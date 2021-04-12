@@ -1,0 +1,12 @@
+{
+    "compiler": "/usr/bin/arm-linux-gnueabihf-gcc",
+    "flags": "-O2 -fno-aggressive-loop-optimizations -ffunction-sections -fdata-sections",
+    "includes": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/Include",
+        "${workspaceFolder}/Source/libs/mpi",
+        "${workspaceFolder}/Source/shared",
+        "${workspaceFolder}/package/osal/include",
+        "${workspaceFolder}/package/mpp_smp_linux/component/hifb/include"
+    ]
+}

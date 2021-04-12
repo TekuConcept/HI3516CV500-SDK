@@ -1,0 +1,419 @@
+==========================
+==      ELF HEADER      ==
+==========================
+
+Identity: 7f454c46 1 1 1 0 0 0 0 0 0 0 0 0
+Type: Relocatable
+Machine: ARM
+Version: 0x1
+Entry: 0x0
+Flags: 0x5000000
+ELF Header Size: 0x34
+Section Header String Table Index: 0x1e
+Section Header Table's Offset: 0x24b0
+Section Header Table Entry Size: 0x28
+Section Header Table Entry Count: 0x1f
+Program Header Table's Offset: 0x0
+Program Header Table Entry Size: 0x0
+Program Header Table Entry Count: 0x0
+
+===============================
+==      SECTION HEADERS      ==
+===============================
+
+Index | Name                           | Type                      | Flags    | Address  | Offset   | Size     | Link     | Info     | Align    | Entry Size 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+    0                                                         Null                     0          0          0          0          0          0          0   
+    1               .note.gnu.build-id                        Note          A          0         34         24          0          0          4          0   
+    2                            .text                Program Bits         AX          0         58        804          0          0          4          0   
+    3                        .rel.text          Relocation Entries          I          0       1d24        520         1c          2          4          8   
+    4                       .init.text                Program Bits         AX          0        85c         10          0          0          4          0   
+    5                   .rel.init.text          Relocation Entries          I          0       2244          8         1c          4          4          8   
+    6                       .exit.text                Program Bits         AX          0        86c          4          0          0          4          0   
+    7                   .rel.exit.text          Relocation Entries          I          0       224c          8         1c          6          4          8   
+    8                          .rodata                Program Bits          A          0        870         25          0          0          4          0   
+    9                   .rodata.str1.4                Program Bits        AMS          0        898        2f6          0          0          4          1   
+    a             .ARM.extab.init.text                Program Bits          A          0        b8e          0          0          0          1          0   
+    b             .ARM.exidx.init.text   Arm Exception Index Table         AL          0        b90          8          4          0          4          0   
+    c         .rel.ARM.exidx.init.text          Relocation Entries          I          0       2254         10         1c          b          4          8   
+    d             .ARM.extab.exit.text                Program Bits          A          0        b98          0          0          0          1          0   
+    e             .ARM.exidx.exit.text   Arm Exception Index Table         AL          0        b98          8          6          0          4          0   
+    f         .rel.ARM.exidx.exit.text          Relocation Entries          I          0       2264         10         1c          e          4          8   
+   10                         .modinfo                Program Bits          A          0        ba0         48          0          0          4          0   
+   11                       .ARM.extab                Program Bits          A          0        be8          0          0          0          1          0   
+   12                            .data                Program Bits         WA          0        be8         b4          0          0          4          0   
+   13                        .rel.data          Relocation Entries          I          0       2274         58         1c         12          4          8   
+   14        .gnu.linkonce.this_module                Program Bits         WA          0        cc0        180          0          0         40          0   
+   15    .rel.gnu.linkonce.this_module          Relocation Entries          I          0       22cc         10         1c         14          4          8   
+   16                       .ARM.exidx   Arm Exception Index Table         AL          0        e40         88          2          0          4          0   
+   17                   .rel.ARM.exidx          Relocation Entries          I          0       22dc         90         1c         16          4          8   
+   18                             .bss                     No-Bits         WA          0        ec8        688          0          0          4          0   
+   19                         .comment                Program Bits         MS          0        ec8         84          0          0          1          1   
+   1a                  .note.GNU-stack                Program Bits                     0        f4c          0          0          0          1          0   
+   1b                  .ARM.attributes   Arm Compatibility attribu                     0        f4c         31          0          0          1          0   
+   1c                          .symtab                Symbol Table                     0        f80        900         1d         70          4         10   
+   1d                          .strtab                String Table                     0       1880        4a1          0          0          1          0   
+   1e                        .shstrtab                String Table                     0       236c        142          0          0          1          0   
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+=======================
+==      SYMBOLS      ==
+=======================
+
+Index | Value    | Size     | Bind    | Type    | Other | Section | Name                                
+----------------------------------------------------------------------------------------------------
+    0          0          0     LOCAL    NOTYPE       0         0   
+    0          0          0     LOCAL   SECTION       0         1   
+    0          0          0     LOCAL   SECTION       0         2   
+    0          0          0     LOCAL   SECTION       0         4   
+    0          0          0     LOCAL   SECTION       0         6   
+    0          0          0     LOCAL   SECTION       0         8   
+    0          0          0     LOCAL   SECTION       0         9   
+    0          0          0     LOCAL   SECTION       0         a   
+    0          0          0     LOCAL   SECTION       0         b   
+    0          0          0     LOCAL   SECTION       0         d   
+    0          0          0     LOCAL   SECTION       0         e   
+    0          0          0     LOCAL   SECTION       0        10   
+    0          0          0     LOCAL   SECTION       0        11   
+    0          0          0     LOCAL   SECTION       0        12   
+    0          0          0     LOCAL   SECTION       0        14   
+    0          0          0     LOCAL   SECTION       0        16   
+    0          0          0     LOCAL   SECTION       0        18   
+    0          0          0     LOCAL   SECTION       0        19   
+    0          0          0     LOCAL   SECTION       0        1a   
+    0          0          0     LOCAL   SECTION       0        1b   
+    0          0          0     LOCAL      FILE       0        1b   adec.c
+    0          0          0     LOCAL    NOTYPE       0         2   $a
+    0          0          8     LOCAL      FUNC       0         2   adec_poll
+    0          0          0     LOCAL    NOTYPE       0        16   $d
+    0          8          8     LOCAL      FUNC       0         2   adec_restore
+    0          0          0     LOCAL    NOTYPE       0        12   .LANCHOR0
+    0         2c          4     LOCAL      FUNC       0         2   ADEC_Notify
+    0         30          c     LOCAL      FUNC       0         2   ADEC_GetVerMagic
+    0         e4          0     LOCAL    NOTYPE       0         9   .LC24
+    0          0          0     LOCAL    NOTYPE       0        18   .LANCHOR1
+    0        144          0     LOCAL    NOTYPE       0         9   .LC25
+    0        1d0          0     LOCAL    NOTYPE       0         9   .LC29
+    0        1d8          0     LOCAL    NOTYPE       0         9   .LC30
+    0        1e0          0     LOCAL    NOTYPE       0         9   .LC31
+    0        1e8          0     LOCAL    NOTYPE       0         9   .LC32
+    0        1f4          0     LOCAL    NOTYPE       0         9   .LC33
+    0        1fc          0     LOCAL    NOTYPE       0         9   .LC34
+    0        208          0     LOCAL    NOTYPE       0         9   .LC35
+    0        210          0     LOCAL    NOTYPE       0         9   .LC36
+    0        198          0     LOCAL    NOTYPE       0         9   .LC26
+    0        1a0          0     LOCAL    NOTYPE       0         9   .LC27
+    0        1a8          0     LOCAL    NOTYPE       0         9   .LC28
+    0        21c          0     LOCAL    NOTYPE       0         9   .LC37
+    0         d4          0     LOCAL    NOTYPE       0         9   .LC22
+    0         dc          0     LOCAL    NOTYPE       0         9   .LC23
+    0         3c          0     LOCAL    NOTYPE       0         9   .LC8
+    0         40          0     LOCAL    NOTYPE       0         9   .LC9
+    0         44          0     LOCAL    NOTYPE       0         9   .LC10
+    0         5c          0     LOCAL    NOTYPE       0         9   .LC13
+    0         50          0     LOCAL    NOTYPE       0         9   .LC12
+    0         64          0     LOCAL    NOTYPE       0         9   .LC14
+    0         c4          0     LOCAL    NOTYPE       0         9   .LC21
+    0          0          0     LOCAL    NOTYPE       0         9   .LC0
+    0          8          0     LOCAL    NOTYPE       0         9   .LC1
+    0         70          0     LOCAL    NOTYPE       0         9   .LC15
+    0         4c          0     LOCAL    NOTYPE       0         9   .LC11
+    0         10          0     LOCAL    NOTYPE       0         9   .LC2
+    0         18          0     LOCAL    NOTYPE       0         9   .LC3
+    0         7c          0     LOCAL    NOTYPE       0         9   .LC16
+    0         20          0     LOCAL    NOTYPE       0         9   .LC4
+    0         88          0     LOCAL    NOTYPE       0         9   .LC17
+    0         28          0     LOCAL    NOTYPE       0         9   .LC5
+    0         30          0     LOCAL    NOTYPE       0         9   .LC6
+    0         94          0     LOCAL    NOTYPE       0         9   .LC18
+    0         34          0     LOCAL    NOTYPE       0         9   .LC7
+    0         a4          0     LOCAL    NOTYPE       0         9   .LC19
+    0         b4          0     LOCAL    NOTYPE       0         9   .LC20
+    0        344         28     LOCAL      FUNC       0         2   ADEC_QueryState
+    0        368          0     LOCAL    NOTYPE       0         2   $d
+    0        36c          0     LOCAL    NOTYPE       0         2   $a
+    0          0          0     LOCAL    NOTYPE       0         8   .LANCHOR2
+    0        244          0     LOCAL    NOTYPE       0         9   .LC38
+    0        260          0     LOCAL    NOTYPE       0         9   .LC39
+    0        418        1b0     LOCAL      FUNC       0         2   AdecIoctl
+    0        294          0     LOCAL    NOTYPE       0         9   .LC41
+    0        280          0     LOCAL    NOTYPE       0         9   .LC40
+    0        5c0          0     LOCAL    NOTYPE       0         2   $d
+    0        5c8          0     LOCAL    NOTYPE       0         2   $a
+    0        5c8          8     LOCAL      FUNC       0         2   adec_close
+    0        5d0          8     LOCAL      FUNC       0         2   adec_freeze
+    0        5d8          8     LOCAL      FUNC       0         2   adec_open
+    0        2bc          0     LOCAL    NOTYPE       0         9   .LC42
+    0        2c4          0     LOCAL    NOTYPE       0         9   .LC43
+    0        7bc          0     LOCAL    NOTYPE       0         2   $d
+    0        7c4          0     LOCAL    NOTYPE       0         2   $a
+    0          0          0     LOCAL    NOTYPE       0         8   $d
+    0          0          a     LOCAL    OBJECT       0         8   __FUNCTION__.7803
+    0          c          a     LOCAL    OBJECT       0         8   __FUNCTION__.7784
+    0         18          d     LOCAL    OBJECT       0         8   __FUNCTION__.7833
+    0          0          0     LOCAL    NOTYPE       0        12   $d
+    0          0          4     LOCAL    OBJECT       0        12   s_u32AdecState
+    0          4         20     LOCAL    OBJECT       0        12   adec_fops
+    0         74         40     LOCAL    OBJECT       0        12   s_stAdecModule
+    0          0          0     LOCAL    NOTYPE       0        18   $d
+    0          0        680     LOCAL    OBJECT       0        18   s_AdecChn
+    0        680          4     LOCAL    OBJECT       0        18   s_stAdecUserRef
+    0        684          4     LOCAL    OBJECT       0        18   g_AdecUmapDev
+    0          0          0     LOCAL    NOTYPE       0         9   $d
+    0          0          0     LOCAL      FILE       0         9   adec_init.c
+    0          0          0     LOCAL    NOTYPE       0         4   $a
+    0          0         10     LOCAL      FUNC       0         4   adec_mod_init
+    0          0          0     LOCAL    NOTYPE       0         b   $d
+    0          0          0     LOCAL    NOTYPE       0         6   $a
+    0          0          4     LOCAL      FUNC       0         6   adec_mod_exit
+    0          0          0     LOCAL    NOTYPE       0         e   $d
+    0          0         14     LOCAL    OBJECT       0        10   __UNIQUE_ID_license8
+    0          0          0     LOCAL    NOTYPE       0        10   $d
+    0          0          0     LOCAL      FILE       0        10   hi3516cv500_adec.mod.c
+    0          0          0     LOCAL    NOTYPE       0        14   $d
+    0         14          0     LOCAL    NOTYPE       0        10   $d
+    0         14          9     LOCAL    OBJECT       0        10   __module_depends
+    0         1d         2b     LOCAL    OBJECT       0        10   __UNIQUE_ID_vermagic8
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_destroydev
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_deregisterdevice
+    0          0        180    GLOBAL    OBJECT       0        14   __this_module
+    0          0          0    GLOBAL    NOTYPE       0         0   CMPI_UnRegisterModule
+    0        6bc        108    GLOBAL      FUNC       0         2   ADEC_ModInit
+    0          0          0    GLOBAL    NOTYPE       0         0   __aeabi_unwind_cpp_pr0
+    0          0          4    GLOBAL      FUNC       0         6   cleanup_module
+    0        7c4         40    GLOBAL      FUNC       0         2   ADEC_ModExit
+    0          0         10    GLOBAL      FUNC       0         4   init_module
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_set
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_init
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_memset
+    0        658         64    GLOBAL      FUNC       0         2   ADEC_SetDbgInfo
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_dec_return
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_memcpy
+    0        36c         ac    GLOBAL      FUNC       0         2   ADEC_Init
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_registerdevice
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_seq_printf
+    0         10         1c    GLOBAL      FUNC       0         2   ADEC_Exit
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_createdev
+    0         24         50    GLOBAL    OBJECT       0        12   stAdecDrvOps
+    0         3c        308    GLOBAL      FUNC       0         2   AdecProcShow
+    0          0          0    GLOBAL    NOTYPE       0         0   HI_LOG
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_create_proc_entry
+    0        5e0         4c    GLOBAL      FUNC       0         2   ADEC_CreateChn
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_destory
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_inc_return
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_read
+    0          0          0    GLOBAL    NOTYPE       0         0   CMPI_RegisterModule
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_printk
+    0        62c         2c    GLOBAL      FUNC       0         2   ADEC_DestroyChn
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_remove_proc_entry
+----------------------------------------------------------------------------------------------------
+
+===========================
+==      RELOCATIONS      ==
+===========================
+
+Index | Offset   | Type                     | Symbol   
+----------------------------------------------------------------------------------------------------
+    0   10         R_ARM_MOVW_ABS_NC          .LANCHOR0 .data@x0
+    1   14         R_ARM_MOVT_ABS             .LANCHOR0 .data@x0
+    2   40         R_ARM_MOVW_ABS_NC          .LC24 .rodata.str1.4@xe4
+    3   4c         R_ARM_MOVT_ABS             .LC24 .rodata.str1.4@xe4
+    4   50         R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+    5   54         R_ARM_CALL                 osal_seq_printf @x0
+    6   5c         R_ARM_MOVW_ABS_NC          .LC25 .rodata.str1.4@x144
+    7   60         R_ARM_MOVT_ABS             .LC25 .rodata.str1.4@x144
+    8   64         R_ARM_CALL                 osal_seq_printf @x0
+    9   68         R_ARM_MOVW_ABS_NC          .LC29 .rodata.str1.4@x1d0
+    a   6c         R_ARM_MOVW_ABS_NC          .LC30 .rodata.str1.4@x1d8
+    b   70         R_ARM_MOVT_ABS             .LC29 .rodata.str1.4@x1d0
+    c   74         R_ARM_MOVT_ABS             .LC30 .rodata.str1.4@x1d8
+    d   80         R_ARM_MOVW_ABS_NC          .LC31 .rodata.str1.4@x1e0
+    e   84         R_ARM_MOVW_ABS_NC          .LC32 .rodata.str1.4@x1e8
+    f   88         R_ARM_MOVT_ABS             .LC31 .rodata.str1.4@x1e0
+   10   8c         R_ARM_MOVT_ABS             .LC32 .rodata.str1.4@x1e8
+   11   98         R_ARM_MOVW_ABS_NC          .LC33 .rodata.str1.4@x1f4
+   12   9c         R_ARM_MOVW_ABS_NC          .LC34 .rodata.str1.4@x1fc
+   13   a0         R_ARM_MOVT_ABS             .LC33 .rodata.str1.4@x1f4
+   14   a4         R_ARM_MOVT_ABS             .LC34 .rodata.str1.4@x1fc
+   15   b0         R_ARM_MOVW_ABS_NC          .LC35 .rodata.str1.4@x208
+   16   b4         R_ARM_MOVW_ABS_NC          .LC36 .rodata.str1.4@x210
+   17   b8         R_ARM_MOVT_ABS             .LC35 .rodata.str1.4@x208
+   18   bc         R_ARM_MOVT_ABS             .LC36 .rodata.str1.4@x210
+   19   cc         R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x198
+   1a   d0         R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1a0
+   1b   d4         R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x198
+   1c   d8         R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1a0
+   1d   dc         R_ARM_MOVW_ABS_NC          .LC28 .rodata.str1.4@x1a8
+   1e   e0         R_ARM_MOVT_ABS             .LC28 .rodata.str1.4@x1a8
+   1f   e4         R_ARM_MOVW_ABS_NC          .LC37 .rodata.str1.4@x21c
+   20   e8         R_ARM_MOVW_ABS_NC          .LC22 .rodata.str1.4@xd4
+   21   ec         R_ARM_MOVW_ABS_NC          .LC23 .rodata.str1.4@xdc
+   22   f0         R_ARM_CALL                 osal_seq_printf @x0
+   23   f4         R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   24   f8         R_ARM_MOVT_ABS             .LC37 .rodata.str1.4@x21c
+   25   fc         R_ARM_MOVT_ABS             .LC22 .rodata.str1.4@xd4
+   26   100        R_ARM_MOVT_ABS             .LC23 .rodata.str1.4@xdc
+   27   150        R_ARM_MOVW_ABS_NC          .LC8 .rodata.str1.4@x3c
+   28   154        R_ARM_MOVW_ABS_NC          .LC9 .rodata.str1.4@x40
+   29   158        R_ARM_MOVT_ABS             .LC8 .rodata.str1.4@x3c
+   2a   15c        R_ARM_MOVT_ABS             .LC9 .rodata.str1.4@x40
+   2b   170        R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x44
+   2c   174        R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x44
+   2d   184        R_ARM_MOVW_ABS_NC          .LC13 .rodata.str1.4@x5c
+   2e   18c        R_ARM_MOVT_ABS             .LC13 .rodata.str1.4@x5c
+   2f   190        R_ARM_MOVW_ABS_NC          .LC12 .rodata.str1.4@x50
+   30   194        R_ARM_MOVT_ABS             .LC12 .rodata.str1.4@x50
+   31   1a8        R_ARM_MOVW_ABS_NC          .LC14 .rodata.str1.4@x64
+   32   1ac        R_ARM_MOVT_ABS             .LC14 .rodata.str1.4@x64
+   33   1e4        R_ARM_MOVW_ABS_NC          .LC13 .rodata.str1.4@x5c
+   34   1ec        R_ARM_MOVT_ABS             .LC13 .rodata.str1.4@x5c
+   35   1f0        R_ARM_MOVW_ABS_NC          .LC21 .rodata.str1.4@xc4
+   36   1f4        R_ARM_MOVT_ABS             .LC21 .rodata.str1.4@xc4
+   37   210        R_ARM_MOVW_ABS_NC          .LC13 .rodata.str1.4@x5c
+   38   214        R_ARM_MOVT_ABS             .LC13 .rodata.str1.4@x5c
+   39   258        R_ARM_CALL                 osal_seq_printf @x0
+   3a   284        R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x0
+   3b   288        R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x0
+   3c   290        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x8
+   3d   294        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x8
+   3e   29c        R_ARM_MOVW_ABS_NC          .LC15 .rodata.str1.4@x70
+   3f   2a0        R_ARM_MOVT_ABS             .LC15 .rodata.str1.4@x70
+   40   2a8        R_ARM_MOVW_ABS_NC          .LC11 .rodata.str1.4@x4c
+   41   2ac        R_ARM_MOVT_ABS             .LC11 .rodata.str1.4@x4c
+   42   2b4        R_ARM_MOVW_ABS_NC          .LC2 .rodata.str1.4@x10
+   43   2b8        R_ARM_MOVT_ABS             .LC2 .rodata.str1.4@x10
+   44   2c0        R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x18
+   45   2c4        R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x18
+   46   2cc        R_ARM_MOVW_ABS_NC          .LC16 .rodata.str1.4@x7c
+   47   2d0        R_ARM_MOVT_ABS             .LC16 .rodata.str1.4@x7c
+   48   2d8        R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@x20
+   49   2dc        R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@x20
+   4a   2e4        R_ARM_MOVW_ABS_NC          .LC17 .rodata.str1.4@x88
+   4b   2e8        R_ARM_MOVT_ABS             .LC17 .rodata.str1.4@x88
+   4c   2f0        R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@x28
+   4d   2f4        R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@x28
+   4e   308        R_ARM_MOVW_ABS_NC          .LC6 .rodata.str1.4@x30
+   4f   30c        R_ARM_MOVT_ABS             .LC6 .rodata.str1.4@x30
+   50   314        R_ARM_MOVW_ABS_NC          .LC18 .rodata.str1.4@x94
+   51   318        R_ARM_MOVT_ABS             .LC18 .rodata.str1.4@x94
+   52   320        R_ARM_MOVW_ABS_NC          .LC7 .rodata.str1.4@x34
+   53   324        R_ARM_MOVT_ABS             .LC7 .rodata.str1.4@x34
+   54   32c        R_ARM_MOVW_ABS_NC          .LC19 .rodata.str1.4@xa4
+   55   330        R_ARM_MOVT_ABS             .LC19 .rodata.str1.4@xa4
+   56   338        R_ARM_MOVW_ABS_NC          .LC20 .rodata.str1.4@xb4
+   57   33c        R_ARM_MOVT_ABS             .LC20 .rodata.str1.4@xb4
+   58   350        R_ARM_CALL                 osal_atomic_read @x0
+   59   368        R_ARM_ABS32                 .bss@x0
+   5a   370        R_ARM_MOVW_ABS_NC          .LANCHOR0 .data@x0
+   5b   374        R_ARM_MOVT_ABS             .LANCHOR0 .data@x0
+   5c   388        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   5d   38c        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   5e   3a8        R_ARM_CALL                 osal_memset @x0
+   5f   3e0        R_ARM_MOVW_ABS_NC          .LANCHOR2 .rodata@x0
+   60   3e4        R_ARM_MOVW_ABS_NC          .LC38 .rodata.str1.4@x244
+   61   3e8        R_ARM_MOVT_ABS             .LANCHOR2 .rodata@x0
+   62   3ec        R_ARM_MOVT_ABS             .LC38 .rodata.str1.4@x244
+   63   3f4        R_ARM_CALL                 HI_LOG @x0
+   64   3fc        R_ARM_MOVW_ABS_NC          .LC39 .rodata.str1.4@x260
+   65   404        R_ARM_MOVT_ABS             .LC39 .rodata.str1.4@x260
+   66   408        R_ARM_CALL                 HI_LOG @x0
+   67   418        R_ARM_MOVW_ABS_NC          .LANCHOR0 .data@x0
+   68   41c        R_ARM_MOVT_ABS             .LANCHOR0 .data@x0
+   69   434        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   6a   438        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   6b   44c        R_ARM_CALL                 osal_atomic_inc_return @x0
+   6c   500        R_ARM_CALL                 osal_atomic_dec_return @x0
+   6d   518        R_ARM_MOVW_ABS_NC          .LC41 .rodata.str1.4@x294
+   6e   51c        R_ARM_MOVT_ABS             .LC41 .rodata.str1.4@x294
+   6f   520        R_ARM_CALL                 osal_printk @x0
+   70   554        R_ARM_CALL                 osal_memcpy @x0
+   71   580        R_ARM_MOVW_ABS_NC          .LC38 .rodata.str1.4@x244
+   72   588        R_ARM_MOVT_ABS             .LC38 .rodata.str1.4@x244
+   73   594        R_ARM_CALL                 HI_LOG @x0
+   74   598        R_ARM_MOVW_ABS_NC          .LC40 .rodata.str1.4@x280
+   75   5a0        R_ARM_MOVT_ABS             .LC40 .rodata.str1.4@x280
+   76   5ac        R_ARM_CALL                 HI_LOG @x0
+   77   5c0        R_ARM_ABS32                 .bss@x0
+   78   5c4        R_ARM_ABS32                 .rodata@x0
+   79   5f4        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   7a   5f8        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   7b   60c        R_ARM_CALL                 osal_memcpy @x0
+   7c   630        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   7d   634        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   7e   660        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   7f   664        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   80   6c0        R_ARM_MOVW_ABS_NC          .LC42 .rodata.str1.4@x2bc
+   81   6cc        R_ARM_MOVT_ABS             .LC42 .rodata.str1.4@x2bc
+   82   6d0        R_ARM_CALL                 osal_create_proc_entry @x0
+   83   6dc        R_ARM_MOVW_ABS_NC          AdecProcShow .text@x3c
+   84   6e0        R_ARM_MOVW_ABS_NC          .LC42 .rodata.str1.4@x2bc
+   85   6e4        R_ARM_MOVT_ABS             AdecProcShow .text@x3c
+   86   6e8        R_ARM_MOVT_ABS             .LC42 .rodata.str1.4@x2bc
+   87   6f0        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   88   6f4        R_ARM_CALL                 osal_createdev @x0
+   89   6fc        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   8a   718        R_ARM_CALL                 osal_registerdevice @x0
+   8b   728        R_ARM_CALL                 CMPI_RegisterModule @x0
+   8c   738        R_ARM_CALL                 osal_atomic_init @x0
+   8d   744        R_ARM_CALL                 osal_atomic_set @x0
+   8e   754        R_ARM_MOVW_ABS_NC          .LC42 .rodata.str1.4@x2bc
+   8f   75c        R_ARM_MOVT_ABS             .LC42 .rodata.str1.4@x2bc
+   90   764        R_ARM_CALL                 osal_remove_proc_entry @x0
+   91   770        R_ARM_MOVW_ABS_NC          .LC42 .rodata.str1.4@x2bc
+   92   774        R_ARM_MOVT_ABS             .LC42 .rodata.str1.4@x2bc
+   93   77c        R_ARM_CALL                 osal_remove_proc_entry @x0
+   94   784        R_ARM_CALL                 osal_deregisterdevice @x0
+   95   78c        R_ARM_CALL                 osal_destroydev @x0
+   96   798        R_ARM_MOVW_ABS_NC          .LC43 .rodata.str1.4@x2c4
+   97   7a0        R_ARM_MOVT_ABS             .LC43 .rodata.str1.4@x2c4
+   98   7b4        R_ARM_CALL                 HI_LOG @x0
+   99   7bc        R_ARM_ABS32                 .data@x0
+   9a   7c0        R_ARM_ABS32                 .rodata@x0
+   9b   7c8        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   9c   7cc        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   9d   7d4        R_ARM_CALL                 osal_atomic_destory @x0
+   9e   7dc        R_ARM_CALL                 CMPI_UnRegisterModule @x0
+   9f   7e4        R_ARM_CALL                 osal_deregisterdevice @x0
+   a0   7ec        R_ARM_CALL                 osal_destroydev @x0
+   a1   7f0        R_ARM_MOVW_ABS_NC          .LC42 .rodata.str1.4@x2bc
+   a2   7f8        R_ARM_MOVT_ABS             .LC42 .rodata.str1.4@x2bc
+   a3   800        R_ARM_JUMP24               osal_remove_proc_entry @x0
+   a4   4          R_ARM_CALL                 ADEC_ModInit .text@x6bc
+   a5   0          R_ARM_JUMP24               ADEC_ModExit .text@x7c4
+   a6   0          R_ARM_PREL31                .init.text@x0
+   a7   0          R_ARM_NONE                 __aeabi_unwind_cpp_pr0 @x0
+   a8   0          R_ARM_PREL31                .exit.text@x0
+   a9   0          R_ARM_NONE                 __aeabi_unwind_cpp_pr0 @x0
+   aa   4          R_ARM_ABS32                adec_open .text@x5d8
+   ab   14         R_ARM_ABS32                adec_close .text@x5c8
+   ac   18         R_ARM_ABS32                AdecIoctl .text@x418
+   ad   1c         R_ARM_ABS32                adec_poll .text@x0
+   ae   34         R_ARM_ABS32                adec_freeze .text@x5d0
+   af   40         R_ARM_ABS32                adec_restore .text@x8
+   b0   90         R_ARM_ABS32                ADEC_Init .text@x36c
+   b1   94         R_ARM_ABS32                ADEC_Exit .text@x10
+   b2   98         R_ARM_ABS32                ADEC_QueryState .text@x344
+   b3   9c         R_ARM_ABS32                ADEC_Notify .text@x2c
+   b4   a0         R_ARM_ABS32                ADEC_GetVerMagic .text@x30
+   b5   dc         R_ARM_ABS32                init_module .init.text@x0
+   b6   16c        R_ARM_ABS32                cleanup_module .exit.text@x0
+   b7   0          R_ARM_PREL31                .text@x0
+   b8   0          R_ARM_NONE                 __aeabi_unwind_cpp_pr0 @x0
+   b9   8          R_ARM_PREL31                .text@x0
+   ba   10         R_ARM_PREL31                .text@x0
+   bb   18         R_ARM_PREL31                .text@x0
+   bc   20         R_ARM_PREL31                .text@x0
+   bd   28         R_ARM_PREL31                .text@x0
+   be   30         R_ARM_PREL31                .text@x0
+   bf   38         R_ARM_PREL31                .text@x0
+   c0   40         R_ARM_PREL31                .text@x0
+   c1   48         R_ARM_PREL31                .text@x0
+   c2   50         R_ARM_PREL31                .text@x0
+   c3   58         R_ARM_PREL31                .text@x0
+   c4   60         R_ARM_PREL31                .text@x0
+   c5   68         R_ARM_PREL31                .text@x0
+   c6   70         R_ARM_PREL31                .text@x0
+   c7   78         R_ARM_PREL31                .text@x0
+   c8   80         R_ARM_PREL31                .text@x0
+----------------------------------------------------------------------------------------------------
+

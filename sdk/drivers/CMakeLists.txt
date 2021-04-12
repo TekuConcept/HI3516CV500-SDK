@@ -1,0 +1,192 @@
+# CMAKE_MINIMUM_REQUIRED(VERSION 3.8.2)
+# PROJECT(drivers C ASM)
+# INCLUDE(../../CMake/KernelBuildTools.cmake)
+
+SET(HICHIP "0x3516C500")
+SET(HIARCH "hi3516cv500")
+SET(HIFPGA "HI_XXXX")
+
+SET(HIFB_CONFIG_SYNC_FILE FALSE)
+
+
+
+#
+# sys_config
+#
+
+FILE(GLOB_RECURSE SYS_CONFIG_FILES "sys_config/*.c")
+ADD_KMODULE(sys_config ${SYS_CONFIG_FILES})
+
+
+
+#
+# hi_osal
+#
+
+FILE(GLOB_RECURSE HI_OSAL_FILES "hi_osal/*.c")
+ADD_KMODULE(hi_osal ${HI_OSAL_FILES})
+TARGET_KINCLUDE_DIRECTORIES(hi_osal
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_osal"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_osal/himedia"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_osal/mmz"
+)
+TARGET_KMODULE_CFLAGS(hi_osal "-DHICHIP=${HICHIP}")
+
+
+
+#
+# hi_mipi_rx
+#
+
+FILE(GLOB_RECURSE HI_MIPI_RX_FILES "hi_mipi_rx/*.c")
+ADD_KMODULE(hi_mipi_rx ${HI_MIPI_RX_FILES})
+TARGET_KINCLUDE_DIRECTORIES(hi_mipi_rx
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_mipi_rx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_osal"
+)
+TARGET_KMODULE_SYMVERS(hi_mipi_rx hi_osal)
+ADD_DEPENDENCIES(hi_mipi_rx hi_osal)
+
+
+
+#
+# hi_mipi_tx
+#
+
+FILE(GLOB_RECURSE HI_MIPI_TX_FILES "hi_mipi_tx/*.c")
+ADD_KMODULE(hi_mipi_tx ${HI_MIPI_TX_FILES})
+TARGET_KINCLUDE_DIRECTORIES(hi_mipi_tx
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_mipi_tx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_osal"
+)
+TARGET_KMODULE_SYMVERS(hi_mipi_tx hi_osal)
+ADD_DEPENDENCIES(hi_mipi_rx hi_osal)
+
+
+
+#
+# hifb
+#
+
+FILE(GLOB_RECURSE HIFB_FILES "hifb/*.c")
+ADD_KMODULE(hifb ${HIFB_FILES})
+TARGET_KINCLUDE_DIRECTORIES(hifb
+    "${CMAKE_CURRENT_SOURCE_DIR}/hifb"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_osal"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_base"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common"
+)
+TARGET_KMODULE_SYMVERS(hifb
+    hi_osal
+    # hi3516cv500_base
+)
+TARGET_KMODULE_CFLAGS(hifb "-DCURSOR -D${HIARCH} -D${HIFPGA}")
+ADD_DEPENDENCIES(hifb hi_osal)
+IF (HIFB_CONFIG_SYNC_FILE)
+    TARGET_KMODULE_CFLAGS(hifb "-DCONFIG_HIFB_FENCE_SUPPORT")
+ENDIF ()
+IF ("${HIARCH}" STREQUAL "hi3516cv500")
+    TARGET_KMODULE_CFLAGS(hifb "-DCONFIG_HIFB_SOFT_IRQ_SUPPORT")
+ELSE ()
+    MESSAGE(FETAL_ERROR "error")
+ENDIF ()
+
+
+
+#
+# hi3516cv500_isp
+#
+
+FILE(GLOB_RECURSE HI3516CV500_ISP_FILES "hi3516cv500_isp/*.c")
+ADD_KMODULE(hi3516cv500_isp ${HI3516CV500_ISP_FILES})
+TARGET_KINCLUDE_DIRECTORIES(hi3516cv500_isp
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_isp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_isp/adapt"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_base"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_osal"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common/adapt"
+)
+TARGET_KMODULE_SYMVERS(hi3516cv500_isp
+    hi_osal
+    # hi3516cv500_base
+)
+
+
+
+#
+# hi_piris
+#
+
+FILE(GLOB_RECURSE HI_PIRIS_FILES "hi_piris/*.c")
+ADD_KMODULE(hi_piris ${HI_PIRIS_FILES})
+TARGET_KINCLUDE_DIRECTORIES(hi_piris
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_piris"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_isp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_base"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common/adapt"
+)
+TARGET_KMODULE_SYMVERS(hi_piris
+    hi_osal
+    hi3516cv500_isp
+    # hi3516cv500_base
+)
+
+
+
+#
+# hi_pwm
+#
+
+FILE(GLOB_RECURSE HI_PWM_FILES "hi_pwm/*.c")
+ADD_KMODULE(hi_pwm ${HI_PWM_FILES})
+TARGET_KINCLUDE_DIRECTORIES(hi_pwm
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_pwm"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_osal"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_base"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common"
+)
+TARGET_KMODULE_SYMVERS(hi_pwm hi_osal)
+
+
+
+#
+# hi_sensor_i2c
+#
+
+FILE(GLOB_RECURSE HI_SENSOR_I2C_FILES "hi_sensor_i2c/*.c")
+ADD_KMODULE(hi_sensor_i2c ${HI_SENSOR_I2C_FILES})
+TARGET_KINCLUDE_DIRECTORIES(hi_sensor_i2c
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_sensor_i2c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_osal"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_base"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_isp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common/adapt"
+)
+TARGET_KMODULE_SYMVERS(hi_sensor_i2c
+    hi_osal
+    # hi3516cv500_base
+)
+
+
+
+#
+# hi_sensor_i2c
+#
+
+FILE(GLOB_RECURSE HI_SENSOR_SPI_FILES "hi_sensor_spi/*.c")
+ADD_KMODULE(hi_sensor_spi ${HI_SENSOR_SPI_FILES})
+TARGET_KINCLUDE_DIRECTORIES(hi_sensor_spi
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_sensor_spi"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi_osal"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_base"
+    "${CMAKE_CURRENT_SOURCE_DIR}/hi3516cv500_isp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../common/adapt"
+)
+TARGET_KMODULE_SYMVERS(hi_sensor_spi
+    hi_osal
+    # hi3516cv500_base
+)

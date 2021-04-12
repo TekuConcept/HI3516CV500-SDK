@@ -1,0 +1,2571 @@
+==========================
+==      ELF HEADER      ==
+==========================
+
+Identity: 7f454c46 1 1 1 0 0 0 0 0 0 0 0 0
+Type: Relocatable
+Machine: ARM
+Version: 0x1
+Entry: 0x0
+Flags: 0x5000000
+ELF Header Size: 0x34
+Section Header String Table Index: 0x1e
+Section Header Table's Offset: 0x1248c
+Section Header Table Entry Size: 0x28
+Section Header Table Entry Count: 0x1f
+Program Header Table's Offset: 0x0
+Program Header Table Entry Size: 0x0
+Program Header Table Entry Count: 0x0
+
+===============================
+==      SECTION HEADERS      ==
+===============================
+
+Index | Name                           | Type                      | Flags    | Address  | Offset   | Size     | Link     | Info     | Align    | Entry Size 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+    0                                                         Null                     0          0          0          0          0          0          0   
+    1               .note.gnu.build-id                        Note          A          0         34         24          0          0          4          0   
+    2                            .text                Program Bits         AX          0         58       8994          0          0          4          0   
+    3                        .rel.text          Relocation Entries          I          0       e840       3788         1c          2          4          8   
+    4                       .init.text                Program Bits         AX          0       89ec         10          0          0          4          0   
+    5                   .rel.init.text          Relocation Entries          I          0      11fc8          8         1c          4          4          8   
+    6                       .exit.text                Program Bits         AX          0       89fc          4          0          0          4          0   
+    7                   .rel.exit.text          Relocation Entries          I          0      11fd0          8         1c          6          4          8   
+    8                          .rodata                Program Bits          A          0       8a00        392          0          0          4          0   
+    9                   .rodata.str1.4                Program Bits        AMS          0       8d94       1e89          0          0          4          1   
+    a             .ARM.extab.init.text                Program Bits          A          0       ac1d          0          0          0          1          0   
+    b             .ARM.exidx.init.text   Arm Exception Index Table         AL          0       ac20          8          4          0          4          0   
+    c         .rel.ARM.exidx.init.text          Relocation Entries          I          0      11fd8         10         1c          b          4          8   
+    d             .ARM.extab.exit.text                Program Bits          A          0       ac28          0          0          0          1          0   
+    e             .ARM.exidx.exit.text   Arm Exception Index Table         AL          0       ac28          8          6          0          4          0   
+    f         .rel.ARM.exidx.exit.text          Relocation Entries          I          0      11fe8         10         1c          e          4          8   
+   10                         .modinfo                Program Bits          A          0       ac30         48          0          0          4          0   
+   11                       .ARM.extab                Program Bits          A          0       ac78          0          0          0          1          0   
+   12                            .data                Program Bits         WA          0       ac78         dc          0          0          4          0   
+   13                        .rel.data          Relocation Entries          I          0      11ff8         a0         1c         12          4          8   
+   14        .gnu.linkonce.this_module                Program Bits         WA          0       ad80        180          0          0         40          0   
+   15    .rel.gnu.linkonce.this_module          Relocation Entries          I          0      12098         10         1c         14          4          8   
+   16                       .ARM.exidx   Arm Exception Index Table         AL          0       af00        288          2          0          4          0   
+   17                   .rel.ARM.exidx          Relocation Entries          I          0      120a8        2a0         1c         16          4          8   
+   18                             .bss                     No-Bits         WA          0       b188       465c          0          0          8          0   
+   19                         .comment                Program Bits         MS          0       b188         dc          0          0          1          1   
+   1a                  .note.GNU-stack                Program Bits                     0       b264          0          0          0          1          0   
+   1b                  .ARM.attributes   Arm Compatibility attribu                     0       b264         31          0          0          1          0   
+   1c                          .symtab                Symbol Table                     0       b298       2600         1d        1e5          4         10   
+   1d                          .strtab                String Table                     0       d898        fa6          0          0          1          0   
+   1e                        .shstrtab                String Table                     0      12348        142          0          0          1          0   
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+=======================
+==      SYMBOLS      ==
+=======================
+
+Index | Value    | Size     | Bind    | Type    | Other | Section | Name                                
+----------------------------------------------------------------------------------------------------
+    0          0          0     LOCAL    NOTYPE       0         0   
+    0          0          0     LOCAL   SECTION       0         1   
+    0          0          0     LOCAL   SECTION       0         2   
+    0          0          0     LOCAL   SECTION       0         4   
+    0          0          0     LOCAL   SECTION       0         6   
+    0          0          0     LOCAL   SECTION       0         8   
+    0          0          0     LOCAL   SECTION       0         9   
+    0          0          0     LOCAL   SECTION       0         a   
+    0          0          0     LOCAL   SECTION       0         b   
+    0          0          0     LOCAL   SECTION       0         d   
+    0          0          0     LOCAL   SECTION       0         e   
+    0          0          0     LOCAL   SECTION       0        10   
+    0          0          0     LOCAL   SECTION       0        11   
+    0          0          0     LOCAL   SECTION       0        12   
+    0          0          0     LOCAL   SECTION       0        14   
+    0          0          0     LOCAL   SECTION       0        16   
+    0          0          0     LOCAL   SECTION       0        18   
+    0          0          0     LOCAL   SECTION       0        19   
+    0          0          0     LOCAL   SECTION       0        1a   
+    0          0          0     LOCAL   SECTION       0        1b   
+    0          0          0     LOCAL      FILE       0        1b   ao.c
+    0          0          0     LOCAL    NOTYPE       0         2   $a
+    0          0          8     LOCAL      FUNC       0         2   ao_restore
+    0          0          0     LOCAL    NOTYPE       0        16   $d
+    0          8          c     LOCAL      FUNC       0         2   AO_GetVerMagic
+    0          0          0     LOCAL    NOTYPE       0         9   .LC0
+    0          0          0     LOCAL    NOTYPE       0         8   .LANCHOR0
+    0         24          0     LOCAL    NOTYPE       0         9   .LC1
+    0          0          0     LOCAL    NOTYPE       0        18   .LANCHOR1
+    0        244          0     LOCAL    NOTYPE       0         9   .LC10
+    0        258          0     LOCAL    NOTYPE       0         9   .LC11
+    0         f0          0     LOCAL    NOTYPE       0         9   .LC6
+    0        134          0     LOCAL    NOTYPE       0         9   .LC7
+    0         64          0     LOCAL    NOTYPE       0         9   .LC2
+    0         dc          0     LOCAL    NOTYPE       0         9   .LC5
+    0         74          0     LOCAL    NOTYPE       0         9   .LC3
+    0         a8          0     LOCAL    NOTYPE       0         9   .LC4
+    0        188          0     LOCAL    NOTYPE       0         9   .LC8
+    0        1e0          0     LOCAL    NOTYPE       0         9   .LC9
+    0        488         90     LOCAL      FUNC       0         2   AO_Notify
+    0          0          0     LOCAL    NOTYPE       0        12   .LANCHOR2
+    0        510          0     LOCAL    NOTYPE       0         2   $d
+    0        518          0     LOCAL    NOTYPE       0         2   $a
+    0        518         28     LOCAL      FUNC       0         2   AO_QueryState
+    0        53c          0     LOCAL    NOTYPE       0         2   $d
+    0        540          0     LOCAL    NOTYPE       0         2   $a
+    0        540         c8     LOCAL      FUNC       0         2   ao_poll
+    0        2f0          0     LOCAL    NOTYPE       0         9   .LC14
+    0        304          0     LOCAL    NOTYPE       0         9   .LC15
+    0        294          0     LOCAL    NOTYPE       0         9   .LC12
+    0        2c4          0     LOCAL    NOTYPE       0         9   .LC13
+    0        82c          0     LOCAL    NOTYPE       0         2   $d
+    0        834          0     LOCAL    NOTYPE       0         2   $a
+    0        31c          0     LOCAL    NOTYPE       0         9   .LC16
+    0        8ec          0     LOCAL    NOTYPE       0         2   $d
+    0        8f0          0     LOCAL    NOTYPE       0         2   $a
+    0        8f0          8     LOCAL      FUNC       0         2   ao_close
+    0        8f8          8     LOCAL      FUNC       0         2   ao_freeze
+    0        900          8     LOCAL      FUNC       0         2   ao_open
+    0        364          0     LOCAL    NOTYPE       0         9   .LC18
+    0        330          0     LOCAL    NOTYPE       0         9   .LC17
+    0        39c          0     LOCAL    NOTYPE       0         9   .LC19
+    0        c44          0     LOCAL    NOTYPE       0         2   $d
+    0        c48          0     LOCAL    NOTYPE       0         2   $a
+    0        404          0     LOCAL    NOTYPE       0         9   .LC20
+    0        ed4          0     LOCAL    NOTYPE       0         2   $d
+    0        ed8          0     LOCAL    NOTYPE       0         2   $a
+    0        498          0     LOCAL    NOTYPE       0         9   .LC23
+    0        43c          0     LOCAL    NOTYPE       0         9   .LC21
+    0        480          0     LOCAL    NOTYPE       0         9   .LC22
+    0       1140          0     LOCAL    NOTYPE       0         2   $d
+    0       1144          0     LOCAL    NOTYPE       0         2   $a
+    0        534          0     LOCAL    NOTYPE       0         9   .LC26
+    0        4cc          0     LOCAL    NOTYPE       0         9   .LC24
+    0        51c          0     LOCAL    NOTYPE       0         9   .LC25
+    0       13a8          0     LOCAL    NOTYPE       0         2   $d
+    0       13ac          0     LOCAL    NOTYPE       0         2   $a
+    0        564          0     LOCAL    NOTYPE       0         9   .LC27
+    0        59c          0     LOCAL    NOTYPE       0         9   .LC28
+    0       163c          0     LOCAL    NOTYPE       0         2   $d
+    0       1640          0     LOCAL    NOTYPE       0         2   $a
+    0       1718          0     LOCAL    NOTYPE       0         2   $d
+    0       171c          0     LOCAL    NOTYPE       0         2   $a
+    0        5e0          0     LOCAL    NOTYPE       0         9   .LC29
+    0       1924          0     LOCAL    NOTYPE       0         2   $d
+    0       1928          0     LOCAL    NOTYPE       0         2   $a
+    0        7b8          0     LOCAL    NOTYPE       0         9   .LC35
+    0        73c          0     LOCAL    NOTYPE       0         9   .LC33
+    0        780          0     LOCAL    NOTYPE       0         9   .LC34
+    0        7e8          0     LOCAL    NOTYPE       0         9   .LC36
+    0        6a0          0     LOCAL    NOTYPE       0         9   .LC31
+    0        700          0     LOCAL    NOTYPE       0         9   .LC32
+    0        64c          0     LOCAL    NOTYPE       0         9   .LC30
+    0       1f28          0     LOCAL    NOTYPE       0         2   $d
+    0       1f2c          0     LOCAL    NOTYPE       0         2   $a
+    0       201c          0     LOCAL    NOTYPE       0         2   $d
+    0       2020          0     LOCAL    NOTYPE       0         2   $a
+    0       2104          0     LOCAL    NOTYPE       0         2   $d
+    0       2108          0     LOCAL    NOTYPE       0         2   $a
+    0       222c          0     LOCAL    NOTYPE       0         2   $d
+    0       2230          0     LOCAL    NOTYPE       0         2   $a
+    0       2360          0     LOCAL    NOTYPE       0         2   $d
+    0       2364          0     LOCAL    NOTYPE       0         2   $a
+    0       2488          0     LOCAL    NOTYPE       0         2   $d
+    0       248c          0     LOCAL    NOTYPE       0         2   $a
+    0       25bc          0     LOCAL    NOTYPE       0         2   $d
+    0       25c0          0     LOCAL    NOTYPE       0         2   $a
+    0        82c          0     LOCAL    NOTYPE       0         9   .LC37
+    0       26f0          0     LOCAL    NOTYPE       0         2   $d
+    0       26f4          0     LOCAL    NOTYPE       0         2   $a
+    0        870          0     LOCAL    NOTYPE       0         9   .LC38
+    0       2830          0     LOCAL    NOTYPE       0         2   $d
+    0       2834          0     LOCAL    NOTYPE       0         2   $a
+    0       2968          0     LOCAL    NOTYPE       0         2   $d
+    0       296c          0     LOCAL    NOTYPE       0         2   $a
+    0        b10          0     LOCAL    NOTYPE       0         9   .LC47
+    0        8e8          0     LOCAL    NOTYPE       0         9   .LC40
+    0        8b4          0     LOCAL    NOTYPE       0         9   .LC39
+    0        980          0     LOCAL    NOTYPE       0         9   .LC42
+    0        a18          0     LOCAL    NOTYPE       0         9   .LC44
+    0        ab0          0     LOCAL    NOTYPE       0         9   .LC46
+    0        b50          0     LOCAL    NOTYPE       0         9   .LC48
+    0        9c4          0     LOCAL    NOTYPE       0         9   .LC43
+    0        a5c          0     LOCAL    NOTYPE       0         9   .LC45
+    0        93c          0     LOCAL    NOTYPE       0         9   .LC41
+    0       2d58          0     LOCAL    NOTYPE       0         2   $d
+    0       2d5c          0     LOCAL    NOTYPE       0         2   $a
+    0       2e64          0     LOCAL    NOTYPE       0         2   $d
+    0       2e68          0     LOCAL    NOTYPE       0         2   $a
+    0       2f9c          0     LOCAL    NOTYPE       0         2   $d
+    0       2fa0          0     LOCAL    NOTYPE       0         2   $a
+    0       2fa0        488     LOCAL      FUNC       0         2   AoIoctl
+    0        bd0          0     LOCAL    NOTYPE       0         9   .LC50
+    0        b94          0     LOCAL    NOTYPE       0         9   .LC49
+    0       3420          0     LOCAL    NOTYPE       0         2   $d
+    0       3428          0     LOCAL    NOTYPE       0         2   $a
+    0        bfc          0     LOCAL    NOTYPE       0         9   .LC51
+    0        c34          0     LOCAL    NOTYPE       0         9   .LC53
+    0        c00          0     LOCAL    NOTYPE       0         9   .LC52
+    0       3568          0     LOCAL    NOTYPE       0         2   $d
+    0       3570          0     LOCAL    NOTYPE       0         2   $a
+    0          0          0     LOCAL    NOTYPE       0         8   $d
+    0          0          d     LOCAL    OBJECT       0         8   __FUNCTION__.7298
+    0         10          8     LOCAL    OBJECT       0         8   __FUNCTION__.7614
+    0         18          7     LOCAL    OBJECT       0         8   __FUNCTION__.7601
+    0         20          8     LOCAL    OBJECT       0         8   __FUNCTION__.7623
+    0         28          c     LOCAL    OBJECT       0         8   __FUNCTION__.7313
+    0         34          d     LOCAL    OBJECT       0         8   __FUNCTION__.7328
+    0         44          b     LOCAL    OBJECT       0         8   __FUNCTION__.7342
+    0         50          c     LOCAL    OBJECT       0         8   __FUNCTION__.7355
+    0         5c          e     LOCAL    OBJECT       0         8   __FUNCTION__.7369
+    0         6c          e     LOCAL    OBJECT       0         8   __FUNCTION__.7380
+    0         7c         10     LOCAL    OBJECT       0         8   __FUNCTION__.7389
+    0         8c          b     LOCAL    OBJECT       0         8   __FUNCTION__.7412
+    0         98         12     LOCAL    OBJECT       0         8   __FUNCTION__.7434
+    0         ac         10     LOCAL    OBJECT       0         8   __FUNCTION__.7442
+    0         bc          f     LOCAL    OBJECT       0         8   __FUNCTION__.7458
+    0         cc          f     LOCAL    OBJECT       0         8   __FUNCTION__.7465
+    0         dc          c     LOCAL    OBJECT       0         8   __FUNCTION__.7472
+    0         e8          c     LOCAL    OBJECT       0         8   __FUNCTION__.7479
+    0         f4          c     LOCAL    OBJECT       0         8   __FUNCTION__.7486
+    0        100          c     LOCAL    OBJECT       0         8   __FUNCTION__.7493
+    0        10c          a     LOCAL    OBJECT       0         8   __FUNCTION__.7500
+    0        118          e     LOCAL    OBJECT       0         8   __FUNCTION__.7511
+    0        128          e     LOCAL    OBJECT       0         8   __FUNCTION__.7519
+    0        138          a     LOCAL    OBJECT       0         8   __FUNCTION__.7526
+    0        144          9     LOCAL    OBJECT       0         8   __FUNCTION__.7536
+    0        150          b     LOCAL    OBJECT       0         8   __FUNCTION__.7649
+    0          0          0     LOCAL    NOTYPE       0        12   $d
+    0          0          4     LOCAL    OBJECT       0        12   s_s32AoState
+    0          4         20     LOCAL    OBJECT       0        12   ao_fops
+    0         74         40     LOCAL    OBJECT       0        12   s_stAoModule
+    0         b4         28     LOCAL    OBJECT       0        12   s_stExportFuncs
+    0          0          0     LOCAL    NOTYPE       0        18   $d
+    0          4          4     LOCAL    OBJECT       0        18   s_stAoUserRef
+    0          8          4     LOCAL    OBJECT       0        18   g_AOumapd
+    0          0          0     LOCAL    NOTYPE       0         9   $d
+    0          0          0     LOCAL      FILE       0         9   ao_trans.c
+    0       35b0          0     LOCAL    NOTYPE       0         2   $a
+    0         10          0     LOCAL    NOTYPE       0        18   .LANCHOR0
+    0        15c          0     LOCAL    NOTYPE       0         8   .LANCHOR1
+    0        c64          0     LOCAL    NOTYPE       0         9   .LC0
+    0       38f4          0     LOCAL    NOTYPE       0         2   $d
+    0        118          0     LOCAL    NOTYPE       0        16   $d
+    0       38f8          0     LOCAL    NOTYPE       0         2   $a
+    0        d24          0     LOCAL    NOTYPE       0         9   .LC3
+    0        cb8          0     LOCAL    NOTYPE       0         9   .LC1
+    0        cf4          0     LOCAL    NOTYPE       0         9   .LC2
+    0        d34          0     LOCAL    NOTYPE       0         9   .LC4
+    0       3c84          0     LOCAL    NOTYPE       0         2   $d
+    0       3c88          0     LOCAL    NOTYPE       0         2   $a
+    0       3cdc          0     LOCAL    NOTYPE       0         2   $d
+    0       3ce0          0     LOCAL    NOTYPE       0         2   $a
+    0        f14          0     LOCAL    NOTYPE       0         9   .LC11
+    0        edc          0     LOCAL    NOTYPE       0         9   .LC10
+    0        d84          0     LOCAL    NOTYPE       0         9   .LC5
+    0        d94          0     LOCAL    NOTYPE       0         9   .LC6
+    0        dd4          0     LOCAL    NOTYPE       0         9   .LC7
+    0        e30          0     LOCAL    NOTYPE       0         9   .LC8
+    0        e84          0     LOCAL    NOTYPE       0         9   .LC9
+    0       40cc          0     LOCAL    NOTYPE       0         2   $d
+    0       40d0          0     LOCAL    NOTYPE       0         2   $a
+    0        f4c          0     LOCAL    NOTYPE       0         9   .LC12
+    0        fd0          0     LOCAL    NOTYPE       0         9   .LC14
+    0        f80          0     LOCAL    NOTYPE       0         9   .LC13
+    0       423c          0     LOCAL    NOTYPE       0         2   $d
+    0       4240          0     LOCAL    NOTYPE       0         2   $a
+    0       105c          0     LOCAL    NOTYPE       0         9   .LC16
+    0       1014          0     LOCAL    NOTYPE       0         9   .LC15
+    0       4380          0     LOCAL    NOTYPE       0         2   $d
+    0       4384          0     LOCAL    NOTYPE       0         2   $a
+    0       1100          0     LOCAL    NOTYPE       0         9   .LC19
+    0       1094          0     LOCAL    NOTYPE       0         9   .LC17
+    0       10cc          0     LOCAL    NOTYPE       0         9   .LC18
+    0       45e8          0     LOCAL    NOTYPE       0         2   $d
+    0       45ec          0     LOCAL    NOTYPE       0         2   $a
+    0       11c8          0     LOCAL    NOTYPE       0         9   .LC22
+    0       1164          0     LOCAL    NOTYPE       0         9   .LC21
+    0       1130          0     LOCAL    NOTYPE       0         9   .LC20
+    0       48b8          0     LOCAL    NOTYPE       0         2   $d
+    0       48c0          0     LOCAL    NOTYPE       0         2   $a
+    0       49e8          0     LOCAL    NOTYPE       0         2   $d
+    0       49ec          0     LOCAL    NOTYPE       0         2   $a
+    0       4b40          0     LOCAL    NOTYPE       0         2   $d
+    0       4b48          0     LOCAL    NOTYPE       0         2   $a
+    0       4b60          0     LOCAL    NOTYPE       0         2   $d
+    0       4b64          0     LOCAL    NOTYPE       0         2   $a
+    0       11fc          0     LOCAL    NOTYPE       0         9   .LC23
+    0       4c88          0     LOCAL    NOTYPE       0         2   $d
+    0       4c8c          0     LOCAL    NOTYPE       0         2   $a
+    0       12c4          0     LOCAL    NOTYPE       0         9   .LC42
+    0       13c8          0     LOCAL    NOTYPE       0         9   .LC49
+    0       1324          0     LOCAL    NOTYPE       0         9   .LC43
+    0       13b4          0     LOCAL    NOTYPE       0         9   .LC47
+    0       13c0          0     LOCAL    NOTYPE       0         9   .LC48
+    0       13d0          0     LOCAL    NOTYPE       0         9   .LC50
+    0       13d8          0     LOCAL    NOTYPE       0         9   .LC51
+    0       13e4          0     LOCAL    NOTYPE       0         9   .LC52
+    0       13f0          0     LOCAL    NOTYPE       0         9   .LC53
+    0       13f8          0     LOCAL    NOTYPE       0         9   .LC54
+    0       1400          0     LOCAL    NOTYPE       0         9   .LC55
+    0       1408          0     LOCAL    NOTYPE       0         9   .LC56
+    0       1378          0     LOCAL    NOTYPE       0         9   .LC44
+    0       1380          0     LOCAL    NOTYPE       0         9   .LC45
+    0       1388          0     LOCAL    NOTYPE       0         9   .LC46
+    0       123c          0     LOCAL    NOTYPE       0         9   .LC24
+    0       1244          0     LOCAL    NOTYPE       0         9   .LC25
+    0       1410          0     LOCAL    NOTYPE       0         9   .LC57
+    0       1250          0     LOCAL    NOTYPE       0         9   .LC27
+    0       129c          0     LOCAL    NOTYPE       0         9   .LC37
+    0       1254          0     LOCAL    NOTYPE       0         9   .LC28
+    0       14c0          0     LOCAL    NOTYPE       0         9   .LC61
+    0       143c          0     LOCAL    NOTYPE       0         9   .LC58
+    0       14c8          0     LOCAL    NOTYPE       0         9   .LC62
+    0       14b8          0     LOCAL    NOTYPE       0         9   .LC60
+    0       14d4          0     LOCAL    NOTYPE       0         9   .LC64
+    0       1490          0     LOCAL    NOTYPE       0         9   .LC59
+    0       14cc          0     LOCAL    NOTYPE       0         9   .LC63
+    0       14dc          0     LOCAL    NOTYPE       0         9   .LC65
+    0       14e4          0     LOCAL    NOTYPE       0         9   .LC66
+    0       14ec          0     LOCAL    NOTYPE       0         9   .LC67
+    0       14f4          0     LOCAL    NOTYPE       0         9   .LC68
+    0       1500          0     LOCAL    NOTYPE       0         9   .LC69
+    0       12ac          0     LOCAL    NOTYPE       0         9   .LC39
+    0       12bc          0     LOCAL    NOTYPE       0         9   .LC41
+    0       124c          0     LOCAL    NOTYPE       0         9   .LC26
+    0       1520          0     LOCAL    NOTYPE       0         9   .LC70
+    0       1714          0     LOCAL    NOTYPE       0         9   .LC100
+    0       1700          0     LOCAL    NOTYPE       0         9   .LC99
+    0       15b4          0     LOCAL    NOTYPE       0         9   .LC75
+    0       171c          0     LOCAL    NOTYPE       0         9   .LC101
+    0       125c          0     LOCAL    NOTYPE       0         9   .LC29
+    0       12b4          0     LOCAL    NOTYPE       0         9   .LC40
+    0       1264          0     LOCAL    NOTYPE       0         9   .LC30
+    0       1590          0     LOCAL    NOTYPE       0         9   .LC72
+    0       1574          0     LOCAL    NOTYPE       0         9   .LC71
+    0       15a8          0     LOCAL    NOTYPE       0         9   .LC74
+    0       159c          0     LOCAL    NOTYPE       0         9   .LC73
+    0       15bc          0     LOCAL    NOTYPE       0         9   .LC76
+    0       1600          0     LOCAL    NOTYPE       0         9   .LC78
+    0       15d0          0     LOCAL    NOTYPE       0         9   .LC77
+    0       1614          0     LOCAL    NOTYPE       0         9   .LC80
+    0       162c          0     LOCAL    NOTYPE       0         9   .LC82
+    0       1608          0     LOCAL    NOTYPE       0         9   .LC79
+    0       1640          0     LOCAL    NOTYPE       0         9   .LC84
+    0       1620          0     LOCAL    NOTYPE       0         9   .LC81
+    0       1634          0     LOCAL    NOTYPE       0         9   .LC83
+    0       164c          0     LOCAL    NOTYPE       0         9   .LC85
+    0       1658          0     LOCAL    NOTYPE       0         9   .LC86
+    0       16ac          0     LOCAL    NOTYPE       0         9   .LC88
+    0       1680          0     LOCAL    NOTYPE       0         9   .LC87
+    0       16b4          0     LOCAL    NOTYPE       0         9   .LC90
+    0       16c4          0     LOCAL    NOTYPE       0         9   .LC92
+    0       16b0          0     LOCAL    NOTYPE       0         9   .LC89
+    0       16cc          0     LOCAL    NOTYPE       0         9   .LC94
+    0       16bc          0     LOCAL    NOTYPE       0         9   .LC91
+    0       16d4          0     LOCAL    NOTYPE       0         9   .LC96
+    0       16c8          0     LOCAL    NOTYPE       0         9   .LC93
+    0       16d0          0     LOCAL    NOTYPE       0         9   .LC95
+    0       16d8          0     LOCAL    NOTYPE       0         9   .LC97
+    0       16dc          0     LOCAL    NOTYPE       0         9   .LC98
+    0       127c          0     LOCAL    NOTYPE       0         9   .LC33
+    0       126c          0     LOCAL    NOTYPE       0         9   .LC31
+    0       1274          0     LOCAL    NOTYPE       0         9   .LC32
+    0       1284          0     LOCAL    NOTYPE       0         9   .LC34
+    0       128c          0     LOCAL    NOTYPE       0         9   .LC35
+    0       1294          0     LOCAL    NOTYPE       0         9   .LC36
+    0       12a4          0     LOCAL    NOTYPE       0         9   .LC38
+    0        15c          0     LOCAL    NOTYPE       0         8   $d
+    0        15c          d     LOCAL    OBJECT       0         8   __FUNCTION__.7695
+    0        16c          a     LOCAL    OBJECT       0         8   __FUNCTION__.7652
+    0        178          a     LOCAL    OBJECT       0         8   __FUNCTION__.7723
+    0        184          d     LOCAL    OBJECT       0         8   __FUNCTION__.7731
+    0        194          d     LOCAL    OBJECT       0         8   __FUNCTION__.7737
+    0        1a4          c     LOCAL    OBJECT       0         8   __FUNCTION__.7749
+    0        1b0          d     LOCAL    OBJECT       0         8   __FUNCTION__.7762
+    0        1c0          c     LOCAL    OBJECT       0         8   __FUNCTION__.7776
+    0        1cc          c     LOCAL    OBJECT       0         8   __FUNCTION__.7787
+    0        1d8          d     LOCAL    OBJECT       0         8   __FUNCTION__.7809
+    0         10          0     LOCAL    NOTYPE       0        18   $d
+    0        c64          0     LOCAL    NOTYPE       0         9   $d
+    0          0          0     LOCAL      FILE       0         9   ao_drv.c
+    0       5da0          0     LOCAL    NOTYPE       0         2   $a
+    0       5da0        260     LOCAL      FUNC       0         2   AO_DRV_ISR
+    0       44e8          0     LOCAL    NOTYPE       0        18   .LANCHOR1
+    0        1e8          0     LOCAL    NOTYPE       0         8   .LANCHOR0
+    0       1760          0     LOCAL    NOTYPE       0         9   .LC1
+    0       17b0          0     LOCAL    NOTYPE       0         9   .LC2
+    0       1728          0     LOCAL    NOTYPE       0         9   .LC0
+    0        198          0     LOCAL    NOTYPE       0        16   $d
+    0       1870          0     LOCAL    NOTYPE       0         9   .LC5
+    0       183c          0     LOCAL    NOTYPE       0         9   .LC4
+    0       1800          0     LOCAL    NOTYPE       0         9   .LC3
+    0       64e4          0     LOCAL    NOTYPE       0         2   $d
+    0       64e8          0     LOCAL    NOTYPE       0         2   $a
+    0       6d14          0     LOCAL    NOTYPE       0         2   $d
+    0       6d18          0     LOCAL    NOTYPE       0         2   $a
+    0       7340          0     LOCAL    NOTYPE       0         2   $d
+    0       7344          0     LOCAL    NOTYPE       0         2   $a
+    0       189c          0     LOCAL    NOTYPE       0         9   .LC6
+    0       7498          0     LOCAL    NOTYPE       0         2   $d
+    0       749c          0     LOCAL    NOTYPE       0         2   $a
+    0       18f0          0     LOCAL    NOTYPE       0         9   .LC7
+    0       75f8          0     LOCAL    NOTYPE       0         2   $d
+    0       75fc          0     LOCAL    NOTYPE       0         2   $a
+    0       1938          0     LOCAL    NOTYPE       0         9   .LC8
+    0       7658          0     LOCAL    NOTYPE       0         2   $d
+    0       765c          0     LOCAL    NOTYPE       0         2   $a
+    0       197c          0     LOCAL    NOTYPE       0         9   .LC9
+    0       772c          0     LOCAL    NOTYPE       0         2   $d
+    0       7730          0     LOCAL    NOTYPE       0         2   $a
+    0       19b4          0     LOCAL    NOTYPE       0         9   .LC10
+    0       77b4          0     LOCAL    NOTYPE       0         2   $d
+    0       77b8          0     LOCAL    NOTYPE       0         2   $a
+    0       7848          0     LOCAL    NOTYPE       0         2   $d
+    0       784c          0     LOCAL    NOTYPE       0         2   $a
+    0       78b8          0     LOCAL    NOTYPE       0         2   $d
+    0       78bc          0     LOCAL    NOTYPE       0         2   $a
+    0       19e8          0     LOCAL    NOTYPE       0         9   .LC11
+    0       7980          0     LOCAL    NOTYPE       0         2   $d
+    0       7984          0     LOCAL    NOTYPE       0         2   $a
+    0       7a28          0     LOCAL    NOTYPE       0         2   $d
+    0       7a2c          0     LOCAL    NOTYPE       0         2   $a
+    0       7ad0          0     LOCAL    NOTYPE       0         2   $d
+    0       7ad4          0     LOCAL    NOTYPE       0         2   $a
+    0       7b88          0     LOCAL    NOTYPE       0         2   $d
+    0       7b8c          0     LOCAL    NOTYPE       0         2   $a
+    0       7c04          0     LOCAL    NOTYPE       0         2   $d
+    0       7c08          0     LOCAL    NOTYPE       0         2   $a
+    0       7c74          0     LOCAL    NOTYPE       0         2   $d
+    0       7c78          0     LOCAL    NOTYPE       0         2   $a
+    0       7cf0          0     LOCAL    NOTYPE       0         2   $d
+    0       7cf4          0     LOCAL    NOTYPE       0         2   $a
+    0       7d58          0     LOCAL    NOTYPE       0         2   $d
+    0       7d5c          0     LOCAL    NOTYPE       0         2   $a
+    0       1a28          0     LOCAL    NOTYPE       0         9   .LC12
+    0       7dd8          0     LOCAL    NOTYPE       0         2   $d
+    0       7ddc          0     LOCAL    NOTYPE       0         2   $a
+    0       1b10          0     LOCAL    NOTYPE       0         9   .LC37
+    0       1b94          0     LOCAL    NOTYPE       0         9   .LC41
+    0       1b9c          0     LOCAL    NOTYPE       0         9   .LC42
+    0       1ba4          0     LOCAL    NOTYPE       0         9   .LC43
+    0       1bac          0     LOCAL    NOTYPE       0         9   .LC44
+    0       1bb8          0     LOCAL    NOTYPE       0         9   .LC45
+    0       1bc0          0     LOCAL    NOTYPE       0         9   .LC46
+    0       1bc8          0     LOCAL    NOTYPE       0         9   .LC47
+    0       1bd0          0     LOCAL    NOTYPE       0         9   .LC48
+    0       1b64          0     LOCAL    NOTYPE       0         9   .LC38
+    0       1b6c          0     LOCAL    NOTYPE       0         9   .LC39
+    0       1b74          0     LOCAL    NOTYPE       0         9   .LC40
+    0       1bd8          0     LOCAL    NOTYPE       0         9   .LC49
+    0       1af8          0     LOCAL    NOTYPE       0         9   .LC33
+    0       1b00          0     LOCAL    NOTYPE       0         9   .LC34
+    0       1a58          0     LOCAL    NOTYPE       0         9   .LC13
+    0       1a80          0     LOCAL    NOTYPE       0         9   .LC18
+    0       1ad8          0     LOCAL    NOTYPE       0         9   .LC29
+    0       1ae0          0     LOCAL    NOTYPE       0         9   .LC30
+    0       1af0          0     LOCAL    NOTYPE       0         9   .LC32
+    0       1bf8          0     LOCAL    NOTYPE       0         9   .LC50
+    0       1c74          0     LOCAL    NOTYPE       0         9   .LC53
+    0       1c7c          0     LOCAL    NOTYPE       0         9   .LC54
+    0       1c84          0     LOCAL    NOTYPE       0         9   .LC55
+    0       1c90          0     LOCAL    NOTYPE       0         9   .LC56
+    0       1c98          0     LOCAL    NOTYPE       0         9   .LC57
+    0       1ca0          0     LOCAL    NOTYPE       0         9   .LC58
+    0       1c4c          0     LOCAL    NOTYPE       0         9   .LC51
+    0       1c54          0     LOCAL    NOTYPE       0         9   .LC52
+    0       1ca8          0     LOCAL    NOTYPE       0         9   .LC59
+    0       1cc8          0     LOCAL    NOTYPE       0         9   .LC60
+    0       1d40          0     LOCAL    NOTYPE       0         9   .LC63
+    0       1d48          0     LOCAL    NOTYPE       0         9   .LC64
+    0       1d50          0     LOCAL    NOTYPE       0         9   .LC65
+    0       1d58          0     LOCAL    NOTYPE       0         9   .LC66
+    0       1d1c          0     LOCAL    NOTYPE       0         9   .LC61
+    0       1d28          0     LOCAL    NOTYPE       0         9   .LC62
+    0       1d60          0     LOCAL    NOTYPE       0         9   .LC67
+    0       1d7c          0     LOCAL    NOTYPE       0         9   .LC68
+    0       1df8          0     LOCAL    NOTYPE       0         9   .LC73
+    0       1de8          0     LOCAL    NOTYPE       0         9   .LC71
+    0       1df0          0     LOCAL    NOTYPE       0         9   .LC72
+    0       1dd0          0     LOCAL    NOTYPE       0         9   .LC69
+    0       1dd8          0     LOCAL    NOTYPE       0         9   .LC70
+    0       1b08          0     LOCAL    NOTYPE       0         9   .LC35
+    0       1b0c          0     LOCAL    NOTYPE       0         9   .LC36
+    0       1a60          0     LOCAL    NOTYPE       0         9   .LC14
+    0       1a88          0     LOCAL    NOTYPE       0         9   .LC19
+    0       1aa0          0     LOCAL    NOTYPE       0         9   .LC22
+    0       1a70          0     LOCAL    NOTYPE       0         9   .LC16
+    0       1a90          0     LOCAL    NOTYPE       0         9   .LC20
+    0       1ae8          0     LOCAL    NOTYPE       0         9   .LC31
+    0       1a98          0     LOCAL    NOTYPE       0         9   .LC21
+    0       1a68          0     LOCAL    NOTYPE       0         9   .LC15
+    0       1aa8          0     LOCAL    NOTYPE       0         9   .LC23
+    0       1ab0          0     LOCAL    NOTYPE       0         9   .LC24
+    0       1ab8          0     LOCAL    NOTYPE       0         9   .LC25
+    0       1a78          0     LOCAL    NOTYPE       0         9   .LC17
+    0       1ac0          0     LOCAL    NOTYPE       0         9   .LC26
+    0       1ac8          0     LOCAL    NOTYPE       0         9   .LC27
+    0       1ad0          0     LOCAL    NOTYPE       0         9   .LC28
+    0       1e08          0     LOCAL    NOTYPE       0         9   .LC74
+    0       1e18          0     LOCAL    NOTYPE       0         9   .LC75
+    0       1e58          0     LOCAL    NOTYPE       0         9   .LC76
+    0       8930          0     LOCAL    NOTYPE       0         2   $d
+    0       8934          0     LOCAL    NOTYPE       0         2   $a
+    0       8990          0     LOCAL    NOTYPE       0         2   $d
+    0        1e8          0     LOCAL    NOTYPE       0         8   $d
+    0        1e8          b     LOCAL    OBJECT       0         8   __FUNCTION__.7877
+    0        1f4         13     LOCAL    OBJECT       0         8   __FUNCTION__.7617
+    0        208         13     LOCAL    OBJECT       0         8   __FUNCTION__.7684
+    0        21c         12     LOCAL    OBJECT       0         8   __FUNCTION__.7766
+    0        230         16     LOCAL    OBJECT       0         8   __FUNCTION__.7825
+    0        248         12     LOCAL    OBJECT       0         8   __FUNCTION__.7846
+    0        25c         12     LOCAL    OBJECT       0         8   __FUNCTION__.7852
+    0        270         11     LOCAL    OBJECT       0         8   __FUNCTION__.7858
+    0        284         12     LOCAL    OBJECT       0         8   __FUNCTION__.7863
+    0        298          f     LOCAL    OBJECT       0         8   __FUNCTION__.7883
+    0        2a8         1a     LOCAL    OBJECT       0         8   __FUNCTION__.7892
+    0        2c4         14     LOCAL    OBJECT       0         8   __FUNCTION__.7906
+    0        2d8         14     LOCAL    OBJECT       0         8   __FUNCTION__.7914
+    0        2ec          f     LOCAL    OBJECT       0         8   __FUNCTION__.7923
+    0        2fc          f     LOCAL    OBJECT       0         8   __FUNCTION__.7932
+    0        30c         11     LOCAL    OBJECT       0         8   __FUNCTION__.7940
+    0        320         11     LOCAL    OBJECT       0         8   __FUNCTION__.7947
+    0        334         11     LOCAL    OBJECT       0         8   __FUNCTION__.7955
+    0        348         11     LOCAL    OBJECT       0         8   __FUNCTION__.7961
+    0        35c          f     LOCAL    OBJECT       0         8   __FUNCTION__.7967
+    0        36c         12     LOCAL    OBJECT       0         8   __FUNCTION__.8008
+    0        380         12     LOCAL    OBJECT       0         8   __FUNCTION__.8055
+    0       44e8          0     LOCAL    NOTYPE       0        18   $d
+    0       4658          4     LOCAL    OBJECT       0        18   s_pfDmaCallback
+    0       1728          0     LOCAL    NOTYPE       0         9   $d
+    0          0          0     LOCAL      FILE       0         9   ao_init.c
+    0          0          0     LOCAL    NOTYPE       0         4   $a
+    0          0         10     LOCAL      FUNC       0         4   ao_mod_init
+    0          0          0     LOCAL    NOTYPE       0         b   $d
+    0          0          0     LOCAL    NOTYPE       0         6   $a
+    0          0          4     LOCAL      FUNC       0         6   ao_mod_exit
+    0          0          0     LOCAL    NOTYPE       0         e   $d
+    0          0         14     LOCAL    OBJECT       0        10   __UNIQUE_ID_license8
+    0          0          0     LOCAL    NOTYPE       0        10   $d
+    0          0          0     LOCAL      FILE       0        10   hi3516cv500_ao.mod.c
+    0          0          0     LOCAL    NOTYPE       0        14   $d
+    0         14          0     LOCAL    NOTYPE       0        10   $d
+    0         14          9     LOCAL    OBJECT       0        10   __module_depends
+    0         1d         2b     LOCAL    OBJECT       0        10   __UNIQUE_ID_vermagic8
+    0       171c        20c    GLOBAL      FUNC       0         2   AOQueryChnState
+    0        ed8        26c    GLOBAL      FUNC       0         2   AOPauseChn
+    0       2834        138    GLOBAL      FUNC       0         2   AoSetMute
+    0       2e68        138    GLOBAL      FUNC       0         2   AoGetMute
+    0       44e8        170    GLOBAL    OBJECT       0        18   g_stAoDrvDev
+    0       75fc         60    GLOBAL      FUNC       0         2   AO_DRV_ClrDevAttr
+    0       6d18         24    GLOBAL      FUNC       0         2   AO_DRV_FlushData
+    0       2d5c        10c    GLOBAL      FUNC       0         2   AoGetSaveFile
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_destroydev
+    0       3ce0         24    GLOBAL      FUNC       0         2   AoSetDmaRdOffsetInitFlag
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_deregisterdevice
+    0          0        180    GLOBAL    OBJECT       0        14   __this_module
+    0          0          0    GLOBAL    NOTYPE       0         0   CMPI_UnRegisterModule
+    0       78c4          8    GLOBAL      FUNC       0         2   AO_DRV_CloseClock
+    0          0          0    GLOBAL    NOTYPE       0         0   __aeabi_unwind_cpp_pr0
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_gettimeofday
+    0          0          0    GLOBAL    NOTYPE       0         0   CMPI_MmzMallocNocache
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_poll_wait
+    0       2020         e8    GLOBAL      FUNC       0         2   AOSetChnVqeInfo
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_spin_unlock_irqrestore
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_down_interruptible
+    0       7a2c         a8    GLOBAL      FUNC       0         2   AO_DRV_SetMute
+    0       38f8        390    GLOBAL      FUNC       0         2   AOBufInit
+    0          0          4    GLOBAL      FUNC       0         6   cleanup_module
+    0       4b48         1c    GLOBAL      FUNC       0         2   AO_GetChnCtx
+    0       2230        134    GLOBAL      FUNC       0         2   AoGetTrackMode
+    0        908        340    GLOBAL      FUNC       0         2   AOEnableChn
+    0       7c08         70    GLOBAL      FUNC       0         2   AO_DRV_GetVolume
+    0       49ec        15c    GLOBAL      FUNC       0         2   AO_DEV_Exit
+    0       8934         60    GLOBAL      FUNC       0         2   AO_DRV_GetDmaRdpt
+    0       6d3c        608    GLOBAL      FUNC       0         2   AO_DRV_PutChnData
+    0       2108        128    GLOBAL      FUNC       0         2   AoSetTrackMode
+    0       3d04        3cc    GLOBAL      FUNC       0         2   AoGetData
+    0       248c        134    GLOBAL      FUNC       0         2   AoGetVolume
+    0          0         10    GLOBAL      FUNC       0         4   init_module
+    0       7ad4         b8    GLOBAL      FUNC       0         2   AO_DRV_GetMute
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_strnlen
+    0       40d0        170    GLOBAL      FUNC       0         2   AoSetDevAttr
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_set
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_init
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_wait_init
+    0       3428        148    GLOBAL      FUNC       0         2   AO_ModInit
+    0        834         bc    GLOBAL      FUNC       0         2   AO_Exit
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_memset
+    0       1144        268    GLOBAL      FUNC       0         2   AOResumeChn
+    0       2364        128    GLOBAL      FUNC       0         2   AoSetVolume
+    0       7d5c         80    GLOBAL      FUNC       0         2   AO_DRV_Restore
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_dec_return
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_memcpy
+    0       77c8         84    GLOBAL      FUNC       0         2   AO_DRV_DevInit
+    0       25c0        134    GLOBAL      FUNC       0         2   AoSetClkDir
+    0          0          0    GLOBAL    NOTYPE       0         0   __aeabi_idiv
+    0         24         50    GLOBAL    OBJECT       0        12   stAoDrvOps
+    0       7984         a8    GLOBAL      FUNC       0         2   AO_DRV_GetTrackMode
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_panic
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_registerdevice
+    0       1f2c         f4    GLOBAL      FUNC       0         2   AoSetChnResmpInfo
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_seq_printf
+    0         10        110    GLOBAL    OBJECT       0        18   g_stAoDev
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_wait_timeout_interruptible
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_copy_from_user
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_createdev
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_spin_lock_init
+    0       77b8         10    GLOBAL      FUNC       0         2   AO_DRV_SetDmaISR
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_sema_destory
+    0       7b8c         7c    GLOBAL      FUNC       0         2   AO_DRV_SetVolume
+    0       7344        158    GLOBAL      FUNC       0         2   AO_DRV_DmaBufInfoInit
+    0          0          0    GLOBAL    NOTYPE       0         0   __aeabi_uidiv
+    0       3ccc         14    GLOBAL      FUNC       0         2   AoSaveDmaRdPtr
+    0       296c        3f0    GLOBAL      FUNC       0         2   AoSetSaveFile
+    0        120       43c8    GLOBAL    OBJECT       0        18   g_stAoChn
+    0          0          0    GLOBAL    NOTYPE       0         0   HI_LOG
+    0       4240        144    GLOBAL      FUNC       0         2   AoGetDevAttr
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_wakeup
+    0       784c         20    GLOBAL      FUNC       0         2   AO_DRV_DevDeInit
+    0          0          0    GLOBAL    NOTYPE       0         0   CMPI_MmzFree
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_wait_destory
+    0       4c8c       1114    GLOBAL      FUNC       0         2   AOProcShow
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_up
+    0       78cc         b8    GLOBAL      FUNC       0         2   AO_DRV_SetTrackMode
+    0       3570         40    GLOBAL      FUNC       0         2   AO_ModExit
+    0       8344        5f0    GLOBAL      FUNC       0         2   AO_DRV_GetAECData
+    0         14        474    GLOBAL      FUNC       0         2   AOReceiveFrm
+    0       13ac        294    GLOBAL      FUNC       0         2   AOClearChnBuf
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_sema_init
+    0       749c         28    GLOBAL      FUNC       0         2   AO_DRV_SetDmaBufAddr
+    0       6000        4e8    GLOBAL      FUNC       0         2   AO_DRV_PutZeroData
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_create_proc_entry
+    0       7c78         7c    GLOBAL      FUNC       0         2   AO_DRV_SetClkDir
+    0       4b64         1c    GLOBAL      FUNC       0         2   AO_GetDevCtx
+    0       64e8        830    GLOBAL      FUNC       0         2   AO_DRV_PutLastData
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_snprintf
+    0          0          4    GLOBAL    OBJECT       0        18   g_stAoBufLock
+    0       3c88         44    GLOBAL      FUNC       0         2   AOBufExit
+    0       4384        268    GLOBAL      FUNC       0         2   AoEnableDev
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_spin_lock_destory
+    0       4b80        10c    GLOBAL      FUNC       0         2   AoClrDevAttr
+    0       74f8        104    GLOBAL      FUNC       0         2   AO_DRV_SetDevAttr
+    0       7cf4         68    GLOBAL      FUNC       0         2   AO_DRV_GetClkDir
+    0          0          0    GLOBAL    NOTYPE       0         0   hil_mmb_flush_dcache_byaddr
+    0       78bc          8    GLOBAL      FUNC       0         2   AO_DRV_OpenClock
+    0       26f4        140    GLOBAL      FUNC       0         2   AoGetClkDir
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_destory
+    0       1928        604    GLOBAL      FUNC       0         2   AOPutFrame
+    0        608         60    GLOBAL      FUNC       0         2   AoPutFrame_WaitConditionCallBack
+    0          0          0    GLOBAL    NOTYPE       0         0   CMPI_GetModuleFuncById
+    0       45ec        2d4    GLOBAL      FUNC       0         2   AoDisableDev
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_inc_return
+    0        668        1cc    GLOBAL      FUNC       0         2   AO_Init
+    0       48c0        12c    GLOBAL      FUNC       0         2   AO_DEV_Init
+    0        c48        290    GLOBAL      FUNC       0         2   AODisableChn
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_msecs_to_jiffies
+    0       74c4         34    GLOBAL      FUNC       0         2   AO_DRV_ClrDmaBufAddr
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_atomic_read
+    0       7730         88    GLOBAL      FUNC       0         2   AO_DRV_DisableDev
+    0       1640         dc    GLOBAL      FUNC       0         2   AOGetChnState
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_spin_lock_irqsave
+    0       786c         50    GLOBAL      FUNC       0         2   AO_DRV_CheckAioExportFunc
+    0          0          0    GLOBAL    NOTYPE       0         0   CMPI_RegisterModule
+    0       35b0        348    GLOBAL      FUNC       0         2   AODmaCallback
+    0       7ddc        568    GLOBAL      FUNC       0         2   AO_DRV_ProcShow
+    0       765c         d4    GLOBAL      FUNC       0         2   AO_DRV_EnableDev
+    0          0          0    GLOBAL    NOTYPE       0         0   osal_remove_proc_entry
+----------------------------------------------------------------------------------------------------
+
+===========================
+==      RELOCATIONS      ==
+===========================
+
+Index | Offset   | Type                     | Symbol   
+----------------------------------------------------------------------------------------------------
+    0   30         R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x0
+    1   34         R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+    2   38         R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+    3   3c         R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x0
+    4   40         R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+    5   48         R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+    6   4c         R_ARM_CALL                 osal_panic @x0
+    7   70         R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+    8   80         R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+    9   88         R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+    a   98         R_ARM_CALL                 osal_spin_lock_irqsave @x0
+    b   dc         R_ARM_CALL                 __aeabi_uidiv @x0
+    c   fc         R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+    d   104        R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+    e   108        R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+    f   110        R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+   10   120        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   11   128        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   12   150        R_ARM_CALL                 osal_memcpy @x0
+   13   198        R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+   14   1d4        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   15   1d8        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   16   1dc        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   17   1f8        R_ARM_MOVW_ABS_NC          .LC11 .rodata.str1.4@x258
+   18   1fc        R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+   19   200        R_ARM_MOVT_ABS             .LC11 .rodata.str1.4@x258
+   1a   204        R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+   1b   20c        R_ARM_CALL                 HI_LOG @x0
+   1c   22c        R_ARM_CALL                 osal_panic @x0
+   1d   244        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   1e   248        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   1f   24c        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   20   268        R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+   21   26c        R_ARM_MOVW_ABS_NC          .LC6 .rodata.str1.4@xf0
+   22   270        R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+   23   274        R_ARM_MOVT_ABS             .LC6 .rodata.str1.4@xf0
+   24   27c        R_ARM_CALL                 HI_LOG @x0
+   25   294        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   26   298        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   27   29c        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   28   2c0        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   29   2c4        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   2a   2c8        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   2b   2dc        R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+   2c   2e4        R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+   2d   2f8        R_ARM_MOVW_ABS_NC          .LC7 .rodata.str1.4@x134
+   2e   2fc        R_ARM_MOVT_ABS             .LC7 .rodata.str1.4@x134
+   2f   300        R_ARM_CALL                 HI_LOG @x0
+   30   310        R_ARM_MOVW_ABS_NC          .LC2 .rodata.str1.4@x64
+   31   314        R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+   32   318        R_ARM_MOVT_ABS             .LC2 .rodata.str1.4@x64
+   33   31c        R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+   34   320        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   35   328        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   36   32c        R_ARM_CALL                 osal_panic @x0
+   37   334        R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+   38   338        R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+   39   33c        R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+   3a   340        R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+   3b   344        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   3c   34c        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   3d   350        R_ARM_CALL                 osal_panic @x0
+   3e   364        R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+   3f   368        R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+   40   36c        R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+   41   374        R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+   42   37c        R_ARM_CALL                 HI_LOG @x0
+   43   390        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   44   394        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   45   398        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   46   3b8        R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+   47   3c0        R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+   48   3c4        R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+   49   3cc        R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+   4a   3d4        R_ARM_CALL                 HI_LOG @x0
+   4b   3e8        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   4c   3ec        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   4d   3f0        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   4e   40c        R_ARM_MOVW_ABS_NC          .LC8 .rodata.str1.4@x188
+   4f   410        R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+   50   414        R_ARM_MOVT_ABS             .LC8 .rodata.str1.4@x188
+   51   418        R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+   52   420        R_ARM_CALL                 HI_LOG @x0
+   53   434        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   54   438        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   55   43c        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   56   458        R_ARM_MOVW_ABS_NC          .LC9 .rodata.str1.4@x1e0
+   57   460        R_ARM_MOVT_ABS             .LC9 .rodata.str1.4@x1e0
+   58   468        R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x0
+   59   470        R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x0
+   5a   478        R_ARM_CALL                 HI_LOG @x0
+   5b   488        R_ARM_MOVW_ABS_NC          .LANCHOR2 .data@x0
+   5c   48c        R_ARM_MOVT_ABS             .LANCHOR2 .data@x0
+   5d   4a0        R_ARM_CALL                 osal_down_interruptible @x0
+   5e   4ac        R_ARM_MOVW_ABS_NC          g_stAoDev .bss@x10
+   5f   4b0        R_ARM_MOVT_ABS             g_stAoDev .bss@x10
+   60   4c4        R_ARM_CALL                 osal_up @x0
+   61   4cc        R_ARM_CALL                 osal_down_interruptible @x0
+   62   4d8        R_ARM_MOVW_ABS_NC          g_stAoDev .bss@x10
+   63   4dc        R_ARM_MOVT_ABS             g_stAoDev .bss@x10
+   64   4f4        R_ARM_JUMP24               osal_up @x0
+   65   4fc        R_ARM_CALL                 osal_wakeup @x0
+   66   508        R_ARM_CALL                 osal_wakeup @x0
+   67   510        R_ARM_ABS32                g_stAoDev .bss@x10
+   68   514        R_ARM_ABS32                g_stAoDev .bss@x10
+   69   524        R_ARM_CALL                 osal_atomic_read @x0
+   6a   53c        R_ARM_ABS32                 .bss@x0
+   6b   554        R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+   6c   56c        R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+   6d   5b8        R_ARM_CALL                 osal_poll_wait @x0
+   6e   5c0        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   6f   5c4        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   70   5c8        R_ARM_CALL                 osal_spin_lock_irqsave @x0
+   71   5e4        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   72   5e8        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   73   5ec        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   74   650        R_ARM_MOVW_ABS_NC          .LANCHOR2 .data@x0
+   75   654        R_ARM_MOVT_ABS             .LANCHOR2 .data@x0
+   76   66c        R_ARM_MOVW_ABS_NC          .LANCHOR2 .data@x0
+   77   670        R_ARM_MOVT_ABS             .LANCHOR2 .data@x0
+   78   68c        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   79   690        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   7a   694        R_ARM_CALL                 osal_spin_lock_init @x0
+   7b   69c        R_ARM_CALL                 AO_DEV_Init .text@x48c0
+   7c   6ac        R_ARM_MOVW_ABS_NC          .LC14 .rodata.str1.4@x2f0
+   7d   6b0        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   7e   6b4        R_ARM_MOVT_ABS             .LC14 .rodata.str1.4@x2f0
+   7f   6b8        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   80   6c4        R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+   81   6e4        R_ARM_CALL                 AO_DEV_Init .text@x48c0
+   82   6f4        R_ARM_MOVW_ABS_NC          .LC14 .rodata.str1.4@x2f0
+   83   6f8        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   84   6fc        R_ARM_MOVT_ABS             .LC14 .rodata.str1.4@x2f0
+   85   700        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   86   710        R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+   87   744        R_ARM_MOVW_ABS_NC          AOReceiveFrm .text@x14
+   88   74c        R_ARM_MOVT_ABS             AOReceiveFrm .text@x14
+   89   75c        R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+   8a   794        R_ARM_CALL                 osal_panic @x0
+   8b   7ac        R_ARM_CALL                 osal_panic @x0
+   8c   7b4        R_ARM_MOVW_ABS_NC          .LC15 .rodata.str1.4@x304
+   8d   7b8        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   8e   7bc        R_ARM_MOVT_ABS             .LC15 .rodata.str1.4@x304
+   8f   7c0        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   90   7cc        R_ARM_CALL                 osal_panic @x0
+   91   7e0        R_ARM_MOVW_ABS_NC          .LC12 .rodata.str1.4@x294
+   92   7e8        R_ARM_MOVT_ABS             .LC12 .rodata.str1.4@x294
+   93   7f0        R_ARM_CALL                 HI_LOG @x0
+   94   804        R_ARM_MOVW_ABS_NC          .LC13 .rodata.str1.4@x2c4
+   95   80c        R_ARM_MOVT_ABS             .LC13 .rodata.str1.4@x2c4
+   96   81c        R_ARM_CALL                 HI_LOG @x0
+   97   82c        R_ARM_ABS32                 .rodata@x0
+   98   830        R_ARM_ABS32                 .rodata@x0
+   99   838        R_ARM_MOVW_ABS_NC          .LANCHOR2 .data@x0
+   9a   83c        R_ARM_MOVT_ABS             .LANCHOR2 .data@x0
+   9b   850        R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+   9c   860        R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+   9d   874        R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+   9e   888        R_ARM_CALL                 AO_DEV_Exit .text@x49ec
+   9f   890        R_ARM_CALL                 AO_DEV_Exit .text@x49ec
+   a0   894        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   a1   898        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   a2   89c        R_ARM_CALL                 osal_spin_lock_destory @x0
+   a3   8ac        R_ARM_MOVW_ABS_NC          .LC16 .rodata.str1.4@x31c
+   a4   8b0        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   a5   8b4        R_ARM_MOVT_ABS             .LC16 .rodata.str1.4@x31c
+   a6   8b8        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   a7   8c4        R_ARM_CALL                 osal_panic @x0
+   a8   8cc        R_ARM_MOVW_ABS_NC          .LC16 .rodata.str1.4@x31c
+   a9   8d0        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   aa   8d4        R_ARM_MOVT_ABS             .LC16 .rodata.str1.4@x31c
+   ab   8d8        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   ac   8e4        R_ARM_CALL                 osal_panic @x0
+   ad   8ec        R_ARM_ABS32                 .rodata@x0
+   ae   91c        R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+   af   93c        R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+   b0   960        R_ARM_CALL                 osal_down_interruptible @x0
+   b1   998        R_ARM_CALL                 __aeabi_idiv @x0
+   b2   9a4        R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+   b3   9a8        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   b4   9ac        R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+   b5   9b0        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   b6   9cc        R_ARM_CALL                 osal_down_interruptible @x0
+   b7   9d8        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   b8   9dc        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   b9   9e4        R_ARM_CALL                 osal_spin_lock_irqsave @x0
+   ba   9f4        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   bb   9f8        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   bc   9fc        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   bd   a04        R_ARM_CALL                 osal_up @x0
+   be   a10        R_ARM_MOVW_ABS_NC          .LC18 .rodata.str1.4@x364
+   bf   a18        R_ARM_MOVT_ABS             .LC18 .rodata.str1.4@x364
+   c0   a2c        R_ARM_CALL                 HI_LOG @x0
+   c1   a4c        R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+   c2   a68        R_ARM_CALL                 osal_panic @x0
+   c3   a78        R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+   c4   a88        R_ARM_CALL                 osal_down_interruptible @x0
+   c5   a98        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   c6   a9c        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   c7   aa0        R_ARM_CALL                 osal_spin_lock_irqsave @x0
+   c8   ab0        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   c9   ab4        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   ca   ab8        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   cb   ac0        R_ARM_CALL                 osal_up @x0
+   cc   ad4        R_ARM_MOVW_ABS_NC          .LC18 .rodata.str1.4@x364
+   cd   adc        R_ARM_MOVT_ABS             .LC18 .rodata.str1.4@x364
+   ce   aec        R_ARM_CALL                 HI_LOG @x0
+   cf   af4        R_ARM_CALL                 osal_up @x0
+   d0   b08        R_ARM_CALL                 osal_up @x0
+   d1   b1c        R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+   d2   b20        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   d3   b24        R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+   d4   b28        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   d5   b34        R_ARM_CALL                 osal_panic @x0
+   d6   b48        R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+   d7   b50        R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+   d8   b5c        R_ARM_CALL                 HI_LOG @x0
+   d9   b78        R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+   da   b80        R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+   db   b8c        R_ARM_CALL                 HI_LOG @x0
+   dc   ba0        R_ARM_CALL                 osal_up @x0
+   dd   bac        R_ARM_MOVW_ABS_NC          .LC17 .rodata.str1.4@x330
+   de   bb4        R_ARM_MOVT_ABS             .LC17 .rodata.str1.4@x330
+   df   bc4        R_ARM_CALL                 HI_LOG @x0
+   e0   be4        R_ARM_CALL                 osal_up @x0
+   e1   bf0        R_ARM_MOVW_ABS_NC          .LC19 .rodata.str1.4@x39c
+   e2   bf8        R_ARM_MOVT_ABS             .LC19 .rodata.str1.4@x39c
+   e3   c08        R_ARM_CALL                 HI_LOG @x0
+   e4   c18        R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+   e5   c1c        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   e6   c20        R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+   e7   c24        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   e8   c30        R_ARM_CALL                 osal_panic @x0
+   e9   c44        R_ARM_ABS32                 .rodata@x0
+   ea   c5c        R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+   eb   c7c        R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+   ec   ca0        R_ARM_CALL                 osal_down_interruptible @x0
+   ed   cc4        R_ARM_CALL                 __aeabi_idiv @x0
+   ee   cdc        R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+   ef   ce0        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+   f0   ce4        R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+   f1   ce8        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+   f2   d0c        R_ARM_CALL                 osal_down_interruptible @x0
+   f3   d18        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   f4   d1c        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   f5   d3c        R_ARM_CALL                 osal_spin_lock_irqsave @x0
+   f6   d4c        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+   f7   d50        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+   f8   d54        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+   f9   d60        R_ARM_CALL                 osal_wakeup @x0
+   fa   d68        R_ARM_CALL                 osal_up @x0
+   fb   d74        R_ARM_MOVW_ABS_NC          .LC20 .rodata.str1.4@x404
+   fc   d7c        R_ARM_MOVT_ABS             .LC20 .rodata.str1.4@x404
+   fd   d90        R_ARM_CALL                 HI_LOG @x0
+   fe   db4        R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+   ff   dd0        R_ARM_CALL                 osal_panic @x0
+  100   ddc        R_ARM_CALL                 osal_up @x0
+  101   df0        R_ARM_CALL                 osal_down_interruptible @x0
+  102   e08        R_ARM_CALL                 osal_up @x0
+  103   e2c        R_ARM_CALL                 osal_up @x0
+  104   e34        R_ARM_CALL                 osal_up @x0
+  105   e48        R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  106   e4c        R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  107   e50        R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  108   e54        R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  109   e60        R_ARM_CALL                 osal_panic @x0
+  10a   e74        R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  10b   e7c        R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  10c   e88        R_ARM_CALL                 HI_LOG @x0
+  10d   ea4        R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  10e   eac        R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  10f   eb8        R_ARM_CALL                 HI_LOG @x0
+  110   ed4        R_ARM_ABS32                 .rodata@x0
+  111   f04        R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  112   f10        R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  113   f44        R_ARM_CALL                 __aeabi_idiv @x0
+  114   f54        R_ARM_CALL                 osal_down_interruptible @x0
+  115   f70        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  116   f78        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  117   f7c        R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  118   f94        R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  119   f98        R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  11a   f9c        R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  11b   fa4        R_ARM_CALL                 osal_up @x0
+  11c   fb0        R_ARM_MOVW_ABS_NC          .LC23 .rodata.str1.4@x498
+  11d   fb8        R_ARM_MOVT_ABS             .LC23 .rodata.str1.4@x498
+  11e   fc8        R_ARM_CALL                 HI_LOG @x0
+  11f   ff4        R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  120   100c       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  121   1010       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  122   1014       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  123   1018       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  124   1024       R_ARM_CALL                 osal_panic @x0
+  125   102c       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+  126   1030       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  127   1034       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+  128   1038       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  129   1044       R_ARM_CALL                 osal_panic @x0
+  12a   1054       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  12b   105c       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  12c   106c       R_ARM_CALL                 HI_LOG @x0
+  12d   1084       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  12e   108c       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  12f   109c       R_ARM_CALL                 HI_LOG @x0
+  130   10bc       R_ARM_CALL                 osal_up @x0
+  131   10c4       R_ARM_MOVW_ABS_NC          .LC21 .rodata.str1.4@x43c
+  132   10cc       R_ARM_MOVT_ABS             .LC21 .rodata.str1.4@x43c
+  133   10dc       R_ARM_CALL                 HI_LOG @x0
+  134   10ec       R_ARM_MOVW_ABS_NC          .LC22 .rodata.str1.4@x480
+  135   10f0       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  136   10f4       R_ARM_MOVT_ABS             .LC22 .rodata.str1.4@x480
+  137   10f8       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  138   1104       R_ARM_CALL                 osal_panic @x0
+  139   1118       R_ARM_MOVW_ABS_NC          .LC19 .rodata.str1.4@x39c
+  13a   1120       R_ARM_MOVT_ABS             .LC19 .rodata.str1.4@x39c
+  13b   1130       R_ARM_CALL                 HI_LOG @x0
+  13c   1140       R_ARM_ABS32                 .rodata@x0
+  13d   1170       R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  13e   117c       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  13f   11b0       R_ARM_CALL                 __aeabi_idiv @x0
+  140   11c0       R_ARM_CALL                 osal_down_interruptible @x0
+  141   11dc       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  142   11e4       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  143   11e8       R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  144   1200       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  145   1204       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  146   1208       R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  147   1210       R_ARM_CALL                 osal_wakeup @x0
+  148   1218       R_ARM_CALL                 osal_up @x0
+  149   1224       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x534
+  14a   122c       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x534
+  14b   123c       R_ARM_CALL                 HI_LOG @x0
+  14c   125c       R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  14d   1274       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+  14e   1278       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  14f   127c       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+  150   1280       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  151   128c       R_ARM_CALL                 osal_panic @x0
+  152   1294       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  153   1298       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  154   129c       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  155   12a0       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  156   12ac       R_ARM_CALL                 osal_panic @x0
+  157   12bc       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  158   12c4       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  159   12d4       R_ARM_CALL                 HI_LOG @x0
+  15a   12ec       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  15b   12f4       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  15c   1304       R_ARM_CALL                 HI_LOG @x0
+  15d   1324       R_ARM_CALL                 osal_up @x0
+  15e   132c       R_ARM_MOVW_ABS_NC          .LC24 .rodata.str1.4@x4cc
+  15f   1334       R_ARM_MOVT_ABS             .LC24 .rodata.str1.4@x4cc
+  160   1344       R_ARM_CALL                 HI_LOG @x0
+  161   1360       R_ARM_MOVW_ABS_NC          .LC19 .rodata.str1.4@x39c
+  162   1368       R_ARM_MOVT_ABS             .LC19 .rodata.str1.4@x39c
+  163   1378       R_ARM_CALL                 HI_LOG @x0
+  164   1388       R_ARM_MOVW_ABS_NC          .LC25 .rodata.str1.4@x51c
+  165   138c       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  166   1390       R_ARM_MOVT_ABS             .LC25 .rodata.str1.4@x51c
+  167   1394       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  168   13a0       R_ARM_CALL                 osal_panic @x0
+  169   13a8       R_ARM_ABS32                 .rodata@x0
+  16a   13cc       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  16b   13fc       R_ARM_CALL                 __aeabi_idiv @x0
+  16c   140c       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+  16d   1410       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  16e   1414       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+  16f   1418       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  170   1438       R_ARM_CALL                 osal_down_interruptible @x0
+  171   1444       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  172   1448       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  173   146c       R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  174   1478       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  175   1480       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  176   148c       R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  177   1494       R_ARM_CALL                 osal_wakeup @x0
+  178   149c       R_ARM_CALL                 osal_up @x0
+  179   14b4       R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  17a   14d0       R_ARM_CALL                 osal_panic @x0
+  17b   1504       R_ARM_CALL                 osal_up @x0
+  17c   1518       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x564
+  17d   1520       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x564
+  17e   1528       R_ARM_CALL                 HI_LOG @x0
+  17f   1540       R_ARM_CALL                 osal_up @x0
+  180   1558       R_ARM_MOVW_ABS_NC          .LC28 .rodata.str1.4@x59c
+  181   1564       R_ARM_MOVT_ABS             .LC28 .rodata.str1.4@x59c
+  182   1574       R_ARM_CALL                 HI_LOG @x0
+  183   1588       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  184   158c       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  185   1590       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  186   1594       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  187   15a0       R_ARM_CALL                 osal_panic @x0
+  188   15b0       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  189   15b8       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  18a   15c8       R_ARM_CALL                 HI_LOG @x0
+  18b   15e0       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  18c   15e8       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  18d   15f8       R_ARM_CALL                 HI_LOG @x0
+  18e   1614       R_ARM_MOVW_ABS_NC          .LC19 .rodata.str1.4@x39c
+  18f   161c       R_ARM_MOVT_ABS             .LC19 .rodata.str1.4@x39c
+  190   162c       R_ARM_CALL                 HI_LOG @x0
+  191   163c       R_ARM_ABS32                 .rodata@x0
+  192   166c       R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  193   168c       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+  194   1690       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  195   1694       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+  196   1698       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  197   16a4       R_ARM_CALL                 osal_panic @x0
+  198   16b4       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  199   16bc       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  19a   16cc       R_ARM_CALL                 HI_LOG @x0
+  19b   16f0       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  19c   16f8       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  19d   1708       R_ARM_CALL                 HI_LOG @x0
+  19e   1718       R_ARM_ABS32                 .rodata@x0
+  19f   1750       R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  1a0   1760       R_ARM_CALL                 osal_down_interruptible @x0
+  1a1   1790       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  1a2   1798       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  1a3   179c       R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  1a4   17ec       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  1a5   17f0       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  1a6   17f4       R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  1a7   17fc       R_ARM_CALL                 osal_up @x0
+  1a8   1834       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+  1a9   1838       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  1aa   183c       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+  1ab   1840       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  1ac   184c       R_ARM_CALL                 osal_panic @x0
+  1ad   185c       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  1ae   1864       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  1af   1874       R_ARM_CALL                 HI_LOG @x0
+  1b0   1888       R_ARM_CALL                 osal_up @x0
+  1b1   188c       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x564
+  1b2   1890       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x564
+  1b3   18ac       R_ARM_CALL                 HI_LOG @x0
+  1b4   18cc       R_ARM_CALL                 osal_up @x0
+  1b5   18d4       R_ARM_MOVW_ABS_NC          .LC29 .rodata.str1.4@x5e0
+  1b6   18e0       R_ARM_MOVT_ABS             .LC29 .rodata.str1.4@x5e0
+  1b7   18fc       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  1b8   1904       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  1b9   1914       R_ARM_CALL                 HI_LOG @x0
+  1ba   1924       R_ARM_ABS32                 .rodata@x0
+  1bb   1958       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  1bc   198c       R_ARM_CALL                 __aeabi_idiv @x0
+  1bd   19c0       R_ARM_CALL                 __aeabi_uidiv @x0
+  1be   19d0       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+  1bf   19d4       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+  1c0   19dc       R_ARM_MOVW_ABS_NC          AoPutFrame_WaitConditionCallBack .text@x608
+  1c1   19e4       R_ARM_MOVW_ABS_NC          .LANCHOR2 .data@x0
+  1c2   19e8       R_ARM_MOVT_ABS             AoPutFrame_WaitConditionCallBack .text@x608
+  1c3   19ec       R_ARM_MOVT_ABS             .LANCHOR2 .data@x0
+  1c4   1a28       R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  1c5   1a38       R_ARM_CALL                 osal_down_interruptible @x0
+  1c6   1a54       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  1c7   1a5c       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  1c8   1a60       R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  1c9   1a80       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  1ca   1a84       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  1cb   1a90       R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  1cc   1a98       R_ARM_CALL                 osal_up @x0
+  1cd   1ab8       R_ARM_CALL                 osal_wait_timeout_interruptible @x0
+  1ce   1ad0       R_ARM_CALL                 AoPutFrame_WaitConditionCallBack .text@x608
+  1cf   1af0       R_ARM_CALL                 osal_msecs_to_jiffies @x0
+  1d0   1b08       R_ARM_CALL                 osal_down_interruptible @x0
+  1d1   1b38       R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  1d2   1b64       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  1d3   1b6c       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  1d4   1b8c       R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  1d5   1ba4       R_ARM_CALL                 osal_copy_from_user @x0
+  1d6   1bc4       R_ARM_CALL                 osal_up @x0
+  1d7   1be4       R_ARM_CALL                 AoPutFrame_WaitConditionCallBack .text@x608
+  1d8   1c00       R_ARM_CALL                 osal_wait_timeout_interruptible @x0
+  1d9   1c28       R_ARM_MOVW_ABS_NC          .LC35 .rodata.str1.4@x7b8
+  1da   1c30       R_ARM_MOVT_ABS             .LC35 .rodata.str1.4@x7b8
+  1db   1c40       R_ARM_CALL                 HI_LOG @x0
+  1dc   1c64       R_ARM_CALL                 osal_up @x0
+  1dd   1c7c       R_ARM_CALL                 osal_up @x0
+  1de   1c88       R_ARM_MOVW_ABS_NC          .LC33 .rodata.str1.4@x73c
+  1df   1c90       R_ARM_MOVT_ABS             .LC33 .rodata.str1.4@x73c
+  1e0   1cac       R_ARM_CALL                 HI_LOG @x0
+  1e1   1ccc       R_ARM_MOVW_ABS_NC          .LC34 .rodata.str1.4@x780
+  1e2   1cd0       R_ARM_MOVT_ABS             .LC34 .rodata.str1.4@x780
+  1e3   1cec       R_ARM_CALL                 HI_LOG @x0
+  1e4   1d20       R_ARM_MOVW_ABS_NC          .LC36 .rodata.str1.4@x7e8
+  1e5   1d28       R_ARM_MOVT_ABS             .LC36 .rodata.str1.4@x7e8
+  1e6   1d30       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  1e7   1d38       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  1e8   1d44       R_ARM_CALL                 osal_panic @x0
+  1e9   1d4c       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  1ea   1d50       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  1eb   1d54       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  1ec   1d58       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  1ed   1d64       R_ARM_CALL                 osal_panic @x0
+  1ee   1d74       R_ARM_MOVW_ABS_NC          .LC31 .rodata.str1.4@x6a0
+  1ef   1d78       R_ARM_MOVT_ABS             .LC31 .rodata.str1.4@x6a0
+  1f0   1da0       R_ARM_CALL                 HI_LOG @x0
+  1f1   1db8       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  1f2   1dc0       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  1f3   1dd0       R_ARM_CALL                 HI_LOG @x0
+  1f4   1de4       R_ARM_MOVW_ABS_NC          .LC9 .rodata.str1.4@x1e0
+  1f5   1dec       R_ARM_MOVT_ABS             .LC9 .rodata.str1.4@x1e0
+  1f6   1e04       R_ARM_CALL                 osal_up @x0
+  1f7   1e0c       R_ARM_MOVW_ABS_NC          .LC33 .rodata.str1.4@x73c
+  1f8   1e14       R_ARM_MOVT_ABS             .LC33 .rodata.str1.4@x73c
+  1f9   1e34       R_ARM_CALL                 HI_LOG @x0
+  1fa   1e48       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  1fb   1e50       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  1fc   1e64       R_ARM_CALL                 HI_LOG @x0
+  1fd   1e7c       R_ARM_MOVW_ABS_NC          .LC32 .rodata.str1.4@x700
+  1fe   1e84       R_ARM_MOVT_ABS             .LC32 .rodata.str1.4@x700
+  1ff   1e94       R_ARM_CALL                 HI_LOG @x0
+  200   1ec0       R_ARM_MOVW_ABS_NC          .LC19 .rodata.str1.4@x39c
+  201   1ec8       R_ARM_MOVT_ABS             .LC19 .rodata.str1.4@x39c
+  202   1ed0       R_ARM_CALL                 HI_LOG @x0
+  203   1ee0       R_ARM_CALL                 osal_up @x0
+  204   1f08       R_ARM_MOVW_ABS_NC          .LC30 .rodata.str1.4@x64c
+  205   1f10       R_ARM_MOVT_ABS             .LC30 .rodata.str1.4@x64c
+  206   1f18       R_ARM_CALL                 HI_LOG @x0
+  207   1f28       R_ARM_ABS32                 .rodata@x0
+  208   1f58       R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  209   1f90       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+  20a   1f94       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  20b   1f98       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+  20c   1f9c       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  20d   1fa8       R_ARM_CALL                 osal_panic @x0
+  20e   1fb8       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  20f   1fc0       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  210   1fd0       R_ARM_CALL                 HI_LOG @x0
+  211   1ff4       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  212   1ffc       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  213   200c       R_ARM_CALL                 HI_LOG @x0
+  214   201c       R_ARM_ABS32                 .rodata@x0
+  215   204c       R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  216   2068       R_ARM_CALL                 osal_memcpy @x0
+  217   2078       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+  218   207c       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  219   2080       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+  21a   2084       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  21b   2090       R_ARM_CALL                 osal_panic @x0
+  21c   20a0       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  21d   20a8       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  21e   20b8       R_ARM_CALL                 HI_LOG @x0
+  21f   20dc       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  220   20e4       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  221   20f4       R_ARM_CALL                 HI_LOG @x0
+  222   2104       R_ARM_ABS32                 .rodata@x0
+  223   211c       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  224   2134       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  225   2148       R_ARM_CALL                 osal_down_interruptible @x0
+  226   2168       R_ARM_CALL                 AO_DRV_SetTrackMode .text@x78cc
+  227   2174       R_ARM_CALL                 osal_up @x0
+  228   2194       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  229   219c       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  22a   21a4       R_ARM_CALL                 HI_LOG @x0
+  22b   21c4       R_ARM_CALL                 osal_up @x0
+  22c   21d0       R_ARM_MOVW_ABS_NC          .LC17 .rodata.str1.4@x330
+  22d   21d8       R_ARM_MOVT_ABS             .LC17 .rodata.str1.4@x330
+  22e   21ec       R_ARM_CALL                 HI_LOG @x0
+  22f   21f4       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  230   21f8       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  231   21fc       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  232   2200       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  233   220c       R_ARM_CALL                 osal_panic @x0
+  234   222c       R_ARM_ABS32                 .rodata@x0
+  235   2244       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  236   2264       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  237   2278       R_ARM_CALL                 osal_down_interruptible @x0
+  238   2298       R_ARM_CALL                 AO_DRV_GetTrackMode .text@x7984
+  239   22a4       R_ARM_CALL                 osal_up @x0
+  23a   22bc       R_ARM_CALL                 osal_up @x0
+  23b   22c8       R_ARM_MOVW_ABS_NC          .LC17 .rodata.str1.4@x330
+  23c   22d0       R_ARM_MOVT_ABS             .LC17 .rodata.str1.4@x330
+  23d   22e4       R_ARM_CALL                 HI_LOG @x0
+  23e   22ec       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  23f   22f0       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  240   22f4       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  241   22f8       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  242   2304       R_ARM_CALL                 osal_panic @x0
+  243   2318       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  244   2320       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  245   2330       R_ARM_CALL                 HI_LOG @x0
+  246   2360       R_ARM_ABS32                 .rodata@x0
+  247   2378       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  248   2390       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  249   23a4       R_ARM_CALL                 osal_down_interruptible @x0
+  24a   23c4       R_ARM_CALL                 AO_DRV_SetVolume .text@x7b8c
+  24b   23d0       R_ARM_CALL                 osal_up @x0
+  24c   23f0       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  24d   23f8       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  24e   2400       R_ARM_CALL                 HI_LOG @x0
+  24f   2420       R_ARM_CALL                 osal_up @x0
+  250   242c       R_ARM_MOVW_ABS_NC          .LC17 .rodata.str1.4@x330
+  251   2434       R_ARM_MOVT_ABS             .LC17 .rodata.str1.4@x330
+  252   2448       R_ARM_CALL                 HI_LOG @x0
+  253   2450       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  254   2454       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  255   2458       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  256   245c       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  257   2468       R_ARM_CALL                 osal_panic @x0
+  258   2488       R_ARM_ABS32                 .rodata@x0
+  259   24a0       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  25a   24c0       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  25b   24d4       R_ARM_CALL                 osal_down_interruptible @x0
+  25c   24f4       R_ARM_CALL                 AO_DRV_GetVolume .text@x7c08
+  25d   2500       R_ARM_CALL                 osal_up @x0
+  25e   2518       R_ARM_CALL                 osal_up @x0
+  25f   2524       R_ARM_MOVW_ABS_NC          .LC17 .rodata.str1.4@x330
+  260   252c       R_ARM_MOVT_ABS             .LC17 .rodata.str1.4@x330
+  261   2540       R_ARM_CALL                 HI_LOG @x0
+  262   2548       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  263   254c       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  264   2550       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  265   2554       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  266   2560       R_ARM_CALL                 osal_panic @x0
+  267   2574       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  268   257c       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  269   258c       R_ARM_CALL                 HI_LOG @x0
+  26a   25bc       R_ARM_ABS32                 .rodata@x0
+  26b   25d4       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  26c   25ec       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  26d   2600       R_ARM_CALL                 osal_down_interruptible @x0
+  26e   262c       R_ARM_CALL                 AO_DRV_SetClkDir .text@x7c78
+  26f   2638       R_ARM_CALL                 osal_up @x0
+  270   2658       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  271   2660       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  272   2668       R_ARM_CALL                 HI_LOG @x0
+  273   2680       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  274   2684       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  275   2688       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  276   268c       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  277   2698       R_ARM_CALL                 osal_panic @x0
+  278   26a8       R_ARM_CALL                 osal_up @x0
+  279   26b4       R_ARM_MOVW_ABS_NC          .LC37 .rodata.str1.4@x82c
+  27a   26bc       R_ARM_MOVT_ABS             .LC37 .rodata.str1.4@x82c
+  27b   26d0       R_ARM_CALL                 HI_LOG @x0
+  27c   26f0       R_ARM_ABS32                 .rodata@x0
+  27d   2708       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  27e   2728       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  27f   273c       R_ARM_CALL                 osal_down_interruptible @x0
+  280   2768       R_ARM_CALL                 AO_DRV_GetClkDir .text@x7cf4
+  281   2774       R_ARM_CALL                 osal_up @x0
+  282   2784       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  283   2788       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  284   278c       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  285   2790       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  286   279c       R_ARM_CALL                 osal_panic @x0
+  287   27ac       R_ARM_CALL                 osal_up @x0
+  288   27b8       R_ARM_MOVW_ABS_NC          .LC38 .rodata.str1.4@x870
+  289   27c0       R_ARM_MOVT_ABS             .LC38 .rodata.str1.4@x870
+  28a   27d4       R_ARM_CALL                 HI_LOG @x0
+  28b   27e8       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  28c   27f0       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  28d   2800       R_ARM_CALL                 HI_LOG @x0
+  28e   2830       R_ARM_ABS32                 .rodata@x0
+  28f   2848       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  290   2868       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  291   287c       R_ARM_CALL                 osal_down_interruptible @x0
+  292   28a0       R_ARM_CALL                 AO_DRV_SetMute .text@x7a2c
+  293   28ac       R_ARM_CALL                 osal_up @x0
+  294   28c4       R_ARM_CALL                 osal_up @x0
+  295   28d0       R_ARM_MOVW_ABS_NC          .LC17 .rodata.str1.4@x330
+  296   28d8       R_ARM_MOVT_ABS             .LC17 .rodata.str1.4@x330
+  297   28ec       R_ARM_CALL                 HI_LOG @x0
+  298   28f4       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  299   28f8       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  29a   28fc       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  29b   2900       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  29c   290c       R_ARM_CALL                 osal_panic @x0
+  29d   2920       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  29e   2928       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  29f   2938       R_ARM_CALL                 HI_LOG @x0
+  2a0   2968       R_ARM_ABS32                 .rodata@x0
+  2a1   29a0       R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  2a2   29b0       R_ARM_CALL                 osal_down_interruptible @x0
+  2a3   2a04       R_ARM_CALL                 osal_strnlen @x0
+  2a4   2a28       R_ARM_CALL                 osal_strnlen @x0
+  2a5   2a60       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  2a6   2a98       R_ARM_CALL                 osal_memcpy @x0
+  2a7   2aa0       R_ARM_CALL                 osal_up @x0
+  2a8   2ac0       R_ARM_CALL                 osal_up @x0
+  2a9   2ac4       R_ARM_MOVW_ABS_NC          .LC47 .rodata.str1.4@xb10
+  2aa   2ac8       R_ARM_MOVT_ABS             .LC47 .rodata.str1.4@xb10
+  2ab   2ae0       R_ARM_CALL                 HI_LOG @x0
+  2ac   2af0       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+  2ad   2af4       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  2ae   2af8       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+  2af   2afc       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  2b0   2b08       R_ARM_CALL                 osal_panic @x0
+  2b1   2b18       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  2b2   2b20       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  2b3   2b30       R_ARM_CALL                 HI_LOG @x0
+  2b4   2b44       R_ARM_CALL                 osal_up @x0
+  2b5   2b4c       R_ARM_MOVW_ABS_NC          .LC40 .rodata.str1.4@x8e8
+  2b6   2b50       R_ARM_MOVT_ABS             .LC40 .rodata.str1.4@x8e8
+  2b7   2b70       R_ARM_CALL                 HI_LOG @x0
+  2b8   2b84       R_ARM_CALL                 osal_up @x0
+  2b9   2b90       R_ARM_MOVW_ABS_NC          .LC39 .rodata.str1.4@x8b4
+  2ba   2b98       R_ARM_MOVT_ABS             .LC39 .rodata.str1.4@x8b4
+  2bb   2ba8       R_ARM_CALL                 HI_LOG @x0
+  2bc   2bc8       R_ARM_CALL                 osal_up @x0
+  2bd   2bcc       R_ARM_MOVW_ABS_NC          .LC42 .rodata.str1.4@x980
+  2be   2bd0       R_ARM_MOVT_ABS             .LC42 .rodata.str1.4@x980
+  2bf   2bec       R_ARM_CALL                 HI_LOG @x0
+  2c0   2c00       R_ARM_CALL                 osal_up @x0
+  2c1   2c08       R_ARM_MOVW_ABS_NC          .LC44 .rodata.str1.4@xa18
+  2c2   2c14       R_ARM_MOVT_ABS             .LC44 .rodata.str1.4@xa18
+  2c3   2c20       R_ARM_CALL                 osal_up @x0
+  2c4   2c2c       R_ARM_MOVW_ABS_NC          .LC46 .rodata.str1.4@xab0
+  2c5   2c34       R_ARM_MOVT_ABS             .LC46 .rodata.str1.4@xab0
+  2c6   2c48       R_ARM_CALL                 osal_up @x0
+  2c7   2c50       R_ARM_MOVW_ABS_NC          .LC48 .rodata.str1.4@xb50
+  2c8   2c58       R_ARM_MOVT_ABS             .LC48 .rodata.str1.4@xb50
+  2c9   2c74       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  2ca   2c7c       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  2cb   2c8c       R_ARM_CALL                 HI_LOG @x0
+  2cc   2ca0       R_ARM_CALL                 osal_up @x0
+  2cd   2cac       R_ARM_CALL                 osal_strnlen @x0
+  2ce   2cb8       R_ARM_MOVW_ABS_NC          .LC43 .rodata.str1.4@x9c4
+  2cf   2cbc       R_ARM_MOVT_ABS             .LC43 .rodata.str1.4@x9c4
+  2d0   2cdc       R_ARM_CALL                 HI_LOG @x0
+  2d1   2cf0       R_ARM_CALL                 osal_up @x0
+  2d2   2cfc       R_ARM_CALL                 osal_strnlen @x0
+  2d3   2d10       R_ARM_MOVW_ABS_NC          .LC45 .rodata.str1.4@xa5c
+  2d4   2d18       R_ARM_MOVT_ABS             .LC45 .rodata.str1.4@xa5c
+  2d5   2d24       R_ARM_CALL                 osal_up @x0
+  2d6   2d30       R_ARM_MOVW_ABS_NC          .LC41 .rodata.str1.4@x93c
+  2d7   2d38       R_ARM_MOVT_ABS             .LC41 .rodata.str1.4@x93c
+  2d8   2d48       R_ARM_CALL                 HI_LOG @x0
+  2d9   2d58       R_ARM_ABS32                 .rodata@x0
+  2da   2d88       R_ARM_CALL                 AO_GetChnCtx .text@x4b48
+  2db   2d98       R_ARM_CALL                 osal_down_interruptible @x0
+  2dc   2db4       R_ARM_CALL                 osal_memcpy @x0
+  2dd   2dbc       R_ARM_CALL                 osal_up @x0
+  2de   2dd8       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x244
+  2df   2ddc       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  2e0   2de0       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x244
+  2e1   2de4       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  2e2   2df0       R_ARM_CALL                 osal_panic @x0
+  2e3   2e00       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  2e4   2e08       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  2e5   2e18       R_ARM_CALL                 HI_LOG @x0
+  2e6   2e3c       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xa8
+  2e7   2e44       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xa8
+  2e8   2e54       R_ARM_CALL                 HI_LOG @x0
+  2e9   2e64       R_ARM_ABS32                 .rodata@x0
+  2ea   2e7c       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  2eb   2e9c       R_ARM_CALL                 AO_GetDevCtx .text@x4b64
+  2ec   2eb0       R_ARM_CALL                 osal_down_interruptible @x0
+  2ed   2ed4       R_ARM_CALL                 AO_DRV_GetMute .text@x7ad4
+  2ee   2ee0       R_ARM_CALL                 osal_up @x0
+  2ef   2ef8       R_ARM_CALL                 osal_up @x0
+  2f0   2f04       R_ARM_MOVW_ABS_NC          .LC17 .rodata.str1.4@x330
+  2f1   2f0c       R_ARM_MOVT_ABS             .LC17 .rodata.str1.4@x330
+  2f2   2f20       R_ARM_CALL                 HI_LOG @x0
+  2f3   2f28       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xdc
+  2f4   2f2c       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x24
+  2f5   2f30       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xdc
+  2f6   2f34       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x24
+  2f7   2f40       R_ARM_CALL                 osal_panic @x0
+  2f8   2f54       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x74
+  2f9   2f5c       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x74
+  2fa   2f6c       R_ARM_CALL                 HI_LOG @x0
+  2fb   2f9c       R_ARM_ABS32                 .rodata@x0
+  2fc   2fbc       R_ARM_MOVW_ABS_NC          .LANCHOR2 .data@x0
+  2fd   2fc4       R_ARM_MOVT_ABS             .LANCHOR2 .data@x0
+  2fe   2fe8       R_ARM_CALL                 osal_atomic_inc_return @x0
+  2ff   305c       R_ARM_MOVW_ABS_NC          .LC50 .rodata.str1.4@xbd0
+  300   3064       R_ARM_MOVT_ABS             .LC50 .rodata.str1.4@xbd0
+  301   3078       R_ARM_CALL                 HI_LOG @x0
+  302   30e4       R_ARM_CALL                 AoSetTrackMode .text@x2108
+  303   3140       R_ARM_CALL                 AoGetSaveFile .text@x2d5c
+  304   3178       R_ARM_CALL                 AoDisableDev .text@x45ec
+  305   31a4       R_ARM_CALL                 AOPauseChn .text@xed8
+  306   31cc       R_ARM_CALL                 AoClrDevAttr .text@x4b80
+  307   3204       R_ARM_CALL                 AOQueryChnState .text@x171c
+  308   3238       R_ARM_CALL                 AoSetDevAttr .text@x40d0
+  309   3244       R_ARM_CALL                 osal_atomic_dec_return @x0
+  30a   3258       R_ARM_CALL                 AoEnableDev .text@x4384
+  30b   326c       R_ARM_CALL                 AODisableChn .text@xc48
+  30c   3280       R_ARM_CALL                 AoGetDevAttr .text@x4240
+  30d   32a4       R_ARM_CALL                 AoSetSaveFile .text@x296c
+  30e   32bc       R_ARM_CALL                 AOGetChnState .text@x1640
+  30f   32d0       R_ARM_CALL                 AoSetMute .text@x2834
+  310   32e4       R_ARM_CALL                 AOClearChnBuf .text@x13ac
+  311   3300       R_ARM_CALL                 AoSetVolume .text@x2364
+  312   3314       R_ARM_CALL                 AoGetClkDir .text@x26f4
+  313   332c       R_ARM_CALL                 AOPutFrame .text@x1928
+  314   333c       R_ARM_MOVW_ABS_NC          .LC49 .rodata.str1.4@xb94
+  315   3344       R_ARM_MOVT_ABS             .LC49 .rodata.str1.4@xb94
+  316   3354       R_ARM_CALL                 HI_LOG @x0
+  317   3370       R_ARM_CALL                 AoSetChnResmpInfo .text@x1f2c
+  318   3384       R_ARM_CALL                 AOEnableChn .text@x908
+  319   339c       R_ARM_CALL                 AOSetChnVqeInfo .text@x2020
+  31a   33b0       R_ARM_CALL                 AOResumeChn .text@x1144
+  31b   33c4       R_ARM_CALL                 AoGetVolume .text@x248c
+  31c   33d8       R_ARM_CALL                 AoGetTrackMode .text@x2230
+  31d   33ec       R_ARM_CALL                 AoGetMute .text@x2e68
+  31e   3408       R_ARM_CALL                 AoSetClkDir .text@x25c0
+  31f   3420       R_ARM_ABS32                 .bss@x0
+  320   3424       R_ARM_ABS32                 .rodata@x0
+  321   3430       R_ARM_CALL                 AO_DRV_CheckAioExportFunc .text@x786c
+  322   3448       R_ARM_CALL                 AO_DRV_OpenClock .text@x78bc
+  323   3450       R_ARM_MOVW_ABS_NC          .LC51 .rodata.str1.4@xbfc
+  324   3454       R_ARM_MOVT_ABS             .LC51 .rodata.str1.4@xbfc
+  325   3458       R_ARM_CALL                 osal_create_proc_entry @x0
+  326   3464       R_ARM_MOVW_ABS_NC          AOProcShow .text@x4c8c
+  327   3468       R_ARM_MOVW_ABS_NC          .LC51 .rodata.str1.4@xbfc
+  328   346c       R_ARM_MOVT_ABS             AOProcShow .text@x4c8c
+  329   3470       R_ARM_MOVT_ABS             .LC51 .rodata.str1.4@xbfc
+  32a   3478       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  32b   347c       R_ARM_CALL                 osal_createdev @x0
+  32c   3484       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  32d   34a0       R_ARM_CALL                 osal_registerdevice @x0
+  32e   34b0       R_ARM_CALL                 CMPI_RegisterModule @x0
+  32f   34bc       R_ARM_CALL                 AO_DRV_CloseClock .text@x78c4
+  330   34c4       R_ARM_CALL                 osal_atomic_init @x0
+  331   34d0       R_ARM_CALL                 osal_atomic_set @x0
+  332   34f0       R_ARM_MOVW_ABS_NC          .LC53 .rodata.str1.4@xc34
+  333   34f8       R_ARM_MOVT_ABS             .LC53 .rodata.str1.4@xc34
+  334   3500       R_ARM_CALL                 HI_LOG @x0
+  335   3504       R_ARM_MOVW_ABS_NC          .LC51 .rodata.str1.4@xbfc
+  336   350c       R_ARM_MOVT_ABS             .LC51 .rodata.str1.4@xbfc
+  337   3510       R_ARM_CALL                 osal_remove_proc_entry @x0
+  338   351c       R_ARM_MOVW_ABS_NC          .LC51 .rodata.str1.4@xbfc
+  339   3520       R_ARM_MOVT_ABS             .LC51 .rodata.str1.4@xbfc
+  33a   3528       R_ARM_CALL                 osal_remove_proc_entry @x0
+  33b   3530       R_ARM_CALL                 osal_deregisterdevice @x0
+  33c   3538       R_ARM_CALL                 osal_destroydev @x0
+  33d   3544       R_ARM_MOVW_ABS_NC          .LC52 .rodata.str1.4@xc00
+  33e   354c       R_ARM_MOVT_ABS             .LC52 .rodata.str1.4@xc00
+  33f   3560       R_ARM_CALL                 HI_LOG @x0
+  340   3568       R_ARM_ABS32                 .data@x0
+  341   356c       R_ARM_ABS32                 .rodata@x0
+  342   3574       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x0
+  343   3578       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x0
+  344   3580       R_ARM_CALL                 osal_atomic_destory @x0
+  345   3588       R_ARM_CALL                 CMPI_UnRegisterModule @x0
+  346   3590       R_ARM_CALL                 osal_deregisterdevice @x0
+  347   3598       R_ARM_CALL                 osal_destroydev @x0
+  348   359c       R_ARM_MOVW_ABS_NC          .LC51 .rodata.str1.4@xbfc
+  349   35a4       R_ARM_MOVT_ABS             .LC51 .rodata.str1.4@xbfc
+  34a   35ac       R_ARM_JUMP24               osal_remove_proc_entry @x0
+  34b   35c0       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  34c   35c4       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  34d   35ec       R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  34e   35fc       R_ARM_MOVW_ABS_NC          g_stAoBufLock .bss@x0
+  34f   3604       R_ARM_MOVT_ABS             g_stAoBufLock .bss@x0
+  350   3608       R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  351   373c       R_ARM_CALL                 AO_DRV_PutChnData .text@x6d3c
+  352   3780       R_ARM_CALL                 osal_wakeup @x0
+  353   378c       R_ARM_CALL                 AO_DRV_FlushData .text@x6d18
+  354   3790       R_ARM_MOVW_ABS_NC          g_stAoBufLock .bss@x0
+  355   3798       R_ARM_MOVT_ABS             g_stAoBufLock .bss@x0
+  356   379c       R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  357   37a8       R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  358   37cc       R_ARM_CALL                 AO_DRV_PutChnData .text@x6d3c
+  359   3854       R_ARM_CALL                 AO_DRV_PutChnData .text@x6d3c
+  35a   3864       R_ARM_MOVW_ABS_NC          .LANCHOR1 .rodata@x15c
+  35b   386c       R_ARM_MOVT_ABS             .LANCHOR1 .rodata@x15c
+  35c   3878       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@xc64
+  35d   3880       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@xc64
+  35e   3884       R_ARM_CALL                 HI_LOG @x0
+  35f   38a0       R_ARM_CALL                 AO_DRV_PutZeroData .text@x6000
+  360   38dc       R_ARM_CALL                 AO_DRV_PutZeroData .text@x6000
+  361   38ec       R_ARM_CALL                 AO_DRV_PutLastData .text@x64e8
+  362   38f4       R_ARM_ABS32                 .bss@x0
+  363   3938       R_ARM_CALL                 AO_DRV_DmaBufInfoInit .text@x7344
+  364   39a0       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  365   39bc       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  366   39c8       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@xd24
+  367   39d0       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@xd24
+  368   39d8       R_ARM_CALL                 osal_snprintf @x0
+  369   39e8       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  36a   3a10       R_ARM_CALL                 CMPI_MmzMallocNocache @x0
+  36b   3a34       R_ARM_CALL                 osal_memset @x0
+  36c   3a48       R_ARM_CALL                 AO_DRV_SetDmaBufAddr .text@x749c
+  36d   3aa0       R_ARM_CALL                 osal_memset @x0
+  36e   3b5c       R_ARM_CALL                 osal_memset @x0
+  36f   3be4       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@xcb8
+  370   3bec       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@xcb8
+  371   3bf4       R_ARM_CALL                 HI_LOG @x0
+  372   3c2c       R_ARM_MOVW_ABS_NC          .LC2 .rodata.str1.4@xcf4
+  373   3c34       R_ARM_MOVT_ABS             .LC2 .rodata.str1.4@xcf4
+  374   3c44       R_ARM_CALL                 HI_LOG @x0
+  375   3c64       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@xd34
+  376   3c6c       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@xd34
+  377   3c70       R_ARM_CALL                 HI_LOG @x0
+  378   3c84       R_ARM_ABS32                 .rodata@x0
+  379   3c88       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  37a   3c8c       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  37b   3cb0       R_ARM_CALL                 CMPI_MmzFree @x0
+  37c   3cc8       R_ARM_JUMP24               AO_DRV_ClrDmaBufAddr .text@x74c4
+  37d   3cd8       R_ARM_JUMP24               AO_DRV_GetDmaRdpt .text@x8934
+  37e   3cdc       R_ARM_ABS32                g_stAoDrvDev .bss@x44e8
+  37f   3ce4       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  380   3cec       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  381   3d1c       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  382   3d20       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  383   3d98       R_ARM_MOVW_ABS_NC          g_stAoDrvDev .bss@x44e8
+  384   3da0       R_ARM_CALL                 __aeabi_uidiv @x0
+  385   3dac       R_ARM_MOVT_ABS             g_stAoDrvDev .bss@x44e8
+  386   3dec       R_ARM_CALL                 __aeabi_uidiv @x0
+  387   3dfc       R_ARM_CALL                 __aeabi_uidiv @x0
+  388   3e84       R_ARM_CALL                 AO_DRV_GetAECData .text@x8344
+  389   3f00       R_ARM_CALL                 __aeabi_uidiv @x0
+  38a   3f1c       R_ARM_CALL                 __aeabi_uidiv @x0
+  38b   3fc0       R_ARM_MOVW_ABS_NC          .LC11 .rodata.str1.4@xf14
+  38c   3fc8       R_ARM_MOVT_ABS             .LC11 .rodata.str1.4@xf14
+  38d   3fd0       R_ARM_CALL                 HI_LOG @x0
+  38e   3fec       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@xedc
+  38f   3ff4       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@xedc
+  390   4000       R_ARM_CALL                 HI_LOG @x0
+  391   401c       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@xd84
+  392   4020       R_ARM_MOVW_ABS_NC          .LC6 .rodata.str1.4@xd94
+  393   4024       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@xd84
+  394   4028       R_ARM_MOVT_ABS             .LC6 .rodata.str1.4@xd94
+  395   4034       R_ARM_CALL                 osal_panic @x0
+  396   4048       R_ARM_MOVW_ABS_NC          .LC7 .rodata.str1.4@xdd4
+  397   4050       R_ARM_MOVT_ABS             .LC7 .rodata.str1.4@xdd4
+  398   4074       R_ARM_CALL                 HI_LOG @x0
+  399   4080       R_ARM_MOVW_ABS_NC          .LC8 .rodata.str1.4@xe30
+  39a   4084       R_ARM_MOVT_ABS             .LC8 .rodata.str1.4@xe30
+  39b   40a4       R_ARM_CALL                 HI_LOG @x0
+  39c   40bc       R_ARM_MOVW_ABS_NC          .LC9 .rodata.str1.4@xe84
+  39d   40c4       R_ARM_MOVT_ABS             .LC9 .rodata.str1.4@xe84
+  39e   40cc       R_ARM_ABS32                 .rodata@x0
+  39f   40e4       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  3a0   4104       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  3a1   410c       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  3a2   411c       R_ARM_CALL                 osal_down_interruptible @x0
+  3a3   4140       R_ARM_CALL                 AO_DRV_SetDevAttr .text@x74f8
+  3a4   415c       R_ARM_CALL                 osal_memcpy @x0
+  3a5   416c       R_ARM_CALL                 osal_up @x0
+  3a6   4180       R_ARM_CALL                 osal_up @x0
+  3a7   4198       R_ARM_MOVW_ABS_NC          .LC12 .rodata.str1.4@xf4c
+  3a8   41a0       R_ARM_MOVT_ABS             .LC12 .rodata.str1.4@xf4c
+  3a9   41b4       R_ARM_CALL                 HI_LOG @x0
+  3aa   41d4       R_ARM_CALL                 osal_up @x0
+  3ab   41dc       R_ARM_MOVW_ABS_NC          .LC14 .rodata.str1.4@xfd0
+  3ac   41e4       R_ARM_MOVT_ABS             .LC14 .rodata.str1.4@xfd0
+  3ad   41f4       R_ARM_CALL                 HI_LOG @x0
+  3ae   4214       R_ARM_MOVW_ABS_NC          .LC13 .rodata.str1.4@xf80
+  3af   421c       R_ARM_MOVT_ABS             .LC13 .rodata.str1.4@xf80
+  3b0   4230       R_ARM_CALL                 HI_LOG @x0
+  3b1   423c       R_ARM_ABS32                 .rodata@x0
+  3b2   4254       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  3b3   4274       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  3b4   427c       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  3b5   428c       R_ARM_CALL                 osal_down_interruptible @x0
+  3b6   42b8       R_ARM_CALL                 osal_memcpy @x0
+  3b7   42c0       R_ARM_CALL                 osal_up @x0
+  3b8   42d4       R_ARM_CALL                 osal_up @x0
+  3b9   42e0       R_ARM_MOVW_ABS_NC          .LC16 .rodata.str1.4@x105c
+  3ba   42e8       R_ARM_MOVT_ABS             .LC16 .rodata.str1.4@x105c
+  3bb   42f8       R_ARM_CALL                 HI_LOG @x0
+  3bc   4314       R_ARM_MOVW_ABS_NC          .LC12 .rodata.str1.4@xf4c
+  3bd   431c       R_ARM_MOVT_ABS             .LC12 .rodata.str1.4@xf4c
+  3be   4328       R_ARM_CALL                 HI_LOG @x0
+  3bf   435c       R_ARM_MOVW_ABS_NC          .LC15 .rodata.str1.4@x1014
+  3c0   4364       R_ARM_MOVT_ABS             .LC15 .rodata.str1.4@x1014
+  3c1   4370       R_ARM_CALL                 HI_LOG @x0
+  3c2   4380       R_ARM_ABS32                 .rodata@x0
+  3c3   4394       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  3c4   43ac       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  3c5   43b4       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  3c6   43d8       R_ARM_CALL                 osal_down_interruptible @x0
+  3c7   4434       R_ARM_CALL                 osal_memset @x0
+  3c8   4488       R_ARM_CALL                 AOBufInit .text@x38f8
+  3c9   4498       R_ARM_CALL                 AO_DRV_EnableDev .text@x765c
+  3ca   44a8       R_ARM_MOVW_ABS_NC          g_stAoBufLock .bss@x0
+  3cb   44ac       R_ARM_MOVT_ABS             g_stAoBufLock .bss@x0
+  3cc   44b0       R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  3cd   44c0       R_ARM_MOVW_ABS_NC          g_stAoBufLock .bss@x0
+  3ce   44c4       R_ARM_MOVT_ABS             g_stAoBufLock .bss@x0
+  3cf   44cc       R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  3d0   44d4       R_ARM_CALL                 osal_up @x0
+  3d1   44dc       R_ARM_MOVW_ABS_NC          .LC19 .rodata.str1.4@x1100
+  3d2   44e8       R_ARM_MOVT_ABS             .LC19 .rodata.str1.4@x1100
+  3d3   44f8       R_ARM_CALL                 HI_LOG @x0
+  3d4   450c       R_ARM_CALL                 osal_up @x0
+  3d5   4520       R_ARM_CALL                 osal_up @x0
+  3d6   4528       R_ARM_CALL                 AOBufExit .text@x3c88
+  3d7   4544       R_ARM_MOVW_ABS_NC          .LC12 .rodata.str1.4@xf4c
+  3d8   454c       R_ARM_MOVT_ABS             .LC12 .rodata.str1.4@xf4c
+  3d9   455c       R_ARM_CALL                 HI_LOG @x0
+  3da   4574       R_ARM_MOVW_ABS_NC          .LC17 .rodata.str1.4@x1094
+  3db   457c       R_ARM_MOVT_ABS             .LC17 .rodata.str1.4@x1094
+  3dc   458c       R_ARM_CALL                 HI_LOG @x0
+  3dd   45ac       R_ARM_CALL                 osal_up @x0
+  3de   45b8       R_ARM_MOVW_ABS_NC          .LC18 .rodata.str1.4@x10cc
+  3df   45c0       R_ARM_MOVT_ABS             .LC18 .rodata.str1.4@x10cc
+  3e0   45d4       R_ARM_CALL                 HI_LOG @x0
+  3e1   45e8       R_ARM_ABS32                 .rodata@x0
+  3e2   45fc       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  3e3   4614       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  3e4   461c       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  3e5   463c       R_ARM_CALL                 osal_down_interruptible @x0
+  3e6   46c8       R_ARM_MOVW_ABS_NC          g_stAoBufLock .bss@x0
+  3e7   46cc       R_ARM_MOVT_ABS             g_stAoBufLock .bss@x0
+  3e8   46d4       R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  3e9   46dc       R_ARM_MOVW_ABS_NC          g_stAoBufLock .bss@x0
+  3ea   46e0       R_ARM_MOVT_ABS             g_stAoBufLock .bss@x0
+  3eb   46e8       R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  3ec   46f0       R_ARM_CALL                 AO_DRV_DisableDev .text@x7730
+  3ed   46f8       R_ARM_MOVW_ABS_NC          g_stAoBufLock .bss@x0
+  3ee   46fc       R_ARM_MOVT_ABS             g_stAoBufLock .bss@x0
+  3ef   4700       R_ARM_CALL                 osal_spin_lock_irqsave @x0
+  3f0   4754       R_ARM_MOVW_ABS_NC          g_stAoBufLock .bss@x0
+  3f1   4758       R_ARM_MOVT_ABS             g_stAoBufLock .bss@x0
+  3f2   475c       R_ARM_CALL                 osal_spin_unlock_irqrestore @x0
+  3f3   4768       R_ARM_CALL                 osal_wakeup @x0
+  3f4   4770       R_ARM_CALL                 AOBufExit .text@x3c88
+  3f5   479c       R_ARM_CALL                 osal_up @x0
+  3f6   47a4       R_ARM_MOVW_ABS_NC          .LC22 .rodata.str1.4@x11c8
+  3f7   47b0       R_ARM_MOVT_ABS             .LC22 .rodata.str1.4@x11c8
+  3f8   47c0       R_ARM_CALL                 HI_LOG @x0
+  3f9   47d8       R_ARM_CALL                 osal_up @x0
+  3fa   47ec       R_ARM_MOVW_ABS_NC          .LC21 .rodata.str1.4@x1164
+  3fb   47f4       R_ARM_MOVT_ABS             .LC21 .rodata.str1.4@x1164
+  3fc   4800       R_ARM_CALL                 HI_LOG @x0
+  3fd   4814       R_ARM_CALL                 AO_DRV_ClrDevAttr .text@x75fc
+  3fe   4824       R_ARM_CALL                 osal_up @x0
+  3ff   4834       R_ARM_CALL                 osal_up @x0
+  400   4850       R_ARM_MOVW_ABS_NC          .LC12 .rodata.str1.4@xf4c
+  401   4858       R_ARM_MOVT_ABS             .LC12 .rodata.str1.4@xf4c
+  402   4868       R_ARM_CALL                 HI_LOG @x0
+  403   4878       R_ARM_MOVW_ABS_NC          .LC20 .rodata.str1.4@x1130
+  404   4880       R_ARM_MOVT_ABS             .LC20 .rodata.str1.4@x1130
+  405   4894       R_ARM_CALL                 HI_LOG @x0
+  406   48b8       R_ARM_ABS32                 .bss@x0
+  407   48bc       R_ARM_ABS32                 .rodata@x0
+  408   48d8       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  409   48e0       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  40a   48f0       R_ARM_CALL                 osal_memset @x0
+  40b   4900       R_ARM_CALL                 AO_DRV_DevInit .text@x77c8
+  40c   4918       R_ARM_MOVW_ABS_NC          AODmaCallback .text@x35b0
+  40d   491c       R_ARM_MOVT_ABS             AODmaCallback .text@x35b0
+  40e   4920       R_ARM_CALL                 AO_DRV_SetDmaISR .text@x77b8
+  40f   4930       R_ARM_CALL                 osal_wait_init @x0
+  410   4940       R_ARM_CALL                 osal_sema_init @x0
+  411   4960       R_ARM_CALL                 osal_memset @x0
+  412   4970       R_ARM_CALL                 osal_sema_init @x0
+  413   4988       R_ARM_CALL                 osal_spin_lock_init @x0
+  414   49c0       R_ARM_MOVW_ABS_NC          .LC12 .rodata.str1.4@xf4c
+  415   49c8       R_ARM_MOVT_ABS             .LC12 .rodata.str1.4@xf4c
+  416   49d0       R_ARM_CALL                 HI_LOG @x0
+  417   49e8       R_ARM_ABS32                 .rodata@x0
+  418   4a04       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  419   4a0c       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  41a   4a2c       R_ARM_CALL                 AO_DRV_DevDeInit .text@x784c
+  41b   4a68       R_ARM_CALL                 osal_wakeup @x0
+  41c   4a88       R_ARM_CALL                 AoDisableDev .text@x45ec
+  41d   4acc       R_ARM_CALL                 osal_sema_destory @x0
+  41e   4ae8       R_ARM_CALL                 osal_wait_destory @x0
+  41f   4af8       R_ARM_CALL                 osal_sema_destory @x0
+  420   4b00       R_ARM_CALL                 osal_spin_lock_destory @x0
+  421   4b18       R_ARM_MOVW_ABS_NC          .LC12 .rodata.str1.4@xf4c
+  422   4b20       R_ARM_MOVT_ABS             .LC12 .rodata.str1.4@xf4c
+  423   4b34       R_ARM_CALL                 HI_LOG @x0
+  424   4b40       R_ARM_ABS32                 .bss@x0
+  425   4b44       R_ARM_ABS32                 .rodata@x0
+  426   4b60       R_ARM_ABS32                 .bss@x0
+  427   4b68       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  428   4b6c       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  429   4b90       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  42a   4ba8       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  42b   4bb0       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  42c   4bc0       R_ARM_CALL                 osal_down_interruptible @x0
+  42d   4be0       R_ARM_CALL                 AO_DRV_ClrDevAttr .text@x75fc
+  42e   4bf0       R_ARM_CALL                 osal_up @x0
+  42f   4c10       R_ARM_MOVW_ABS_NC          .LC12 .rodata.str1.4@xf4c
+  430   4c18       R_ARM_MOVT_ABS             .LC12 .rodata.str1.4@xf4c
+  431   4c20       R_ARM_CALL                 HI_LOG @x0
+  432   4c4c       R_ARM_CALL                 osal_up @x0
+  433   4c58       R_ARM_MOVW_ABS_NC          .LC23 .rodata.str1.4@x11fc
+  434   4c60       R_ARM_MOVT_ABS             .LC23 .rodata.str1.4@x11fc
+  435   4c74       R_ARM_CALL                 HI_LOG @x0
+  436   4c88       R_ARM_ABS32                 .rodata@x0
+  437   4c90       R_ARM_MOVW_ABS_NC          .LC42 .rodata.str1.4@x12c4
+  438   4c9c       R_ARM_MOVT_ABS             .LC42 .rodata.str1.4@x12c4
+  439   4ca0       R_ARM_MOVW_ABS_NC          .LC49 .rodata.str1.4@x13c8
+  43a   4ca4       R_ARM_CALL                 osal_seq_printf @x0
+  43b   4cac       R_ARM_CALL                 AO_DRV_ProcShow .text@x7ddc
+  43c   4cb4       R_ARM_MOVW_ABS_NC          .LC43 .rodata.str1.4@x1324
+  43d   4cb8       R_ARM_MOVT_ABS             .LC43 .rodata.str1.4@x1324
+  43e   4cbc       R_ARM_CALL                 osal_seq_printf @x0
+  43f   4cc0       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  440   4cc4       R_ARM_MOVT_ABS             .LC49 .rodata.str1.4@x13c8
+  441   4cd0       R_ARM_MOVW_ABS_NC          .LC47 .rodata.str1.4@x13b4
+  442   4cd4       R_ARM_MOVW_ABS_NC          .LC48 .rodata.str1.4@x13c0
+  443   4cd8       R_ARM_MOVT_ABS             .LC47 .rodata.str1.4@x13b4
+  444   4cdc       R_ARM_MOVT_ABS             .LC48 .rodata.str1.4@x13c0
+  445   4ce8       R_ARM_MOVW_ABS_NC          .LC50 .rodata.str1.4@x13d0
+  446   4cec       R_ARM_MOVW_ABS_NC          .LC51 .rodata.str1.4@x13d8
+  447   4cf0       R_ARM_MOVT_ABS             .LC50 .rodata.str1.4@x13d0
+  448   4cf4       R_ARM_MOVT_ABS             .LC51 .rodata.str1.4@x13d8
+  449   4d00       R_ARM_MOVW_ABS_NC          .LC52 .rodata.str1.4@x13e4
+  44a   4d04       R_ARM_MOVW_ABS_NC          .LC53 .rodata.str1.4@x13f0
+  44b   4d08       R_ARM_MOVT_ABS             .LC52 .rodata.str1.4@x13e4
+  44c   4d0c       R_ARM_MOVT_ABS             .LC53 .rodata.str1.4@x13f0
+  44d   4d18       R_ARM_MOVW_ABS_NC          .LC54 .rodata.str1.4@x13f8
+  44e   4d1c       R_ARM_MOVW_ABS_NC          .LC55 .rodata.str1.4@x1400
+  44f   4d20       R_ARM_MOVT_ABS             .LC54 .rodata.str1.4@x13f8
+  450   4d24       R_ARM_MOVT_ABS             .LC55 .rodata.str1.4@x1400
+  451   4d30       R_ARM_MOVW_ABS_NC          .LC56 .rodata.str1.4@x1408
+  452   4d38       R_ARM_MOVT_ABS             .LC56 .rodata.str1.4@x1408
+  453   4d3c       R_ARM_MOVW_ABS_NC          .LC44 .rodata.str1.4@x1378
+  454   4d48       R_ARM_MOVT_ABS             .LC44 .rodata.str1.4@x1378
+  455   4d4c       R_ARM_MOVW_ABS_NC          .LC45 .rodata.str1.4@x1380
+  456   4d50       R_ARM_MOVW_ABS_NC          .LC46 .rodata.str1.4@x1388
+  457   4d54       R_ARM_MOVT_ABS             .LC45 .rodata.str1.4@x1380
+  458   4d58       R_ARM_MOVT_ABS             .LC46 .rodata.str1.4@x1388
+  459   4d5c       R_ARM_CALL                 osal_seq_printf @x0
+  45a   4d64       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  45b   4d80       R_ARM_MOVW_ABS_NC          .LC24 .rodata.str1.4@x123c
+  45c   4d84       R_ARM_MOVW_ABS_NC          .LC25 .rodata.str1.4@x1244
+  45d   4d88       R_ARM_MOVT_ABS             .LC24 .rodata.str1.4@x123c
+  45e   4d8c       R_ARM_MOVT_ABS             .LC25 .rodata.str1.4@x1244
+  45f   4da4       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  460   4da8       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  461   4dcc       R_ARM_MOVW_ABS_NC          .LC57 .rodata.str1.4@x1410
+  462   4dd4       R_ARM_MOVT_ABS             .LC57 .rodata.str1.4@x1410
+  463   4e70       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  464   4e74       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  465   4f00       R_ARM_MOVW_ABS_NC          .LC37 .rodata.str1.4@x129c
+  466   4f04       R_ARM_MOVT_ABS             .LC37 .rodata.str1.4@x129c
+  467   4f14       R_ARM_MOVW_ABS_NC          .LC28 .rodata.str1.4@x1254
+  468   4f18       R_ARM_MOVT_ABS             .LC28 .rodata.str1.4@x1254
+  469   4f58       R_ARM_CALL                 osal_seq_printf @x0
+  46a   4f84       R_ARM_MOVW_ABS_NC          .LC61 .rodata.str1.4@x14c0
+  46b   4f8c       R_ARM_MOVW_ABS_NC          .LC58 .rodata.str1.4@x143c
+  46c   4f90       R_ARM_MOVT_ABS             .LC58 .rodata.str1.4@x143c
+  46d   4fa0       R_ARM_CALL                 osal_seq_printf @x0
+  46e   4fa8       R_ARM_MOVT_ABS             .LC61 .rodata.str1.4@x14c0
+  46f   4fc0       R_ARM_MOVW_ABS_NC          .LC62 .rodata.str1.4@x14c8
+  470   4fc4       R_ARM_MOVT_ABS             .LC62 .rodata.str1.4@x14c8
+  471   4fcc       R_ARM_MOVW_ABS_NC          .LC60 .rodata.str1.4@x14b8
+  472   4fd4       R_ARM_MOVW_ABS_NC          .LC64 .rodata.str1.4@x14d4
+  473   4fd8       R_ARM_MOVT_ABS             .LC64 .rodata.str1.4@x14d4
+  474   4fe0       R_ARM_MOVT_ABS             .LC60 .rodata.str1.4@x14b8
+  475   4fec       R_ARM_MOVW_ABS_NC          .LC59 .rodata.str1.4@x1490
+  476   4ff4       R_ARM_MOVW_ABS_NC          .LC63 .rodata.str1.4@x14cc
+  477   4ff8       R_ARM_MOVT_ABS             .LC59 .rodata.str1.4@x1490
+  478   4ffc       R_ARM_MOVT_ABS             .LC63 .rodata.str1.4@x14cc
+  479   5010       R_ARM_MOVW_ABS_NC          .LC65 .rodata.str1.4@x14dc
+  47a   5018       R_ARM_MOVT_ABS             .LC65 .rodata.str1.4@x14dc
+  47b   501c       R_ARM_MOVW_ABS_NC          .LC66 .rodata.str1.4@x14e4
+  47c   5024       R_ARM_MOVT_ABS             .LC66 .rodata.str1.4@x14e4
+  47d   5028       R_ARM_MOVW_ABS_NC          .LC67 .rodata.str1.4@x14ec
+  47e   5030       R_ARM_MOVT_ABS             .LC67 .rodata.str1.4@x14ec
+  47f   5034       R_ARM_MOVW_ABS_NC          .LC44 .rodata.str1.4@x1378
+  480   503c       R_ARM_MOVT_ABS             .LC44 .rodata.str1.4@x1378
+  481   5040       R_ARM_MOVW_ABS_NC          .LC45 .rodata.str1.4@x1380
+  482   5044       R_ARM_MOVT_ABS             .LC45 .rodata.str1.4@x1380
+  483   5048       R_ARM_CALL                 osal_seq_printf @x0
+  484   504c       R_ARM_MOVW_ABS_NC          .LC25 .rodata.str1.4@x1244
+  485   5050       R_ARM_MOVT_ABS             .LC25 .rodata.str1.4@x1244
+  486   505c       R_ARM_MOVW_ABS_NC          .LC68 .rodata.str1.4@x14f4
+  487   5064       R_ARM_MOVT_ABS             .LC68 .rodata.str1.4@x14f4
+  488   5080       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  489   5084       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  48a   50a8       R_ARM_MOVW_ABS_NC          .LC69 .rodata.str1.4@x1500
+  48b   50b0       R_ARM_MOVT_ABS             .LC69 .rodata.str1.4@x1500
+  48c   5164       R_ARM_CALL                 osal_seq_printf @x0
+  48d   5178       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  48e   517c       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  48f   518c       R_ARM_MOVW_ABS_NC          .LC39 .rodata.str1.4@x12ac
+  490   5190       R_ARM_MOVT_ABS             .LC39 .rodata.str1.4@x12ac
+  491   51a4       R_ARM_MOVW_ABS_NC          .LC41 .rodata.str1.4@x12bc
+  492   51a8       R_ARM_MOVT_ABS             .LC41 .rodata.str1.4@x12bc
+  493   522c       R_ARM_MOVW_ABS_NC          .LC37 .rodata.str1.4@x129c
+  494   5230       R_ARM_MOVT_ABS             .LC37 .rodata.str1.4@x129c
+  495   5248       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  496   524c       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  497   525c       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  498   5260       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  499   5270       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  49a   5274       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  49b   5284       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  49c   5288       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  49d   5294       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  49e   5298       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  49f   5304       R_ARM_MOVW_ABS_NC          .LC70 .rodata.str1.4@x1520
+  4a0   530c       R_ARM_MOVT_ABS             .LC70 .rodata.str1.4@x1520
+  4a1   5314       R_ARM_MOVW_ABS_NC          .LC25 .rodata.str1.4@x1244
+  4a2   5318       R_ARM_CALL                 osal_seq_printf @x0
+  4a3   5320       R_ARM_MOVW_ABS_NC          .LC100 .rodata.str1.4@x1714
+  4a4   5324       R_ARM_MOVW_ABS_NC          .LC99 .rodata.str1.4@x1700
+  4a5   5328       R_ARM_MOVT_ABS             .LC100 .rodata.str1.4@x1714
+  4a6   5334       R_ARM_MOVT_ABS             .LC99 .rodata.str1.4@x1700
+  4a7   533c       R_ARM_MOVT_ABS             .LC25 .rodata.str1.4@x1244
+  4a8   5344       R_ARM_MOVW_ABS_NC          .LC45 .rodata.str1.4@x1380
+  4a9   5348       R_ARM_MOVT_ABS             .LC45 .rodata.str1.4@x1380
+  4aa   534c       R_ARM_MOVW_ABS_NC          .LC68 .rodata.str1.4@x14f4
+  4ab   5354       R_ARM_MOVW_ABS_NC          .LC75 .rodata.str1.4@x15b4
+  4ac   5358       R_ARM_MOVT_ABS             .LC75 .rodata.str1.4@x15b4
+  4ad   5360       R_ARM_MOVW_ABS_NC          .LC44 .rodata.str1.4@x1378
+  4ae   5364       R_ARM_MOVT_ABS             .LC44 .rodata.str1.4@x1378
+  4af   5368       R_ARM_CALL                 osal_seq_printf @x0
+  4b0   536c       R_ARM_MOVT_ABS             .LC68 .rodata.str1.4@x14f4
+  4b1   5374       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  4b2   537c       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  4b3   5384       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  4b4   538c       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  4b5   5394       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  4b6   5398       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  4b7   5400       R_ARM_CALL                 osal_seq_printf @x0
+  4b8   5424       R_ARM_MOVW_ABS_NC          .LC101 .rodata.str1.4@x171c
+  4b9   542c       R_ARM_MOVT_ABS             .LC101 .rodata.str1.4@x171c
+  4ba   5444       R_ARM_CALL                 osal_seq_printf @x0
+  4bb   5474       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  4bc   5478       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  4bd   5480       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  4be   5484       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  4bf   548c       R_ARM_MOVW_ABS_NC          .LC28 .rodata.str1.4@x1254
+  4c0   5490       R_ARM_MOVT_ABS             .LC28 .rodata.str1.4@x1254
+  4c1   54ac       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  4c2   54b0       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  4c3   54c8       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  4c4   54cc       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  4c5   54e4       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  4c6   54e8       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  4c7   5500       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  4c8   5504       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  4c9   5518       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  4ca   551c       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  4cb   5544       R_ARM_CALL                 osal_seq_printf @x0
+  4cc   5550       R_ARM_MOVW_ABS_NC          .LC28 .rodata.str1.4@x1254
+  4cd   5554       R_ARM_MOVT_ABS             .LC28 .rodata.str1.4@x1254
+  4ce   55d4       R_ARM_MOVW_ABS_NC          .LC37 .rodata.str1.4@x129c
+  4cf   55d8       R_ARM_MOVT_ABS             .LC37 .rodata.str1.4@x129c
+  4d0   55e8       R_ARM_MOVW_ABS_NC          .LC29 .rodata.str1.4@x125c
+  4d1   55ec       R_ARM_MOVT_ABS             .LC29 .rodata.str1.4@x125c
+  4d2   55f4       R_ARM_MOVW_ABS_NC          .LC29 .rodata.str1.4@x125c
+  4d3   55f8       R_ARM_MOVT_ABS             .LC29 .rodata.str1.4@x125c
+  4d4   5600       R_ARM_MOVW_ABS_NC          .LC29 .rodata.str1.4@x125c
+  4d5   5604       R_ARM_MOVT_ABS             .LC29 .rodata.str1.4@x125c
+  4d6   560c       R_ARM_MOVW_ABS_NC          .LC40 .rodata.str1.4@x12b4
+  4d7   5610       R_ARM_MOVT_ABS             .LC40 .rodata.str1.4@x12b4
+  4d8   5618       R_ARM_MOVW_ABS_NC          .LC30 .rodata.str1.4@x1264
+  4d9   561c       R_ARM_MOVT_ABS             .LC30 .rodata.str1.4@x1264
+  4da   5624       R_ARM_MOVW_ABS_NC          .LC30 .rodata.str1.4@x1264
+  4db   5628       R_ARM_MOVT_ABS             .LC30 .rodata.str1.4@x1264
+  4dc   5630       R_ARM_MOVW_ABS_NC          .LC30 .rodata.str1.4@x1264
+  4dd   5634       R_ARM_MOVT_ABS             .LC30 .rodata.str1.4@x1264
+  4de   5640       R_ARM_MOVW_ABS_NC          .LC70 .rodata.str1.4@x1520
+  4df   5648       R_ARM_MOVT_ABS             .LC70 .rodata.str1.4@x1520
+  4e0   564c       R_ARM_CALL                 osal_seq_printf @x0
+  4e1   5654       R_ARM_MOVW_ABS_NC          .LC72 .rodata.str1.4@x1590
+  4e2   5658       R_ARM_MOVW_ABS_NC          .LC71 .rodata.str1.4@x1574
+  4e3   565c       R_ARM_MOVT_ABS             .LC72 .rodata.str1.4@x1590
+  4e4   5668       R_ARM_MOVT_ABS             .LC71 .rodata.str1.4@x1574
+  4e5   5670       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  4e6   5678       R_ARM_MOVW_ABS_NC          .LC74 .rodata.str1.4@x15a8
+  4e7   567c       R_ARM_MOVT_ABS             .LC74 .rodata.str1.4@x15a8
+  4e8   5688       R_ARM_MOVW_ABS_NC          .LC45 .rodata.str1.4@x1380
+  4e9   568c       R_ARM_MOVW_ABS_NC          .LC73 .rodata.str1.4@x159c
+  4ea   5690       R_ARM_MOVT_ABS             .LC45 .rodata.str1.4@x1380
+  4eb   5694       R_ARM_MOVT_ABS             .LC73 .rodata.str1.4@x159c
+  4ec   569c       R_ARM_MOVW_ABS_NC          .LC75 .rodata.str1.4@x15b4
+  4ed   56a0       R_ARM_MOVT_ABS             .LC75 .rodata.str1.4@x15b4
+  4ee   56a8       R_ARM_MOVW_ABS_NC          .LC44 .rodata.str1.4@x1378
+  4ef   56ac       R_ARM_MOVT_ABS             .LC44 .rodata.str1.4@x1378
+  4f0   56b0       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  4f1   56b4       R_ARM_CALL                 osal_seq_printf @x0
+  4f2   56bc       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  4f3   56c0       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  4f4   56c8       R_ARM_MOVW_ABS_NC          .LC25 .rodata.str1.4@x1244
+  4f5   56cc       R_ARM_MOVT_ABS             .LC25 .rodata.str1.4@x1244
+  4f6   56d4       R_ARM_MOVW_ABS_NC          .LC68 .rodata.str1.4@x14f4
+  4f7   56d8       R_ARM_MOVT_ABS             .LC68 .rodata.str1.4@x14f4
+  4f8   56e0       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  4f9   56e4       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  4fa   56ec       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  4fb   56f0       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  4fc   5758       R_ARM_CALL                 osal_seq_printf @x0
+  4fd   5788       R_ARM_MOVW_ABS_NC          .LC76 .rodata.str1.4@x15bc
+  4fe   5790       R_ARM_MOVT_ABS             .LC76 .rodata.str1.4@x15bc
+  4ff   57b8       R_ARM_CALL                 osal_seq_printf @x0
+  500   57c8       R_ARM_MOVW_ABS_NC          .LC70 .rodata.str1.4@x1520
+  501   57d0       R_ARM_MOVT_ABS             .LC70 .rodata.str1.4@x1520
+  502   57dc       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  503   57e0       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  504   57e8       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  505   57ec       R_ARM_CALL                 osal_seq_printf @x0
+  506   57f4       R_ARM_MOVW_ABS_NC          .LC78 .rodata.str1.4@x1600
+  507   57f8       R_ARM_MOVW_ABS_NC          .LC77 .rodata.str1.4@x15d0
+  508   57fc       R_ARM_MOVT_ABS             .LC78 .rodata.str1.4@x1600
+  509   5800       R_ARM_MOVT_ABS             .LC77 .rodata.str1.4@x15d0
+  50a   5810       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  50b   5818       R_ARM_MOVW_ABS_NC          .LC80 .rodata.str1.4@x1614
+  50c   581c       R_ARM_MOVT_ABS             .LC80 .rodata.str1.4@x1614
+  50d   5828       R_ARM_MOVW_ABS_NC          .LC82 .rodata.str1.4@x162c
+  50e   582c       R_ARM_MOVW_ABS_NC          .LC79 .rodata.str1.4@x1608
+  50f   5830       R_ARM_MOVT_ABS             .LC82 .rodata.str1.4@x162c
+  510   5834       R_ARM_MOVT_ABS             .LC79 .rodata.str1.4@x1608
+  511   5840       R_ARM_MOVW_ABS_NC          .LC84 .rodata.str1.4@x1640
+  512   5844       R_ARM_MOVW_ABS_NC          .LC81 .rodata.str1.4@x1620
+  513   5848       R_ARM_MOVT_ABS             .LC84 .rodata.str1.4@x1640
+  514   584c       R_ARM_MOVT_ABS             .LC81 .rodata.str1.4@x1620
+  515   5858       R_ARM_MOVW_ABS_NC          .LC75 .rodata.str1.4@x15b4
+  516   585c       R_ARM_MOVW_ABS_NC          .LC83 .rodata.str1.4@x1634
+  517   5860       R_ARM_MOVT_ABS             .LC75 .rodata.str1.4@x15b4
+  518   5864       R_ARM_MOVT_ABS             .LC83 .rodata.str1.4@x1634
+  519   5870       R_ARM_MOVW_ABS_NC          .LC45 .rodata.str1.4@x1380
+  51a   5874       R_ARM_MOVW_ABS_NC          .LC85 .rodata.str1.4@x164c
+  51b   5878       R_ARM_MOVT_ABS             .LC45 .rodata.str1.4@x1380
+  51c   587c       R_ARM_MOVT_ABS             .LC85 .rodata.str1.4@x164c
+  51d   5884       R_ARM_MOVW_ABS_NC          .LC44 .rodata.str1.4@x1378
+  51e   5888       R_ARM_MOVT_ABS             .LC44 .rodata.str1.4@x1378
+  51f   588c       R_ARM_CALL                 osal_seq_printf @x0
+  520   58a4       R_ARM_MOVW_ABS_NC          .LC25 .rodata.str1.4@x1244
+  521   58a8       R_ARM_MOVW_ABS_NC          .LC68 .rodata.str1.4@x14f4
+  522   58ac       R_ARM_MOVT_ABS             .LC25 .rodata.str1.4@x1244
+  523   58b0       R_ARM_MOVT_ABS             .LC68 .rodata.str1.4@x14f4
+  524   58b8       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  525   58c0       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  526   58c8       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  527   58cc       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  528   593c       R_ARM_CALL                 osal_seq_printf @x0
+  529   599c       R_ARM_MOVW_ABS_NC          .LC86 .rodata.str1.4@x1658
+  52a   59a4       R_ARM_MOVT_ABS             .LC86 .rodata.str1.4@x1658
+  52b   59d8       R_ARM_CALL                 osal_seq_printf @x0
+  52c   59e8       R_ARM_MOVW_ABS_NC          .LC70 .rodata.str1.4@x1520
+  52d   59f0       R_ARM_MOVT_ABS             .LC70 .rodata.str1.4@x1520
+  52e   59fc       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  52f   5a00       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  530   5a0c       R_ARM_CALL                 osal_seq_printf @x0
+  531   5a14       R_ARM_MOVW_ABS_NC          .LC88 .rodata.str1.4@x16ac
+  532   5a18       R_ARM_MOVW_ABS_NC          .LC87 .rodata.str1.4@x1680
+  533   5a1c       R_ARM_MOVT_ABS             .LC88 .rodata.str1.4@x16ac
+  534   5a28       R_ARM_MOVT_ABS             .LC87 .rodata.str1.4@x1680
+  535   5a30       R_ARM_MOVW_ABS_NC          .LC25 .rodata.str1.4@x1244
+  536   5a38       R_ARM_MOVW_ABS_NC          .LC90 .rodata.str1.4@x16b4
+  537   5a3c       R_ARM_MOVT_ABS             .LC90 .rodata.str1.4@x16b4
+  538   5a48       R_ARM_MOVW_ABS_NC          .LC92 .rodata.str1.4@x16c4
+  539   5a4c       R_ARM_MOVW_ABS_NC          .LC89 .rodata.str1.4@x16b0
+  53a   5a50       R_ARM_MOVT_ABS             .LC92 .rodata.str1.4@x16c4
+  53b   5a54       R_ARM_MOVT_ABS             .LC89 .rodata.str1.4@x16b0
+  53c   5a60       R_ARM_MOVW_ABS_NC          .LC94 .rodata.str1.4@x16cc
+  53d   5a64       R_ARM_MOVW_ABS_NC          .LC91 .rodata.str1.4@x16bc
+  53e   5a68       R_ARM_MOVT_ABS             .LC94 .rodata.str1.4@x16cc
+  53f   5a6c       R_ARM_MOVT_ABS             .LC91 .rodata.str1.4@x16bc
+  540   5a78       R_ARM_MOVW_ABS_NC          .LC96 .rodata.str1.4@x16d4
+  541   5a7c       R_ARM_MOVW_ABS_NC          .LC93 .rodata.str1.4@x16c8
+  542   5a80       R_ARM_MOVT_ABS             .LC96 .rodata.str1.4@x16d4
+  543   5a84       R_ARM_MOVT_ABS             .LC93 .rodata.str1.4@x16c8
+  544   5a90       R_ARM_MOVW_ABS_NC          .LC45 .rodata.str1.4@x1380
+  545   5a94       R_ARM_MOVW_ABS_NC          .LC95 .rodata.str1.4@x16d0
+  546   5a98       R_ARM_MOVT_ABS             .LC45 .rodata.str1.4@x1380
+  547   5a9c       R_ARM_MOVT_ABS             .LC95 .rodata.str1.4@x16d0
+  548   5aa4       R_ARM_MOVW_ABS_NC          .LC97 .rodata.str1.4@x16d8
+  549   5aa8       R_ARM_MOVT_ABS             .LC97 .rodata.str1.4@x16d8
+  54a   5ab0       R_ARM_MOVW_ABS_NC          .LC44 .rodata.str1.4@x1378
+  54b   5ab4       R_ARM_MOVT_ABS             .LC44 .rodata.str1.4@x1378
+  54c   5ab8       R_ARM_MOVT_ABS             .LC25 .rodata.str1.4@x1244
+  54d   5abc       R_ARM_CALL                 osal_seq_printf @x0
+  54e   5ac4       R_ARM_MOVW_ABS_NC          .LC68 .rodata.str1.4@x14f4
+  54f   5acc       R_ARM_MOVT_ABS             .LC68 .rodata.str1.4@x14f4
+  550   5ad4       R_ARM_MOVW_ABS_NC          .LANCHOR0 .bss@x10
+  551   5ad8       R_ARM_MOVT_ABS             .LANCHOR0 .bss@x10
+  552   5afc       R_ARM_MOVW_ABS_NC          .LC98 .rodata.str1.4@x16dc
+  553   5b04       R_ARM_MOVT_ABS             .LC98 .rodata.str1.4@x16dc
+  554   5b50       R_ARM_CALL                 osal_seq_printf @x0
+  555   5b58       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1250
+  556   5b5c       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1250
+  557   5bec       R_ARM_CALL                 osal_seq_printf @x0
+  558   5bf8       R_ARM_MOVW_ABS_NC          .LC33 .rodata.str1.4@x127c
+  559   5bfc       R_ARM_MOVT_ABS             .LC33 .rodata.str1.4@x127c
+  55a   5c04       R_ARM_MOVW_ABS_NC          .LC33 .rodata.str1.4@x127c
+  55b   5c08       R_ARM_MOVT_ABS             .LC33 .rodata.str1.4@x127c
+  55c   5ca0       R_ARM_MOVW_ABS_NC          .LC31 .rodata.str1.4@x126c
+  55d   5ca4       R_ARM_MOVT_ABS             .LC31 .rodata.str1.4@x126c
+  55e   5cac       R_ARM_MOVW_ABS_NC          .LC31 .rodata.str1.4@x126c
+  55f   5cb0       R_ARM_MOVT_ABS             .LC31 .rodata.str1.4@x126c
+  560   5cb8       R_ARM_MOVW_ABS_NC          .LC31 .rodata.str1.4@x126c
+  561   5cbc       R_ARM_MOVT_ABS             .LC31 .rodata.str1.4@x126c
+  562   5cc4       R_ARM_MOVW_ABS_NC          .LC32 .rodata.str1.4@x1274
+  563   5cc8       R_ARM_MOVT_ABS             .LC32 .rodata.str1.4@x1274
+  564   5cd0       R_ARM_MOVW_ABS_NC          .LC32 .rodata.str1.4@x1274
+  565   5cd4       R_ARM_MOVT_ABS             .LC32 .rodata.str1.4@x1274
+  566   5cdc       R_ARM_MOVW_ABS_NC          .LC32 .rodata.str1.4@x1274
+  567   5ce0       R_ARM_MOVT_ABS             .LC32 .rodata.str1.4@x1274
+  568   5ce8       R_ARM_MOVW_ABS_NC          .LC33 .rodata.str1.4@x127c
+  569   5cec       R_ARM_MOVT_ABS             .LC33 .rodata.str1.4@x127c
+  56a   5cf4       R_ARM_MOVW_ABS_NC          .LC34 .rodata.str1.4@x1284
+  56b   5cf8       R_ARM_MOVT_ABS             .LC34 .rodata.str1.4@x1284
+  56c   5d00       R_ARM_MOVW_ABS_NC          .LC34 .rodata.str1.4@x1284
+  56d   5d04       R_ARM_MOVT_ABS             .LC34 .rodata.str1.4@x1284
+  56e   5d0c       R_ARM_MOVW_ABS_NC          .LC34 .rodata.str1.4@x1284
+  56f   5d10       R_ARM_MOVT_ABS             .LC34 .rodata.str1.4@x1284
+  570   5d28       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x124c
+  571   5d2c       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x124c
+  572   5d34       R_ARM_MOVW_ABS_NC          .LC35 .rodata.str1.4@x128c
+  573   5d38       R_ARM_MOVT_ABS             .LC35 .rodata.str1.4@x128c
+  574   5d40       R_ARM_MOVW_ABS_NC          .LC35 .rodata.str1.4@x128c
+  575   5d44       R_ARM_MOVT_ABS             .LC35 .rodata.str1.4@x128c
+  576   5d4c       R_ARM_MOVW_ABS_NC          .LC35 .rodata.str1.4@x128c
+  577   5d50       R_ARM_MOVT_ABS             .LC35 .rodata.str1.4@x128c
+  578   5d58       R_ARM_MOVW_ABS_NC          .LC36 .rodata.str1.4@x1294
+  579   5d5c       R_ARM_MOVT_ABS             .LC36 .rodata.str1.4@x1294
+  57a   5d64       R_ARM_MOVW_ABS_NC          .LC36 .rodata.str1.4@x1294
+  57b   5d68       R_ARM_MOVT_ABS             .LC36 .rodata.str1.4@x1294
+  57c   5d70       R_ARM_MOVW_ABS_NC          .LC36 .rodata.str1.4@x1294
+  57d   5d74       R_ARM_MOVT_ABS             .LC36 .rodata.str1.4@x1294
+  57e   5d7c       R_ARM_MOVW_ABS_NC          .LC38 .rodata.str1.4@x12a4
+  57f   5d80       R_ARM_MOVT_ABS             .LC38 .rodata.str1.4@x12a4
+  580   5d88       R_ARM_MOVW_ABS_NC          .LC38 .rodata.str1.4@x12a4
+  581   5d8c       R_ARM_MOVT_ABS             .LC38 .rodata.str1.4@x12a4
+  582   5d94       R_ARM_MOVW_ABS_NC          .LC38 .rodata.str1.4@x12a4
+  583   5d98       R_ARM_MOVT_ABS             .LC38 .rodata.str1.4@x12a4
+  584   5db0       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  585   5df4       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  586   5df8       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  587   5e38       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  588   5e7c       R_ARM_CALL                 osal_gettimeofday @x0
+  589   5e90       R_ARM_CALL                 osal_gettimeofday @x0
+  58a   5f40       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  58b   5f44       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  58c   5f60       R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x1e8
+  58d   5f64       R_ARM_MOVW_ABS_NC          .LC1 .rodata.str1.4@x1760
+  58e   5f68       R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x1e8
+  58f   5f70       R_ARM_MOVT_ABS             .LC1 .rodata.str1.4@x1760
+  590   5f88       R_ARM_CALL                 HI_LOG @x0
+  591   5fa8       R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x1e8
+  592   5fac       R_ARM_MOVW_ABS_NC          .LC2 .rodata.str1.4@x17b0
+  593   5fb0       R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x1e8
+  594   5fb4       R_ARM_MOVT_ABS             .LC2 .rodata.str1.4@x17b0
+  595   5fd0       R_ARM_CALL                 HI_LOG @x0
+  596   5fe4       R_ARM_MOVW_ABS_NC          .LANCHOR0 .rodata@x1e8
+  597   5fe8       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  598   5fec       R_ARM_MOVT_ABS             .LANCHOR0 .rodata@x1e8
+  599   5ff0       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  59a   5ff4       R_ARM_CALL                 HI_LOG @x0
+  59b   600c       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  59c   6010       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  59d   6068       R_ARM_CALL                 __aeabi_uidiv @x0
+  59e   6438       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@x1870
+  59f   6440       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@x1870
+  5a0   6448       R_ARM_CALL                 HI_LOG @x0
+  5a1   6478       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@x183c
+  5a2   6480       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@x183c
+  5a3   6490       R_ARM_CALL                 HI_LOG @x0
+  5a4   64bc       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x1800
+  5a5   64c4       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x1800
+  5a6   64d4       R_ARM_CALL                 HI_LOG @x0
+  5a7   64e4       R_ARM_ABS32                 .rodata@x0
+  5a8   6500       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5a9   6504       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5aa   6568       R_ARM_CALL                 __aeabi_uidiv @x0
+  5ab   65a8       R_ARM_CALL                 __aeabi_uidiv @x0
+  5ac   6838       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@x1870
+  5ad   6840       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@x1870
+  5ae   6850       R_ARM_CALL                 HI_LOG @x0
+  5af   6c90       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@x183c
+  5b0   6c98       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@x183c
+  5b1   6ca8       R_ARM_CALL                 HI_LOG @x0
+  5b2   6cec       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x1800
+  5b3   6cf4       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x1800
+  5b4   6d04       R_ARM_CALL                 HI_LOG @x0
+  5b5   6d14       R_ARM_ABS32                 .rodata@x0
+  5b6   6d1c       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5b7   6d24       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5b8   6d38       R_ARM_JUMP24               hil_mmb_flush_dcache_byaddr @x0
+  5b9   6d48       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5ba   6d4c       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5bb   6da8       R_ARM_CALL                 __aeabi_uidiv @x0
+  5bc   72bc       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@x1870
+  5bd   72c4       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@x1870
+  5be   72cc       R_ARM_CALL                 HI_LOG @x0
+  5bf   72ec       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@x183c
+  5c0   72f4       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@x183c
+  5c1   7304       R_ARM_CALL                 HI_LOG @x0
+  5c2   7318       R_ARM_MOVW_ABS_NC          .LC3 .rodata.str1.4@x1800
+  5c3   7320       R_ARM_MOVT_ABS             .LC3 .rodata.str1.4@x1800
+  5c4   7330       R_ARM_CALL                 HI_LOG @x0
+  5c5   7340       R_ARM_ABS32                 .rodata@x0
+  5c6   7344       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5c7   7348       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5c8   73f8       R_ARM_MOVW_ABS_NC          .LC6 .rodata.str1.4@x189c
+  5c9   7400       R_ARM_MOVT_ABS             .LC6 .rodata.str1.4@x189c
+  5ca   740c       R_ARM_CALL                 HI_LOG @x0
+  5cb   7498       R_ARM_ABS32                 .rodata@x0
+  5cc   749c       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5cd   74a0       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5ce   74c4       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5cf   74c8       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5d0   7528       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  5d1   7544       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  5d2   7560       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  5d3   7588       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5d4   7590       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5d5   75c0       R_ARM_CALL                 osal_memcpy @x0
+  5d6   75d4       R_ARM_MOVW_ABS_NC          .LC7 .rodata.str1.4@x18f0
+  5d7   75dc       R_ARM_MOVT_ABS             .LC7 .rodata.str1.4@x18f0
+  5d8   75ec       R_ARM_CALL                 HI_LOG @x0
+  5d9   75f8       R_ARM_ABS32                 .rodata@x0
+  5da   760c       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  5db   7638       R_ARM_MOVW_ABS_NC          .LC8 .rodata.str1.4@x1938
+  5dc   7640       R_ARM_MOVT_ABS             .LC8 .rodata.str1.4@x1938
+  5dd   7644       R_ARM_CALL                 HI_LOG @x0
+  5de   7658       R_ARM_ABS32                 .rodata@x0
+  5df   766c       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  5e0   767c       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5e1   7684       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5e2   7704       R_ARM_MOVW_ABS_NC          .LC9 .rodata.str1.4@x197c
+  5e3   770c       R_ARM_MOVT_ABS             .LC9 .rodata.str1.4@x197c
+  5e4   771c       R_ARM_CALL                 HI_LOG @x0
+  5e5   772c       R_ARM_ABS32                 .rodata@x0
+  5e6   7730       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5e7   7734       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5e8   776c       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  5e9   7798       R_ARM_MOVW_ABS_NC          .LC10 .rodata.str1.4@x19b4
+  5ea   77a0       R_ARM_MOVT_ABS             .LC10 .rodata.str1.4@x19b4
+  5eb   77a8       R_ARM_CALL                 HI_LOG @x0
+  5ec   77b4       R_ARM_ABS32                 .rodata@x0
+  5ed   77b8       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5ee   77bc       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5ef   77c8       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5f0   77cc       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5f1   77ec       R_ARM_CALL                 osal_memset @x0
+  5f2   77f8       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  5f3   7808       R_ARM_MOVW_ABS_NC          AO_DRV_ISR .text@x5da0
+  5f4   780c       R_ARM_MOVT_ABS             AO_DRV_ISR .text@x5da0
+  5f5   7824       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  5f6   782c       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  5f7   7838       R_ARM_CALL                 HI_LOG @x0
+  5f8   7848       R_ARM_ABS32                 .rodata@x0
+  5f9   784c       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  5fa   7850       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  5fb   7878       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  5fc   7894       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  5fd   789c       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  5fe   78a8       R_ARM_CALL                 HI_LOG @x0
+  5ff   78b8       R_ARM_ABS32                 .rodata@x0
+  600   78cc       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  601   78d0       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  602   78fc       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  603   7934       R_ARM_MOVW_ABS_NC          .LC11 .rodata.str1.4@x19e8
+  604   793c       R_ARM_MOVT_ABS             .LC11 .rodata.str1.4@x19e8
+  605   7944       R_ARM_CALL                 HI_LOG @x0
+  606   795c       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  607   7964       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  608   7970       R_ARM_CALL                 HI_LOG @x0
+  609   7980       R_ARM_ABS32                 .rodata@x0
+  60a   7984       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  60b   7988       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  60c   79b0       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  60d   79dc       R_ARM_MOVW_ABS_NC          .LC11 .rodata.str1.4@x19e8
+  60e   79e4       R_ARM_MOVT_ABS             .LC11 .rodata.str1.4@x19e8
+  60f   79ec       R_ARM_CALL                 HI_LOG @x0
+  610   7a04       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  611   7a0c       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  612   7a18       R_ARM_CALL                 HI_LOG @x0
+  613   7a28       R_ARM_ABS32                 .rodata@x0
+  614   7a44       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  615   7a6c       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  616   7a70       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  617   7aac       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  618   7ab4       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  619   7ac0       R_ARM_CALL                 HI_LOG @x0
+  61a   7ad0       R_ARM_ABS32                 .rodata@x0
+  61b   7aec       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  61c   7b00       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  61d   7b04       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  61e   7b20       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  61f   7b24       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  620   7b64       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  621   7b6c       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  622   7b78       R_ARM_CALL                 HI_LOG @x0
+  623   7b88       R_ARM_ABS32                 .rodata@x0
+  624   7ba0       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  625   7bc0       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  626   7bc4       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  627   7be0       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  628   7be8       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  629   7bf4       R_ARM_CALL                 HI_LOG @x0
+  62a   7c04       R_ARM_ABS32                 .rodata@x0
+  62b   7c1c       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  62c   7c28       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  62d   7c2c       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  62e   7c50       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  62f   7c58       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  630   7c64       R_ARM_CALL                 HI_LOG @x0
+  631   7c74       R_ARM_ABS32                 .rodata@x0
+  632   7c8c       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  633   7cac       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  634   7cb0       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  635   7ccc       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  636   7cd4       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  637   7ce0       R_ARM_CALL                 HI_LOG @x0
+  638   7cf0       R_ARM_ABS32                 .rodata@x0
+  639   7d08       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  63a   7d38       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  63b   7d40       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  63c   7d44       R_ARM_CALL                 HI_LOG @x0
+  63d   7d58       R_ARM_ABS32                 .rodata@x0
+  63e   7d68       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  63f   7d88       R_ARM_MOVW_ABS_NC          .LC12 .rodata.str1.4@x1a28
+  640   7d90       R_ARM_MOVT_ABS             .LC12 .rodata.str1.4@x1a28
+  641   7da0       R_ARM_CALL                 HI_LOG @x0
+  642   7db4       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  643   7dbc       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  644   7dcc       R_ARM_CALL                 HI_LOG @x0
+  645   7dd8       R_ARM_ABS32                 .rodata@x0
+  646   7de8       R_ARM_MOVW_ABS_NC          .LC37 .rodata.str1.4@x1b10
+  647   7dec       R_ARM_MOVT_ABS             .LC37 .rodata.str1.4@x1b10
+  648   7df0       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  649   7df4       R_ARM_CALL                 osal_seq_printf @x0
+  64a   7df8       R_ARM_MOVW_ABS_NC          .LC41 .rodata.str1.4@x1b94
+  64b   7dfc       R_ARM_MOVW_ABS_NC          .LC42 .rodata.str1.4@x1b9c
+  64c   7e00       R_ARM_MOVT_ABS             .LC41 .rodata.str1.4@x1b94
+  64d   7e04       R_ARM_MOVT_ABS             .LC42 .rodata.str1.4@x1b9c
+  64e   7e10       R_ARM_MOVW_ABS_NC          .LC43 .rodata.str1.4@x1ba4
+  64f   7e14       R_ARM_MOVW_ABS_NC          .LC44 .rodata.str1.4@x1bac
+  650   7e18       R_ARM_MOVT_ABS             .LC43 .rodata.str1.4@x1ba4
+  651   7e1c       R_ARM_MOVT_ABS             .LC44 .rodata.str1.4@x1bac
+  652   7e28       R_ARM_MOVW_ABS_NC          .LC45 .rodata.str1.4@x1bb8
+  653   7e2c       R_ARM_MOVW_ABS_NC          .LC46 .rodata.str1.4@x1bc0
+  654   7e30       R_ARM_MOVT_ABS             .LC45 .rodata.str1.4@x1bb8
+  655   7e34       R_ARM_MOVT_ABS             .LC46 .rodata.str1.4@x1bc0
+  656   7e40       R_ARM_MOVW_ABS_NC          .LC47 .rodata.str1.4@x1bc8
+  657   7e44       R_ARM_MOVW_ABS_NC          .LC48 .rodata.str1.4@x1bd0
+  658   7e48       R_ARM_MOVT_ABS             .LC47 .rodata.str1.4@x1bc8
+  659   7e4c       R_ARM_MOVT_ABS             .LC48 .rodata.str1.4@x1bd0
+  65a   7e5c       R_ARM_MOVW_ABS_NC          .LC38 .rodata.str1.4@x1b64
+  65b   7e60       R_ARM_MOVW_ABS_NC          .LC39 .rodata.str1.4@x1b6c
+  65c   7e64       R_ARM_MOVT_ABS             .LC38 .rodata.str1.4@x1b64
+  65d   7e68       R_ARM_MOVT_ABS             .LC39 .rodata.str1.4@x1b6c
+  65e   7e6c       R_ARM_MOVW_ABS_NC          .LC40 .rodata.str1.4@x1b74
+  65f   7e70       R_ARM_MOVT_ABS             .LC40 .rodata.str1.4@x1b74
+  660   7e74       R_ARM_CALL                 osal_seq_printf @x0
+  661   7e78       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  662   7e7c       R_ARM_MOVW_ABS_NC          .LC49 .rodata.str1.4@x1bd8
+  663   7e80       R_ARM_MOVW_ABS_NC          .LC33 .rodata.str1.4@x1af8
+  664   7e84       R_ARM_MOVW_ABS_NC          .LC34 .rodata.str1.4@x1b00
+  665   7e88       R_ARM_MOVT_ABS             .LC49 .rodata.str1.4@x1bd8
+  666   7e8c       R_ARM_MOVT_ABS             .LC33 .rodata.str1.4@x1af8
+  667   7e90       R_ARM_MOVT_ABS             .LC34 .rodata.str1.4@x1b00
+  668   7eb0       R_ARM_MOVW_ABS_NC          .LC13 .rodata.str1.4@x1a58
+  669   7eb4       R_ARM_MOVT_ABS             .LC13 .rodata.str1.4@x1a58
+  66a   7ee0       R_ARM_MOVW_ABS_NC          .LC18 .rodata.str1.4@x1a80
+  66b   7ee4       R_ARM_MOVT_ABS             .LC18 .rodata.str1.4@x1a80
+  66c   7f64       R_ARM_MOVW_ABS_NC          .LC29 .rodata.str1.4@x1ad8
+  66d   7f68       R_ARM_MOVT_ABS             .LC29 .rodata.str1.4@x1ad8
+  66e   7f78       R_ARM_MOVW_ABS_NC          .LC30 .rodata.str1.4@x1ae0
+  66f   7f7c       R_ARM_MOVT_ABS             .LC30 .rodata.str1.4@x1ae0
+  670   7f90       R_ARM_MOVW_ABS_NC          .LC32 .rodata.str1.4@x1af0
+  671   7f94       R_ARM_MOVT_ABS             .LC32 .rodata.str1.4@x1af0
+  672   7ff8       R_ARM_CALL                 osal_seq_printf @x0
+  673   800c       R_ARM_MOVW_ABS_NC          .LC50 .rodata.str1.4@x1bf8
+  674   8014       R_ARM_MOVT_ABS             .LC50 .rodata.str1.4@x1bf8
+  675   8018       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  676   801c       R_ARM_CALL                 osal_seq_printf @x0
+  677   8020       R_ARM_MOVW_ABS_NC          .LC53 .rodata.str1.4@x1c74
+  678   8024       R_ARM_MOVW_ABS_NC          .LC54 .rodata.str1.4@x1c7c
+  679   8028       R_ARM_MOVT_ABS             .LC53 .rodata.str1.4@x1c74
+  67a   802c       R_ARM_MOVT_ABS             .LC54 .rodata.str1.4@x1c7c
+  67b   8038       R_ARM_MOVW_ABS_NC          .LC55 .rodata.str1.4@x1c84
+  67c   803c       R_ARM_MOVW_ABS_NC          .LC56 .rodata.str1.4@x1c90
+  67d   8040       R_ARM_MOVT_ABS             .LC55 .rodata.str1.4@x1c84
+  67e   8044       R_ARM_MOVT_ABS             .LC56 .rodata.str1.4@x1c90
+  67f   8050       R_ARM_MOVW_ABS_NC          .LC57 .rodata.str1.4@x1c98
+  680   8054       R_ARM_MOVW_ABS_NC          .LC58 .rodata.str1.4@x1ca0
+  681   8058       R_ARM_MOVT_ABS             .LC57 .rodata.str1.4@x1c98
+  682   805c       R_ARM_MOVT_ABS             .LC58 .rodata.str1.4@x1ca0
+  683   8068       R_ARM_MOVW_ABS_NC          .LC39 .rodata.str1.4@x1b6c
+  684   806c       R_ARM_MOVW_ABS_NC          .LC51 .rodata.str1.4@x1c4c
+  685   8070       R_ARM_MOVT_ABS             .LC39 .rodata.str1.4@x1b6c
+  686   8074       R_ARM_MOVT_ABS             .LC51 .rodata.str1.4@x1c4c
+  687   8078       R_ARM_MOVW_ABS_NC          .LC52 .rodata.str1.4@x1c54
+  688   8080       R_ARM_MOVT_ABS             .LC52 .rodata.str1.4@x1c54
+  689   8084       R_ARM_CALL                 osal_seq_printf @x0
+  68a   8088       R_ARM_MOVW_ABS_NC          .LC59 .rodata.str1.4@x1ca8
+  68b   808c       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  68c   8090       R_ARM_MOVT_ABS             .LC59 .rodata.str1.4@x1ca8
+  68d   80b4       R_ARM_MOVW_ABS_NC          .LC60 .rodata.str1.4@x1cc8
+  68e   80bc       R_ARM_MOVT_ABS             .LC60 .rodata.str1.4@x1cc8
+  68f   80c0       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  690   80c4       R_ARM_CALL                 osal_seq_printf @x0
+  691   80c8       R_ARM_MOVW_ABS_NC          .LC63 .rodata.str1.4@x1d40
+  692   80cc       R_ARM_MOVW_ABS_NC          .LC64 .rodata.str1.4@x1d48
+  693   80d0       R_ARM_MOVT_ABS             .LC63 .rodata.str1.4@x1d40
+  694   80d4       R_ARM_MOVT_ABS             .LC64 .rodata.str1.4@x1d48
+  695   80e0       R_ARM_MOVW_ABS_NC          .LC65 .rodata.str1.4@x1d50
+  696   80e4       R_ARM_MOVW_ABS_NC          .LC66 .rodata.str1.4@x1d58
+  697   80e8       R_ARM_MOVT_ABS             .LC65 .rodata.str1.4@x1d50
+  698   80ec       R_ARM_MOVT_ABS             .LC66 .rodata.str1.4@x1d58
+  699   80f8       R_ARM_MOVW_ABS_NC          .LC39 .rodata.str1.4@x1b6c
+  69a   80fc       R_ARM_MOVW_ABS_NC          .LC61 .rodata.str1.4@x1d1c
+  69b   8100       R_ARM_MOVT_ABS             .LC39 .rodata.str1.4@x1b6c
+  69c   8104       R_ARM_MOVT_ABS             .LC61 .rodata.str1.4@x1d1c
+  69d   8108       R_ARM_MOVW_ABS_NC          .LC62 .rodata.str1.4@x1d28
+  69e   8110       R_ARM_MOVT_ABS             .LC62 .rodata.str1.4@x1d28
+  69f   8114       R_ARM_CALL                 osal_seq_printf @x0
+  6a0   8118       R_ARM_MOVW_ABS_NC          .LC67 .rodata.str1.4@x1d60
+  6a1   811c       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  6a2   8120       R_ARM_MOVT_ABS             .LC67 .rodata.str1.4@x1d60
+  6a3   8144       R_ARM_MOVW_ABS_NC          .LC68 .rodata.str1.4@x1d7c
+  6a4   814c       R_ARM_MOVT_ABS             .LC68 .rodata.str1.4@x1d7c
+  6a5   8150       R_ARM_MOVW_ABS_NC          .LC73 .rodata.str1.4@x1df8
+  6a6   8154       R_ARM_CALL                 osal_seq_printf @x0
+  6a7   8158       R_ARM_MOVW_ABS_NC          .LC71 .rodata.str1.4@x1de8
+  6a8   815c       R_ARM_MOVW_ABS_NC          .LC72 .rodata.str1.4@x1df0
+  6a9   8160       R_ARM_MOVT_ABS             .LC71 .rodata.str1.4@x1de8
+  6aa   8164       R_ARM_MOVT_ABS             .LC72 .rodata.str1.4@x1df0
+  6ab   8170       R_ARM_MOVW_ABS_NC          .LC39 .rodata.str1.4@x1b6c
+  6ac   8174       R_ARM_MOVW_ABS_NC          .LC69 .rodata.str1.4@x1dd0
+  6ad   8178       R_ARM_MOVT_ABS             .LC39 .rodata.str1.4@x1b6c
+  6ae   817c       R_ARM_MOVT_ABS             .LC69 .rodata.str1.4@x1dd0
+  6af   8180       R_ARM_MOVW_ABS_NC          .LC70 .rodata.str1.4@x1dd8
+  6b0   8188       R_ARM_MOVT_ABS             .LC70 .rodata.str1.4@x1dd8
+  6b1   818c       R_ARM_CALL                 osal_seq_printf @x0
+  6b2   8190       R_ARM_MOVW_ABS_NC          .LC35 .rodata.str1.4@x1b08
+  6b3   8194       R_ARM_MOVW_ABS_NC          .LC36 .rodata.str1.4@x1b0c
+  6b4   8198       R_ARM_MOVT_ABS             .LC73 .rodata.str1.4@x1df8
+  6b5   819c       R_ARM_MOVT_ABS             .LC35 .rodata.str1.4@x1b08
+  6b6   81a0       R_ARM_MOVT_ABS             .LC36 .rodata.str1.4@x1b0c
+  6b7   81ec       R_ARM_CALL                 osal_seq_printf @x0
+  6b8   823c       R_ARM_CALL                 osal_seq_printf @x0
+  6b9   8280       R_ARM_CALL                 osal_seq_printf @x0
+  6ba   828c       R_ARM_MOVW_ABS_NC          .LC14 .rodata.str1.4@x1a60
+  6bb   8290       R_ARM_MOVT_ABS             .LC14 .rodata.str1.4@x1a60
+  6bc   829c       R_ARM_MOVW_ABS_NC          .LC19 .rodata.str1.4@x1a88
+  6bd   82a0       R_ARM_MOVT_ABS             .LC19 .rodata.str1.4@x1a88
+  6be   82a8       R_ARM_MOVW_ABS_NC          .LC22 .rodata.str1.4@x1aa0
+  6bf   82ac       R_ARM_MOVT_ABS             .LC22 .rodata.str1.4@x1aa0
+  6c0   82b4       R_ARM_MOVW_ABS_NC          .LC16 .rodata.str1.4@x1a70
+  6c1   82b8       R_ARM_MOVT_ABS             .LC16 .rodata.str1.4@x1a70
+  6c2   82c0       R_ARM_MOVW_ABS_NC          .LC20 .rodata.str1.4@x1a90
+  6c3   82c4       R_ARM_MOVT_ABS             .LC20 .rodata.str1.4@x1a90
+  6c4   82cc       R_ARM_MOVW_ABS_NC          .LC31 .rodata.str1.4@x1ae8
+  6c5   82d0       R_ARM_MOVT_ABS             .LC31 .rodata.str1.4@x1ae8
+  6c6   82d8       R_ARM_MOVW_ABS_NC          .LC21 .rodata.str1.4@x1a98
+  6c7   82dc       R_ARM_MOVT_ABS             .LC21 .rodata.str1.4@x1a98
+  6c8   82e4       R_ARM_MOVW_ABS_NC          .LC15 .rodata.str1.4@x1a68
+  6c9   82e8       R_ARM_MOVT_ABS             .LC15 .rodata.str1.4@x1a68
+  6ca   82f0       R_ARM_MOVW_ABS_NC          .LC23 .rodata.str1.4@x1aa8
+  6cb   82f4       R_ARM_MOVT_ABS             .LC23 .rodata.str1.4@x1aa8
+  6cc   82fc       R_ARM_MOVW_ABS_NC          .LC24 .rodata.str1.4@x1ab0
+  6cd   8300       R_ARM_MOVT_ABS             .LC24 .rodata.str1.4@x1ab0
+  6ce   8308       R_ARM_MOVW_ABS_NC          .LC25 .rodata.str1.4@x1ab8
+  6cf   830c       R_ARM_MOVT_ABS             .LC25 .rodata.str1.4@x1ab8
+  6d0   8314       R_ARM_MOVW_ABS_NC          .LC17 .rodata.str1.4@x1a78
+  6d1   8318       R_ARM_MOVT_ABS             .LC17 .rodata.str1.4@x1a78
+  6d2   8320       R_ARM_MOVW_ABS_NC          .LC26 .rodata.str1.4@x1ac0
+  6d3   8324       R_ARM_MOVT_ABS             .LC26 .rodata.str1.4@x1ac0
+  6d4   832c       R_ARM_MOVW_ABS_NC          .LC27 .rodata.str1.4@x1ac8
+  6d5   8330       R_ARM_MOVT_ABS             .LC27 .rodata.str1.4@x1ac8
+  6d6   8338       R_ARM_MOVW_ABS_NC          .LC28 .rodata.str1.4@x1ad0
+  6d7   833c       R_ARM_MOVT_ABS             .LC28 .rodata.str1.4@x1ad0
+  6d8   8364       R_ARM_MOVW_ABS_NC          .LANCHOR1 .bss@x44e8
+  6d9   836c       R_ARM_MOVT_ABS             .LANCHOR1 .bss@x44e8
+  6da   83cc       R_ARM_CALL                 __aeabi_uidiv @x0
+  6db   8564       R_ARM_CALL                 __aeabi_uidiv @x0
+  6dc   86f8       R_ARM_CALL                 __aeabi_uidiv @x0
+  6dd   8878       R_ARM_MOVW_ABS_NC          .LC5 .rodata.str1.4@x1870
+  6de   8880       R_ARM_MOVT_ABS             .LC5 .rodata.str1.4@x1870
+  6df   8890       R_ARM_CALL                 HI_LOG @x0
+  6e0   88a0       R_ARM_MOVW_ABS_NC          .LC74 .rodata.str1.4@x1e08
+  6e1   88a4       R_ARM_MOVW_ABS_NC          .LC75 .rodata.str1.4@x1e18
+  6e2   88a8       R_ARM_MOVT_ABS             .LC74 .rodata.str1.4@x1e08
+  6e3   88ac       R_ARM_MOVT_ABS             .LC75 .rodata.str1.4@x1e18
+  6e4   88b8       R_ARM_CALL                 osal_panic @x0
+  6e5   88dc       R_ARM_MOVW_ABS_NC          .LC4 .rodata.str1.4@x183c
+  6e6   88e4       R_ARM_MOVT_ABS             .LC4 .rodata.str1.4@x183c
+  6e7   88f4       R_ARM_CALL                 HI_LOG @x0
+  6e8   8908       R_ARM_MOVW_ABS_NC          .LC76 .rodata.str1.4@x1e58
+  6e9   8910       R_ARM_MOVT_ABS             .LC76 .rodata.str1.4@x1e58
+  6ea   8920       R_ARM_CALL                 HI_LOG @x0
+  6eb   8930       R_ARM_ABS32                 .rodata@x0
+  6ec   8948       R_ARM_CALL                 CMPI_GetModuleFuncById @x0
+  6ed   8978       R_ARM_MOVW_ABS_NC          .LC0 .rodata.str1.4@x1728
+  6ee   8980       R_ARM_MOVT_ABS             .LC0 .rodata.str1.4@x1728
+  6ef   8984       R_ARM_CALL                 HI_LOG @x0
+  6f0   8990       R_ARM_ABS32                 .rodata@x0
+  6f1   4          R_ARM_CALL                 AO_ModInit .text@x3428
+  6f2   0          R_ARM_JUMP24               AO_ModExit .text@x3570
+  6f3   0          R_ARM_PREL31                .init.text@x0
+  6f4   0          R_ARM_NONE                 __aeabi_unwind_cpp_pr0 @x0
+  6f5   0          R_ARM_PREL31                .exit.text@x0
+  6f6   0          R_ARM_NONE                 __aeabi_unwind_cpp_pr0 @x0
+  6f7   4          R_ARM_ABS32                ao_open .text@x900
+  6f8   14         R_ARM_ABS32                ao_close .text@x8f0
+  6f9   18         R_ARM_ABS32                AoIoctl .text@x2fa0
+  6fa   1c         R_ARM_ABS32                ao_poll .text@x540
+  6fb   34         R_ARM_ABS32                ao_freeze .text@x8f8
+  6fc   40         R_ARM_ABS32                ao_restore .text@x0
+  6fd   90         R_ARM_ABS32                AO_Init .text@x668
+  6fe   94         R_ARM_ABS32                AO_Exit .text@x834
+  6ff   98         R_ARM_ABS32                AO_QueryState .text@x518
+  700   9c         R_ARM_ABS32                AO_Notify .text@x488
+  701   a0         R_ARM_ABS32                AO_GetVerMagic .text@x8
+  702   a8         R_ARM_ABS32                 .data@x0
+  703   bc         R_ARM_ABS32                AO_DEV_Init .text@x48c0
+  704   c0         R_ARM_ABS32                AoEnableDev .text@x4384
+  705   c4         R_ARM_ABS32                AoDisableDev .text@x45ec
+  706   c8         R_ARM_ABS32                AO_DEV_Exit .text@x49ec
+  707   cc         R_ARM_ABS32                AO_GetDevCtx .text@x4b64
+  708   d0         R_ARM_ABS32                AoGetData .text@x3d04
+  709   d4         R_ARM_ABS32                AoSaveDmaRdPtr .text@x3ccc
+  70a   d8         R_ARM_ABS32                AoSetDmaRdOffsetInitFlag .text@x3ce0
+  70b   dc         R_ARM_ABS32                init_module .init.text@x0
+  70c   16c        R_ARM_ABS32                cleanup_module .exit.text@x0
+  70d   0          R_ARM_PREL31                .text@x0
+  70e   0          R_ARM_NONE                 __aeabi_unwind_cpp_pr0 @x0
+  70f   8          R_ARM_PREL31                .text@x0
+  710   10         R_ARM_PREL31                .text@x0
+  711   18         R_ARM_PREL31                .text@x0
+  712   20         R_ARM_PREL31                .text@x0
+  713   28         R_ARM_PREL31                .text@x0
+  714   30         R_ARM_PREL31                .text@x0
+  715   38         R_ARM_PREL31                .text@x0
+  716   40         R_ARM_PREL31                .text@x0
+  717   48         R_ARM_PREL31                .text@x0
+  718   50         R_ARM_PREL31                .text@x0
+  719   58         R_ARM_PREL31                .text@x0
+  71a   60         R_ARM_PREL31                .text@x0
+  71b   68         R_ARM_PREL31                .text@x0
+  71c   70         R_ARM_PREL31                .text@x0
+  71d   78         R_ARM_PREL31                .text@x0
+  71e   80         R_ARM_PREL31                .text@x0
+  71f   88         R_ARM_PREL31                .text@x0
+  720   90         R_ARM_PREL31                .text@x0
+  721   98         R_ARM_PREL31                .text@x0
+  722   a0         R_ARM_PREL31                .text@x0
+  723   a8         R_ARM_PREL31                .text@x0
+  724   b0         R_ARM_PREL31                .text@x0
+  725   b8         R_ARM_PREL31                .text@x0
+  726   c0         R_ARM_PREL31                .text@x0
+  727   c8         R_ARM_PREL31                .text@x0
+  728   d0         R_ARM_PREL31                .text@x0
+  729   d8         R_ARM_PREL31                .text@x0
+  72a   e0         R_ARM_PREL31                .text@x0
+  72b   e8         R_ARM_PREL31                .text@x0
+  72c   f0         R_ARM_PREL31                .text@x0
+  72d   f8         R_ARM_PREL31                .text@x0
+  72e   100        R_ARM_PREL31                .text@x0
+  72f   108        R_ARM_PREL31                .text@x0
+  730   110        R_ARM_PREL31                .text@x0
+  731   118        R_ARM_PREL31                .text@x0
+  732   118        R_ARM_NONE                 __aeabi_unwind_cpp_pr0 @x0
+  733   120        R_ARM_PREL31                .text@x0
+  734   128        R_ARM_PREL31                .text@x0
+  735   130        R_ARM_PREL31                .text@x0
+  736   138        R_ARM_PREL31                .text@x0
+  737   140        R_ARM_PREL31                .text@x0
+  738   148        R_ARM_PREL31                .text@x0
+  739   150        R_ARM_PREL31                .text@x0
+  73a   158        R_ARM_PREL31                .text@x0
+  73b   160        R_ARM_PREL31                .text@x0
+  73c   168        R_ARM_PREL31                .text@x0
+  73d   170        R_ARM_PREL31                .text@x0
+  73e   178        R_ARM_PREL31                .text@x0
+  73f   180        R_ARM_PREL31                .text@x0
+  740   188        R_ARM_PREL31                .text@x0
+  741   190        R_ARM_PREL31                .text@x0
+  742   198        R_ARM_PREL31                .text@x0
+  743   198        R_ARM_NONE                 __aeabi_unwind_cpp_pr0 @x0
+  744   1a0        R_ARM_PREL31                .text@x0
+  745   1a8        R_ARM_PREL31                .text@x0
+  746   1b0        R_ARM_PREL31                .text@x0
+  747   1b8        R_ARM_PREL31                .text@x0
+  748   1c0        R_ARM_PREL31                .text@x0
+  749   1c8        R_ARM_PREL31                .text@x0
+  74a   1d0        R_ARM_PREL31                .text@x0
+  74b   1d8        R_ARM_PREL31                .text@x0
+  74c   1e0        R_ARM_PREL31                .text@x0
+  74d   1e8        R_ARM_PREL31                .text@x0
+  74e   1f0        R_ARM_PREL31                .text@x0
+  74f   1f8        R_ARM_PREL31                .text@x0
+  750   200        R_ARM_PREL31                .text@x0
+  751   208        R_ARM_PREL31                .text@x0
+  752   210        R_ARM_PREL31                .text@x0
+  753   218        R_ARM_PREL31                .text@x0
+  754   220        R_ARM_PREL31                .text@x0
+  755   228        R_ARM_PREL31                .text@x0
+  756   230        R_ARM_PREL31                .text@x0
+  757   238        R_ARM_PREL31                .text@x0
+  758   240        R_ARM_PREL31                .text@x0
+  759   248        R_ARM_PREL31                .text@x0
+  75a   250        R_ARM_PREL31                .text@x0
+  75b   258        R_ARM_PREL31                .text@x0
+  75c   260        R_ARM_PREL31                .text@x0
+  75d   268        R_ARM_PREL31                .text@x0
+  75e   270        R_ARM_PREL31                .text@x0
+  75f   278        R_ARM_PREL31                .text@x0
+  760   280        R_ARM_PREL31                .text@x0
+----------------------------------------------------------------------------------------------------
+

@@ -1,0 +1,169 @@
+*func_0: bl      0x00000000000000e0 memcpy32(src, dst, size)
+*func_1: bl      0x0000000000000140 configure_soc_clocks
+*func_2: bl      0x00000000000001b0 reset_soc_clocks
+*func_3: bl      0x00000000000001dc read_bsbm_header(header_info)
+*func_4: bl      0x00000000000002cc get_random_value
+*func_5: bl      0x0000000000000320 uart0_send_status(data1,data2)
+*func_6: bl      0x0000000000000358 refresh_ddr
+func_7: bl      0x00000000000004b8 set_boot_target_addr(is_emmc)
+*func_8: bl      0x0000000000000568
+func_9: bl      0x0000000000000614
+func_a: bl      0x0000000000000654
+func_b: bl      0x00000000000006a4
+func_c: bl      0x00000000000006e0
+func_d: bl      0x000000000000072c
+*func_e: bl      0x0000000000000868
+func_f: bl      0x000000000000105c is_update_mode
+func_10: bl     0x00000000000010ac reset_secure_io_peripherals
+func_11: bl     0x0000000000001128 initial_memory_setup
+*func_12: bl     0x0000000000001150
+func_13: bl     0x000000000000122c
+func_14: bl     0x0000000000001314
+func_15: bl     0x000000000000136c
+*func_16: bl     0x0000000000001470 << in-progress >> **
+*func_17: bl     0x00000000000016ac
+*func_18: bl     0x00000000000018b8
+*func_19: bl     0x0000000000001af4
+func_1a: bl     0x0000000000001b40
+*func_1b: bl     0x0000000000001bdc
+*func_1c: bl     0x0000000000001f0c
+*func_1d: bl     0x0000000000002284
+*func_1e: bl     0x0000000000002368 fastboot_update
+func_1f: bl     0x00000000000023c4 media_update
+*func_20: bl     0x000000000000249c config_use_flash
+*func_21: bl     0x00000000000025d4
+*func_22: bl     0x0000000000002704 init_and_load
+func_23: bl     0x0000000000002844 disable_control_features
+func_24: bl     0x0000000000002858 enable_instruction_cache
+func_25: bl     0x0000000000002880 disable_instruction_cache
+                0x0000000000002890 data_cache_iterative_invalidation
+func_26: bl     0x00000000000028e0 invalidate_instruction_pipeline
+func_27: bl     0x0000000000002900 memset(addr, val, size)
+func_28: bl     0x00000000000029a0 memcpy(dst, src, size)
+                0x0000000000002a80 organize_memory_chunks
+func_29: bl     0x0000000000002b78 alloc_chunk(size)
+func_2a: bl     0x0000000000002c1c free_chunk(addr)
+func_2b: bl     0x0000000000002c84 wait_long_timer_0(time)
+func_2c: bl     0x0000000000002cb4 timer_wait_seconds(seconds)
+func_2d: bl     0x0000000000002cd8 strlen(str)
+func_2e: bl     0x0000000000002d04 strncmp(str1,str2,num)
+                0x0000000000002d5c strcpy(dst,src)
+func_2f: bl     0x0000000000002d74 nop_2d74
+                0x0000000000002d78 strn_contains(str1,str2,num)
+func_30: bl     0x0000000000002e00 strcmp(str1,str2)
+func_31: bl     0x0000000000002e30 crc16_checksum(addr,r1,r2)
+*func_32: bl     0x0000000000002ee4 receive_frame(r0)
+func_33: bl     0x0000000000003318 initialize_uart0_hdwr
+func_34: bl     0x0000000000003334 disable_uart0_hdwr
+*func_35: bl     0x0000000000003338 uart0_flush_rx_fifo
+*func_36: bl     0x0000000000003354 << in-progress >>
+*func_37: bl     0x0000000000003410 uart0_wait_start_frame
+*func_38: bl     0x00000000000034ac burn_bootloader
+*func_39: bl     0x00000000000034e0
+*func_3a: bl     0x0000000000003580 << in-progress >>
+func_3b: bl     0x0000000000003628
+func_3c: bl     0x00000000000036c0
+func_3d: bl     0x00000000000036c4
+func_3e: bl     0x000000000000373c
+func_3f: bl     0x00000000000037e4
+func_40: bl     0x0000000000003858
+func_41: bl     0x00000000000038dc
+func_42: bl     0x000000000000390c
+func_43: bl     0x00000000000039a8
+func_44: bl     0x00000000000039fc
+func_45: bl     0x0000000000003a74
+func_46: bl     0x0000000000003ae8
+func_47: bl     0x0000000000003b68
+func_48: bl     0x0000000000003bcc
+func_49: bl     0x0000000000003c30 update_emmc_card_clock
+func_4a: bl     0x0000000000003c88 update_sdio0_card_clock
+func_4b: bl     0x0000000000003ce0 send_command_sdio0(cmd, value, sync)
+func_4c: bl     0x0000000000003d68 configure_emmc_pins
+func_4d: bl     0x0000000000003de0 initialize_emmc
+func_4e: bl     0x0000000000004060 reset_emmc
+func_4f: bl     0x00000000000040a0 memcpy_emmc
+func_50: bl     0x000000000000414c
+func_51: bl     0x00000000000041c0
+func_52: bl     0x00000000000041f0
+func_53: bl     0x000000000000422c
+func_54: bl     0x000000000000445c close_sdio0
+func_55: bl     0x000000000000449c
+func_56: bl     0x00000000000045b8
+func_57: bl     0x00000000000046c8
+func_58: bl     0x000000000000476c
+func_59: bl     0x00000000000047bc
+func_5a: bl     0x0000000000004828
+func_5b: bl     0x0000000000004900
+func_5c: bl     0x0000000000004d8c
+func_5d: bl     0x00000000000050c0 initialize_uart0
+func_5e: bl     0x000000000000512c disable_uart0
+func_5f: bl     0x000000000000514c uart0_write(data)
+*func_60: bl     0x0000000000005170 uart0_read
+func_61: bl     0x00000000000051a0 uart0_has_rx_data
+func_62: bl     0x00000000000051bc timer_start
+func_63: bl     0x00000000000051e8 timer_stop
+func_64: bl     0x00000000000051f8 timer_reset_counter
+func_65: bl     0x0000000000005234 timer_get_value
+func_66: bl     0x0000000000005244 get_wait_ticks
+func_67: bl     0x000000000000524c update_timer_0_value
+func_68: bl     0x0000000000005280 update_timer_0_value2(offset)
+                0x0000000000005294 initialize_timer_0_value
+func_68: bl     0x00000000000052b4 wait_timer_0(delay)
+func_69: bl     0x0000000000005348 invoke_foreign_code(*fn)
+func_6a: bl     0x0000000000005384
+func_6b: bl     0x0000000000005468
+func_6c: bl     0x00000000000054b0
+func_6d: bl     0x0000000000005670
+func_6e: bl     0x00000000000056c0
+func_6f: bl     0x0000000000005740
+func_70: bl     0x00000000000057dc
+func_71: bl     0x0000000000005834
+func_72: bl     0x0000000000005874
+func_73: bl     0x00000000000058c4
+func_74: bl     0x0000000000005920
+func_75: bl     0x0000000000005930
+func_76: bl     0x0000000000005974
+func_77: bl     0x0000000000005990
+func_78: bl     0x00000000000059bc
+func_79: bl     0x0000000000005bd4
+func_7a: bl     0x0000000000006880
+func_7b: bl     0x0000000000006ab0
+func_7c: bl     0x0000000000006c08
+func_7d: bl     0x0000000000006c60
+func_7e: bl     0x0000000000006cb8
+func_7f: bl     0x0000000000006cc0
+func_80: bl     0x0000000000006cd8
+func_81: bl     0x0000000000006dbc
+func_82: bl     0x0000000000006e3c
+func_83: bl     0x0000000000006e50
+func_84: bl     0x0000000000006e54
+func_85: bl     0x0000000000006e68
+func_86: bl     0x0000000000006e6c
+func_87: bl     0x0000000000006e70
+func_88: bl     0x0000000000006e84
+func_89: bl     0x0000000000006e94
+func_8a: bl     0x0000000000006ea4
+func_8b: bl     0x0000000000006edc
+func_8c: bl     0x0000000000006f58
+func_8d: bl     0x0000000000006f9c
+func_8e: bl     0x0000000000006fdc
+func_8f: bl     0x0000000000007038
+func_90: bl     0x0000000000007078
+func_91: bl     0x000000000000711c
+func_92: bl     0x0000000000007180
+func_93: bl     0x000000000000723c
+func_94: bl     0x0000000000007354
+func_95: bl     0x0000000000007398
+func_96: bl     0x0000000000007578
+func_97: bl     0x00000000000075a0
+func_98: bl     0x0000000000007688
+func_99: bl     0x00000000000077a8 << in-progress >>
+func_9a: bl     0x00000000000077b8
+func_9b: bl     0x000000000000795c
+func_9c: bl     0x0000000000007998
+func_9d: bl     0x00000000000079c0
+func_9e: bl     0x0000000000007a5c
+func_9f: bl     0x0000000000007aac
+func_a0: bl     0x0000000000007ae8
+func_a1: bl     0x0000000000007bbc
+func_a2: bl     0x0000000000007c70

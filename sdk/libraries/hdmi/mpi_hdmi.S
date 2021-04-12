@@ -1,0 +1,5558 @@
+@
+@ -- FILES --
+@
+
+@ mpi_hdmi.c
+
+
+unsigned char data[0] = {
+};
+
+unsigned char bss[0];
+
+_RODATA_HI_MPI_HDMI_GETINFOFRAME_STR1_4_0000: .ascii "Error video timing:%d\n\0"
+
+
+_RODATA_HI_MPI_HDMI_GETSINKCAPABILITY_STR1_4_0000: .ascii "NULL pointer!!\n\0",
+_RODATA_HI_MPI_HDMI_GETSINKCAPABILITY_STR1_4_0010: .ascii ""
+
+
+_RODATA_HI_MPI_HDMI_OPEN_STR1_4_0000: .ascii "Invalid HDMI DEV ID:%d!\n\0"
+
+
+_RODATA_HI_MPI_HDMI_REGCECCALLBACKFUNC_STR1_4_0000: .ascii "Not support CEC!\n\0"
+
+
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0000: .ascii "Param is invalid, This chip is not support HDMI2.1\n\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0034: .ascii "return 0x%x!\n\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0044: .ascii "Invalid BOOL type data:%d!\n\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0060: .ascii "enVideoFmt(%d) is invalid\n\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_007c: .ascii "enVidOutMode(%d) is invalid\n\0\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_009c: .ascii "enDeepColorMode(%d) is invalid\n\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_00bc: .ascii "enOutCscQuantization(%d) is invalid\n\0\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_00e4: .ascii "enDefaultMode(%d) is invalid\n\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0104: .ascii "not support pstAttr->bxvYCCMode=HI_TRUE,please set default HI_FALSE! \n\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_014c: .ascii "not support pstAttr->bEnableSpdInfoFrame=HI_TRUE, please set default HI_FALSE! \n\0\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_01a0: .ascii "not support pstAttr->bEnableMpegInfoFrame=HI_TRUE,please we set default HI_FALSE! \n\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_01f4: .ascii "not support pstAttr->bDebugFlag=HI_TRUE,please set default HI_FALSE! \n\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_023c: .ascii "not support pstAttr->bHDCPEnable=HI_TRUE,please set default HI_FALSE! \n\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0284: .ascii "not support b3DEnable=HI_TRUE ! \n\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_02a8: .ascii "not support u8DownSampleParm!=0 ! \n\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_02cc: .ascii "not support DeepColor=%d when enVidOutMode is YCbCr422\n\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0304: .ascii "enSoundIntf(%d) is invalid\n\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0320: .ascii "not support enSampleRate(%d)\n\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0340: .ascii "enBitDepth(%d) is invalid\n\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_035c: .ascii "DVI mode, no audio output, relevant parameters can be set up, but may not be effective.\n\0\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_03b8: .ascii "not support pstAttr->u8I2SCtlVbit!=0 ! \n\0\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_03e4: .ascii "enDefaultMode: %d is invalid\n\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0404: .ascii "not support u83DParam: %d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0420: .ascii "WARN:PixFreq search fail,invalid format=%u\n\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_044c: .ascii "enVideoFmt(%d) not support\n\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0468: .ascii "enSampleRate(%d) is invalid\n\0\0\0\0",
+_RODATA_HI_MPI_HDMI_SETATTR_STR1_4_0488: .ascii "u83DParam: %d is invalid\n\0"
+
+
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0000: .ascii "enTimingMode error:%d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0018: .ascii "enColorSpace error:%d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0030: .ascii "bActive_Infor_Present error:%d\n\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0050: .ascii "enBarInfo error:%d\n\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0064: .ascii "enScanInfo error:%d\n\0\0\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_007c: .ascii "enColorimetry error:%d\n\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0094: .ascii "enExtColorimetry error:%d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_00b0: .ascii "enAspectRatio error:%d\n\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_00c8: .ascii "enPictureScaling error:%d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_00e4: .ascii "enRGBQuantization error:%d\n\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0100: .ascii "bIsITContent error:%d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0118: .ascii "enPixelRepetition error:%d\n\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0134: .ascii "enContentType error:%d\n\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_014c: .ascii "enYCCQuantization error:%d\n\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0168: .ascii "enChannelCount error:%d\n\0\0\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0184: .ascii "enCodingType error:%d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_019c: .ascii "enSampleSize error:%d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_01b4: .ascii "enSamplingFrequency error:%d\n\0\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_01d4: .ascii "enLevelShift error:%d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_01ec: .ascii "enLfePlaybackLevel error:%d\n\0\0\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_020c: .ascii "bDownmixInhibit error:%d\n\0\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0228: .ascii "not support Infoframe type:%d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0248: .ascii "invalid Infoframe type:%d\n\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0264: .ascii "enTimingMode(%d) not support\n\0\0\0",
+_RODATA_HI_MPI_HDMI_SETINFOFRAME_STR1_4_0284: .ascii "enActiveAspectRatio error:%d\n\0"
+
+
+_RODATA_HI_MPI_HDMI_SETMODPARAM_STR1_4_0000: .ascii "param invalid!\n\0",
+_RODATA_HI_MPI_HDMI_SETMODPARAM_STR1_4_0010: .ascii "not support!\n\0"
+
+
+_RODATA_HDMI_FMT2HDMITIMING_PART_0_STR1_4_0000: .ascii "[Func]:%s [Line]:%d [Info]:\0",
+_RODATA_HDMI_FMT2HDMITIMING_PART_0_STR1_4_001c: .ascii "Error video fmt:%d\n\0",
+_RODATA_HDMI_FMT2HDMITIMING_PART_0_STR1_4_0030: .ascii ""
+
+
+_RODATA___FUNCTION___10461_0000: .ascii "Hdmi_PixelFreqSearch\0"
+
+
+_RODATA___FUNCTION___10510_0000: .ascii "Hdmi_Fmt2HdmiTiming\0",
+_RODATA___FUNCTION___10510_0014: .ascii ""
+
+
+_RODATA___FUNCTION___10518_0000: .ascii "Hdmi_HdmiTiming2Fmt\0",
+_RODATA___FUNCTION___10518_0014: .ascii ""
+
+
+_RODATA___FUNCTION___10535_0000: .ascii "Hdmi_InfoFrameDrv2User\0"
+
+
+_RODATA___FUNCTION___10546_0000: .ascii "Hdmi_AviParamCheck\0"
+
+
+_RODATA___FUNCTION___10552_0000: .ascii "Hdmi_AudioInfoFrameParamCheck\0"
+
+
+_RODATA___FUNCTION___10558_0000: .ascii "Hdmi_InfoFrameUser2Drv\0"
+
+
+_RODATA___FUNCTION___10582_0000: .ascii "Hdmi_21CapsCheck\0"
+
+
+_RODATA___FUNCTION___10587_0000: .ascii "Hdmi_AttrAudioChk\0"
+
+
+_RODATA___FUNCTION___10593_0000: .ascii "Hdmi_AttrChkValid\0"
+
+
+_RODATA___FUNCTION___10604_0000: .ascii "HI_MPI_HDMI_Open\0"
+
+
+_RODATA___FUNCTION___10608_0000: .ascii "HI_MPI_HDMI_Close\0"
+
+
+_RODATA___FUNCTION___10616_0000: .ascii "HI_MPI_HDMI_GetSinkCapability\0"
+
+
+_RODATA___FUNCTION___10626_0000: .ascii "HI_MPI_HDMI_SetAttr\0",
+_RODATA___FUNCTION___10626_0014: .ascii ""
+
+
+_RODATA___FUNCTION___10635_0000: .ascii "HI_MPI_HDMI_GetAttr\0",
+_RODATA___FUNCTION___10635_0014: .ascii ""
+
+
+_RODATA___FUNCTION___10639_0000: .ascii "HI_MPI_HDMI_Start\0"
+
+
+_RODATA___FUNCTION___10643_0000: .ascii "HI_MPI_HDMI_Stop\0"
+
+
+_RODATA___FUNCTION___10649_0000: .ascii "HI_MPI_HDMI_Force_GetEDID\0"
+
+
+_RODATA___FUNCTION___10656_0000: .ascii "HI_MPI_HDMI_SetInfoFrame\0"
+
+
+_RODATA___FUNCTION___10663_0000: .ascii "HI_MPI_HDMI_GetInfoFrame\0"
+
+
+_RODATA___FUNCTION___10676_0000: .ascii "HI_MPI_HDMI_RegCallbackFunc\0",
+_RODATA___FUNCTION___10676_001c: .ascii ""
+
+
+_RODATA___FUNCTION___10681_0000: .ascii "HI_MPI_HDMI_UnRegCallbackFunc\0"
+
+
+_RODATA___FUNCTION___10686_0000: .ascii "HI_MPI_HDMI_RegCECCallBackFunc\0"
+
+
+_RODATA___FUNCTION___10691_0000: .ascii "HI_MPI_HDMI_UnRegCECCallBackFunc\0"
+
+
+_RODATA___FUNCTION___10696_0000: .ascii "HI_MPI_HDMI_SetCECCommand\0"
+
+
+_RODATA___FUNCTION___10701_0000: .ascii "HI_MPI_HDMI_CECStatus\0"
+
+
+_RODATA___FUNCTION___10705_0000: .ascii "HI_MPI_HDMI_CEC_Enable\0"
+
+
+_RODATA___FUNCTION___10709_0000: .ascii "HI_MPI_HDMI_CEC_Disable\0",
+_RODATA___FUNCTION___10709_0018: .ascii ""
+
+
+_RODATA___FUNCTION___10714_0000: .ascii "HI_MPI_HDMI_SetModParam\0",
+_RODATA___FUNCTION___10714_0018: .ascii ""
+
+
+_RODATA___FUNCTION___10719_0000: .ascii "HI_MPI_HDMI_GetModParam\0",
+_RODATA___FUNCTION___10719_0018: .ascii ""
+
+
+_RODATA_S_STFMTESTABTABLE_0000: .ascii "\0\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0004: .ascii "\x14\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0008: .ascii "\x01\0\0\0",
+_RODATA_S_STFMTESTABTABLE_000c: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0010: .ascii "\x02\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0014: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0018: .ascii "\x03\0\0\0",
+_RODATA_S_STFMTESTABTABLE_001c: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0020: .ascii "\x04\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0024: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0028: .ascii "\x05\0\0\0",
+_RODATA_S_STFMTESTABTABLE_002c: .ascii "\x14\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0030: .ascii "\x06\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0034: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0038: .ascii "\x07\0\0\0",
+_RODATA_S_STFMTESTABTABLE_003c: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0040: .ascii "\x08\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0044: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0048: .ascii "\t\0\0\0",
+_RODATA_S_STFMTESTABTABLE_004c: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0050: .ascii "\n\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0054: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0058: .ascii "\x0b\0\0\0",
+_RODATA_S_STFMTESTABTABLE_005c: .ascii "\x15\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0060: .ascii "\x0c\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0064: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0068: .ascii "\r\0\0\0",
+_RODATA_S_STFMTESTABTABLE_006c: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0070: .ascii "\x0e\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0074: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0078: .ascii "\x0f\0\0\0",
+_RODATA_S_STFMTESTABTABLE_007c: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0080: .ascii "\x10\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0084: .ascii "4\0\0\0",
+_RODATA_S_STFMTESTABTABLE_0088: .ascii ""
+
+
+_RODATA_S_STFMTPARAMTABLE_0000: .ascii "\0\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0004: .ascii "\x04\xa0\x01\0",
+_RODATA_S_STFMTPARAMTABLE_0008: .ascii "\xa0\x05\0\0",
+_RODATA_S_STFMTPARAMTABLE_000c: .ascii "\x84\x03\0\0",
+_RODATA_S_STFMTPARAMTABLE_0010: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_0014: .ascii "\x1a\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0018: .ascii "\0\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_001c: .ascii ",F\x01\0",
+_RODATA_S_STFMTPARAMTABLE_0020: .ascii "\0\x05\0\0",
+_RODATA_S_STFMTPARAMTABLE_0024: .ascii " \x03\0\0",
+_RODATA_S_STFMTPARAMTABLE_0028: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_002c: .ascii "\x17\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0030: .ascii "\0\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0034: .ascii "J;\x02\0",
+_RODATA_S_STFMTPARAMTABLE_0038: .ascii "\x90\x06\0\0",
+_RODATA_S_STFMTPARAMTABLE_003c: .ascii "\x18\x06\0\0",
+_RODATA_S_STFMTPARAMTABLE_0040: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_0044: .ascii "\x1e\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0048: .ascii "\0\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_004c: .ascii "\xd0x\x02\0",
+_RODATA_S_STFMTPARAMTABLE_0050: .ascii "@\x06\0\0",
+_RODATA_S_STFMTPARAMTABLE_0054: .ascii "\xb0\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_0058: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_005c: .ascii "\x1d\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0060: .ascii "\0\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0064: .ascii "\xd4\x18\x04\0",
+_RODATA_S_STFMTPARAMTABLE_0068: .ascii "\0\n\0\0",
+_RODATA_S_STFMTPARAMTABLE_006c: .ascii "@\x06\0\0",
+_RODATA_S_STFMTPARAMTABLE_0070: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_0074: .ascii "$\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0078: .ascii "\0\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_007c: .ascii "O\xd2\x01\0",
+_RODATA_S_STFMTPARAMTABLE_0080: .ascii "\0\n\0\0",
+_RODATA_S_STFMTPARAMTABLE_0084: .ascii "\xa0\x05\0\0",
+_RODATA_S_STFMTPARAMTABLE_0088: .ascii "\xb8\x0b\0\0",
+_RODATA_S_STFMTPARAMTABLE_008c: .ascii "\"\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0090: .ascii "\0\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0094: .ascii "\x9e\xa4\x03\0",
+_RODATA_S_STFMTPARAMTABLE_0098: .ascii "\0\n\0\0",
+_RODATA_S_STFMTPARAMTABLE_009c: .ascii "\xa0\x05\0\0",
+_RODATA_S_STFMTPARAMTABLE_00a0: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_00a4: .ascii "#\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_00a8: .ascii "\0\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_00ac: .ascii "\x14D\x02\0",
+_RODATA_S_STFMTPARAMTABLE_00b0: .ascii "\x80\x07\0\0",
+_RODATA_S_STFMTPARAMTABLE_00b4: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_00b8: .ascii "\xb8\x0b\0\0",
+_RODATA_S_STFMTPARAMTABLE_00bc: .ascii "%\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_00c0: .ascii "\x01\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_00c4: .ascii "Wb\0\0",
+_RODATA_S_STFMTPARAMTABLE_00c8: .ascii "\x80\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_00cc: .ascii "\xe0\x01\0\0",
+_RODATA_S_STFMTPARAMTABLE_00d0: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_00d4: .ascii "\x13\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_00d8: .ascii "\x02\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_00dc: .ascii "xi\0\0",
+_RODATA_S_STFMTPARAMTABLE_00e0: .ascii "\xd0\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_00e4: .ascii "\xe0\x01\0\0",
+_RODATA_S_STFMTPARAMTABLE_00e8: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_00ec: .ascii "\n\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_00f0: .ascii "\x03\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_00f4: .ascii "xi\0\0",
+_RODATA_S_STFMTPARAMTABLE_00f8: .ascii "\xd0\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_00fc: .ascii "\xe0\x01\0\0",
+_RODATA_S_STFMTPARAMTABLE_0100: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_0104: .ascii "\n\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0108: .ascii "\x04\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_010c: .ascii "\n\"\x01\0",
+_RODATA_S_STFMTPARAMTABLE_0110: .ascii "\0\x05\0\0",
+_RODATA_S_STFMTPARAMTABLE_0114: .ascii "\xd0\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_0118: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_011c: .ascii "\x07\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0120: .ascii "\x05\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0124: .ascii "\n\"\x01\0",
+_RODATA_S_STFMTPARAMTABLE_0128: .ascii "\x80\x07\0\0",
+_RODATA_S_STFMTPARAMTABLE_012c: .ascii "8\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_0130: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_0134: .ascii "\x05\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0138: .ascii "\x06\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_013c: .ascii "xi\0\0",
+_RODATA_S_STFMTPARAMTABLE_0140: .ascii "\xd0\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_0144: .ascii "\xe0\x01\0\0",
+_RODATA_S_STFMTPARAMTABLE_0148: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_014c: .ascii "\x0e\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0150: .ascii "\x07\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0154: .ascii "xi\0\0",
+_RODATA_S_STFMTPARAMTABLE_0158: .ascii "\xd0\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_015c: .ascii "\xe0\x01\0\0",
+_RODATA_S_STFMTPARAMTABLE_0160: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_0164: .ascii "\x0e\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0168: .ascii "\x10\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_016c: .ascii "\x14D\x02\0",
+_RODATA_S_STFMTPARAMTABLE_0170: .ascii "\x80\x07\0\0",
+_RODATA_S_STFMTPARAMTABLE_0174: .ascii "8\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_0178: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_017c: .ascii "\0\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0180: .ascii "\x11\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0184: .ascii "xi\0\0",
+_RODATA_S_STFMTPARAMTABLE_0188: .ascii "\xd0\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_018c: .ascii "@\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_0190: .ascii "\x88\x13\0\0",
+_RODATA_S_STFMTPARAMTABLE_0194: .ascii "\t\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0198: .ascii "\x12\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_019c: .ascii "xi\0\0",
+_RODATA_S_STFMTPARAMTABLE_01a0: .ascii "\xd0\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_01a4: .ascii "@\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_01a8: .ascii "\x88\x13\0\0",
+_RODATA_S_STFMTPARAMTABLE_01ac: .ascii "\t\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_01b0: .ascii "\x13\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_01b4: .ascii "\n\"\x01\0",
+_RODATA_S_STFMTPARAMTABLE_01b8: .ascii "\0\x05\0\0",
+_RODATA_S_STFMTPARAMTABLE_01bc: .ascii "\xd0\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_01c0: .ascii "\x88\x13\0\0",
+_RODATA_S_STFMTPARAMTABLE_01c4: .ascii "\x08\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_01c8: .ascii "\x14\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_01cc: .ascii "\n\"\x01\0",
+_RODATA_S_STFMTPARAMTABLE_01d0: .ascii "\x80\x07\0\0",
+_RODATA_S_STFMTPARAMTABLE_01d4: .ascii "8\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_01d8: .ascii "\x88\x13\0\0",
+_RODATA_S_STFMTPARAMTABLE_01dc: .ascii "\x06\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_01e0: .ascii "\x15\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_01e4: .ascii "xi\0\0",
+_RODATA_S_STFMTPARAMTABLE_01e8: .ascii "\xa0\x05\0\0",
+_RODATA_S_STFMTPARAMTABLE_01ec: .ascii "@\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_01f0: .ascii "\x88\x13\0\0",
+_RODATA_S_STFMTPARAMTABLE_01f4: .ascii "\x0b\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_01f8: .ascii "\x16\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_01fc: .ascii "xi\0\0",
+_RODATA_S_STFMTPARAMTABLE_0200: .ascii "\xa0\x05\0\0",
+_RODATA_S_STFMTPARAMTABLE_0204: .ascii "@\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_0208: .ascii "\x88\x13\0\0",
+_RODATA_S_STFMTPARAMTABLE_020c: .ascii "\x0b\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0210: .ascii "\x1f\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0214: .ascii "\x14D\x02\0",
+_RODATA_S_STFMTPARAMTABLE_0218: .ascii "\x80\x07\0\0",
+_RODATA_S_STFMTPARAMTABLE_021c: .ascii "8\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_0220: .ascii "\x88\x13\0\0",
+_RODATA_S_STFMTPARAMTABLE_0224: .ascii "\x01\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0228: .ascii " \0\0\0",
+_RODATA_S_STFMTPARAMTABLE_022c: .ascii "\n\"\x01\0",
+_RODATA_S_STFMTPARAMTABLE_0230: .ascii "\x80\x07\0\0",
+_RODATA_S_STFMTPARAMTABLE_0234: .ascii "8\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_0238: .ascii "`\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_023c: .ascii "\x04\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0240: .ascii "!\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0244: .ascii "\n\"\x01\0",
+_RODATA_S_STFMTPARAMTABLE_0248: .ascii "\x80\x07\0\0",
+_RODATA_S_STFMTPARAMTABLE_024c: .ascii "8\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_0250: .ascii "\xc4\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_0254: .ascii "\x03\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0258: .ascii "\"\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_025c: .ascii "\n\"\x01\0",
+_RODATA_S_STFMTPARAMTABLE_0260: .ascii "\x80\x07\0\0",
+_RODATA_S_STFMTPARAMTABLE_0264: .ascii "8\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_0268: .ascii "\xb8\x0b\0\0",
+_RODATA_S_STFMTPARAMTABLE_026c: .ascii "\x02\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0270: .ascii "]\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0274: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_0278: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_027c: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_0280: .ascii "`\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_0284: .ascii "&\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0288: .ascii "^\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_028c: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_0290: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_0294: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_0298: .ascii "\xc4\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_029c: .ascii "'\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_02a0: .ascii "_\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_02a4: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_02a8: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_02ac: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_02b0: .ascii "\xb8\x0b\0\0",
+_RODATA_S_STFMTPARAMTABLE_02b4: .ascii "(\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_02b8: .ascii "`\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_02bc: .ascii "P\x10\t\0",
+_RODATA_S_STFMTPARAMTABLE_02c0: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_02c4: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_02c8: .ascii "\x88\x13\0\0",
+_RODATA_S_STFMTPARAMTABLE_02cc: .ascii ")\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_02d0: .ascii "a\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_02d4: .ascii "P\x10\t\0",
+_RODATA_S_STFMTPARAMTABLE_02d8: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_02dc: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_02e0: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_02e4: .ascii "*\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_02e8: .ascii "b\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_02ec: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_02f0: .ascii "\0\x10\0\0",
+_RODATA_S_STFMTPARAMTABLE_02f4: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_02f8: .ascii "`\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_02fc: .ascii "+\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0300: .ascii "c\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0304: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_0308: .ascii "\0\x10\0\0",
+_RODATA_S_STFMTPARAMTABLE_030c: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_0310: .ascii "\xc4\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_0314: .ascii ",\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0318: .ascii "d\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_031c: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_0320: .ascii "\0\x10\0\0",
+_RODATA_S_STFMTPARAMTABLE_0324: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_0328: .ascii "\xb8\x0b\0\0",
+_RODATA_S_STFMTPARAMTABLE_032c: .ascii "-\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0330: .ascii "e\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0334: .ascii "P\x10\t\0",
+_RODATA_S_STFMTPARAMTABLE_0338: .ascii "\0\x10\0\0",
+_RODATA_S_STFMTPARAMTABLE_033c: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_0340: .ascii "\x88\x13\0\0",
+_RODATA_S_STFMTPARAMTABLE_0344: .ascii ".\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0348: .ascii "f\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_034c: .ascii "P\x10\t\0",
+_RODATA_S_STFMTPARAMTABLE_0350: .ascii "\0\x10\0\0",
+_RODATA_S_STFMTPARAMTABLE_0354: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_0358: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_035c: .ascii "/\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0360: .ascii "g\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0364: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_0368: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_036c: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_0370: .ascii "`\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_0374: .ascii "&\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0378: .ascii "h\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_037c: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_0380: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_0384: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_0388: .ascii "\xc4\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_038c: .ascii "'\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0390: .ascii "i\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0394: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_0398: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_039c: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_03a0: .ascii "\xb8\x0b\0\0",
+_RODATA_S_STFMTPARAMTABLE_03a4: .ascii "(\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_03a8: .ascii "j\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_03ac: .ascii "P\x10\t\0",
+_RODATA_S_STFMTPARAMTABLE_03b0: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_03b4: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_03b8: .ascii "\x88\x13\0\0",
+_RODATA_S_STFMTPARAMTABLE_03bc: .ascii ")\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_03c0: .ascii "k\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_03c4: .ascii "P\x10\t\0",
+_RODATA_S_STFMTPARAMTABLE_03c8: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_03cc: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_03d0: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_03d4: .ascii "*\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_03d8: .ascii "v\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_03dc: .ascii "\xa0 \x12\0",
+_RODATA_S_STFMTPARAMTABLE_03e0: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_03e4: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_03e8: .ascii "\xe0.\0\0",
+_RODATA_S_STFMTPARAMTABLE_03ec: .ascii "0\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_03f0: .ascii "\xdb\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_03f4: .ascii "\xa0 \x12\0",
+_RODATA_S_STFMTPARAMTABLE_03f8: .ascii "\0\x10\0\0",
+_RODATA_S_STFMTPARAMTABLE_03fc: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_0400: .ascii "\xe0.\0\0",
+_RODATA_S_STFMTPARAMTABLE_0404: .ascii "1\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0408: .ascii "\xc4\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_040c: .ascii "\xa0 \x12\0",
+_RODATA_S_STFMTPARAMTABLE_0410: .ascii "\0\x1e\0\0",
+_RODATA_S_STFMTPARAMTABLE_0414: .ascii "\xe0\x10\0\0",
+_RODATA_S_STFMTPARAMTABLE_0418: .ascii "\xb8\x0b\0\0",
+_RODATA_S_STFMTPARAMTABLE_041c: .ascii "2\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0420: .ascii "\x08\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_0424: .ascii "@\x9c\0\0",
+_RODATA_S_STFMTPARAMTABLE_0428: .ascii " \x03\0\0",
+_RODATA_S_STFMTPARAMTABLE_042c: .ascii "X\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_0430: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_0434: .ascii "\x14\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0438: .ascii "\x0c\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_043c: .ascii "\xe8\xfd\0\0",
+_RODATA_S_STFMTPARAMTABLE_0440: .ascii "\0\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_0444: .ascii "\0\x03\0\0",
+_RODATA_S_STFMTPARAMTABLE_0448: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_044c: .ascii "\x15\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0450: .ascii "\x11\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_0454: .ascii "\xd0x\x02\0",
+_RODATA_S_STFMTPARAMTABLE_0458: .ascii "@\x06\0\0",
+_RODATA_S_STFMTPARAMTABLE_045c: .ascii "\xb0\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_0460: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_0464: .ascii "\x1d\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0468: .ascii "\x18\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_046c: .ascii "\xe0\xa5\x01\0",
+_RODATA_S_STFMTPARAMTABLE_0470: .ascii "\0\x05\0\0",
+_RODATA_S_STFMTPARAMTABLE_0474: .ascii "\0\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_0478: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_047c: .ascii "\x18\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0480: .ascii "\x1b\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_0484: .ascii "\xfcM\x01\0",
+_RODATA_S_STFMTPARAMTABLE_0488: .ascii "P\x05\0\0",
+_RODATA_S_STFMTPARAMTABLE_048c: .ascii "\0\x03\0\0",
+_RODATA_S_STFMTPARAMTABLE_0490: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_0494: .ascii "\x19\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0498: .ascii "(\x02\0\0",
+_RODATA_S_STFMTPARAMTABLE_049c: .ascii "\x90Y\x02\0",
+_RODATA_S_STFMTPARAMTABLE_04a0: .ascii "\x80\x07\0\0",
+_RODATA_S_STFMTPARAMTABLE_04a4: .ascii "\xb0\x04\0\0",
+_RODATA_S_STFMTPARAMTABLE_04a8: .ascii "p\x17\0\0",
+_RODATA_S_STFMTPARAMTABLE_04ac: .ascii " \0\0\0",
+_RODATA_S_STFMTPARAMTABLE_04b0: .ascii "\0\x01\0\0",
+_RODATA_S_STFMTPARAMTABLE_04b4: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_04b8: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_04bc: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_04c0: .ascii "\xb8\x0b\0\0",
+_RODATA_S_STFMTPARAMTABLE_04c4: .ascii "(\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_04c8: .ascii "\x01\x01\0\0",
+_RODATA_S_STFMTPARAMTABLE_04cc: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_04d0: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_04d4: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_04d8: .ascii "\xc4\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_04dc: .ascii "'\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_04e0: .ascii "\x02\x01\0\0",
+_RODATA_S_STFMTPARAMTABLE_04e4: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_04e8: .ascii "\0\x0f\0\0",
+_RODATA_S_STFMTPARAMTABLE_04ec: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_04f0: .ascii "`\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_04f4: .ascii "&\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_04f8: .ascii "\x03\x01\0\0",
+_RODATA_S_STFMTPARAMTABLE_04fc: .ascii "(\x88\x04\0",
+_RODATA_S_STFMTPARAMTABLE_0500: .ascii "\0\x10\0\0",
+_RODATA_S_STFMTPARAMTABLE_0504: .ascii "p\x08\0\0",
+_RODATA_S_STFMTPARAMTABLE_0508: .ascii "`\t\0\0",
+_RODATA_S_STFMTPARAMTABLE_050c: .ascii "+\0\0\0",
+_RODATA_S_STFMTPARAMTABLE_0510: .ascii ""
+
+
+_RODATA_STFMTTOTIMING_0000: .ascii "\0\0\0\0",
+_RODATA_STFMTTOTIMING_0004: .ascii "2\0\0\0",
+_RODATA_STFMTTOTIMING_0008: .ascii "\x01\0\0\0",
+_RODATA_STFMTTOTIMING_000c: .ascii "4\0\0\0",
+_RODATA_STFMTTOTIMING_0010: .ascii "\x02\0\0\0",
+_RODATA_STFMTTOTIMING_0014: .ascii "7\0\0\0",
+_RODATA_STFMTTOTIMING_0018: .ascii "\x03\0\0\0",
+_RODATA_STFMTTOTIMING_001c: .ascii "6\0\0\0",
+_RODATA_STFMTTOTIMING_0020: .ascii "\x04\0\0\0",
+_RODATA_STFMTTOTIMING_0024: .ascii "5\0\0\0",
+_RODATA_STFMTTOTIMING_0028: .ascii "\x05\0\0\0",
+_RODATA_STFMTTOTIMING_002c: .ascii "1\0\0\0",
+_RODATA_STFMTTOTIMING_0030: .ascii "\x06\0\0\0",
+_RODATA_STFMTTOTIMING_0034: .ascii "3\0\0\0",
+_RODATA_STFMTTOTIMING_0038: .ascii "\x07\0\0\0",
+_RODATA_STFMTTOTIMING_003c: .ascii "\r\0\0\0",
+_RODATA_STFMTTOTIMING_0040: .ascii "\x08\0\0\0",
+_RODATA_STFMTTOTIMING_0044: .ascii "\x0c\0\0\0",
+_RODATA_STFMTTOTIMING_0048: .ascii "\t\0\0\0",
+_RODATA_STFMTTOTIMING_004c: .ascii "\x05\0\0\0",
+_RODATA_STFMTTOTIMING_0050: .ascii "\n\0\0\0",
+_RODATA_STFMTTOTIMING_0054: .ascii "\x02\0\0\0",
+_RODATA_STFMTTOTIMING_0058: .ascii "\x0b\0\0\0",
+_RODATA_STFMTTOTIMING_005c: .ascii "\x16\0\0\0",
+_RODATA_STFMTTOTIMING_0060: .ascii "\x0c\0\0\0",
+_RODATA_STFMTTOTIMING_0064: .ascii "\x16\0\0\0",
+_RODATA_STFMTTOTIMING_0068: .ascii "\r\0\0\0",
+_RODATA_STFMTTOTIMING_006c: .ascii "\x16\0\0\0",
+_RODATA_STFMTTOTIMING_0070: .ascii "\x0e\0\0\0",
+_RODATA_STFMTTOTIMING_0074: .ascii "\x12\0\0\0",
+_RODATA_STFMTTOTIMING_0078: .ascii "\x0f\0\0\0",
+_RODATA_STFMTTOTIMING_007c: .ascii "\x12\0\0\0",
+_RODATA_STFMTTOTIMING_0080: .ascii "\x10\0\0\0",
+_RODATA_STFMTTOTIMING_0084: .ascii "\x12\0\0\0",
+_RODATA_STFMTTOTIMING_0088: .ascii "\x11\0\0\0",
+_RODATA_STFMTTOTIMING_008c: .ascii "\x16\0\0\0",
+_RODATA_STFMTTOTIMING_0090: .ascii "\x12\0\0\0",
+_RODATA_STFMTTOTIMING_0094: .ascii "\x16\0\0\0",
+_RODATA_STFMTTOTIMING_0098: .ascii "\x13\0\0\0",
+_RODATA_STFMTTOTIMING_009c: .ascii "\x01\0\0\0",
+_RODATA_STFMTTOTIMING_00a0: .ascii "\x14\0\0\0",
+_RODATA_STFMTTOTIMING_00a4: .ascii "f\0\0\0",
+_RODATA_STFMTTOTIMING_00a8: .ascii "\x15\0\0\0",
+_RODATA_STFMTTOTIMING_00ac: .ascii "h\0\0\0",
+_RODATA_STFMTTOTIMING_00b0: .ascii "\x16\0\0\0",
+_RODATA_STFMTTOTIMING_00b4: .ascii "\x89\0\0\0",
+_RODATA_STFMTTOTIMING_00b8: .ascii "\x17\0\0\0",
+_RODATA_STFMTTOTIMING_00bc: .ascii "l\0\0\0",
+_RODATA_STFMTTOTIMING_00c0: .ascii "\x18\0\0\0",
+_RODATA_STFMTTOTIMING_00c4: .ascii "o\0\0\0",
+_RODATA_STFMTTOTIMING_00c8: .ascii "\x19\0\0\0",
+_RODATA_STFMTTOTIMING_00cc: .ascii "\x8a\0\0\0",
+_RODATA_STFMTTOTIMING_00d0: .ascii "\x1a\0\0\0",
+_RODATA_STFMTTOTIMING_00d4: .ascii "s\0\0\0",
+_RODATA_STFMTTOTIMING_00d8: .ascii "\x1b\0\0\0",
+_RODATA_STFMTTOTIMING_00dc: .ascii "t\0\0\0",
+_RODATA_STFMTTOTIMING_00e0: .ascii "\x1c\0\0\0",
+_RODATA_STFMTTOTIMING_00e4: .ascii "\x8b\0\0\0",
+_RODATA_STFMTTOTIMING_00e8: .ascii "\x1d\0\0\0",
+_RODATA_STFMTTOTIMING_00ec: .ascii "x\0\0\0",
+_RODATA_STFMTTOTIMING_00f0: .ascii "\x1e\0\0\0",
+_RODATA_STFMTTOTIMING_00f4: .ascii "y\0\0\0",
+_RODATA_STFMTTOTIMING_00f8: .ascii "\x1f\0\0\0",
+_RODATA_STFMTTOTIMING_00fc: .ascii "\x8c\0\0\0",
+_RODATA_STFMTTOTIMING_0100: .ascii " \0\0\0",
+_RODATA_STFMTTOTIMING_0104: .ascii "~\0\0\0",
+_RODATA_STFMTTOTIMING_0108: .ascii "!\0\0\0",
+_RODATA_STFMTTOTIMING_010c: .ascii "\x8d\0\0\0",
+_RODATA_STFMTTOTIMING_0110: .ascii "\"\0\0\0",
+_RODATA_STFMTTOTIMING_0114: .ascii "\x87\0\0\0",
+_RODATA_STFMTTOTIMING_0118: .ascii "#\0\0\0",
+_RODATA_STFMTTOTIMING_011c: .ascii "\x88\0\0\0",
+_RODATA_STFMTTOTIMING_0120: .ascii "$\0\0\0",
+_RODATA_STFMTTOTIMING_0124: .ascii "\x83\0\0\0",
+_RODATA_STFMTTOTIMING_0128: .ascii "%\0\0\0",
+_RODATA_STFMTTOTIMING_012c: .ascii "\x86\0\0\0",
+_RODATA_STFMTTOTIMING_0130: .ascii "&\0\0\0",
+_RODATA_STFMTTOTIMING_0134: .ascii "=\0\0\0",
+_RODATA_STFMTTOTIMING_0138: .ascii "'\0\0\0",
+_RODATA_STFMTTOTIMING_013c: .ascii ">\0\0\0",
+_RODATA_STFMTTOTIMING_0140: .ascii "(\0\0\0",
+_RODATA_STFMTTOTIMING_0144: .ascii "?\0\0\0",
+_RODATA_STFMTTOTIMING_0148: .ascii ")\0\0\0",
+_RODATA_STFMTTOTIMING_014c: .ascii "A\0\0\0",
+_RODATA_STFMTTOTIMING_0150: .ascii "*\0\0\0",
+_RODATA_STFMTTOTIMING_0154: .ascii "B\0\0\0",
+_RODATA_STFMTTOTIMING_0158: .ascii "+\0\0\0",
+_RODATA_STFMTTOTIMING_015c: .ascii "E\0\0\0",
+_RODATA_STFMTTOTIMING_0160: .ascii ",\0\0\0",
+_RODATA_STFMTTOTIMING_0164: .ascii "F\0\0\0",
+_RODATA_STFMTTOTIMING_0168: .ascii "-\0\0\0",
+_RODATA_STFMTTOTIMING_016c: .ascii "G\0\0\0",
+_RODATA_STFMTTOTIMING_0170: .ascii ".\0\0\0",
+_RODATA_STFMTTOTIMING_0174: .ascii "I\0\0\0",
+_RODATA_STFMTTOTIMING_0178: .ascii "/\0\0\0",
+_RODATA_STFMTTOTIMING_017c: .ascii "J\0\0\0",
+_RODATA_STFMTTOTIMING_0180: .ascii "2\0\0\0",
+_RODATA_STFMTTOTIMING_0184: .ascii "W\0\0\0",
+_RODATA_STFMTTOTIMING_0188: .ascii "3\0\0\0",
+_RODATA_STFMTTOTIMING_018c: .ascii "\x85\0\0\0",
+_RODATA_STFMTTOTIMING_0190: .ascii ""
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.Hdmi_Fmt2HdmiTiming.part.0
+@ Size: 0x64
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN Hdmi_Fmt2HdmiTiming.part.0
+    /*00000000*/ LDR         R1, WORD_0050               @ LDR         R1, [PC, #72]               @ 0x0000000000000050 
+    /*00000004*/ MOVW        R3, #1367                   @ 0x557 
+    /*00000008*/ PUSH        {R4, R5, R6, LR} 
+    /*0000000c*/ MOV         R5, R0 
+    /*00000010*/ ADD         R1, PC, R1 
+    /*00000014*/ LDR         R0, WORD_0054               @ LDR         R0, [PC, #56]               @ 0x0000000000000054 
+    /*00000018*/ LDR         R2, WORD_0058               @ LDR         R2, [PC, #56]               @ 0x0000000000000058 
+    /*0000001c*/ LDR         R4, [R1, R0] 
+    /*00000020*/ LDR         R1, WORD_005c               @ LDR         R1, [PC, #52]               @ 0x000000000000005c 
+    /*00000024*/ ADD         R2, PC, R2 
+    /*00000028*/ ADD         R1, PC, R1 
+    /*0000002c*/ LDR         R0, [R4] 
+    /*00000030*/ BL          fprintf
+    /*00000034*/ LDR         R1, WORD_0060               @ LDR         R1, [PC, #36]               @ 0x0000000000000060 
+    /*00000038*/ MOV         R2, R5 
+    /*0000003c*/ LDR         R0, [R4] 
+    /*00000040*/ ADD         R1, PC, R1 
+    /*00000044*/ BL          fprintf
+    /*00000048*/ MOV         R0, #0 
+    /*0000004c*/ POP         {R4, R5, R6, PC} 
+    /*00000050*/ WORD_0050: .word 0x00000038
+    /*00000054*/ WORD_0054: .word 0x00000000
+    /*00000058*/ WORD_0058: .word 0x0000002c
+    /*0000005c*/ WORD_005c: .word 0x0000002c
+    /*00000060*/ WORD_0060: .word 0x00000018
+FUNC_END Hdmi_Fmt2HdmiTiming.part.0
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_Init
+@ Size: 0x4
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_Init
+    HI_MPI_HDMI_Init_x0:
+    /*00000000*/ B           HI_MPI_HDMI_Init_x0         @ HI_MPI_HDMI_ComInit [R_ARM_JUMP24: +0x0] 
+FUNC_END HI_MPI_HDMI_Init
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_DeInit
+@ Size: 0x4
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_DeInit
+    HI_MPI_HDMI_DeInit_x0:
+    /*00000000*/ B           HI_MPI_HDMI_DeInit_x0       @ HI_MPI_HDMI_ComDeInit [R_ARM_JUMP24: +0x0] 
+FUNC_END HI_MPI_HDMI_DeInit
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_Open
+@ Size: 0xb0
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_Open
+    /*00000000*/ LDR         R1, WORD_0098               @ LDR         R1, [PC, #144]              @ 0x0000000000000098 
+    /*00000004*/ MOV         R2, #1 
+    /*00000008*/ LDR         R3, WORD_009c               @ LDR         R3, [PC, #140]              @ 0x000000000000009c 
+    /*0000000c*/ ADD         R1, PC, R1 
+    /*00000010*/ PUSH        {R4, R5, R6, LR} 
+    /*00000014*/ SUBS        R5, R0, #0 
+    /*00000018*/ LDR         R4, [R1, R3] 
+    /*0000001c*/ SUB         SP, SP, #8 
+    /*00000020*/ LDR         R3, [R4] 
+    /*00000024*/ STR         R2, [SP] 
+    /*00000028*/ STR         R3, [SP, #4] 
+    /*0000002c*/ BNE         HI_MPI_HDMI_Open_x50
+    /*00000030*/ MOV         R1, SP 
+    /*00000034*/ BL          HI_MPI_HDMI_ComOpen
+    HI_MPI_HDMI_Open_x38:
+    /*00000038*/ LDR         R2, [SP, #4] 
+    /*0000003c*/ LDR         R3, [R4] 
+    /*00000040*/ CMP         R2, R3 
+    /*00000044*/ BNE         HI_MPI_HDMI_Open_x94
+    /*00000048*/ ADD         SP, SP, #8 
+    /*0000004c*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_Open_x50:
+    /*00000050*/ LDR         R0, WORD_00a0               @ LDR         R0, [PC, #72]               @ 0x00000000000000a0 
+    /*00000054*/ MOVW        R3, #2187                   @ 0x88b 
+    /*00000058*/ LDR         R2, WORD_00a4               @ LDR         R2, [PC, #68]               @ 0x00000000000000a4 
+    /*0000005c*/ LDR         R6, [R1, R0] 
+    /*00000060*/ LDR         R1, WORD_00a8               @ LDR         R1, [PC, #64]               @ 0x00000000000000a8 
+    /*00000064*/ ADD         R2, PC, R2 
+    /*00000068*/ ADD         R1, PC, R1 
+    /*0000006c*/ LDR         R0, [R6] 
+    /*00000070*/ BL          fprintf
+    /*00000074*/ LDR         R1, WORD_00ac               @ LDR         R1, [PC, #48]               @ 0x00000000000000ac 
+    /*00000078*/ MOV         R2, R5 
+    /*0000007c*/ LDR         R0, [R6] 
+    /*00000080*/ ADD         R1, PC, R1 
+    /*00000084*/ BL          fprintf
+    /*00000088*/ MOVW        R0, #32770                  @ 0x8002 
+    /*0000008c*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000090*/ B           HI_MPI_HDMI_Open_x38
+    HI_MPI_HDMI_Open_x94:
+    /*00000094*/ BL          __stack_chk_fail
+    /*00000098*/ WORD_0098: .word 0x00000084
+    /*0000009c*/ WORD_009c: .word 0x00000000
+    /*000000a0*/ WORD_00a0: .word 0x00000000
+    /*000000a4*/ WORD_00a4: .word 0x00000038
+    /*000000a8*/ WORD_00a8: .word 0x00000038
+    /*000000ac*/ WORD_00ac: .word 0x00000024
+FUNC_END HI_MPI_HDMI_Open
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_Close
+@ Size: 0x74
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_Close
+    /*00000000*/ LDR         R1, WORD_0060               @ LDR         R1, [PC, #88]               @ 0x0000000000000060 
+    /*00000004*/ SUBS        R2, R0, #0 
+    /*00000008*/ ADD         R1, PC, R1 
+    /*0000000c*/ BNE         HI_MPI_HDMI_Close_x14
+    HI_MPI_HDMI_Close_x10:
+    /*00000010*/ B           HI_MPI_HDMI_Close_x10       @ HI_MPI_HDMI_ComClose [R_ARM_JUMP24: +0x0] 
+    HI_MPI_HDMI_Close_x14:
+    /*00000014*/ LDR         R0, WORD_0064               @ LDR         R0, [PC, #72]               @ 0x0000000000000064 
+    /*00000018*/ MOVW        R3, #2193                   @ 0x891 
+    /*0000001c*/ PUSH        {R4, R5, R6, LR} 
+    /*00000020*/ MOV         R4, R2 
+    /*00000024*/ LDR         R5, [R1, R0] 
+    /*00000028*/ LDR         R2, WORD_0068               @ LDR         R2, [PC, #56]               @ 0x0000000000000068 
+    /*0000002c*/ LDR         R1, WORD_006c               @ LDR         R1, [PC, #56]               @ 0x000000000000006c 
+    /*00000030*/ ADD         R2, PC, R2 
+    /*00000034*/ ADD         R1, PC, R1 
+    /*00000038*/ LDR         R0, [R5] 
+    /*0000003c*/ BL          fprintf
+    /*00000040*/ LDR         R1, WORD_0070               @ LDR         R1, [PC, #40]               @ 0x0000000000000070 
+    /*00000044*/ MOV         R2, R4 
+    /*00000048*/ LDR         R0, [R5] 
+    /*0000004c*/ ADD         R1, PC, R1 
+    /*00000050*/ BL          fprintf
+    /*00000054*/ MOVW        R0, #32770                  @ 0x8002 
+    /*00000058*/ MOVT        R0, #41000                  @ 0xa028 
+    /*0000005c*/ POP         {R4, R5, R6, PC} 
+    /*00000060*/ WORD_0060: .word 0x00000050
+    /*00000064*/ WORD_0064: .word 0x00000000
+    /*00000068*/ WORD_0068: .word 0x00000030
+    /*0000006c*/ WORD_006c: .word 0x00000030
+    /*00000070*/ WORD_0070: .word 0x0000001c
+FUNC_END HI_MPI_HDMI_Close
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_GetSinkCapability
+@ Size: 0x8c4
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_GetSinkCapability
+    /*00000000*/ LDR         IP, WORD_086c               @ LDR         IP, [PC, #2148]             @ 0x000000000000086c 
+    /*00000004*/ LDR         R3, WORD_0870               @ LDR         R3, [PC, #2148]             @ 0x0000000000000870 
+    /*00000008*/ ADD         IP, PC, IP 
+    /*0000000c*/ PUSH        {R4, R5, R6, R7, R8, R9, SL, FP, LR} 
+    /*00000010*/ SUB         SP, SP, #36                 @ 0x24 
+    /*00000014*/ LDR         R3, [IP, R3] 
+    /*00000018*/ ADD         R5, SP, #8 
+    /*0000001c*/ VMOV.I32    Q8, #0                      @ 0x00000000 
+    /*00000020*/ STR         R3, [SP] 
+    /*00000024*/ SUBS        R7, R0, #0 
+    /*00000028*/ LDR         R3, [R3] 
+    /*0000002c*/ VST1.8      {D16-D17}, [R5 :64] 
+    /*00000030*/ STR         R3, [SP, #28] 
+    /*00000034*/ VSTR        D16, [R5, #12] 
+    /*00000038*/ BNE         HI_MPI_HDMI_GetSinkCapability_x7d0
+    /*0000003c*/ CMP         R1, #0 
+    /*00000040*/ MOV         R4, R1 
+    /*00000044*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x820
+    /*00000048*/ MOV         R3, #20 
+    /*0000004c*/ MOV         R2, R7 
+    /*00000050*/ MOV         R1, R3 
+    /*00000054*/ MOV         R0, R5 
+    /*00000058*/ BL          memset_s
+    /*0000005c*/ MOV         R1, R5 
+    /*00000060*/ MOV         R0, R7 
+    /*00000064*/ BL          HI_MPI_HDMI_ComGetStatus
+    /*00000068*/ SUBS        R6, R0, #0 
+    /*0000006c*/ BNE         HI_MPI_HDMI_GetSinkCapability_xec
+    /*00000070*/ LDR         R3, [SP, #8] 
+    /*00000074*/ MOV         R2, #1 
+    /*00000078*/ LDR         R1, [SP, #12] 
+    /*0000007c*/ STR         R3, [R4] 
+    /*00000080*/ CMP         R3, #0 
+    /*00000084*/ STR         R1, [R4, #8] 
+    /*00000088*/ STR         R2, [R4, #12] 
+    /*0000008c*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x7bc
+    /*00000090*/ MOVW        R0, #4084                   @ 0xff4 
+    /*00000094*/ BL          malloc
+    /*00000098*/ SUBS        R5, R0, #0 
+    /*0000009c*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x814
+    /*000000a0*/ MOVW        R3, #4084                   @ 0xff4 
+    /*000000a4*/ MOV         R2, R6 
+    /*000000a8*/ MOV         R1, R3 
+    /*000000ac*/ BL          memset_s
+    /*000000b0*/ STR         R6, [R5] 
+    /*000000b4*/ MOV         R0, R6 
+    /*000000b8*/ MOV         R1, R5 
+    /*000000bc*/ BL          HI_MPI_HDMI_ComGetSinkCapability
+    /*000000c0*/ SUBS        R6, R0, #0 
+    /*000000c4*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x10c
+    /*000000c8*/ MOVW        R3, #32772                  @ 0x8004 
+    /*000000cc*/ MOVW        R2, #32774                  @ 0x8006 
+    /*000000d0*/ MOVT        R3, #41000                  @ 0xa028 
+    /*000000d4*/ CMP         R6, R3 
+    /*000000d8*/ MOVT        R2, #41000                  @ 0xa028 
+    /*000000dc*/ MOVEQ       R6, R3 
+    /*000000e0*/ MOVNE       R6, R2 
+    HI_MPI_HDMI_GetSinkCapability_xe4:
+    /*000000e4*/ MOV         R0, R5 
+    /*000000e8*/ BL          free
+    HI_MPI_HDMI_GetSinkCapability_xec:
+    /*000000ec*/ LDR         R3, [SP] 
+    /*000000f0*/ MOV         R0, R6 
+    /*000000f4*/ LDR         R2, [SP, #28] 
+    /*000000f8*/ LDR         R3, [R3] 
+    /*000000fc*/ CMP         R2, R3 
+    /*00000100*/ BNE         HI_MPI_HDMI_GetSinkCapability_x868
+    /*00000104*/ ADD         SP, SP, #36                 @ 0x24 
+    /*00000108*/ POP         {R4, R5, R6, R7, R8, R9, SL, FP, PC} 
+    HI_MPI_HDMI_GetSinkCapability_x10c:
+    /*0000010c*/ LDR         LR, [R5, #4] 
+    /*00000110*/ MOV         R2, R6 
+    /*00000114*/ LDR         IP, WORD_0874               @ LDR         IP, [PC, #1880]             @ 0x0000000000000874 
+    /*00000118*/ MOV         R3, R6 
+    /*0000011c*/ LDR         R1, [R5, #8] 
+    /*00000120*/ MOV         R0, #24 
+    /*00000124*/ ADD         IP, PC, IP 
+    /*00000128*/ STR         LR, [R4, #4] 
+    /*0000012c*/ B           HI_MPI_HDMI_GetSinkCapability_x144
+    HI_MPI_HDMI_GetSinkCapability_x130:
+    /*00000130*/ ADD         R3, R3, #1 
+    /*00000134*/ CMP         R3, #54                     @ 0x36 
+    /*00000138*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x7c8
+    /*0000013c*/ MUL         R2, R0, R3 
+    /*00000140*/ LDR         R2, [R2, IP] 
+    HI_MPI_HDMI_GetSinkCapability_x144:
+    /*00000144*/ CMP         R1, R2 
+    /*00000148*/ BNE         HI_MPI_HDMI_GetSinkCapability_x130
+    /*0000014c*/ LDR         R2, WORD_0878               @ LDR         R2, [PC, #1828]             @ 0x0000000000000878 
+    /*00000150*/ MOV         R1, #24 
+    /*00000154*/ ADD         R2, PC, R2 
+    /*00000158*/ MLA         R3, R1, R3, R2 
+    /*0000015c*/ LDR         R3, [R3, #20] 
+    HI_MPI_HDMI_GetSinkCapability_x160:
+    /*00000160*/ STR         R3, [R4, #16] 
+    /*00000164*/ MOV         R3, #208                    @ 0xd0 
+    /*00000168*/ MOV         R1, R3 
+    /*0000016c*/ MOV         R2, #0 
+    /*00000170*/ ADD         R0, R4, #20 
+    /*00000174*/ BL          memset_s
+    /*00000178*/ LDR         R7, [R5, #12] 
+    /*0000017c*/ CMP         R7, #0 
+    /*00000180*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x1d4
+    /*00000184*/ LDR         R0, WORD_087c               @ LDR         R0, [PC, #1776]             @ 0x000000000000087c 
+    /*00000188*/ ADD         LR, R5, #16 
+    /*0000018c*/ LDR         R9, WORD_0880               @ LDR         R9, [PC, #1772]             @ 0x0000000000000880 
+    /*00000190*/ MOV         IP, #0 
+    /*00000194*/ ADD         R0, PC, R0 
+    /*00000198*/ MOV         R8, #1 
+    /*0000019c*/ ADD         R9, PC, R9 
+    HI_MPI_HDMI_GetSinkCapability_x1a0:
+    /*000001a0*/ LDR         R1, [LR], #4 
+    /*000001a4*/ MOV         R2, #0 
+    /*000001a8*/ MOV         R3, R2 
+    /*000001ac*/ B           HI_MPI_HDMI_GetSinkCapability_x1b4
+    HI_MPI_HDMI_GetSinkCapability_x1b0:
+    /*000001b0*/ LDR         R2, [R0, R3, LSL #3] 
+    HI_MPI_HDMI_GetSinkCapability_x1b4:
+    /*000001b4*/ CMP         R1, R2 
+    /*000001b8*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x798
+    /*000001bc*/ ADD         R3, R3, #1 
+    /*000001c0*/ CMP         R3, #17 
+    /*000001c4*/ BNE         HI_MPI_HDMI_GetSinkCapability_x1b0
+    /*000001c8*/ ADD         IP, IP, #1 
+    /*000001cc*/ CMP         IP, R7 
+    /*000001d0*/ BNE         HI_MPI_HDMI_GetSinkCapability_x1a0
+    HI_MPI_HDMI_GetSinkCapability_x1d4:
+    /*000001d4*/ LDR         R9, WORD_0884               @ LDR         R9, [PC, #1704]             @ 0x0000000000000884 
+    /*000001d8*/ MOV         R0, R5 
+    /*000001dc*/ LDR         R3, WORD_0888               @ LDR         R3, [PC, #1700]             @ 0x0000000000000888 
+    /*000001e0*/ ADD         SL, R5, #96                 @ 0x60 
+    /*000001e4*/ ADD         R9, PC, R9 
+    /*000001e8*/ MOV         R7, R5 
+    /*000001ec*/ ADD         R3, PC, R3 
+    /*000001f0*/ MOV         R8, #100                    @ 0x64 
+    /*000001f4*/ STR         R3, [SP, #4] 
+    /*000001f8*/ MOV         FP, #1 
+    HI_MPI_HDMI_GetSinkCapability_x1fc:
+    /*000001fc*/ LDR         IP, [R7, #84]               @ 0x54 
+    /*00000200*/ MOV         R3, R9 
+    /*00000204*/ MOV         R1, #1440                   @ 0x5a0 
+    /*00000208*/ MOV         R2, #0 
+    /*0000020c*/ B           HI_MPI_HDMI_GetSinkCapability_x224
+    HI_MPI_HDMI_GetSinkCapability_x210:
+    /*00000210*/ ADD         R2, R2, #1 
+    /*00000214*/ ADD         R3, R3, #24 
+    /*00000218*/ CMP         R2, #54                     @ 0x36 
+    /*0000021c*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x278
+    /*00000220*/ LDR         R1, [R3, #8] 
+    HI_MPI_HDMI_GetSinkCapability_x224:
+    /*00000224*/ CMP         R1, IP 
+    /*00000228*/ BNE         HI_MPI_HDMI_GetSinkCapability_x210
+    /*0000022c*/ LDR         LR, [R3, #12] 
+    /*00000230*/ LDR         R1, [R7, #88]               @ 0x58 
+    /*00000234*/ CMP         LR, R1 
+    /*00000238*/ BNE         HI_MPI_HDMI_GetSinkCapability_x210
+    /*0000023c*/ LDR         R1, [R7, #92]               @ 0x5c 
+    /*00000240*/ LDR         LR, [R3, #16] 
+    /*00000244*/ MUL         R1, R8, R1 
+    /*00000248*/ CMP         LR, R1 
+    /*0000024c*/ BCC         HI_MPI_HDMI_GetSinkCapability_x210
+    /*00000250*/ SUB         LR, LR, #50                 @ 0x32 
+    /*00000254*/ CMP         R1, LR 
+    /*00000258*/ BCC         HI_MPI_HDMI_GetSinkCapability_x210
+    /*0000025c*/ LDR         R1, [SP, #4] 
+    /*00000260*/ MOV         R3, #24 
+    /*00000264*/ MLA         R2, R3, R2, R1 
+    /*00000268*/ LDR         R3, [R2, #20] 
+    /*0000026c*/ CMP         R3, #52                     @ 0x34 
+    /*00000270*/ ADDNE       R3, R4, R3, LSL #2 
+    /*00000274*/ STRNE       FP, [R3, #20] 
+    HI_MPI_HDMI_GetSinkCapability_x278:
+    /*00000278*/ ADD         R7, R7, #12 
+    /*0000027c*/ CMP         R7, SL 
+    /*00000280*/ BNE         HI_MPI_HDMI_GetSinkCapability_x1fc
+    /*00000284*/ LDR         R8, [R5, #2128]             @ 0x850 
+    /*00000288*/ CMP         R8, #0 
+    /*0000028c*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x324
+    /*00000290*/ LDR         FP, WORD_088c               @ LDR         FP, [PC, #1524]             @ 0x000000000000088c 
+    /*00000294*/ MOV         R7, #0 
+    /*00000298*/ MOV         SL, #1 
+    /*0000029c*/ ADD         FP, PC, FP 
+    HI_MPI_HDMI_GetSinkCapability_x2a0:
+    /*000002a0*/ LDR         IP, [R0, #2152]             @ 0x868 
+    /*000002a4*/ MOV         R3, R9 
+    /*000002a8*/ MOV         R1, #1440                   @ 0x5a0 
+    /*000002ac*/ MOV         R2, #0 
+    /*000002b0*/ B           HI_MPI_HDMI_GetSinkCapability_x2c8
+    HI_MPI_HDMI_GetSinkCapability_x2b4:
+    /*000002b4*/ ADD         R2, R2, #1 
+    /*000002b8*/ ADD         R3, R3, #24 
+    /*000002bc*/ CMP         R2, #54                     @ 0x36 
+    /*000002c0*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x314
+    /*000002c4*/ LDR         R1, [R3, #8] 
+    HI_MPI_HDMI_GetSinkCapability_x2c8:
+    /*000002c8*/ CMP         R1, IP 
+    /*000002cc*/ BNE         HI_MPI_HDMI_GetSinkCapability_x2b4
+    /*000002d0*/ LDR         LR, [R3, #12] 
+    /*000002d4*/ LDR         R1, [R0, #2140]             @ 0x85c 
+    /*000002d8*/ CMP         LR, R1 
+    /*000002dc*/ BNE         HI_MPI_HDMI_GetSinkCapability_x2b4
+    /*000002e0*/ LDR         R1, [R3, #4] 
+    /*000002e4*/ LDR         LR, [R0, #2196]             @ 0x894 
+    /*000002e8*/ CMP         R1, LR 
+    /*000002ec*/ BCC         HI_MPI_HDMI_GetSinkCapability_x2b4
+    /*000002f0*/ SUB         R1, R1, #100                @ 0x64 
+    /*000002f4*/ CMP         LR, R1 
+    /*000002f8*/ BCC         HI_MPI_HDMI_GetSinkCapability_x2b4
+    /*000002fc*/ MOV         R3, #24 
+    /*00000300*/ MLA         R2, R3, R2, FP 
+    /*00000304*/ LDR         R3, [R2, #20] 
+    /*00000308*/ CMP         R3, #52                     @ 0x34 
+    /*0000030c*/ ADDNE       R3, R4, R3, LSL #2 
+    /*00000310*/ STRNE       SL, [R3, #20] 
+    HI_MPI_HDMI_GetSinkCapability_x314:
+    /*00000314*/ ADD         R7, R7, #1 
+    /*00000318*/ ADD         R0, R0, #68                 @ 0x44 
+    /*0000031c*/ CMP         R7, R8 
+    /*00000320*/ BNE         HI_MPI_HDMI_GetSinkCapability_x2a0
+    HI_MPI_HDMI_GetSinkCapability_x324:
+    /*00000324*/ LDR         R7, [R5, #180]              @ 0xb4 
+    /*00000328*/ CMP         R7, #0 
+    /*0000032c*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x39c
+    /*00000330*/ LDR         R0, WORD_0890               @ LDR         R0, [PC, #1368]             @ 0x0000000000000890 
+    /*00000334*/ ADD         LR, R5, #184                @ 0xb8 
+    /*00000338*/ LDR         R9, WORD_0894               @ LDR         R9, [PC, #1364]             @ 0x0000000000000894 
+    /*0000033c*/ MOV         IP, #0 
+    /*00000340*/ ADD         R0, PC, R0 
+    /*00000344*/ MOV         R1, #24 
+    /*00000348*/ ADD         R9, PC, R9 
+    /*0000034c*/ MOV         R8, #1 
+    HI_MPI_HDMI_GetSinkCapability_x350:
+    /*00000350*/ LDR         SL, [LR], #4 
+    /*00000354*/ MOV         R2, #0 
+    /*00000358*/ MOV         R3, R2 
+    /*0000035c*/ B           HI_MPI_HDMI_GetSinkCapability_x374
+    HI_MPI_HDMI_GetSinkCapability_x360:
+    /*00000360*/ ADD         R3, R3, #1 
+    /*00000364*/ CMP         R3, #54                     @ 0x36 
+    /*00000368*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x390
+    /*0000036c*/ MUL         R2, R1, R3 
+    /*00000370*/ LDR         R2, [R2, R0] 
+    HI_MPI_HDMI_GetSinkCapability_x374:
+    /*00000374*/ CMP         SL, R2 
+    /*00000378*/ BNE         HI_MPI_HDMI_GetSinkCapability_x360
+    /*0000037c*/ MLA         R3, R1, R3, R9 
+    /*00000380*/ LDR         R3, [R3, #20] 
+    /*00000384*/ CMP         R3, #52                     @ 0x34 
+    /*00000388*/ ADDNE       R3, R4, R3, LSL #2 
+    /*0000038c*/ STRNE       R8, [R3, #20] 
+    HI_MPI_HDMI_GetSinkCapability_x390:
+    /*00000390*/ ADD         IP, IP, #1 
+    /*00000394*/ CMP         IP, R7 
+    /*00000398*/ BNE         HI_MPI_HDMI_GetSinkCapability_x350
+    HI_MPI_HDMI_GetSinkCapability_x39c:
+    /*0000039c*/ LDR         R3, [R5, #792]              @ 0x318 
+    /*000003a0*/ CMP         R3, #0 
+    /*000003a4*/ MOVNE       R3, #1 
+    /*000003a8*/ BNE         HI_MPI_HDMI_GetSinkCapability_x3b8
+    /*000003ac*/ LDR         R3, [R5, #796]              @ 0x31c 
+    /*000003b0*/ ADDS        R3, R3, #0 
+    /*000003b4*/ MOVNE       R3, #1 
+    HI_MPI_HDMI_GetSinkCapability_x3b8:
+    /*000003b8*/ LDR         R7, [R5, #752]              @ 0x2f0 
+    /*000003bc*/ ADD         LR, R4, #1392               @ 0x570 
+    /*000003c0*/ LDR         R1, [R5, #756]              @ 0x2f4 
+    /*000003c4*/ ADD         LR, LR, #12 
+    /*000003c8*/ LDRB        R2, [R5, #784]              @ 0x310 
+    /*000003cc*/ ADD         R0, R5, #868                @ 0x364 
+    /*000003d0*/ STR         R7, [R4, #232]              @ 0xe8 
+    /*000003d4*/ ADD         IP, R4, #252                @ 0xfc 
+    /*000003d8*/ STR         R3, [R4, #228]              @ 0xe4 
+    /*000003dc*/ MOV         R8, #15 
+    /*000003e0*/ STR         R1, [R4, #236]              @ 0xec 
+    /*000003e4*/ MOV         R7, #9 
+    /*000003e8*/ STRB        R2, [R4, #240]              @ 0xf0 
+    HI_MPI_HDMI_GetSinkCapability_x3ec:
+    /*000003ec*/ LDR         R3, [R0, #-64]              @ 0xffffffc0 
+    /*000003f0*/ CMP         R3, #0 
+    /*000003f4*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*000003f8*/ CMP         R3, #1 
+    /*000003fc*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*00000400*/ CMP         R3, #2 
+    /*00000404*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*00000408*/ CMP         R3, #3 
+    /*0000040c*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*00000410*/ CMP         R3, #4 
+    /*00000414*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*00000418*/ CMP         R3, #5 
+    /*0000041c*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*00000420*/ CMP         R3, #6 
+    /*00000424*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*00000428*/ CMP         R3, #7 
+    /*0000042c*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*00000430*/ CMP         R3, #8 
+    /*00000434*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*00000438*/ CMP         R3, #9 
+    /*0000043c*/ STREQ       R7, [IP, #-4] 
+    /*00000440*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x474
+    /*00000444*/ CMP         R3, #10 
+    /*00000448*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*0000044c*/ CMP         R3, #11 
+    /*00000450*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*00000454*/ CMP         R3, #12 
+    /*00000458*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*0000045c*/ CMP         R3, #13 
+    /*00000460*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x470
+    /*00000464*/ CMP         R3, #14 
+    /*00000468*/ STRNE       R8, [IP, #-4] 
+    /*0000046c*/ BNE         HI_MPI_HDMI_GetSinkCapability_x474
+    HI_MPI_HDMI_GetSinkCapability_x470:
+    /*00000470*/ STR         R3, [IP, #-4] 
+    HI_MPI_HDMI_GetSinkCapability_x474:
+    /*00000474*/ LDRB        R2, [R0, #-24]              @ 0xffffffe8 
+    /*00000478*/ SUB         R3, R0, #60                 @ 0x3c 
+    /*0000047c*/ LDR         R1, [R0, #4] 
+    /*00000480*/ SUB         R9, R0, #28 
+    /*00000484*/ STRB        R2, [IP, #32] 
+    /*00000488*/ MOV         R2, IP 
+    /*0000048c*/ STR         R1, [IP, #60]               @ 0x3c 
+    /*00000490*/ LDR         R1, [R0, #8] 
+    /*00000494*/ STR         R1, [IP, #64]               @ 0x40 
+    HI_MPI_HDMI_GetSinkCapability_x498:
+    /*00000498*/ LDR         R1, [R3], #4 
+    /*0000049c*/ CMP         R3, R9 
+    /*000004a0*/ STR         R1, [R2], #4 
+    /*000004a4*/ BNE         HI_MPI_HDMI_GetSinkCapability_x498
+    /*000004a8*/ SUB         R3, R0, #24 
+    /*000004ac*/ ADD         R2, IP, #32 
+    HI_MPI_HDMI_GetSinkCapability_x4b0:
+    /*000004b0*/ LDR         R1, [R3, #4]! 
+    /*000004b4*/ CMP         R0, R3 
+    /*000004b8*/ STR         R1, [R2, #4]! 
+    /*000004bc*/ BNE         HI_MPI_HDMI_GetSinkCapability_x4b0
+    /*000004c0*/ ADD         IP, IP, #72                 @ 0x48 
+    /*000004c4*/ ADD         R0, R0, #76                 @ 0x4c 
+    /*000004c8*/ CMP         LR, IP 
+    /*000004cc*/ BNE         HI_MPI_HDMI_GetSinkCapability_x3ec
+    /*000004d0*/ LDR         R2, [R5, #2020]             @ 0x7e4 
+    /*000004d4*/ ADD         R3, R5, #2016               @ 0x7e0 
+    /*000004d8*/ ADD         R3, R3, #4 
+    /*000004dc*/ ADD         R0, R5, #2064               @ 0x810 
+    /*000004e0*/ STR         R2, [R4, #244]              @ 0xf4 
+    /*000004e4*/ ADD         R2, R4, #1392               @ 0x570 
+    /*000004e8*/ ADD         R2, R2, #4 
+    HI_MPI_HDMI_GetSinkCapability_x4ec:
+    /*000004ec*/ LDR         R1, [R3, #4]! 
+    /*000004f0*/ CMP         R3, R0 
+    /*000004f4*/ STR         R1, [R2, #4]! 
+    /*000004f8*/ BNE         HI_MPI_HDMI_GetSinkCapability_x4ec
+    /*000004fc*/ LDRB        IP, [R5, #2078]             @ 0x81e 
+    /*00000500*/ MOV         R3, #208                    @ 0xd0 
+    /*00000504*/ LDRB        LR, [R5, #2079]             @ 0x81f 
+    /*00000508*/ MOV         R1, R3 
+    /*0000050c*/ STRB        IP, [R4, #1446]             @ 0x5a6 
+    /*00000510*/ LDR         IP, [R5, #2080]             @ 0x820 
+    /*00000514*/ STRB        LR, [R4, #1447]             @ 0x5a7 
+    /*00000518*/ STR         IP, [R4, #1448]             @ 0x5a8 
+    /*0000051c*/ LDR         IP, [R5, #2088]             @ 0x828 
+    /*00000520*/ LDR         LR, [R5, #2084]             @ 0x824 
+    /*00000524*/ STR         IP, [R4, #1456]             @ 0x5b0 
+    /*00000528*/ LDRB        IP, [R5, #2073]             @ 0x819 
+    /*0000052c*/ STR         LR, [R4, #1452]             @ 0x5ac 
+    /*00000530*/ STRB        IP, [R4, #1464]             @ 0x5b8 
+    /*00000534*/ LDR         LR, [R5, #2092]             @ 0x82c 
+    /*00000538*/ LDRB        IP, [R5, #2072]             @ 0x818 
+    /*0000053c*/ STR         LR, [R4, #1460]             @ 0x5b4 
+    /*00000540*/ STRB        IP, [R4, #1466]             @ 0x5ba 
+    /*00000544*/ LDRB        LR, [R5, #2074]             @ 0x81a 
+    /*00000548*/ LDRB        IP, [R5, #2116]             @ 0x844 
+    /*0000054c*/ STRB        LR, [R4, #1465]             @ 0x5b9 
+    /*00000550*/ STRB        IP, [R4, #1472]             @ 0x5c0 
+    /*00000554*/ LDR         LR, [R5, #2112]             @ 0x840 
+    /*00000558*/ LDRB        IP, [R5, #2118]             @ 0x846 
+    /*0000055c*/ LDRB        R2, [R5, #2076]             @ 0x81c 
+    /*00000560*/ LDRB        R0, [R5, #2077]             @ 0x81d 
+    /*00000564*/ STR         LR, [R4, #1468]             @ 0x5bc 
+    /*00000568*/ STRB        IP, [R4, #1474]             @ 0x5c2 
+    /*0000056c*/ LDRB        LR, [R5, #2117]             @ 0x845 
+    /*00000570*/ LDRB        IP, [R5, #2119]             @ 0x847 
+    /*00000574*/ STRB        R2, [R4, #1444]             @ 0x5a4 
+    /*00000578*/ MOV         R2, #0 
+    /*0000057c*/ STRB        R0, [R4, #1445]             @ 0x5a5 
+    /*00000580*/ ADD         R0, R4, #1536               @ 0x600 
+    /*00000584*/ STRB        IP, [R4, #1475]             @ 0x5c3 
+    /*00000588*/ STRB        LR, [R4, #1473]             @ 0x5c1 
+    /*0000058c*/ LDR         LR, [R5, #2856]             @ 0xb28 
+    /*00000590*/ LDR         IP, [R5, #736]              @ 0x2e0 
+    /*00000594*/ STR         LR, [R4, #1476]             @ 0x5c4 
+    /*00000598*/ STR         IP, [R4, #1480]             @ 0x5c8 
+    /*0000059c*/ LDR         LR, [R5, #740]              @ 0x2e4 
+    /*000005a0*/ LDR         IP, [R5, #744]              @ 0x2e8 
+    /*000005a4*/ STR         LR, [R4, #1484]             @ 0x5cc 
+    /*000005a8*/ STR         IP, [R4, #1488]             @ 0x5d0 
+    /*000005ac*/ LDR         LR, [R5, #748]              @ 0x2ec 
+    /*000005b0*/ LDR         IP, [R5, #2124]             @ 0x84c 
+    /*000005b4*/ STR         LR, [R4, #1492]             @ 0x5d4 
+    /*000005b8*/ STR         IP, [R4, #1496]             @ 0x5d8 
+    /*000005bc*/ LDR         LR, [R5, #2812]             @ 0xafc 
+    /*000005c0*/ LDR         IP, [R5, #2816]             @ 0xb00 
+    /*000005c4*/ STR         LR, [R4, #1500]             @ 0x5dc 
+    /*000005c8*/ STR         IP, [R4, #1504]             @ 0x5e0 
+    /*000005cc*/ LDR         LR, [R5, #2820]             @ 0xb04 
+    /*000005d0*/ LDR         IP, [R5, #2824]             @ 0xb08 
+    /*000005d4*/ STR         LR, [R4, #1508]             @ 0x5e4 
+    /*000005d8*/ STR         IP, [R4, #1512]             @ 0x5e8 
+    /*000005dc*/ LDRB        LR, [R5, #2828]             @ 0xb0c 
+    /*000005e0*/ LDRB        IP, [R5, #2829]             @ 0xb0d 
+    /*000005e4*/ STRB        LR, [R4, #1516]             @ 0x5ec 
+    /*000005e8*/ STRB        IP, [R4, #1517]             @ 0x5ed 
+    /*000005ec*/ LDRB        LR, [R5, #2830]             @ 0xb0e 
+    /*000005f0*/ LDRB        IP, [R5, #2831]             @ 0xb0f 
+    /*000005f4*/ STRB        LR, [R4, #1518]             @ 0x5ee 
+    /*000005f8*/ STRB        IP, [R4, #1519]             @ 0x5ef 
+    /*000005fc*/ LDR         LR, [R5, #3972]             @ 0xf84 
+    /*00000600*/ LDR         IP, [R5, #3976]             @ 0xf88 
+    /*00000604*/ STR         LR, [R4, #1520]             @ 0x5f0 
+    /*00000608*/ STR         IP, [R4, #1524]             @ 0x5f4 
+    /*0000060c*/ LDR         LR, [R5, #3980]             @ 0xf8c 
+    /*00000610*/ LDR         IP, [R5, #2836]             @ 0xb14 
+    /*00000614*/ STR         LR, [R4, #1528]             @ 0x5f8 
+    /*00000618*/ STR         IP, [R4, #1532]             @ 0x5fc 
+    /*0000061c*/ BL          memset_s
+    /*00000620*/ LDR         R7, [R5, #2864]             @ 0xb30 
+    /*00000624*/ CMP         R7, #0 
+    /*00000628*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x69c
+    /*0000062c*/ LDR         R0, WORD_0898               @ LDR         R0, [PC, #612]              @ 0x0000000000000898 
+    /*00000630*/ ADD         LR, R5, #2864               @ 0xb30 
+    /*00000634*/ LDR         R9, WORD_089c               @ LDR         R9, [PC, #608]              @ 0x000000000000089c 
+    /*00000638*/ ADD         LR, LR, #4 
+    /*0000063c*/ ADD         R0, PC, R0 
+    /*00000640*/ MOV         IP, #0 
+    /*00000644*/ ADD         R9, PC, R9 
+    /*00000648*/ MOV         R1, #24 
+    /*0000064c*/ MOV         R8, #1 
+    HI_MPI_HDMI_GetSinkCapability_x650:
+    /*00000650*/ LDR         SL, [LR], #4 
+    /*00000654*/ MOV         R2, #0 
+    /*00000658*/ MOV         R3, R2 
+    /*0000065c*/ B           HI_MPI_HDMI_GetSinkCapability_x674
+    HI_MPI_HDMI_GetSinkCapability_x660:
+    /*00000660*/ ADD         R3, R3, #1 
+    /*00000664*/ CMP         R3, #54                     @ 0x36 
+    /*00000668*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x690
+    /*0000066c*/ MUL         R2, R1, R3 
+    /*00000670*/ LDR         R2, [R2, R0] 
+    HI_MPI_HDMI_GetSinkCapability_x674:
+    /*00000674*/ CMP         SL, R2 
+    /*00000678*/ BNE         HI_MPI_HDMI_GetSinkCapability_x660
+    /*0000067c*/ MLA         R3, R1, R3, R9 
+    /*00000680*/ LDR         R3, [R3, #20] 
+    /*00000684*/ CMP         R3, #52                     @ 0x34 
+    /*00000688*/ ADDNE       R3, R3, #384                @ 0x180 
+    /*0000068c*/ STRNE       R8, [R4, R3, LSL #2] 
+    HI_MPI_HDMI_GetSinkCapability_x690:
+    /*00000690*/ ADD         IP, IP, #1 
+    /*00000694*/ CMP         R7, IP 
+    /*00000698*/ BNE         HI_MPI_HDMI_GetSinkCapability_x650
+    HI_MPI_HDMI_GetSinkCapability_x69c:
+    /*0000069c*/ MOV         R3, #208                    @ 0xd0 
+    /*000006a0*/ MOV         R2, #0 
+    /*000006a4*/ MOV         R1, R3 
+    /*000006a8*/ ADD         R0, R4, #1744               @ 0x6d0 
+    /*000006ac*/ BL          memset_s
+    /*000006b0*/ LDR         R7, [R5, #3380]             @ 0xd34 
+    /*000006b4*/ CMP         R7, #0 
+    /*000006b8*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x72c
+    /*000006bc*/ LDR         R0, WORD_08a0               @ LDR         R0, [PC, #476]              @ 0x00000000000008a0 
+    /*000006c0*/ ADD         LR, R5, #3376               @ 0xd30 
+    /*000006c4*/ LDR         R9, WORD_08a4               @ LDR         R9, [PC, #472]              @ 0x00000000000008a4 
+    /*000006c8*/ ADD         LR, LR, #8 
+    /*000006cc*/ ADD         R0, PC, R0 
+    /*000006d0*/ MOV         IP, #0 
+    /*000006d4*/ ADD         R9, PC, R9 
+    /*000006d8*/ MOV         R1, #24 
+    /*000006dc*/ MOV         R8, #1 
+    HI_MPI_HDMI_GetSinkCapability_x6e0:
+    /*000006e0*/ LDR         SL, [LR], #4 
+    /*000006e4*/ MOV         R2, #0 
+    /*000006e8*/ MOV         R3, R2 
+    /*000006ec*/ B           HI_MPI_HDMI_GetSinkCapability_x704
+    HI_MPI_HDMI_GetSinkCapability_x6f0:
+    /*000006f0*/ ADD         R3, R3, #1 
+    /*000006f4*/ CMP         R3, #54                     @ 0x36 
+    /*000006f8*/ BEQ         HI_MPI_HDMI_GetSinkCapability_x720
+    /*000006fc*/ MUL         R2, R1, R3 
+    /*00000700*/ LDR         R2, [R2, R0] 
+    HI_MPI_HDMI_GetSinkCapability_x704:
+    /*00000704*/ CMP         SL, R2 
+    /*00000708*/ BNE         HI_MPI_HDMI_GetSinkCapability_x6f0
+    /*0000070c*/ MLA         R3, R1, R3, R9 
+    /*00000710*/ LDR         R3, [R3, #20] 
+    /*00000714*/ CMP         R3, #52                     @ 0x34 
+    /*00000718*/ ADDNE       R3, R3, #436                @ 0x1b4 
+    /*0000071c*/ STRNE       R8, [R4, R3, LSL #2] 
+    HI_MPI_HDMI_GetSinkCapability_x720:
+    /*00000720*/ ADD         IP, IP, #1 
+    /*00000724*/ CMP         R7, IP 
+    /*00000728*/ BNE         HI_MPI_HDMI_GetSinkCapability_x6e0
+    HI_MPI_HDMI_GetSinkCapability_x72c:
+    /*0000072c*/ LDR         R3, [R5, #2128]             @ 0x850 
+    /*00000730*/ LDR         R1, [R5, #3900]             @ 0xf3c 
+    /*00000734*/ LDR         R2, [R5, #3896]             @ 0xf38 
+    /*00000738*/ CMP         R3, #10 
+    /*0000073c*/ STR         R1, [R4, #1956]             @ 0x7a4 
+    /*00000740*/ MOVCS       R3, #10 
+    /*00000744*/ STR         R3, [R4, #1992]             @ 0x7c8 
+    /*00000748*/ CMP         R3, #0 
+    /*0000074c*/ STR         R2, [R4, #1952]             @ 0x7a0 
+    /*00000750*/ BEQ         HI_MPI_HDMI_GetSinkCapability_xe4
+    /*00000754*/ ADD         R8, R4, #1984               @ 0x7c0 
+    /*00000758*/ ADD         R7, R5, #2128               @ 0x850 
+    /*0000075c*/ ADD         R8, R8, #12 
+    /*00000760*/ ADD         R7, R7, #4 
+    /*00000764*/ MOV         R9, #0 
+    HI_MPI_HDMI_GetSinkCapability_x768:
+    /*00000768*/ MOV         R3, #68                     @ 0x44 
+    /*0000076c*/ MOV         R2, R7 
+    /*00000770*/ MOV         R1, R3 
+    /*00000774*/ MOV         R0, R8 
+    /*00000778*/ ADD         R9, R9, #1 
+    /*0000077c*/ BL          memcpy_s
+    /*00000780*/ LDR         R3, [R4, #1992]             @ 0x7c8 
+    /*00000784*/ ADD         R7, R7, #68                 @ 0x44 
+    /*00000788*/ ADD         R8, R8, #68                 @ 0x44 
+    /*0000078c*/ CMP         R9, R3 
+    /*00000790*/ BCC         HI_MPI_HDMI_GetSinkCapability_x768
+    /*00000794*/ B           HI_MPI_HDMI_GetSinkCapability_xe4
+    HI_MPI_HDMI_GetSinkCapability_x798:
+    /*00000798*/ ADD         R3, R9, R3, LSL #3 
+    /*0000079c*/ ADD         IP, IP, #1 
+    /*000007a0*/ LDR         R3, [R3, #4] 
+    /*000007a4*/ CMP         R3, #52                     @ 0x34 
+    /*000007a8*/ ADDNE       R3, R4, R3, LSL #2 
+    /*000007ac*/ STRNE       R8, [R3, #20] 
+    /*000007b0*/ CMP         IP, R7 
+    /*000007b4*/ BNE         HI_MPI_HDMI_GetSinkCapability_x1a0
+    /*000007b8*/ B           HI_MPI_HDMI_GetSinkCapability_x1d4
+    HI_MPI_HDMI_GetSinkCapability_x7bc:
+    /*000007bc*/ MOVW        R6, #32773                  @ 0x8005 
+    /*000007c0*/ MOVT        R6, #41000                  @ 0xa028 
+    /*000007c4*/ B           HI_MPI_HDMI_GetSinkCapability_xec
+    HI_MPI_HDMI_GetSinkCapability_x7c8:
+    /*000007c8*/ MOV         R3, #52                     @ 0x34 
+    /*000007cc*/ B           HI_MPI_HDMI_GetSinkCapability_x160
+    HI_MPI_HDMI_GetSinkCapability_x7d0:
+    /*000007d0*/ LDR         R1, WORD_08a8               @ LDR         R1, [PC, #208]              @ 0x00000000000008a8 
+    /*000007d4*/ MOVW        R3, #2205                   @ 0x89d 
+    /*000007d8*/ LDR         R2, WORD_08ac               @ LDR         R2, [PC, #204]              @ 0x00000000000008ac 
+    /*000007dc*/ MOVW        R6, #32770                  @ 0x8002 
+    /*000007e0*/ LDR         R4, [IP, R1] 
+    /*000007e4*/ LDR         R1, WORD_08b0               @ LDR         R1, [PC, #196]              @ 0x00000000000008b0 
+    /*000007e8*/ ADD         R2, PC, R2 
+    /*000007ec*/ ADD         R1, PC, R1 
+    /*000007f0*/ LDR         R0, [R4] 
+    /*000007f4*/ MOVT        R6, #41000                  @ 0xa028 
+    /*000007f8*/ BL          fprintf
+    /*000007fc*/ LDR         R1, WORD_08b4               @ LDR         R1, [PC, #176]              @ 0x00000000000008b4 
+    /*00000800*/ MOV         R2, R7 
+    /*00000804*/ LDR         R0, [R4] 
+    /*00000808*/ ADD         R1, PC, R1 
+    /*0000080c*/ BL          fprintf
+    /*00000810*/ B           HI_MPI_HDMI_GetSinkCapability_xec
+    HI_MPI_HDMI_GetSinkCapability_x814:
+    /*00000814*/ MOVW        R6, #32785                  @ 0x8011 
+    /*00000818*/ MOVT        R6, #41000                  @ 0xa028 
+    /*0000081c*/ B           HI_MPI_HDMI_GetSinkCapability_xec
+    HI_MPI_HDMI_GetSinkCapability_x820:
+    /*00000820*/ LDR         R1, WORD_08a8               @ LDR         R1, [PC, #128]              @ 0x00000000000008a8 
+    /*00000824*/ MOVW        R3, #2206                   @ 0x89e 
+    /*00000828*/ LDR         R2, WORD_08b8               @ LDR         R2, [PC, #136]              @ 0x00000000000008b8 
+    /*0000082c*/ MOVW        R6, #32771                  @ 0x8003 
+    /*00000830*/ LDR         R4, [IP, R1] 
+    /*00000834*/ LDR         R1, WORD_08bc               @ LDR         R1, [PC, #128]              @ 0x00000000000008bc 
+    /*00000838*/ ADD         R2, PC, R2 
+    /*0000083c*/ ADD         R1, PC, R1 
+    /*00000840*/ LDR         R0, [R4] 
+    /*00000844*/ MOVT        R6, #41000                  @ 0xa028 
+    /*00000848*/ BL          fprintf
+    /*0000084c*/ LDR         R0, WORD_08c0               @ LDR         R0, [PC, #108]              @ 0x00000000000008c0 
+    /*00000850*/ MOV         R2, #15 
+    /*00000854*/ LDR         R3, [R4] 
+    /*00000858*/ MOV         R1, #1 
+    /*0000085c*/ ADD         R0, PC, R0 
+    /*00000860*/ BL          fwrite
+    /*00000864*/ B           HI_MPI_HDMI_GetSinkCapability_xec
+    HI_MPI_HDMI_GetSinkCapability_x868:
+    /*00000868*/ BL          __stack_chk_fail
+    /*0000086c*/ WORD_086c: .word 0x0000085c
+    /*00000870*/ WORD_0870: .word 0x00000000
+    /*00000874*/ WORD_0874: .word 0x00000748
+    /*00000878*/ WORD_0878: .word 0x0000071c
+    /*0000087c*/ WORD_087c: .word 0x000006e0
+    /*00000880*/ WORD_0880: .word 0x000006dc
+    /*00000884*/ WORD_0884: .word 0x00000698
+    /*00000888*/ WORD_0888: .word 0x00000694
+    /*0000088c*/ WORD_088c: .word 0x000005e8
+    /*00000890*/ WORD_0890: .word 0x00000548
+    /*00000894*/ WORD_0894: .word 0x00000544
+    /*00000898*/ WORD_0898: .word 0x00000254
+    /*0000089c*/ WORD_089c: .word 0x00000250
+    /*000008a0*/ WORD_08a0: .word 0x000001cc
+    /*000008a4*/ WORD_08a4: .word 0x000001c8
+    /*000008a8*/ WORD_08a8: .word 0x00000000
+    /*000008ac*/ WORD_08ac: .word 0x000000bc
+    /*000008b0*/ WORD_08b0: .word 0x000000bc
+    /*000008b4*/ WORD_08b4: .word 0x000000a4
+    /*000008b8*/ WORD_08b8: .word 0x00000078
+    /*000008bc*/ WORD_08bc: .word 0x00000078
+    /*000008c0*/ WORD_08c0: .word 0x0000005c
+FUNC_END HI_MPI_HDMI_GetSinkCapability
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_SetAttr
+@ Size: 0x16a0
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_SetAttr
+    /*00000000*/ PUSH        {R4, R5, R6, R7, R8, R9, SL, FP, LR} 
+    /*00000004*/ SUBS        R7, R0, #0 
+    /*00000008*/ LDR         R5, WORD_0fec               @ LDR         R5, [PC, #4060]             @ 0x0000000000000fec 
+    /*0000000c*/ SUB         SP, SP, #212                @ 0xd4 
+    /*00000010*/ LDR         R3, WORD_0ff0               @ LDR         R3, [PC, #4056]             @ 0x0000000000000ff0 
+    /*00000014*/ ADD         R5, PC, R5 
+    /*00000018*/ LDR         R6, [R5, R3] 
+    /*0000001c*/ LDR         R3, [R6] 
+    /*00000020*/ STR         R3, [SP, #204]              @ 0xcc 
+    /*00000024*/ BNE         HI_MPI_HDMI_SetAttr_xcc0
+    /*00000028*/ CMP         R1, #0 
+    /*0000002c*/ MOV         R4, R1 
+    /*00000030*/ BEQ         HI_MPI_HDMI_SetAttr_x124c
+    /*00000034*/ LDR         R3, [R1, #8] 
+    /*00000038*/ SUB         R2, R3, #48                 @ 0x30 
+    /*0000003c*/ CMP         R2, #2 
+    /*00000040*/ BLS         HI_MPI_HDMI_SetAttr_x528
+    /*00000044*/ LDR         R0, [R1] 
+    /*00000048*/ CMP         R0, #1 
+    /*0000004c*/ BHI         HI_MPI_HDMI_SetAttr_xb6c
+    /*00000050*/ LDR         R2, [R4, #4] 
+    /*00000054*/ CMP         R2, #1 
+    /*00000058*/ BHI         HI_MPI_HDMI_SetAttr_xaa4
+    /*0000005c*/ LDR         IP, [R4, #28] 
+    /*00000060*/ CMP         IP, #1 
+    /*00000064*/ BHI         HI_MPI_HDMI_SetAttr_xbb0
+    /*00000068*/ LDR         FP, [R4, #32] 
+    /*0000006c*/ CMP         FP, #1 
+    /*00000070*/ BHI         HI_MPI_HDMI_SetAttr_xbf4
+    /*00000074*/ LDR         R2, [R4, #40]               @ 0x28 
+    /*00000078*/ CMP         R2, #1 
+    /*0000007c*/ BHI         HI_MPI_HDMI_SetAttr_xc38
+    /*00000080*/ LDR         R2, [R4, #60]               @ 0x3c 
+    /*00000084*/ STR         R2, [SP, #4] 
+    /*00000088*/ CMP         R2, #1 
+    /*0000008c*/ BHI         HI_MPI_HDMI_SetAttr_xc7c
+    /*00000090*/ LDR         R2, [R4, #64]               @ 0x40 
+    /*00000094*/ STR         R2, [SP, #8] 
+    /*00000098*/ CMP         R2, #1 
+    /*0000009c*/ BHI         HI_MPI_HDMI_SetAttr_xd04
+    /*000000a0*/ LDR         R7, [R4, #68]               @ 0x44 
+    /*000000a4*/ CMP         R7, #1 
+    /*000000a8*/ BHI         HI_MPI_HDMI_SetAttr_xd48
+    /*000000ac*/ LDR         R8, [R4, #72]               @ 0x48 
+    /*000000b0*/ CMP         R8, #1 
+    /*000000b4*/ BHI         HI_MPI_HDMI_SetAttr_xdcc
+    /*000000b8*/ LDR         R9, [R4, #76]               @ 0x4c 
+    /*000000bc*/ CMP         R9, #1 
+    /*000000c0*/ BHI         HI_MPI_HDMI_SetAttr_xe10
+    /*000000c4*/ LDR         SL, [R4, #80]               @ 0x50 
+    /*000000c8*/ CMP         SL, #1 
+    /*000000cc*/ BHI         HI_MPI_HDMI_SetAttr_xe54
+    /*000000d0*/ LDR         R2, [R4, #84]               @ 0x54 
+    /*000000d4*/ STR         R2, [SP] 
+    /*000000d8*/ CMP         R2, #1 
+    /*000000dc*/ BHI         HI_MPI_HDMI_SetAttr_xe98
+    /*000000e0*/ LDR         R2, [R4, #96]               @ 0x60 
+    /*000000e4*/ CMP         R2, #1 
+    /*000000e8*/ BHI         HI_MPI_HDMI_SetAttr_xedc
+    /*000000ec*/ LDR         R2, [R4, #100]              @ 0x64 
+    /*000000f0*/ CMP         R2, #1 
+    /*000000f4*/ BHI         HI_MPI_HDMI_SetAttr_xf20
+    /*000000f8*/ LDR         R2, [R4, #104]              @ 0x68 
+    /*000000fc*/ CMP         R2, #1 
+    /*00000100*/ BHI         HI_MPI_HDMI_SetAttr_xf64
+    /*00000104*/ SUB         R1, R3, #15 
+    /*00000108*/ SUB         LR, R3, #12 
+    /*0000010c*/ SUB         R2, R3, #27 
+    /*00000110*/ CMP         R1, #3 
+    /*00000114*/ CMPHI       LR, #1 
+    /*00000118*/ SUB         LR, R3, #31 
+    /*0000011c*/ MOVLS       R1, #1 
+    /*00000120*/ MOVHI       R1, #0 
+    /*00000124*/ CMP         R3, #22 
+    /*00000128*/ ORREQ       R1, R1, #1 
+    /*0000012c*/ CMP         R2, #1 
+    /*00000130*/ MOVHI       R2, R1 
+    /*00000134*/ ORRLS       R2, R1, #1 
+    /*00000138*/ BICS        R1, LR, #2 
+    /*0000013c*/ ORREQ       R2, R2, #1 
+    /*00000140*/ CMP         R2, #0 
+    /*00000144*/ BNE         HI_MPI_HDMI_SetAttr_x33c
+    /*00000148*/ CMP         R3, #51                     @ 0x33 
+    /*0000014c*/ BHI         HI_MPI_HDMI_SetAttr_x131c
+    /*00000150*/ LDR         R3, [R4, #16] 
+    /*00000154*/ CMP         R3, #3 
+    /*00000158*/ BHI         HI_MPI_HDMI_SetAttr_x13a4
+    /*0000015c*/ LDR         R2, [R4, #24] 
+    /*00000160*/ SUBS        R1, R2, #255                @ 0xff 
+    /*00000164*/ MOVNE       R1, #1 
+    /*00000168*/ CMP         R2, #255                    @ 0xff 
+    /*0000016c*/ CMPNE       R2, #2 
+    /*00000170*/ STR         R1, [SP, #12] 
+    /*00000174*/ BHI         HI_MPI_HDMI_SetAttr_x13e8
+    /*00000178*/ LDR         R1, [R4, #20] 
+    /*0000017c*/ CMP         R1, #1 
+    /*00000180*/ BHI         HI_MPI_HDMI_SetAttr_xfa8
+    /*00000184*/ LDR         R1, [R4, #92]               @ 0x5c 
+    /*00000188*/ CMP         R1, #3 
+    /*0000018c*/ BHI         HI_MPI_HDMI_SetAttr_x1360
+    /*00000190*/ CMP         IP, #0 
+    /*00000194*/ BNE         HI_MPI_HDMI_SetAttr_x1594
+    /*00000198*/ CMP         R7, #0 
+    /*0000019c*/ BNE         HI_MPI_HDMI_SetAttr_x142c
+    /*000001a0*/ CMP         R8, #0 
+    /*000001a4*/ BNE         HI_MPI_HDMI_SetAttr_x1474
+    /*000001a8*/ CMP         R9, #0 
+    /*000001ac*/ BNE         HI_MPI_HDMI_SetAttr_xae8
+    /*000001b0*/ CMP         SL, #0 
+    /*000001b4*/ BNE         HI_MPI_HDMI_SetAttr_x154c
+    /*000001b8*/ LDR         R1, [SP] 
+    /*000001bc*/ CMP         R1, #0 
+    /*000001c0*/ BNE         HI_MPI_HDMI_SetAttr_x1504
+    /*000001c4*/ LDRB        R1, [R4, #48]               @ 0x30 
+    /*000001c8*/ CMP         R1, #0 
+    /*000001cc*/ BNE         HI_MPI_HDMI_SetAttr_x14bc
+    /*000001d0*/ CMP         R3, #1 
+    /*000001d4*/ BNE         HI_MPI_HDMI_SetAttr_x1f4
+    /*000001d8*/ SUBS        R3, R2, #255                @ 0xff 
+    /*000001dc*/ MOVNE       R3, #1 
+    /*000001e0*/ CMP         R2, #0 
+    /*000001e4*/ MOVEQ       R3, #0 
+    /*000001e8*/ ANDNE       R3, R3, #1 
+    /*000001ec*/ CMP         R3, #0 
+    /*000001f0*/ BNE         HI_MPI_HDMI_SetAttr_x1658
+    HI_MPI_HDMI_SetAttr_x1f4:
+    /*000001f4*/ LDR         R3, [R4, #36]               @ 0x24 
+    /*000001f8*/ CMP         R3, #0 
+    /*000001fc*/ BNE         HI_MPI_HDMI_SetAttr_xa04
+    /*00000200*/ LDR         R1, [R4, #44]               @ 0x2c 
+    /*00000204*/ MOVW        LR, #11025                  @ 0x2b11 
+    /*00000208*/ MOVW        R8, #12000                  @ 0x2ee0 
+    /*0000020c*/ MOVW        IP, #44100                  @ 0xac44 
+    /*00000210*/ CMP         R1, #0 
+    /*00000214*/ CMPNE       R1, #8000                   @ 0x1f40 
+    /*00000218*/ MOVW        R9, #22050                  @ 0x5622 
+    /*0000021c*/ MOVNE       R3, #1 
+    /*00000220*/ MOVEQ       R3, #0 
+    /*00000224*/ MOVW        R7, #24000                  @ 0x5dc0 
+    /*00000228*/ MOV         SL, #30464                  @ 0x7700 
+    /*0000022c*/ CMP         R1, LR 
+    /*00000230*/ MOVEQ       R3, #0 
+    /*00000234*/ ANDNE       R3, R3, #1 
+    /*00000238*/ MOVW        LR, #48000                  @ 0xbb80 
+    /*0000023c*/ SUBS        IP, R1, IP 
+    /*00000240*/ MOVT        SL, #1 
+    /*00000244*/ MOVNE       IP, #1 
+    /*00000248*/ CMP         R1, R8 
+    /*0000024c*/ MOVEQ       R3, #0 
+    /*00000250*/ ANDNE       R3, R3, #1 
+    /*00000254*/ MOVW        R8, #22664                  @ 0x5888 
+    /*00000258*/ SUBS        LR, R1, LR 
+    /*0000025c*/ MOVT        R8, #1 
+    /*00000260*/ MOVNE       LR, #1 
+    /*00000264*/ CMP         R1, #16000                  @ 0x3e80 
+    /*00000268*/ MOVEQ       R3, #0 
+    /*0000026c*/ ANDNE       R3, R3, #1 
+    /*00000270*/ CMP         R1, R9 
+    /*00000274*/ MOVEQ       R3, #0 
+    /*00000278*/ ANDNE       R3, R3, #1 
+    /*0000027c*/ MOVW        R9, #45328                  @ 0xb110 
+    /*00000280*/ MOVT        R9, #2 
+    /*00000284*/ CMP         R1, R7 
+    /*00000288*/ MOVEQ       R3, #0 
+    /*0000028c*/ ANDNE       R3, R3, #1 
+    /*00000290*/ SUBS        R7, R1, #32000              @ 0x7d00 
+    /*00000294*/ MOVNE       R7, #1 
+    /*00000298*/ AND         R3, R3, R7 
+    /*0000029c*/ AND         R3, R3, IP 
+    /*000002a0*/ AND         R3, R3, LR 
+    /*000002a4*/ CMP         R1, R8 
+    /*000002a8*/ MOVEQ       R3, #0 
+    /*000002ac*/ ANDNE       R3, R3, #1 
+    /*000002b0*/ MOV         R8, #60928                  @ 0xee00 
+    /*000002b4*/ MOVT        R8, #2 
+    /*000002b8*/ CMP         R1, SL 
+    /*000002bc*/ MOVEQ       R3, #0 
+    /*000002c0*/ ANDNE       R3, R3, #1 
+    /*000002c4*/ MOV         SL, #47104                  @ 0xb800 
+    /*000002c8*/ MOVT        SL, #11 
+    /*000002cc*/ CMP         R1, R9 
+    /*000002d0*/ MOVEQ       R3, #0 
+    /*000002d4*/ ANDNE       R3, R3, #1 
+    /*000002d8*/ CMP         R1, R8 
+    /*000002dc*/ MOVEQ       R3, #0 
+    /*000002e0*/ ANDNE       R3, R3, #1 
+    /*000002e4*/ CMP         R1, SL 
+    /*000002e8*/ MOVEQ       R3, #0 
+    /*000002ec*/ ANDNE       R3, R3, #1 
+    /*000002f0*/ CMP         R3, #0 
+    /*000002f4*/ BEQ         HI_MPI_HDMI_SetAttr_x398
+    /*000002f8*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #3900]             @ 0x000000000000123c 
+    /*000002fc*/ MOVW        R3, #1927                   @ 0x787 
+    /*00000300*/ LDR         R2, WORD_0ff4               @ LDR         R2, [PC, #3308]             @ 0x0000000000000ff4 
+    /*00000304*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000308*/ LDR         R5, [R5, R1] 
+    /*0000030c*/ LDR         R1, WORD_0ff8               @ LDR         R1, [PC, #3300]             @ 0x0000000000000ff8 
+    /*00000310*/ ADD         R2, PC, R2 
+    /*00000314*/ ADD         R1, PC, R1 
+    /*00000318*/ LDR         R0, [R5] 
+    /*0000031c*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000320*/ BL          fprintf
+    /*00000324*/ LDR         R1, WORD_0ffc               @ LDR         R1, [PC, #3280]             @ 0x0000000000000ffc 
+    /*00000328*/ LDR         R0, [R5] 
+    /*0000032c*/ LDR         R2, [R4, #44]               @ 0x2c 
+    /*00000330*/ ADD         R1, PC, R1 
+    /*00000334*/ BL          fprintf
+    /*00000338*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x33c:
+    /*0000033c*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #3832]             @ 0x000000000000123c 
+    /*00000340*/ MOVW        R3, #2025                   @ 0x7e9 
+    /*00000344*/ LDR         R2, WORD_1000               @ LDR         R2, [PC, #3252]             @ 0x0000000000001000 
+    /*00000348*/ MOVW        R8, #32778                  @ 0x800a 
+    /*0000034c*/ LDR         R5, [R5, R1] 
+    /*00000350*/ LDR         R1, WORD_1004               @ LDR         R1, [PC, #3244]             @ 0x0000000000001004 
+    /*00000354*/ ADD         R2, PC, R2 
+    /*00000358*/ ADD         R1, PC, R1 
+    /*0000035c*/ LDR         R0, [R5] 
+    /*00000360*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000364*/ BL          fprintf
+    /*00000368*/ LDR         R1, WORD_1008               @ LDR         R1, [PC, #3224]             @ 0x0000000000001008 
+    /*0000036c*/ LDR         R0, [R5] 
+    /*00000370*/ LDR         R2, [R4, #8] 
+    /*00000374*/ ADD         R1, PC, R1 
+    /*00000378*/ BL          fprintf
+    HI_MPI_HDMI_SetAttr_x37c:
+    /*0000037c*/ LDR         R2, [SP, #204]              @ 0xcc 
+    /*00000380*/ MOV         R0, R8 
+    /*00000384*/ LDR         R3, [R6] 
+    /*00000388*/ CMP         R2, R3 
+    /*0000038c*/ BNE         HI_MPI_HDMI_SetAttr_x169c
+    /*00000390*/ ADD         SP, SP, #212                @ 0xd4 
+    /*00000394*/ POP         {R4, R5, R6, R7, R8, R9, SL, FP, PC} 
+    HI_MPI_HDMI_SetAttr_x398:
+    /*00000398*/ AND         IP, IP, R7 
+    /*0000039c*/ TST         LR, IP 
+    /*000003a0*/ BNE         HI_MPI_HDMI_SetAttr_x15dc
+    /*000003a4*/ LDR         R1, [R4, #52]               @ 0x34 
+    /*000003a8*/ BIC         R7, R1, #2 
+    /*000003ac*/ BICS        IP, R1, #8 
+    /*000003b0*/ MOVNE       R3, #1 
+    /*000003b4*/ MOVEQ       R3, #0 
+    /*000003b8*/ SUB         LR, R1, #20 
+    /*000003bc*/ CMP         R7, #16 
+    /*000003c0*/ MOVEQ       R3, #0 
+    /*000003c4*/ ANDNE       R3, R3, #1 
+    /*000003c8*/ CMP         R1, #32 
+    /*000003cc*/ MOVEQ       R3, #0 
+    /*000003d0*/ ANDNE       R3, R3, #1 
+    /*000003d4*/ BICS        LR, LR, #4 
+    /*000003d8*/ MOVEQ       R3, #0 
+    /*000003dc*/ ANDNE       R3, R3, #1 
+    /*000003e0*/ CMP         R3, #0 
+    /*000003e4*/ BEQ         HI_MPI_HDMI_SetAttr_x42c
+    /*000003e8*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #3660]             @ 0x000000000000123c 
+    /*000003ec*/ MOVW        R3, #1948                   @ 0x79c 
+    /*000003f0*/ LDR         R2, WORD_100c               @ LDR         R2, [PC, #3092]             @ 0x000000000000100c 
+    /*000003f4*/ MOVW        R8, #32770                  @ 0x8002 
+    /*000003f8*/ LDR         R5, [R5, R1] 
+    /*000003fc*/ LDR         R1, WORD_1010               @ LDR         R1, [PC, #3084]             @ 0x0000000000001010 
+    /*00000400*/ ADD         R2, PC, R2 
+    /*00000404*/ ADD         R1, PC, R1 
+    /*00000408*/ LDR         R0, [R5] 
+    /*0000040c*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000410*/ BL          fprintf
+    /*00000414*/ LDR         R1, WORD_1014               @ LDR         R1, [PC, #3064]             @ 0x0000000000001014 
+    /*00000418*/ LDR         R0, [R5] 
+    /*0000041c*/ LDR         R2, [R4, #52]               @ 0x34 
+    /*00000420*/ ADD         R1, PC, R1 
+    /*00000424*/ BL          fprintf
+    /*00000428*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x42c:
+    /*0000042c*/ CMP         IP, #0 
+    /*00000430*/ CMPNE       R1, #32 
+    /*00000434*/ BEQ         HI_MPI_HDMI_SetAttr_x12d8
+    /*00000438*/ CMP         R0, #0 
+    /*0000043c*/ BNE         HI_MPI_HDMI_SetAttr_x9b0
+    /*00000440*/ LDMIB       SP, {R1, R3} 
+    /*00000444*/ ORR         R3, R3, R1 
+    /*00000448*/ ORR         R3, R3, FP 
+    /*0000044c*/ TST         R3, #1 
+    /*00000450*/ BNE         HI_MPI_HDMI_SetAttr_x470
+    /*00000454*/ SUBS        R3, R2, #255                @ 0xff 
+    /*00000458*/ MOVNE       R3, #1 
+    /*0000045c*/ CMP         R2, #0 
+    /*00000460*/ MOVEQ       R3, #0 
+    /*00000464*/ ANDNE       R3, R3, #1 
+    /*00000468*/ CMP         R3, #0 
+    /*0000046c*/ BEQ         HI_MPI_HDMI_SetAttr_x9b0
+    HI_MPI_HDMI_SetAttr_x470:
+    /*00000470*/ LDR         R2, WORD_123c               @ LDR         R2, [PC, #3524]             @ 0x000000000000123c 
+    /*00000474*/ MOVW        R3, #1976                   @ 0x7b8 
+    /*00000478*/ LDR         R8, WORD_1018               @ LDR         R8, [PC, #2968]             @ 0x0000000000001018 
+    /*0000047c*/ LDR         R7, [R5, R2] 
+    /*00000480*/ LDR         R2, WORD_101c               @ LDR         R2, [PC, #2964]             @ 0x000000000000101c 
+    /*00000484*/ ADD         R8, PC, R8 
+    /*00000488*/ ADD         R2, PC, R2 
+    /*0000048c*/ MOV         R1, R8 
+    /*00000490*/ LDR         R0, [R7] 
+    /*00000494*/ BL          fprintf
+    /*00000498*/ LDR         R0, WORD_1020               @ LDR         R0, [PC, #2944]             @ 0x0000000000001020 
+    /*0000049c*/ MOV         R2, #88                     @ 0x58 
+    /*000004a0*/ LDR         R3, [R7] 
+    /*000004a4*/ MOV         R1, #1 
+    /*000004a8*/ ADD         R0, PC, R0 
+    /*000004ac*/ BL          fwrite
+    /*000004b0*/ LDRB        R3, [R4, #56]               @ 0x38 
+    /*000004b4*/ CMP         R3, #0 
+    /*000004b8*/ BNE         HI_MPI_HDMI_SetAttr_x9c4
+    /*000004bc*/ LDR         R3, [R4, #92]               @ 0x5c 
+    /*000004c0*/ CMP         R3, #3 
+    /*000004c4*/ BHI         HI_MPI_HDMI_SetAttr_x1620
+    HI_MPI_HDMI_SetAttr_x4c8:
+    /*000004c8*/ LDRB        R2, [R4, #88]               @ 0x58 
+    /*000004cc*/ SUB         R3, R2, #8 
+    /*000004d0*/ CMP         R3, #1 
+    /*000004d4*/ CMPHI       R2, #6 
+    /*000004d8*/ MOVHI       R3, #1 
+    /*000004dc*/ MOVLS       R3, #0 
+    /*000004e0*/ BLS         HI_MPI_HDMI_SetAttr_x5a4
+    /*000004e4*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #3408]             @ 0x000000000000123c 
+    /*000004e8*/ MOVW        R3, #2158                   @ 0x86e 
+    /*000004ec*/ LDR         R2, WORD_1024               @ LDR         R2, [PC, #2864]             @ 0x0000000000001024 
+    /*000004f0*/ MOVW        R8, #32770                  @ 0x8002 
+    /*000004f4*/ LDR         R5, [R5, R1] 
+    /*000004f8*/ LDR         R1, WORD_1028               @ LDR         R1, [PC, #2856]             @ 0x0000000000001028 
+    /*000004fc*/ ADD         R2, PC, R2 
+    /*00000500*/ ADD         R1, PC, R1 
+    /*00000504*/ LDR         R0, [R5] 
+    /*00000508*/ MOVT        R8, #41000                  @ 0xa028 
+    /*0000050c*/ BL          fprintf
+    /*00000510*/ LDR         R1, WORD_102c               @ LDR         R1, [PC, #2836]             @ 0x000000000000102c 
+    /*00000514*/ LDR         R0, [R5] 
+    /*00000518*/ LDRB        R2, [R4, #88]               @ 0x58 
+    /*0000051c*/ ADD         R1, PC, R1 
+    /*00000520*/ BL          fprintf
+    /*00000524*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x528:
+    /*00000528*/ LDR         R2, WORD_123c               @ LDR         R2, [PC, #3340]             @ 0x000000000000123c 
+    /*0000052c*/ MOVW        R3, #1882                   @ 0x75a 
+    /*00000530*/ LDR         R1, WORD_1030               @ LDR         R1, [PC, #2808]             @ 0x0000000000001030 
+    /*00000534*/ MOVW        R8, #32778                  @ 0x800a 
+    /*00000538*/ LDR         R4, [R5, R2] 
+    /*0000053c*/ LDR         R2, WORD_1034               @ LDR         R2, [PC, #2800]             @ 0x0000000000001034 
+    /*00000540*/ ADD         R1, PC, R1 
+    /*00000544*/ ADD         R2, PC, R2 
+    /*00000548*/ MOV         R5, R1 
+    /*0000054c*/ LDR         R0, [R4] 
+    /*00000550*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000554*/ BL          fprintf
+    /*00000558*/ LDR         R0, WORD_1038               @ LDR         R0, [PC, #2776]             @ 0x0000000000001038 
+    /*0000055c*/ MOV         R2, #51                     @ 0x33 
+    /*00000560*/ LDR         R3, [R4] 
+    /*00000564*/ MOV         R1, #1 
+    /*00000568*/ ADD         R0, PC, R0 
+    /*0000056c*/ BL          fwrite
+    /*00000570*/ LDR         R2, WORD_103c               @ LDR         R2, [PC, #2756]             @ 0x000000000000103c 
+    /*00000574*/ MOV         R1, R5 
+    /*00000578*/ LDR         R0, [R4] 
+    /*0000057c*/ MOVW        R3, #1993                   @ 0x7c9 
+    /*00000580*/ ADD         R2, PC, R2 
+    /*00000584*/ BL          fprintf
+    /*00000588*/ LDR         R1, WORD_1040               @ LDR         R1, [PC, #2736]             @ 0x0000000000001040 
+    /*0000058c*/ MOVW        R2, #32778                  @ 0x800a 
+    /*00000590*/ LDR         R0, [R4] 
+    /*00000594*/ MOVT        R2, #41000                  @ 0xa028 
+    /*00000598*/ ADD         R1, PC, R1 
+    /*0000059c*/ BL          fprintf
+    /*000005a0*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x5a4:
+    /*000005a4*/ CMP         R2, #9 
+    /*000005a8*/ BNE         HI_MPI_HDMI_SetAttr_x1294
+    /*000005ac*/ ADD         R9, SP, #208                @ 0xd0 
+    /*000005b0*/ MOV         R0, R3 
+    /*000005b4*/ STR         R3, [R9, #-160]!            @ 0xffffff60 
+    /*000005b8*/ MOV         R1, R9 
+    /*000005bc*/ BL          HI_MPI_HDMI_ComGetVOAttr
+    /*000005c0*/ SUBS        R8, R0, #0 
+    /*000005c4*/ BNE         HI_MPI_HDMI_SetAttr_x938
+    /*000005c8*/ LDR         R7, [R4, #8] 
+    /*000005cc*/ MOV         R2, R8 
+    /*000005d0*/ LDR         R1, WORD_1044               @ LDR         R1, [PC, #2668]             @ 0x0000000000001044 
+    /*000005d4*/ MOV         R3, R8 
+    /*000005d8*/ STR         R8, [SP, #48]               @ 0x30 
+    /*000005dc*/ ADD         R1, PC, R1 
+    /*000005e0*/ STR         R7, [SP, #120]              @ 0x78 
+    /*000005e4*/ B           HI_MPI_HDMI_SetAttr_x5f8
+    HI_MPI_HDMI_SetAttr_x5e8:
+    /*000005e8*/ ADD         R3, R3, #1 
+    /*000005ec*/ CMP         R3, #50                     @ 0x32 
+    /*000005f0*/ BEQ         HI_MPI_HDMI_SetAttr_x928
+    /*000005f4*/ LDR         R2, [R1, R3, LSL #3] 
+    HI_MPI_HDMI_SetAttr_x5f8:
+    /*000005f8*/ CMP         R7, R2 
+    /*000005fc*/ BNE         HI_MPI_HDMI_SetAttr_x5e8
+    /*00000600*/ LDR         R2, WORD_1048               @ LDR         R2, [PC, #2624]             @ 0x0000000000001048 
+    /*00000604*/ ADD         R2, PC, R2 
+    /*00000608*/ ADD         R3, R2, R3, LSL #3 
+    /*0000060c*/ LDR         R0, [R3, #4] 
+    HI_MPI_HDMI_SetAttr_x610:
+    /*00000610*/ STR         R0, [SP, #76]               @ 0x4c 
+    /*00000614*/ SUB         R2, R0, #1 
+    /*00000618*/ SUB         IP, R0, #16 
+    /*0000061c*/ MOV         R1, R2 
+    /*00000620*/ MOV         R2, IP 
+    /*00000624*/ SUB         R3, R0, #22 
+    /*00000628*/ CMP         IP, #2 
+    /*0000062c*/ CMPHI       R1, #1 
+    /*00000630*/ MOVLS       R2, #1 
+    /*00000634*/ MOVHI       R2, #0 
+    /*00000638*/ CMP         R0, #5 
+    /*0000063c*/ ORREQ       R2, R2, #1 
+    /*00000640*/ CMP         R3, #2 
+    /*00000644*/ MOVHI       R3, R2 
+    /*00000648*/ ORRLS       R3, R2, #1 
+    /*0000064c*/ CMP         R3, #0 
+    /*00000650*/ BNE         HI_MPI_HDMI_SetAttr_x8e0
+    /*00000654*/ SUB         R0, R0, #69                 @ 0x45 
+    /*00000658*/ CMP         R0, #5 
+    /*0000065c*/ MOVLS       R3, #4 
+    /*00000660*/ STRLS       R3, [SP, #104]              @ 0x68 
+    /*00000664*/ MOVHI       R3, #2 
+    /*00000668*/ STRHI       R3, [SP, #104]              @ 0x68 
+    HI_MPI_HDMI_SetAttr_x66c:
+    /*0000066c*/ CMP         R7, #51                     @ 0x33 
+    /*00000670*/ LDREQ       R3, [R4, #108]              @ 0x6c 
+    /*00000674*/ BEQ         HI_MPI_HDMI_SetAttr_x680
+    /*00000678*/ MVNHI       R3, #0 
+    /*0000067c*/ BLS         HI_MPI_HDMI_SetAttr_xa5c
+    HI_MPI_HDMI_SetAttr_x680:
+    /*00000680*/ STR         R3, [SP, #52]               @ 0x34 
+    /*00000684*/ MOV         R1, R9 
+    /*00000688*/ MOV         R3, #9 
+    /*0000068c*/ MOV         R7, #2 
+    /*00000690*/ STR         R7, [SP, #84]               @ 0x54 
+    /*00000694*/ MOV         R0, #0 
+    /*00000698*/ STR         R3, [SP, #80]               @ 0x50 
+    /*0000069c*/ BL          HI_MPI_HDMI_ComSetVOAttr
+    /*000006a0*/ SUBS        R8, R0, #0 
+    /*000006a4*/ BNE         HI_MPI_HDMI_SetAttr_x974
+    /*000006a8*/ LDR         R3, [R4, #20] 
+    /*000006ac*/ LDR         R0, [R4] 
+    /*000006b0*/ LDR         R1, [R4, #4] 
+    /*000006b4*/ CMP         R3, #0 
+    /*000006b8*/ LDR         R2, [R4, #32] 
+    /*000006bc*/ MOVEQ       R3, #1 
+    /*000006c0*/ STR         R8, [SP, #124]              @ 0x7c 
+    /*000006c4*/ STR         R0, [SP, #128]              @ 0x80 
+    /*000006c8*/ STR         R1, [SP, #132]              @ 0x84 
+    /*000006cc*/ STR         R2, [SP, #136]              @ 0x88 
+    /*000006d0*/ STREQ       R3, [SP, #144]              @ 0x90 
+    /*000006d4*/ BEQ         HI_MPI_HDMI_SetAttr_x6e8
+    /*000006d8*/ CMP         R3, #1 
+    /*000006dc*/ STREQ       R7, [SP, #144]              @ 0x90 
+    /*000006e0*/ MOVNE       R3, #3 
+    /*000006e4*/ STRNE       R3, [SP, #144]              @ 0x90 
+    HI_MPI_HDMI_SetAttr_x6e8:
+    /*000006e8*/ LDR         R3, [R4, #16] 
+    /*000006ec*/ CMP         R3, #0 
+    /*000006f0*/ BEQ         HI_MPI_HDMI_SetAttr_x70c
+    /*000006f4*/ CMP         R3, #1 
+    /*000006f8*/ BEQ         HI_MPI_HDMI_SetAttr_x70c
+    /*000006fc*/ CMP         R3, #2 
+    /*00000700*/ BEQ         HI_MPI_HDMI_SetAttr_x70c
+    /*00000704*/ CMP         R3, #3 
+    /*00000708*/ MOVNE       R3, #4 
+    HI_MPI_HDMI_SetAttr_x70c:
+    /*0000070c*/ STR         R3, [SP, #140]              @ 0x8c 
+    /*00000710*/ LDR         R3, [R4, #24] 
+    /*00000714*/ CMP         R3, #0 
+    /*00000718*/ BEQ         HI_MPI_HDMI_SetAttr_x734
+    /*0000071c*/ CMP         R3, #1 
+    /*00000720*/ BEQ         HI_MPI_HDMI_SetAttr_x734
+    /*00000724*/ CMP         R3, #2 
+    /*00000728*/ BEQ         HI_MPI_HDMI_SetAttr_x734
+    /*0000072c*/ CMP         R3, #255                    @ 0xff 
+    /*00000730*/ MOVNE       R3, #256                    @ 0x100 
+    HI_MPI_HDMI_SetAttr_x734:
+    /*00000734*/ LDR         IP, [R4, #60]               @ 0x3c 
+    /*00000738*/ ADD         R1, SP, #124                @ 0x7c 
+    /*0000073c*/ LDR         R2, [R4, #64]               @ 0x40 
+    /*00000740*/ STR         R3, [SP, #148]              @ 0x94 
+    /*00000744*/ MOV         R3, #0 
+    /*00000748*/ LDR         LR, [R4, #92]               @ 0x5c 
+    /*0000074c*/ MOV         R0, R3 
+    /*00000750*/ STR         R3, [SP, #152]              @ 0x98 
+    /*00000754*/ STR         R3, [SP, #160]              @ 0xa0 
+    /*00000758*/ STR         R3, [SP, #164]              @ 0xa4 
+    /*0000075c*/ STR         R3, [SP, #172]              @ 0xac 
+    /*00000760*/ STR         R3, [SP, #176]              @ 0xb0 
+    /*00000764*/ STR         R3, [SP, #200]              @ 0xc8 
+    /*00000768*/ STR         IP, [SP, #156]              @ 0x9c 
+    /*0000076c*/ STR         R2, [SP, #168]              @ 0xa8 
+    /*00000770*/ LDR         IP, [R4, #96]               @ 0x60 
+    /*00000774*/ LDR         R2, [R4, #100]              @ 0x64 
+    /*00000778*/ LDR         R3, [R4, #104]              @ 0x68 
+    /*0000077c*/ STR         LR, [SP, #180]              @ 0xb4 
+    /*00000780*/ STR         IP, [SP, #192]              @ 0xc0 
+    /*00000784*/ STR         R2, [SP, #184]              @ 0xb8 
+    /*00000788*/ STR         R3, [SP, #188]              @ 0xbc 
+    /*0000078c*/ BL          HI_MPI_HDMI_ComSetAttr
+    /*00000790*/ SUBS        R8, R0, #0 
+    /*00000794*/ BNE         HI_MPI_HDMI_SetAttr_x8ec
+    /*00000798*/ ADD         R7, SP, #208                @ 0xd0 
+    /*0000079c*/ STR         R8, [R7, #-188]!            @ 0xffffff44 
+    /*000007a0*/ MOV         R1, R7 
+    /*000007a4*/ BL          HI_MPI_HDMI_ComGetAOAttr
+    /*000007a8*/ SUBS        R8, R0, #0 
+    /*000007ac*/ BNE         HI_MPI_HDMI_SetAttr_xb30
+    /*000007b0*/ LDR         R3, [R4, #44]               @ 0x2c 
+    /*000007b4*/ LDRB        R2, [R4, #48]               @ 0x30 
+    /*000007b8*/ STR         R8, [SP, #20] 
+    /*000007bc*/ CMP         R3, #0 
+    /*000007c0*/ STR         R2, [SP, #24] 
+    /*000007c4*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*000007c8*/ CMP         R3, #8000                   @ 0x1f40 
+    /*000007cc*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*000007d0*/ MOVW        R2, #11025                  @ 0x2b11 
+    /*000007d4*/ CMP         R3, R2 
+    /*000007d8*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*000007dc*/ MOVW        R2, #12000                  @ 0x2ee0 
+    /*000007e0*/ CMP         R3, R2 
+    /*000007e4*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*000007e8*/ CMP         R3, #16000                  @ 0x3e80 
+    /*000007ec*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*000007f0*/ MOVW        R2, #22050                  @ 0x5622 
+    /*000007f4*/ CMP         R3, R2 
+    /*000007f8*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*000007fc*/ MOVW        R2, #24000                  @ 0x5dc0 
+    /*00000800*/ CMP         R3, R2 
+    /*00000804*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*00000808*/ CMP         R3, #32000                  @ 0x7d00 
+    /*0000080c*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*00000810*/ MOVW        R2, #44100                  @ 0xac44 
+    /*00000814*/ CMP         R3, R2 
+    /*00000818*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*0000081c*/ MOVW        R2, #48000                  @ 0xbb80 
+    /*00000820*/ CMP         R3, R2 
+    /*00000824*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*00000828*/ MOVW        R2, #22664                  @ 0x5888 
+    /*0000082c*/ MOVT        R2, #1 
+    /*00000830*/ CMP         R3, R2 
+    /*00000834*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*00000838*/ MOV         R2, #30464                  @ 0x7700 
+    /*0000083c*/ MOVT        R2, #1 
+    /*00000840*/ CMP         R3, R2 
+    /*00000844*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*00000848*/ MOVW        R2, #45328                  @ 0xb110 
+    /*0000084c*/ MOVT        R2, #2 
+    /*00000850*/ CMP         R3, R2 
+    /*00000854*/ BEQ         HI_MPI_HDMI_SetAttr_x868
+    /*00000858*/ MOV         R2, #60928                  @ 0xee00 
+    /*0000085c*/ MOVT        R2, #2 
+    /*00000860*/ CMP         R3, R2 
+    /*00000864*/ MOVNE       R3, #0 
+    HI_MPI_HDMI_SetAttr_x868:
+    /*00000868*/ LDR         IP, [R4, #40]               @ 0x28 
+    /*0000086c*/ MOV         R0, #0 
+    /*00000870*/ LDR         R2, [R4, #36]               @ 0x24 
+    /*00000874*/ MOV         R1, R7 
+    /*00000878*/ CMP         IP, R0 
+    /*0000087c*/ STR         R3, [SP, #28] 
+    /*00000880*/ LDR         R3, [R4, #52]               @ 0x34 
+    /*00000884*/ STR         R2, [SP, #36]               @ 0x24 
+    /*00000888*/ MOVEQ       R2, #2 
+    /*0000088c*/ STR         R3, [SP, #40]               @ 0x28 
+    /*00000890*/ MOVNE       R2, #8 
+    /*00000894*/ STR         R2, [SP, #32] 
+    /*00000898*/ BL          HI_MPI_HDMI_ComSetAOAttr
+    /*0000089c*/ SUBS        R8, R0, #0 
+    /*000008a0*/ BEQ         HI_MPI_HDMI_SetAttr_x37c
+    /*000008a4*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #2448]             @ 0x000000000000123c 
+    /*000008a8*/ MOVW        R3, #2356                   @ 0x934 
+    /*000008ac*/ LDR         R2, WORD_104c               @ LDR         R2, [PC, #1944]             @ 0x000000000000104c 
+    /*000008b0*/ LDR         R4, [R5, R1] 
+    /*000008b4*/ LDR         R1, WORD_1050               @ LDR         R1, [PC, #1940]             @ 0x0000000000001050 
+    /*000008b8*/ ADD         R2, PC, R2 
+    /*000008bc*/ ADD         R1, PC, R1 
+    /*000008c0*/ LDR         R0, [R4] 
+    /*000008c4*/ BL          fprintf
+    /*000008c8*/ LDR         R1, WORD_1054               @ LDR         R1, [PC, #1924]             @ 0x0000000000001054 
+    /*000008cc*/ MOV         R2, R8 
+    /*000008d0*/ LDR         R0, [R4] 
+    /*000008d4*/ ADD         R1, PC, R1 
+    /*000008d8*/ BL          fprintf
+    /*000008dc*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x8e0:
+    /*000008e0*/ MOV         R3, #1 
+    /*000008e4*/ STR         R3, [SP, #104]              @ 0x68 
+    /*000008e8*/ B           HI_MPI_HDMI_SetAttr_x66c
+    HI_MPI_HDMI_SetAttr_x8ec:
+    /*000008ec*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #2376]             @ 0x000000000000123c 
+    /*000008f0*/ MOVW        R3, #2343                   @ 0x927 
+    /*000008f4*/ LDR         R2, WORD_1058               @ LDR         R2, [PC, #1884]             @ 0x0000000000001058 
+    /*000008f8*/ LDR         R4, [R5, R1] 
+    /*000008fc*/ LDR         R1, WORD_105c               @ LDR         R1, [PC, #1880]             @ 0x000000000000105c 
+    /*00000900*/ ADD         R2, PC, R2 
+    /*00000904*/ ADD         R1, PC, R1 
+    /*00000908*/ LDR         R0, [R4] 
+    /*0000090c*/ BL          fprintf
+    /*00000910*/ LDR         R1, WORD_1060               @ LDR         R1, [PC, #1864]             @ 0x0000000000001060 
+    /*00000914*/ MOV         R2, R8 
+    /*00000918*/ LDR         R0, [R4] 
+    /*0000091c*/ ADD         R1, PC, R1 
+    /*00000920*/ BL          fprintf
+    /*00000924*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x928:
+    /*00000928*/ MOV         R0, R7 
+    /*0000092c*/ BL          Hdmi_Fmt2HdmiTiming.part.0
+    /*00000930*/ LDR         R7, [R4, #8] 
+    /*00000934*/ B           HI_MPI_HDMI_SetAttr_x610
+    HI_MPI_HDMI_SetAttr_x938:
+    /*00000938*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #2300]             @ 0x000000000000123c 
+    /*0000093c*/ MOVW        R3, #2274                   @ 0x8e2 
+    /*00000940*/ LDR         R2, WORD_1064               @ LDR         R2, [PC, #1820]             @ 0x0000000000001064 
+    /*00000944*/ LDR         R4, [R5, R1] 
+    /*00000948*/ LDR         R1, WORD_1068               @ LDR         R1, [PC, #1816]             @ 0x0000000000001068 
+    /*0000094c*/ ADD         R2, PC, R2 
+    /*00000950*/ ADD         R1, PC, R1 
+    /*00000954*/ LDR         R0, [R4] 
+    /*00000958*/ BL          fprintf
+    /*0000095c*/ LDR         R1, WORD_106c               @ LDR         R1, [PC, #1800]             @ 0x000000000000106c 
+    /*00000960*/ MOV         R2, R8 
+    /*00000964*/ LDR         R0, [R4] 
+    /*00000968*/ ADD         R1, PC, R1 
+    /*0000096c*/ BL          fprintf
+    /*00000970*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x974:
+    /*00000974*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #2240]             @ 0x000000000000123c 
+    /*00000978*/ MOVW        R3, #2314                   @ 0x90a 
+    /*0000097c*/ LDR         R2, WORD_1070               @ LDR         R2, [PC, #1772]             @ 0x0000000000001070 
+    /*00000980*/ LDR         R4, [R5, R1] 
+    /*00000984*/ LDR         R1, WORD_1074               @ LDR         R1, [PC, #1768]             @ 0x0000000000001074 
+    /*00000988*/ ADD         R2, PC, R2 
+    /*0000098c*/ ADD         R1, PC, R1 
+    /*00000990*/ LDR         R0, [R4] 
+    /*00000994*/ BL          fprintf
+    /*00000998*/ LDR         R1, WORD_1078               @ LDR         R1, [PC, #1752]             @ 0x0000000000001078 
+    /*0000099c*/ MOV         R2, R8 
+    /*000009a0*/ LDR         R0, [R4] 
+    /*000009a4*/ ADD         R1, PC, R1 
+    /*000009a8*/ BL          fprintf
+    /*000009ac*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x9b0:
+    /*000009b0*/ LDRB        R3, [R4, #56]               @ 0x38 
+    /*000009b4*/ CMP         R3, #0 
+    /*000009b8*/ BEQ         HI_MPI_HDMI_SetAttr_x4c8
+    /*000009bc*/ LDR         R3, WORD_123c               @ LDR         R3, [PC, #2168]             @ 0x000000000000123c 
+    /*000009c0*/ LDR         R7, [R5, R3] 
+    HI_MPI_HDMI_SetAttr_x9c4:
+    /*000009c4*/ LDR         R2, WORD_107c               @ LDR         R2, [PC, #1712]             @ 0x000000000000107c 
+    /*000009c8*/ MOVW        R3, #2137                   @ 0x859 
+    /*000009cc*/ LDR         R1, WORD_1080               @ LDR         R1, [PC, #1708]             @ 0x0000000000001080 
+    /*000009d0*/ MOVW        R8, #32778                  @ 0x800a 
+    /*000009d4*/ ADD         R2, PC, R2 
+    /*000009d8*/ ADD         R1, PC, R1 
+    /*000009dc*/ LDR         R0, [R7] 
+    /*000009e0*/ MOVT        R8, #41000                  @ 0xa028 
+    /*000009e4*/ BL          fprintf
+    /*000009e8*/ LDR         R0, WORD_1084               @ LDR         R0, [PC, #1684]             @ 0x0000000000001084 
+    /*000009ec*/ MOV         R2, #40                     @ 0x28 
+    /*000009f0*/ LDR         R3, [R7] 
+    /*000009f4*/ MOV         R1, #1 
+    /*000009f8*/ ADD         R0, PC, R0 
+    /*000009fc*/ BL          fwrite
+    /*00000a00*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xa04:
+    /*00000a04*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #2096]             @ 0x000000000000123c 
+    /*00000a08*/ MOVW        R3, #1899                   @ 0x76b 
+    /*00000a0c*/ LDR         R2, WORD_1088               @ LDR         R2, [PC, #1652]             @ 0x0000000000001088 
+    /*00000a10*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000a14*/ LDR         R5, [R5, R1] 
+    /*00000a18*/ LDR         R1, WORD_108c               @ LDR         R1, [PC, #1644]             @ 0x000000000000108c 
+    /*00000a1c*/ ADD         R2, PC, R2 
+    /*00000a20*/ ADD         R1, PC, R1 
+    /*00000a24*/ LDR         R0, [R5] 
+    /*00000a28*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000a2c*/ BL          fprintf
+    /*00000a30*/ LDR         R1, WORD_1090               @ LDR         R1, [PC, #1624]             @ 0x0000000000001090 
+    /*00000a34*/ LDR         R2, [R4, #36]               @ 0x24 
+    /*00000a38*/ LDR         R0, [R5] 
+    /*00000a3c*/ ADD         R1, PC, R1 
+    /*00000a40*/ BL          fprintf
+    /*00000a44*/ LDR         R2, [R4, #36]               @ 0x24 
+    /*00000a48*/ MOVW        R3, #32778                  @ 0x800a 
+    /*00000a4c*/ MOVT        R3, #41000                  @ 0xa028 
+    /*00000a50*/ CMP         R2, #2 
+    /*00000a54*/ MOVLS       R8, R3 
+    /*00000a58*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xa5c:
+    /*00000a5c*/ LDR         R2, WORD_1094               @ LDR         R2, [PC, #1584]             @ 0x0000000000001094 
+    /*00000a60*/ MOV         R1, #26 
+    /*00000a64*/ MOV         R3, #0 
+    /*00000a68*/ ADD         R2, PC, R2 
+    /*00000a6c*/ B           HI_MPI_HDMI_SetAttr_xa84
+    HI_MPI_HDMI_SetAttr_xa70:
+    /*00000a70*/ ADD         R3, R3, #1 
+    /*00000a74*/ ADD         R2, R2, #24 
+    /*00000a78*/ CMP         R3, #54                     @ 0x36 
+    /*00000a7c*/ BEQ         HI_MPI_HDMI_SetAttr_xd8c
+    /*00000a80*/ LDR         R1, [R2, #20] 
+    HI_MPI_HDMI_SetAttr_xa84:
+    /*00000a84*/ CMP         R1, R7 
+    /*00000a88*/ BNE         HI_MPI_HDMI_SetAttr_xa70
+    /*00000a8c*/ LDR         R2, WORD_1098               @ LDR         R2, [PC, #1540]             @ 0x0000000000001098 
+    /*00000a90*/ MOV         R1, #24 
+    /*00000a94*/ ADD         R2, PC, R2 
+    /*00000a98*/ MLA         R3, R1, R3, R2 
+    /*00000a9c*/ LDR         R3, [R3, #4] 
+    /*00000aa0*/ B           HI_MPI_HDMI_SetAttr_x680
+    HI_MPI_HDMI_SetAttr_xaa4:
+    /*00000aa4*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1936]             @ 0x000000000000123c 
+    /*00000aa8*/ MOVW        R3, #1996                   @ 0x7cc 
+    /*00000aac*/ LDR         R2, WORD_109c               @ LDR         R2, [PC, #1512]             @ 0x000000000000109c 
+    /*00000ab0*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000ab4*/ LDR         R5, [R5, R1] 
+    /*00000ab8*/ LDR         R1, WORD_10a0               @ LDR         R1, [PC, #1504]             @ 0x00000000000010a0 
+    /*00000abc*/ ADD         R2, PC, R2 
+    /*00000ac0*/ ADD         R1, PC, R1 
+    /*00000ac4*/ LDR         R0, [R5] 
+    /*00000ac8*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000acc*/ BL          fprintf
+    /*00000ad0*/ LDR         R1, WORD_10a4               @ LDR         R1, [PC, #1484]             @ 0x00000000000010a4 
+    /*00000ad4*/ LDR         R0, [R5] 
+    /*00000ad8*/ LDR         R2, [R4, #4] 
+    /*00000adc*/ ADD         R1, PC, R1 
+    /*00000ae0*/ BL          fprintf
+    /*00000ae4*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xae8:
+    /*00000ae8*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1868]             @ 0x000000000000123c 
+    /*00000aec*/ MOVW        R3, #2078                   @ 0x81e 
+    /*00000af0*/ LDR         R2, WORD_10a8               @ LDR         R2, [PC, #1456]             @ 0x00000000000010a8 
+    /*00000af4*/ MOVW        R8, #32778                  @ 0x800a 
+    /*00000af8*/ LDR         R4, [R5, R1] 
+    /*00000afc*/ LDR         R1, WORD_10ac               @ LDR         R1, [PC, #1448]             @ 0x00000000000010ac 
+    /*00000b00*/ ADD         R2, PC, R2 
+    /*00000b04*/ ADD         R1, PC, R1 
+    /*00000b08*/ LDR         R0, [R4] 
+    /*00000b0c*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000b10*/ BL          fprintf
+    /*00000b14*/ LDR         R0, WORD_10b0               @ LDR         R0, [PC, #1428]             @ 0x00000000000010b0 
+    /*00000b18*/ MOV         R2, #70                     @ 0x46 
+    /*00000b1c*/ LDR         R3, [R4] 
+    /*00000b20*/ MOV         R1, #1 
+    /*00000b24*/ ADD         R0, PC, R0 
+    /*00000b28*/ BL          fwrite
+    /*00000b2c*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xb30:
+    /*00000b30*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1796]             @ 0x000000000000123c 
+    /*00000b34*/ MOVW        R3, #2348                   @ 0x92c 
+    /*00000b38*/ LDR         R2, WORD_10b4               @ LDR         R2, [PC, #1396]             @ 0x00000000000010b4 
+    /*00000b3c*/ LDR         R4, [R5, R1] 
+    /*00000b40*/ LDR         R1, WORD_10b8               @ LDR         R1, [PC, #1392]             @ 0x00000000000010b8 
+    /*00000b44*/ ADD         R2, PC, R2 
+    /*00000b48*/ ADD         R1, PC, R1 
+    /*00000b4c*/ LDR         R0, [R4] 
+    /*00000b50*/ BL          fprintf
+    /*00000b54*/ LDR         R1, WORD_10bc               @ LDR         R1, [PC, #1376]             @ 0x00000000000010bc 
+    /*00000b58*/ MOV         R2, R8 
+    /*00000b5c*/ LDR         R0, [R4] 
+    /*00000b60*/ ADD         R1, PC, R1 
+    /*00000b64*/ BL          fprintf
+    /*00000b68*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xb6c:
+    /*00000b6c*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1736]             @ 0x000000000000123c 
+    /*00000b70*/ MOVW        R3, #1995                   @ 0x7cb 
+    /*00000b74*/ LDR         R2, WORD_10c0               @ LDR         R2, [PC, #1348]             @ 0x00000000000010c0 
+    /*00000b78*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000b7c*/ LDR         R5, [R5, R1] 
+    /*00000b80*/ LDR         R1, WORD_10c4               @ LDR         R1, [PC, #1340]             @ 0x00000000000010c4 
+    /*00000b84*/ ADD         R2, PC, R2 
+    /*00000b88*/ ADD         R1, PC, R1 
+    /*00000b8c*/ LDR         R0, [R5] 
+    /*00000b90*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000b94*/ BL          fprintf
+    /*00000b98*/ LDR         R1, WORD_10c8               @ LDR         R1, [PC, #1320]             @ 0x00000000000010c8 
+    /*00000b9c*/ LDR         R0, [R5] 
+    /*00000ba0*/ LDR         R2, [R4] 
+    /*00000ba4*/ ADD         R1, PC, R1 
+    /*00000ba8*/ BL          fprintf
+    /*00000bac*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xbb0:
+    /*00000bb0*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1668]             @ 0x000000000000123c 
+    /*00000bb4*/ MOVW        R3, #1997                   @ 0x7cd 
+    /*00000bb8*/ LDR         R2, WORD_10cc               @ LDR         R2, [PC, #1292]             @ 0x00000000000010cc 
+    /*00000bbc*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000bc0*/ LDR         R5, [R5, R1] 
+    /*00000bc4*/ LDR         R1, WORD_10d0               @ LDR         R1, [PC, #1284]             @ 0x00000000000010d0 
+    /*00000bc8*/ ADD         R2, PC, R2 
+    /*00000bcc*/ ADD         R1, PC, R1 
+    /*00000bd0*/ LDR         R0, [R5] 
+    /*00000bd4*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000bd8*/ BL          fprintf
+    /*00000bdc*/ LDR         R1, WORD_10d4               @ LDR         R1, [PC, #1264]             @ 0x00000000000010d4 
+    /*00000be0*/ LDR         R0, [R5] 
+    /*00000be4*/ LDR         R2, [R4, #28] 
+    /*00000be8*/ ADD         R1, PC, R1 
+    /*00000bec*/ BL          fprintf
+    /*00000bf0*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xbf4:
+    /*00000bf4*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1600]             @ 0x000000000000123c 
+    /*00000bf8*/ MOVW        R3, #1998                   @ 0x7ce 
+    /*00000bfc*/ LDR         R2, WORD_10d8               @ LDR         R2, [PC, #1236]             @ 0x00000000000010d8 
+    /*00000c00*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000c04*/ LDR         R5, [R5, R1] 
+    /*00000c08*/ LDR         R1, WORD_10dc               @ LDR         R1, [PC, #1228]             @ 0x00000000000010dc 
+    /*00000c0c*/ ADD         R2, PC, R2 
+    /*00000c10*/ ADD         R1, PC, R1 
+    /*00000c14*/ LDR         R0, [R5] 
+    /*00000c18*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000c1c*/ BL          fprintf
+    /*00000c20*/ LDR         R1, WORD_10e0               @ LDR         R1, [PC, #1208]             @ 0x00000000000010e0 
+    /*00000c24*/ LDR         R0, [R5] 
+    /*00000c28*/ LDR         R2, [R4, #32] 
+    /*00000c2c*/ ADD         R1, PC, R1 
+    /*00000c30*/ BL          fprintf
+    /*00000c34*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xc38:
+    /*00000c38*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1532]             @ 0x000000000000123c 
+    /*00000c3c*/ MOVW        R3, #1999                   @ 0x7cf 
+    /*00000c40*/ LDR         R2, WORD_10e4               @ LDR         R2, [PC, #1180]             @ 0x00000000000010e4 
+    /*00000c44*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000c48*/ LDR         R5, [R5, R1] 
+    /*00000c4c*/ LDR         R1, WORD_10e8               @ LDR         R1, [PC, #1172]             @ 0x00000000000010e8 
+    /*00000c50*/ ADD         R2, PC, R2 
+    /*00000c54*/ ADD         R1, PC, R1 
+    /*00000c58*/ LDR         R0, [R5] 
+    /*00000c5c*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000c60*/ BL          fprintf
+    /*00000c64*/ LDR         R1, WORD_10ec               @ LDR         R1, [PC, #1152]             @ 0x00000000000010ec 
+    /*00000c68*/ LDR         R0, [R5] 
+    /*00000c6c*/ LDR         R2, [R4, #40]               @ 0x28 
+    /*00000c70*/ ADD         R1, PC, R1 
+    /*00000c74*/ BL          fprintf
+    /*00000c78*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xc7c:
+    /*00000c7c*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1464]             @ 0x000000000000123c 
+    /*00000c80*/ MOV         R3, #2000                   @ 0x7d0 
+    /*00000c84*/ LDR         R2, WORD_10f0               @ LDR         R2, [PC, #1124]             @ 0x00000000000010f0 
+    /*00000c88*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000c8c*/ LDR         R5, [R5, R1] 
+    /*00000c90*/ LDR         R1, WORD_10f4               @ LDR         R1, [PC, #1116]             @ 0x00000000000010f4 
+    /*00000c94*/ ADD         R2, PC, R2 
+    /*00000c98*/ ADD         R1, PC, R1 
+    /*00000c9c*/ LDR         R0, [R5] 
+    /*00000ca0*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000ca4*/ BL          fprintf
+    /*00000ca8*/ LDR         R1, WORD_10f8               @ LDR         R1, [PC, #1096]             @ 0x00000000000010f8 
+    /*00000cac*/ LDR         R0, [R5] 
+    /*00000cb0*/ LDR         R2, [R4, #60]               @ 0x3c 
+    /*00000cb4*/ ADD         R1, PC, R1 
+    /*00000cb8*/ BL          fprintf
+    /*00000cbc*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xcc0:
+    /*00000cc0*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1396]             @ 0x000000000000123c 
+    /*00000cc4*/ MOVW        R3, #2262                   @ 0x8d6 
+    /*00000cc8*/ LDR         R2, WORD_10fc               @ LDR         R2, [PC, #1068]             @ 0x00000000000010fc 
+    /*00000ccc*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000cd0*/ LDR         R4, [R5, R1] 
+    /*00000cd4*/ LDR         R1, WORD_1100               @ LDR         R1, [PC, #1060]             @ 0x0000000000001100 
+    /*00000cd8*/ ADD         R2, PC, R2 
+    /*00000cdc*/ ADD         R1, PC, R1 
+    /*00000ce0*/ LDR         R0, [R4] 
+    /*00000ce4*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000ce8*/ BL          fprintf
+    /*00000cec*/ LDR         R1, WORD_1104               @ LDR         R1, [PC, #1040]             @ 0x0000000000001104 
+    /*00000cf0*/ MOV         R2, R7 
+    /*00000cf4*/ LDR         R0, [R4] 
+    /*00000cf8*/ ADD         R1, PC, R1 
+    /*00000cfc*/ BL          fprintf
+    /*00000d00*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xd04:
+    /*00000d04*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1328]             @ 0x000000000000123c 
+    /*00000d08*/ MOVW        R3, #2001                   @ 0x7d1 
+    /*00000d0c*/ LDR         R2, WORD_1108               @ LDR         R2, [PC, #1012]             @ 0x0000000000001108 
+    /*00000d10*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000d14*/ LDR         R5, [R5, R1] 
+    /*00000d18*/ LDR         R1, WORD_110c               @ LDR         R1, [PC, #1004]             @ 0x000000000000110c 
+    /*00000d1c*/ ADD         R2, PC, R2 
+    /*00000d20*/ ADD         R1, PC, R1 
+    /*00000d24*/ LDR         R0, [R5] 
+    /*00000d28*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000d2c*/ BL          fprintf
+    /*00000d30*/ LDR         R1, WORD_1110               @ LDR         R1, [PC, #984]              @ 0x0000000000001110 
+    /*00000d34*/ LDR         R0, [R5] 
+    /*00000d38*/ LDR         R2, [R4, #64]               @ 0x40 
+    /*00000d3c*/ ADD         R1, PC, R1 
+    /*00000d40*/ BL          fprintf
+    /*00000d44*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xd48:
+    /*00000d48*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1260]             @ 0x000000000000123c 
+    /*00000d4c*/ MOVW        R3, #2002                   @ 0x7d2 
+    /*00000d50*/ LDR         R2, WORD_1114               @ LDR         R2, [PC, #956]              @ 0x0000000000001114 
+    /*00000d54*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000d58*/ LDR         R5, [R5, R1] 
+    /*00000d5c*/ LDR         R1, WORD_1118               @ LDR         R1, [PC, #948]              @ 0x0000000000001118 
+    /*00000d60*/ ADD         R2, PC, R2 
+    /*00000d64*/ ADD         R1, PC, R1 
+    /*00000d68*/ LDR         R0, [R5] 
+    /*00000d6c*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000d70*/ BL          fprintf
+    /*00000d74*/ LDR         R1, WORD_111c               @ LDR         R1, [PC, #928]              @ 0x000000000000111c 
+    /*00000d78*/ LDR         R0, [R5] 
+    /*00000d7c*/ LDR         R2, [R4, #68]               @ 0x44 
+    /*00000d80*/ ADD         R1, PC, R1 
+    /*00000d84*/ BL          fprintf
+    /*00000d88*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xd8c:
+    /*00000d8c*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1192]             @ 0x000000000000123c 
+    /*00000d90*/ MOVW        R3, #1179                   @ 0x49b 
+    /*00000d94*/ LDR         R2, WORD_1120               @ LDR         R2, [PC, #900]              @ 0x0000000000001120 
+    /*00000d98*/ LDR         R8, [R5, R1] 
+    /*00000d9c*/ LDR         R1, WORD_1124               @ LDR         R1, [PC, #896]              @ 0x0000000000001124 
+    /*00000da0*/ ADD         R2, PC, R2 
+    /*00000da4*/ ADD         R1, PC, R1 
+    /*00000da8*/ LDR         R0, [R8] 
+    /*00000dac*/ BL          fprintf
+    /*00000db0*/ LDR         R1, WORD_1128               @ LDR         R1, [PC, #880]              @ 0x0000000000001128 
+    /*00000db4*/ MOV         R2, R7 
+    /*00000db8*/ LDR         R0, [R8] 
+    /*00000dbc*/ ADD         R1, PC, R1 
+    /*00000dc0*/ BL          fprintf
+    /*00000dc4*/ MVN         R3, #0 
+    /*00000dc8*/ B           HI_MPI_HDMI_SetAttr_x680
+    HI_MPI_HDMI_SetAttr_xdcc:
+    /*00000dcc*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1128]             @ 0x000000000000123c 
+    /*00000dd0*/ MOVW        R3, #2003                   @ 0x7d3 
+    /*00000dd4*/ LDR         R2, WORD_112c               @ LDR         R2, [PC, #848]              @ 0x000000000000112c 
+    /*00000dd8*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000ddc*/ LDR         R5, [R5, R1] 
+    /*00000de0*/ LDR         R1, WORD_1130               @ LDR         R1, [PC, #840]              @ 0x0000000000001130 
+    /*00000de4*/ ADD         R2, PC, R2 
+    /*00000de8*/ ADD         R1, PC, R1 
+    /*00000dec*/ LDR         R0, [R5] 
+    /*00000df0*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000df4*/ BL          fprintf
+    /*00000df8*/ LDR         R1, WORD_1134               @ LDR         R1, [PC, #820]              @ 0x0000000000001134 
+    /*00000dfc*/ LDR         R0, [R5] 
+    /*00000e00*/ LDR         R2, [R4, #72]               @ 0x48 
+    /*00000e04*/ ADD         R1, PC, R1 
+    /*00000e08*/ BL          fprintf
+    /*00000e0c*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xe10:
+    /*00000e10*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #1060]             @ 0x000000000000123c 
+    /*00000e14*/ MOVW        R3, #2004                   @ 0x7d4 
+    /*00000e18*/ LDR         R2, WORD_1138               @ LDR         R2, [PC, #792]              @ 0x0000000000001138 
+    /*00000e1c*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000e20*/ LDR         R5, [R5, R1] 
+    /*00000e24*/ LDR         R1, WORD_113c               @ LDR         R1, [PC, #784]              @ 0x000000000000113c 
+    /*00000e28*/ ADD         R2, PC, R2 
+    /*00000e2c*/ ADD         R1, PC, R1 
+    /*00000e30*/ LDR         R0, [R5] 
+    /*00000e34*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000e38*/ BL          fprintf
+    /*00000e3c*/ LDR         R1, WORD_1140               @ LDR         R1, [PC, #764]              @ 0x0000000000001140 
+    /*00000e40*/ LDR         R0, [R5] 
+    /*00000e44*/ LDR         R2, [R4, #76]               @ 0x4c 
+    /*00000e48*/ ADD         R1, PC, R1 
+    /*00000e4c*/ BL          fprintf
+    /*00000e50*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xe54:
+    /*00000e54*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #992]              @ 0x000000000000123c 
+    /*00000e58*/ MOVW        R3, #2005                   @ 0x7d5 
+    /*00000e5c*/ LDR         R2, WORD_1144               @ LDR         R2, [PC, #736]              @ 0x0000000000001144 
+    /*00000e60*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000e64*/ LDR         R5, [R5, R1] 
+    /*00000e68*/ LDR         R1, WORD_1148               @ LDR         R1, [PC, #728]              @ 0x0000000000001148 
+    /*00000e6c*/ ADD         R2, PC, R2 
+    /*00000e70*/ ADD         R1, PC, R1 
+    /*00000e74*/ LDR         R0, [R5] 
+    /*00000e78*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000e7c*/ BL          fprintf
+    /*00000e80*/ LDR         R1, WORD_114c               @ LDR         R1, [PC, #708]              @ 0x000000000000114c 
+    /*00000e84*/ LDR         R0, [R5] 
+    /*00000e88*/ LDR         R2, [R4, #80]               @ 0x50 
+    /*00000e8c*/ ADD         R1, PC, R1 
+    /*00000e90*/ BL          fprintf
+    /*00000e94*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xe98:
+    /*00000e98*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #924]              @ 0x000000000000123c 
+    /*00000e9c*/ MOVW        R3, #2006                   @ 0x7d6 
+    /*00000ea0*/ LDR         R2, WORD_1150               @ LDR         R2, [PC, #680]              @ 0x0000000000001150 
+    /*00000ea4*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000ea8*/ LDR         R5, [R5, R1] 
+    /*00000eac*/ LDR         R1, WORD_1154               @ LDR         R1, [PC, #672]              @ 0x0000000000001154 
+    /*00000eb0*/ ADD         R2, PC, R2 
+    /*00000eb4*/ ADD         R1, PC, R1 
+    /*00000eb8*/ LDR         R0, [R5] 
+    /*00000ebc*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000ec0*/ BL          fprintf
+    /*00000ec4*/ LDR         R1, WORD_1158               @ LDR         R1, [PC, #652]              @ 0x0000000000001158 
+    /*00000ec8*/ LDR         R0, [R5] 
+    /*00000ecc*/ LDR         R2, [R4, #84]               @ 0x54 
+    /*00000ed0*/ ADD         R1, PC, R1 
+    /*00000ed4*/ BL          fprintf
+    /*00000ed8*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xedc:
+    /*00000edc*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #856]              @ 0x000000000000123c 
+    /*00000ee0*/ MOVW        R3, #2007                   @ 0x7d7 
+    /*00000ee4*/ LDR         R2, WORD_115c               @ LDR         R2, [PC, #624]              @ 0x000000000000115c 
+    /*00000ee8*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000eec*/ LDR         R5, [R5, R1] 
+    /*00000ef0*/ LDR         R1, WORD_1160               @ LDR         R1, [PC, #616]              @ 0x0000000000001160 
+    /*00000ef4*/ ADD         R2, PC, R2 
+    /*00000ef8*/ ADD         R1, PC, R1 
+    /*00000efc*/ LDR         R0, [R5] 
+    /*00000f00*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000f04*/ BL          fprintf
+    /*00000f08*/ LDR         R1, WORD_1164               @ LDR         R1, [PC, #596]              @ 0x0000000000001164 
+    /*00000f0c*/ LDR         R0, [R5] 
+    /*00000f10*/ LDR         R2, [R4, #96]               @ 0x60 
+    /*00000f14*/ ADD         R1, PC, R1 
+    /*00000f18*/ BL          fprintf
+    /*00000f1c*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xf20:
+    /*00000f20*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #788]              @ 0x000000000000123c 
+    /*00000f24*/ MOVW        R3, #2008                   @ 0x7d8 
+    /*00000f28*/ LDR         R2, WORD_1168               @ LDR         R2, [PC, #568]              @ 0x0000000000001168 
+    /*00000f2c*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000f30*/ LDR         R5, [R5, R1] 
+    /*00000f34*/ LDR         R1, WORD_116c               @ LDR         R1, [PC, #560]              @ 0x000000000000116c 
+    /*00000f38*/ ADD         R2, PC, R2 
+    /*00000f3c*/ ADD         R1, PC, R1 
+    /*00000f40*/ LDR         R0, [R5] 
+    /*00000f44*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000f48*/ BL          fprintf
+    /*00000f4c*/ LDR         R1, WORD_1170               @ LDR         R1, [PC, #540]              @ 0x0000000000001170 
+    /*00000f50*/ LDR         R0, [R5] 
+    /*00000f54*/ LDR         R2, [R4, #100]              @ 0x64 
+    /*00000f58*/ ADD         R1, PC, R1 
+    /*00000f5c*/ BL          fprintf
+    /*00000f60*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xf64:
+    /*00000f64*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #720]              @ 0x000000000000123c 
+    /*00000f68*/ MOVW        R3, #2009                   @ 0x7d9 
+    /*00000f6c*/ LDR         R2, WORD_1174               @ LDR         R2, [PC, #512]              @ 0x0000000000001174 
+    /*00000f70*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000f74*/ LDR         R5, [R5, R1] 
+    /*00000f78*/ LDR         R1, WORD_1178               @ LDR         R1, [PC, #504]              @ 0x0000000000001178 
+    /*00000f7c*/ ADD         R2, PC, R2 
+    /*00000f80*/ ADD         R1, PC, R1 
+    /*00000f84*/ LDR         R0, [R5] 
+    /*00000f88*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000f8c*/ BL          fprintf
+    /*00000f90*/ LDR         R1, WORD_117c               @ LDR         R1, [PC, #484]              @ 0x000000000000117c 
+    /*00000f94*/ LDR         R0, [R5] 
+    /*00000f98*/ LDR         R2, [R4, #104]              @ 0x68 
+    /*00000f9c*/ ADD         R1, PC, R1 
+    /*00000fa0*/ BL          fprintf
+    /*00000fa4*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_xfa8:
+    /*00000fa8*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #652]              @ 0x000000000000123c 
+    /*00000fac*/ MOVW        R3, #2051                   @ 0x803 
+    /*00000fb0*/ LDR         R2, WORD_1180               @ LDR         R2, [PC, #456]              @ 0x0000000000001180 
+    /*00000fb4*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00000fb8*/ LDR         R5, [R5, R1] 
+    /*00000fbc*/ LDR         R1, WORD_1184               @ LDR         R1, [PC, #448]              @ 0x0000000000001184 
+    /*00000fc0*/ ADD         R2, PC, R2 
+    /*00000fc4*/ ADD         R1, PC, R1 
+    /*00000fc8*/ LDR         R0, [R5] 
+    /*00000fcc*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00000fd0*/ BL          fprintf
+    /*00000fd4*/ LDR         R1, WORD_1188               @ LDR         R1, [PC, #428]              @ 0x0000000000001188 
+    /*00000fd8*/ LDR         R0, [R5] 
+    /*00000fdc*/ LDR         R2, [R4, #20] 
+    /*00000fe0*/ ADD         R1, PC, R1 
+    /*00000fe4*/ BL          fprintf
+    /*00000fe8*/ B           HI_MPI_HDMI_SetAttr_x37c
+    /*00000fec*/ WORD_0fec: .word 0x00000fd0
+    /*00000ff0*/ WORD_0ff0: .word 0x00000000
+    /*00000ff4*/ WORD_0ff4: .word 0x00000cdc
+    /*00000ff8*/ WORD_0ff8: .word 0x00000cdc
+    /*00000ffc*/ WORD_0ffc: .word 0x00000cc4
+    /*00001000*/ WORD_1000: .word 0x00000ca4
+    /*00001004*/ WORD_1004: .word 0x00000ca4
+    /*00001008*/ WORD_1008: .word 0x00000c8c
+    /*0000100c*/ WORD_100c: .word 0x00000c04
+    /*00001010*/ WORD_1010: .word 0x00000c04
+    /*00001014*/ WORD_1014: .word 0x00000bec
+    /*00001018*/ WORD_1018: .word 0x00000b8c
+    /*0000101c*/ WORD_101c: .word 0x00000b8c
+    /*00001020*/ WORD_1020: .word 0x00000b70
+    /*00001024*/ WORD_1024: .word 0x00000b20
+    /*00001028*/ WORD_1028: .word 0x00000b20
+    /*0000102c*/ WORD_102c: .word 0x00000b08
+    /*00001030*/ WORD_1030: .word 0x00000ae8
+    /*00001034*/ WORD_1034: .word 0x00000ae8
+    /*00001038*/ WORD_1038: .word 0x00000ac8
+    /*0000103c*/ WORD_103c: .word 0x00000ab4
+    /*00001040*/ WORD_1040: .word 0x00000aa0
+    /*00001044*/ WORD_1044: .word 0x00000a60
+    /*00001048*/ WORD_1048: .word 0x00000a3c
+    /*0000104c*/ WORD_104c: .word 0x0000078c
+    /*00001050*/ WORD_1050: .word 0x0000078c
+    /*00001054*/ WORD_1054: .word 0x00000778
+    /*00001058*/ WORD_1058: .word 0x00000750
+    /*0000105c*/ WORD_105c: .word 0x00000750
+    /*00001060*/ WORD_1060: .word 0x0000073c
+    /*00001064*/ WORD_1064: .word 0x00000710
+    /*00001068*/ WORD_1068: .word 0x00000710
+    /*0000106c*/ WORD_106c: .word 0x000006fc
+    /*00001070*/ WORD_1070: .word 0x000006e0
+    /*00001074*/ WORD_1074: .word 0x000006e0
+    /*00001078*/ WORD_1078: .word 0x000006cc
+    /*0000107c*/ WORD_107c: .word 0x000006a0
+    /*00001080*/ WORD_1080: .word 0x000006a0
+    /*00001084*/ WORD_1084: .word 0x00000684
+    /*00001088*/ WORD_1088: .word 0x00000664
+    /*0000108c*/ WORD_108c: .word 0x00000664
+    /*00001090*/ WORD_1090: .word 0x0000064c
+    /*00001094*/ WORD_1094: .word 0x00000624
+    /*00001098*/ WORD_1098: .word 0x000005fc
+    /*0000109c*/ WORD_109c: .word 0x000005d8
+    /*000010a0*/ WORD_10a0: .word 0x000005d8
+    /*000010a4*/ WORD_10a4: .word 0x000005c0
+    /*000010a8*/ WORD_10a8: .word 0x000005a0
+    /*000010ac*/ WORD_10ac: .word 0x000005a0
+    /*000010b0*/ WORD_10b0: .word 0x00000584
+    /*000010b4*/ WORD_10b4: .word 0x00000568
+    /*000010b8*/ WORD_10b8: .word 0x00000568
+    /*000010bc*/ WORD_10bc: .word 0x00000554
+    /*000010c0*/ WORD_10c0: .word 0x00000534
+    /*000010c4*/ WORD_10c4: .word 0x00000534
+    /*000010c8*/ WORD_10c8: .word 0x0000051c
+    /*000010cc*/ WORD_10cc: .word 0x000004fc
+    /*000010d0*/ WORD_10d0: .word 0x000004fc
+    /*000010d4*/ WORD_10d4: .word 0x000004e4
+    /*000010d8*/ WORD_10d8: .word 0x000004c4
+    /*000010dc*/ WORD_10dc: .word 0x000004c4
+    /*000010e0*/ WORD_10e0: .word 0x000004ac
+    /*000010e4*/ WORD_10e4: .word 0x0000048c
+    /*000010e8*/ WORD_10e8: .word 0x0000048c
+    /*000010ec*/ WORD_10ec: .word 0x00000474
+    /*000010f0*/ WORD_10f0: .word 0x00000454
+    /*000010f4*/ WORD_10f4: .word 0x00000454
+    /*000010f8*/ WORD_10f8: .word 0x0000043c
+    /*000010fc*/ WORD_10fc: .word 0x0000041c
+    /*00001100*/ WORD_1100: .word 0x0000041c
+    /*00001104*/ WORD_1104: .word 0x00000404
+    /*00001108*/ WORD_1108: .word 0x000003e4
+    /*0000110c*/ WORD_110c: .word 0x000003e4
+    /*00001110*/ WORD_1110: .word 0x000003cc
+    /*00001114*/ WORD_1114: .word 0x000003ac
+    /*00001118*/ WORD_1118: .word 0x000003ac
+    /*0000111c*/ WORD_111c: .word 0x00000394
+    /*00001120*/ WORD_1120: .word 0x00000378
+    /*00001124*/ WORD_1124: .word 0x00000378
+    /*00001128*/ WORD_1128: .word 0x00000364
+    /*0000112c*/ WORD_112c: .word 0x00000340
+    /*00001130*/ WORD_1130: .word 0x00000340
+    /*00001134*/ WORD_1134: .word 0x00000328
+    /*00001138*/ WORD_1138: .word 0x00000308
+    /*0000113c*/ WORD_113c: .word 0x00000308
+    /*00001140*/ WORD_1140: .word 0x000002f0
+    /*00001144*/ WORD_1144: .word 0x000002d0
+    /*00001148*/ WORD_1148: .word 0x000002d0
+    /*0000114c*/ WORD_114c: .word 0x000002b8
+    /*00001150*/ WORD_1150: .word 0x00000298
+    /*00001154*/ WORD_1154: .word 0x00000298
+    /*00001158*/ WORD_1158: .word 0x00000280
+    /*0000115c*/ WORD_115c: .word 0x00000260
+    /*00001160*/ WORD_1160: .word 0x00000260
+    /*00001164*/ WORD_1164: .word 0x00000248
+    /*00001168*/ WORD_1168: .word 0x00000228
+    /*0000116c*/ WORD_116c: .word 0x00000228
+    /*00001170*/ WORD_1170: .word 0x00000210
+    /*00001174*/ WORD_1174: .word 0x000001f0
+    /*00001178*/ WORD_1178: .word 0x000001f0
+    /*0000117c*/ WORD_117c: .word 0x000001d8
+    /*00001180*/ WORD_1180: .word 0x000001b8
+    /*00001184*/ WORD_1184: .word 0x000001b8
+    /*00001188*/ WORD_1188: .word 0x000001a0
+    /*0000118c*/ WORD_118c: .word 0xffffff20
+    /*00001190*/ WORD_1190: .word 0xffffff20
+    /*00001194*/ WORD_1194: .word 0xffffff04
+    /*00001198*/ WORD_1198: .word 0xfffffee4
+    /*0000119c*/ WORD_119c: .word 0xfffffee4
+    /*000011a0*/ WORD_11a0: .word 0xfffffecc
+    /*000011a4*/ WORD_11a4: .word 0xfffffeac
+    /*000011a8*/ WORD_11a8: .word 0xfffffeac
+    /*000011ac*/ WORD_11ac: .word 0xfffffe94
+    /*000011b0*/ WORD_11b0: .word 0xfffffe74
+    /*000011b4*/ WORD_11b4: .word 0xfffffe74
+    /*000011b8*/ WORD_11b8: .word 0xfffffe5c
+    /*000011bc*/ WORD_11bc: .word 0xfffffe3c
+    /*000011c0*/ WORD_11c0: .word 0xfffffe3c
+    /*000011c4*/ WORD_11c4: .word 0xfffffe24
+    /*000011c8*/ WORD_11c8: .word 0xfffffe04
+    /*000011cc*/ WORD_11cc: .word 0xfffffe04
+    /*000011d0*/ WORD_11d0: .word 0xfffffdec
+    /*000011d4*/ WORD_11d4: .word 0xfffffdcc
+    /*000011d8*/ WORD_11d8: .word 0xfffffdcc
+    /*000011dc*/ WORD_11dc: .word 0xfffffdb4
+    /*000011e0*/ WORD_11e0: .word 0xfffffd94
+    /*000011e4*/ WORD_11e4: .word 0xfffffd94
+    /*000011e8*/ WORD_11e8: .word 0xfffffd78
+    /*000011ec*/ WORD_11ec: .word 0xfffffd58
+    /*000011f0*/ WORD_11f0: .word 0xfffffd58
+    /*000011f4*/ WORD_11f4: .word 0xfffffd3c
+    /*000011f8*/ WORD_11f8: .word 0xfffffd1c
+    /*000011fc*/ WORD_11fc: .word 0xfffffd1c
+    /*00001200*/ WORD_1200: .word 0xfffffd00
+    /*00001204*/ WORD_1204: .word 0xfffffce0
+    /*00001208*/ WORD_1208: .word 0xfffffce0
+    /*0000120c*/ WORD_120c: .word 0xfffffcc4
+    /*00001210*/ WORD_1210: .word 0xfffffca4
+    /*00001214*/ WORD_1214: .word 0xfffffca4
+    /*00001218*/ WORD_1218: .word 0xfffffc88
+    /*0000121c*/ WORD_121c: .word 0xfffffc68
+    /*00001220*/ WORD_1220: .word 0xfffffc68
+    /*00001224*/ WORD_1224: .word 0xfffffc4c
+    /*00001228*/ WORD_1228: .word 0xfffffc2c
+    /*0000122c*/ WORD_122c: .word 0xfffffc2c
+    /*00001230*/ WORD_1230: .word 0xfffffc14
+    /*00001234*/ WORD_1234: .word 0xfffffbfc
+    /*00001238*/ WORD_1238: .word 0xfffffbe4
+    /*0000123c*/ WORD_123c: .word 0x00000000
+    /*00001240*/ WORD_1240: .word 0xfffffbc8
+    /*00001244*/ WORD_1244: .word 0xfffffbc8
+    /*00001248*/ WORD_1248: .word 0xfffffbb0
+    HI_MPI_HDMI_SetAttr_x124c:
+    /*0000124c*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-24]              @ 0x000000000000123c 
+    /*00001250*/ MOVW        R3, #2263                   @ 0x8d7 
+    /*00001254*/ LDR         R2, WORD_118c               @ LDR         R2, [PC, #-208]             @ 0x000000000000118c 
+    /*00001258*/ MOVW        R8, #32771                  @ 0x8003 
+    /*0000125c*/ LDR         R4, [R5, R1] 
+    /*00001260*/ LDR         R1, WORD_1190               @ LDR         R1, [PC, #-216]             @ 0x0000000000001190 
+    /*00001264*/ ADD         R2, PC, R2 
+    /*00001268*/ ADD         R1, PC, R1 
+    /*0000126c*/ LDR         R0, [R4] 
+    /*00001270*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00001274*/ BL          fprintf
+    /*00001278*/ LDR         R0, WORD_1194               @ LDR         R0, [PC, #-236]             @ 0x0000000000001194 
+    /*0000127c*/ MOV         R2, #15 
+    /*00001280*/ LDR         R3, [R4] 
+    /*00001284*/ MOV         R1, #1 
+    /*00001288*/ ADD         R0, PC, R0 
+    /*0000128c*/ BL          fwrite
+    /*00001290*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x1294:
+    /*00001294*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-96]              @ 0x000000000000123c 
+    /*00001298*/ MOVW        R3, #2163                   @ 0x873 
+    /*0000129c*/ LDR         R2, WORD_1198               @ LDR         R2, [PC, #-268]             @ 0x0000000000001198 
+    /*000012a0*/ MOVW        R8, #32778                  @ 0x800a 
+    /*000012a4*/ LDR         R5, [R5, R1] 
+    /*000012a8*/ LDR         R1, WORD_119c               @ LDR         R1, [PC, #-276]             @ 0x000000000000119c 
+    /*000012ac*/ ADD         R2, PC, R2 
+    /*000012b0*/ ADD         R1, PC, R1 
+    /*000012b4*/ LDR         R0, [R5] 
+    /*000012b8*/ MOVT        R8, #41000                  @ 0xa028 
+    /*000012bc*/ BL          fprintf
+    /*000012c0*/ LDR         R1, WORD_11a0               @ LDR         R1, [PC, #-296]             @ 0x00000000000011a0 
+    /*000012c4*/ LDR         R0, [R5] 
+    /*000012c8*/ LDRB        R2, [R4, #88]               @ 0x58 
+    /*000012cc*/ ADD         R1, PC, R1 
+    /*000012d0*/ BL          fprintf
+    /*000012d4*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x12d8:
+    /*000012d8*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-164]             @ 0x000000000000123c 
+    /*000012dc*/ MOVW        R3, #1956                   @ 0x7a4 
+    /*000012e0*/ LDR         R2, WORD_11a4               @ LDR         R2, [PC, #-324]             @ 0x00000000000011a4 
+    /*000012e4*/ MOVW        R8, #32778                  @ 0x800a 
+    /*000012e8*/ LDR         R5, [R5, R1] 
+    /*000012ec*/ LDR         R1, WORD_11a8               @ LDR         R1, [PC, #-332]             @ 0x00000000000011a8 
+    /*000012f0*/ ADD         R2, PC, R2 
+    /*000012f4*/ ADD         R1, PC, R1 
+    /*000012f8*/ LDR         R0, [R5] 
+    /*000012fc*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00001300*/ BL          fprintf
+    /*00001304*/ LDR         R1, WORD_11ac               @ LDR         R1, [PC, #-352]             @ 0x00000000000011ac 
+    /*00001308*/ LDR         R0, [R5] 
+    /*0000130c*/ LDR         R2, [R4, #52]               @ 0x34 
+    /*00001310*/ ADD         R1, PC, R1 
+    /*00001314*/ BL          fprintf
+    /*00001318*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x131c:
+    /*0000131c*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-232]             @ 0x000000000000123c 
+    /*00001320*/ MOVW        R3, #2031                   @ 0x7ef 
+    /*00001324*/ LDR         R2, WORD_11b0               @ LDR         R2, [PC, #-380]             @ 0x00000000000011b0 
+    /*00001328*/ MOVW        R8, #32770                  @ 0x8002 
+    /*0000132c*/ LDR         R5, [R5, R1] 
+    /*00001330*/ LDR         R1, WORD_11b4               @ LDR         R1, [PC, #-388]             @ 0x00000000000011b4 
+    /*00001334*/ ADD         R2, PC, R2 
+    /*00001338*/ ADD         R1, PC, R1 
+    /*0000133c*/ LDR         R0, [R5] 
+    /*00001340*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00001344*/ BL          fprintf
+    /*00001348*/ LDR         R1, WORD_11b8               @ LDR         R1, [PC, #-408]             @ 0x00000000000011b8 
+    /*0000134c*/ LDR         R0, [R5] 
+    /*00001350*/ LDR         R2, [R4, #8] 
+    /*00001354*/ ADD         R1, PC, R1 
+    /*00001358*/ BL          fprintf
+    /*0000135c*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x1360:
+    /*00001360*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-300]             @ 0x000000000000123c 
+    /*00001364*/ MOVW        R3, #2056                   @ 0x808 
+    /*00001368*/ LDR         R2, WORD_11bc               @ LDR         R2, [PC, #-436]             @ 0x00000000000011bc 
+    /*0000136c*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00001370*/ LDR         R5, [R5, R1] 
+    /*00001374*/ LDR         R1, WORD_11c0               @ LDR         R1, [PC, #-444]             @ 0x00000000000011c0 
+    /*00001378*/ ADD         R2, PC, R2 
+    /*0000137c*/ ADD         R1, PC, R1 
+    /*00001380*/ LDR         R0, [R5] 
+    /*00001384*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00001388*/ BL          fprintf
+    /*0000138c*/ LDR         R1, WORD_11c4               @ LDR         R1, [PC, #-464]             @ 0x00000000000011c4 
+    /*00001390*/ LDR         R0, [R5] 
+    /*00001394*/ LDR         R2, [R4, #92]               @ 0x5c 
+    /*00001398*/ ADD         R1, PC, R1 
+    /*0000139c*/ BL          fprintf
+    /*000013a0*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x13a4:
+    /*000013a4*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-368]             @ 0x000000000000123c 
+    /*000013a8*/ MOVW        R3, #2036                   @ 0x7f4 
+    /*000013ac*/ LDR         R2, WORD_11c8               @ LDR         R2, [PC, #-492]             @ 0x00000000000011c8 
+    /*000013b0*/ MOVW        R8, #32770                  @ 0x8002 
+    /*000013b4*/ LDR         R5, [R5, R1] 
+    /*000013b8*/ LDR         R1, WORD_11cc               @ LDR         R1, [PC, #-500]             @ 0x00000000000011cc 
+    /*000013bc*/ ADD         R2, PC, R2 
+    /*000013c0*/ ADD         R1, PC, R1 
+    /*000013c4*/ LDR         R0, [R5] 
+    /*000013c8*/ MOVT        R8, #41000                  @ 0xa028 
+    /*000013cc*/ BL          fprintf
+    /*000013d0*/ LDR         R1, WORD_11d0               @ LDR         R1, [PC, #-520]             @ 0x00000000000011d0 
+    /*000013d4*/ LDR         R0, [R5] 
+    /*000013d8*/ LDR         R2, [R4, #16] 
+    /*000013dc*/ ADD         R1, PC, R1 
+    /*000013e0*/ BL          fprintf
+    /*000013e4*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x13e8:
+    /*000013e8*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-436]             @ 0x000000000000123c 
+    /*000013ec*/ MOVW        R3, #2046                   @ 0x7fe 
+    /*000013f0*/ LDR         R2, WORD_11d4               @ LDR         R2, [PC, #-548]             @ 0x00000000000011d4 
+    /*000013f4*/ MOVW        R8, #32770                  @ 0x8002 
+    /*000013f8*/ LDR         R5, [R5, R1] 
+    /*000013fc*/ LDR         R1, WORD_11d8               @ LDR         R1, [PC, #-556]             @ 0x00000000000011d8 
+    /*00001400*/ ADD         R2, PC, R2 
+    /*00001404*/ ADD         R1, PC, R1 
+    /*00001408*/ LDR         R0, [R5] 
+    /*0000140c*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00001410*/ BL          fprintf
+    /*00001414*/ LDR         R1, WORD_11dc               @ LDR         R1, [PC, #-576]             @ 0x00000000000011dc 
+    /*00001418*/ LDR         R0, [R5] 
+    /*0000141c*/ LDR         R2, [R4, #24] 
+    /*00001420*/ ADD         R1, PC, R1 
+    /*00001424*/ BL          fprintf
+    /*00001428*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x142c:
+    /*0000142c*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-504]             @ 0x000000000000123c 
+    /*00001430*/ MOVW        R3, #2068                   @ 0x814 
+    /*00001434*/ LDR         R2, WORD_11e0               @ LDR         R2, [PC, #-604]             @ 0x00000000000011e0 
+    /*00001438*/ MOVW        R8, #32778                  @ 0x800a 
+    /*0000143c*/ LDR         R4, [R5, R1] 
+    /*00001440*/ LDR         R1, WORD_11e4               @ LDR         R1, [PC, #-612]             @ 0x00000000000011e4 
+    /*00001444*/ ADD         R2, PC, R2 
+    /*00001448*/ ADD         R1, PC, R1 
+    /*0000144c*/ LDR         R0, [R4] 
+    /*00001450*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00001454*/ BL          fprintf
+    /*00001458*/ LDR         R0, WORD_11e8               @ LDR         R0, [PC, #-632]             @ 0x00000000000011e8 
+    /*0000145c*/ MOV         R2, #80                     @ 0x50 
+    /*00001460*/ LDR         R3, [R4] 
+    /*00001464*/ MOV         R1, #1 
+    /*00001468*/ ADD         R0, PC, R0 
+    /*0000146c*/ BL          fwrite
+    /*00001470*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x1474:
+    /*00001474*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-576]             @ 0x000000000000123c 
+    /*00001478*/ MOVW        R3, #2073                   @ 0x819 
+    /*0000147c*/ LDR         R2, WORD_11ec               @ LDR         R2, [PC, #-664]             @ 0x00000000000011ec 
+    /*00001480*/ MOVW        R8, #32778                  @ 0x800a 
+    /*00001484*/ LDR         R4, [R5, R1] 
+    /*00001488*/ LDR         R1, WORD_11f0               @ LDR         R1, [PC, #-672]             @ 0x00000000000011f0 
+    /*0000148c*/ ADD         R2, PC, R2 
+    /*00001490*/ ADD         R1, PC, R1 
+    /*00001494*/ LDR         R0, [R4] 
+    /*00001498*/ MOVT        R8, #41000                  @ 0xa028 
+    /*0000149c*/ BL          fprintf
+    /*000014a0*/ LDR         R0, WORD_11f4               @ LDR         R0, [PC, #-692]             @ 0x00000000000011f4 
+    /*000014a4*/ MOV         R2, #83                     @ 0x53 
+    /*000014a8*/ LDR         R3, [R4] 
+    /*000014ac*/ MOV         R1, #1 
+    /*000014b0*/ ADD         R0, PC, R0 
+    /*000014b4*/ BL          fwrite
+    /*000014b8*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x14bc:
+    /*000014bc*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-648]             @ 0x000000000000123c 
+    /*000014c0*/ MOVW        R3, #2094                   @ 0x82e 
+    /*000014c4*/ LDR         R2, WORD_11f8               @ LDR         R2, [PC, #-724]             @ 0x00000000000011f8 
+    /*000014c8*/ MOVW        R8, #32778                  @ 0x800a 
+    /*000014cc*/ LDR         R4, [R5, R1] 
+    /*000014d0*/ LDR         R1, WORD_11fc               @ LDR         R1, [PC, #-732]             @ 0x00000000000011fc 
+    /*000014d4*/ ADD         R2, PC, R2 
+    /*000014d8*/ ADD         R1, PC, R1 
+    /*000014dc*/ LDR         R0, [R4] 
+    /*000014e0*/ MOVT        R8, #41000                  @ 0xa028 
+    /*000014e4*/ BL          fprintf
+    /*000014e8*/ LDR         R0, WORD_1200               @ LDR         R0, [PC, #-752]             @ 0x0000000000001200 
+    /*000014ec*/ MOV         R2, #35                     @ 0x23 
+    /*000014f0*/ LDR         R3, [R4] 
+    /*000014f4*/ MOV         R1, #1 
+    /*000014f8*/ ADD         R0, PC, R0 
+    /*000014fc*/ BL          fwrite
+    /*00001500*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x1504:
+    /*00001504*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-720]             @ 0x000000000000123c 
+    /*00001508*/ MOVW        R3, #2088                   @ 0x828 
+    /*0000150c*/ LDR         R2, WORD_1204               @ LDR         R2, [PC, #-784]             @ 0x0000000000001204 
+    /*00001510*/ MOVW        R8, #32778                  @ 0x800a 
+    /*00001514*/ LDR         R4, [R5, R1] 
+    /*00001518*/ LDR         R1, WORD_1208               @ LDR         R1, [PC, #-792]             @ 0x0000000000001208 
+    /*0000151c*/ ADD         R2, PC, R2 
+    /*00001520*/ ADD         R1, PC, R1 
+    /*00001524*/ LDR         R0, [R4] 
+    /*00001528*/ MOVT        R8, #41000                  @ 0xa028 
+    /*0000152c*/ BL          fprintf
+    /*00001530*/ LDR         R0, WORD_120c               @ LDR         R0, [PC, #-812]             @ 0x000000000000120c 
+    /*00001534*/ MOV         R2, #33                     @ 0x21 
+    /*00001538*/ LDR         R3, [R4] 
+    /*0000153c*/ MOV         R1, #1 
+    /*00001540*/ ADD         R0, PC, R0 
+    /*00001544*/ BL          fwrite
+    /*00001548*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x154c:
+    /*0000154c*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-792]             @ 0x000000000000123c 
+    /*00001550*/ MOVW        R3, #2083                   @ 0x823 
+    /*00001554*/ LDR         R2, WORD_1210               @ LDR         R2, [PC, #-844]             @ 0x0000000000001210 
+    /*00001558*/ MOVW        R8, #32778                  @ 0x800a 
+    /*0000155c*/ LDR         R4, [R5, R1] 
+    /*00001560*/ LDR         R1, WORD_1214               @ LDR         R1, [PC, #-852]             @ 0x0000000000001214 
+    /*00001564*/ ADD         R2, PC, R2 
+    /*00001568*/ ADD         R1, PC, R1 
+    /*0000156c*/ LDR         R0, [R4] 
+    /*00001570*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00001574*/ BL          fprintf
+    /*00001578*/ LDR         R0, WORD_1218               @ LDR         R0, [PC, #-872]             @ 0x0000000000001218 
+    /*0000157c*/ MOV         R2, #71                     @ 0x47 
+    /*00001580*/ LDR         R3, [R4] 
+    /*00001584*/ MOV         R1, #1 
+    /*00001588*/ ADD         R0, PC, R0 
+    /*0000158c*/ BL          fwrite
+    /*00001590*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x1594:
+    /*00001594*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-864]             @ 0x000000000000123c 
+    /*00001598*/ MOVW        R3, #2063                   @ 0x80f 
+    /*0000159c*/ LDR         R2, WORD_121c               @ LDR         R2, [PC, #-904]             @ 0x000000000000121c 
+    /*000015a0*/ MOVW        R8, #32778                  @ 0x800a 
+    /*000015a4*/ LDR         R4, [R5, R1] 
+    /*000015a8*/ LDR         R1, WORD_1220               @ LDR         R1, [PC, #-912]             @ 0x0000000000001220 
+    /*000015ac*/ ADD         R2, PC, R2 
+    /*000015b0*/ ADD         R1, PC, R1 
+    /*000015b4*/ LDR         R0, [R4] 
+    /*000015b8*/ MOVT        R8, #41000                  @ 0xa028 
+    /*000015bc*/ BL          fprintf
+    /*000015c0*/ LDR         R0, WORD_1224               @ LDR         R0, [PC, #-932]             @ 0x0000000000001224 
+    /*000015c4*/ MOV         R2, #70                     @ 0x46 
+    /*000015c8*/ LDR         R3, [R4] 
+    /*000015cc*/ MOV         R1, #1 
+    /*000015d0*/ ADD         R0, PC, R0 
+    /*000015d4*/ BL          fwrite
+    /*000015d8*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x15dc:
+    /*000015dc*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-936]             @ 0x000000000000123c 
+    /*000015e0*/ MOVW        R3, #1934                   @ 0x78e 
+    /*000015e4*/ LDR         R2, WORD_1228               @ LDR         R2, [PC, #-964]             @ 0x0000000000001228 
+    /*000015e8*/ MOVW        R8, #32778                  @ 0x800a 
+    /*000015ec*/ LDR         R5, [R5, R1] 
+    /*000015f0*/ LDR         R1, WORD_122c               @ LDR         R1, [PC, #-972]             @ 0x000000000000122c 
+    /*000015f4*/ ADD         R2, PC, R2 
+    /*000015f8*/ ADD         R1, PC, R1 
+    /*000015fc*/ LDR         R0, [R5] 
+    /*00001600*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00001604*/ BL          fprintf
+    /*00001608*/ LDR         R1, WORD_1230               @ LDR         R1, [PC, #-992]             @ 0x0000000000001230 
+    /*0000160c*/ LDR         R0, [R5] 
+    /*00001610*/ LDR         R2, [R4, #44]               @ 0x2c 
+    /*00001614*/ ADD         R1, PC, R1 
+    /*00001618*/ BL          fprintf
+    /*0000161c*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x1620:
+    /*00001620*/ LDR         R2, WORD_1234               @ LDR         R2, [PC, #-1012]            @ 0x0000000000001234 
+    /*00001624*/ MOV         R1, R8 
+    /*00001628*/ LDR         R0, [R7] 
+    /*0000162c*/ MOVW        R3, #2143                   @ 0x85f 
+    /*00001630*/ ADD         R2, PC, R2 
+    /*00001634*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00001638*/ MOVT        R8, #41000                  @ 0xa028 
+    /*0000163c*/ BL          fprintf
+    /*00001640*/ LDR         R1, WORD_1238               @ LDR         R1, [PC, #-1040]            @ 0x0000000000001238 
+    /*00001644*/ LDR         R2, [R4, #92]               @ 0x5c 
+    /*00001648*/ LDR         R0, [R7] 
+    /*0000164c*/ ADD         R1, PC, R1 
+    /*00001650*/ BL          fprintf
+    /*00001654*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x1658:
+    /*00001658*/ LDR         R1, WORD_123c               @ LDR         R1, [PC, #-1060]            @ 0x000000000000123c 
+    /*0000165c*/ MOVW        R3, #2123                   @ 0x84b 
+    /*00001660*/ LDR         R2, WORD_1240               @ LDR         R2, [PC, #-1064]            @ 0x0000000000001240 
+    /*00001664*/ MOVW        R8, #32770                  @ 0x8002 
+    /*00001668*/ LDR         R5, [R5, R1] 
+    /*0000166c*/ LDR         R1, WORD_1244               @ LDR         R1, [PC, #-1072]            @ 0x0000000000001244 
+    /*00001670*/ ADD         R2, PC, R2 
+    /*00001674*/ ADD         R1, PC, R1 
+    /*00001678*/ LDR         R0, [R5] 
+    /*0000167c*/ MOVT        R8, #41000                  @ 0xa028 
+    /*00001680*/ BL          fprintf
+    /*00001684*/ LDR         R1, WORD_1248               @ LDR         R1, [PC, #-1092]            @ 0x0000000000001248 
+    /*00001688*/ LDR         R0, [R5] 
+    /*0000168c*/ LDR         R2, [R4, #24] 
+    /*00001690*/ ADD         R1, PC, R1 
+    /*00001694*/ BL          fprintf
+    /*00001698*/ B           HI_MPI_HDMI_SetAttr_x37c
+    HI_MPI_HDMI_SetAttr_x169c:
+    /*0000169c*/ BL          __stack_chk_fail
+FUNC_END HI_MPI_HDMI_SetAttr
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_GetAttr
+@ Size: 0x414
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_GetAttr
+    /*00000000*/ PUSH        {R4, R5, R6, R7, R8, LR} 
+    /*00000004*/ SUBS        R5, R0, #0 
+    /*00000008*/ LDR         R7, WORD_03cc               @ LDR         R7, [PC, #956]              @ 0x00000000000003cc 
+    /*0000000c*/ SUB         SP, SP, #192                @ 0xc0 
+    /*00000010*/ LDR         R3, WORD_03d0               @ LDR         R3, [PC, #952]              @ 0x00000000000003d0 
+    /*00000014*/ ADD         R7, PC, R7 
+    /*00000018*/ LDR         R8, [R7, R3] 
+    /*0000001c*/ LDR         R3, [R8] 
+    /*00000020*/ STR         R3, [SP, #188]              @ 0xbc 
+    /*00000024*/ BNE         HI_MPI_HDMI_GetAttr_x33c
+    /*00000028*/ CMP         R1, #0 
+    /*0000002c*/ MOV         R4, R1 
+    /*00000030*/ BEQ         HI_MPI_HDMI_GetAttr_x380
+    /*00000034*/ STR         R5, [SP, #108]              @ 0x6c 
+    /*00000038*/ ADD         R1, SP, #108                @ 0x6c 
+    /*0000003c*/ STR         R5, [SP, #4] 
+    /*00000040*/ STR         R5, [SP, #32] 
+    /*00000044*/ BL          HI_MPI_HDMI_ComGetAttr
+    /*00000048*/ SUBS        R6, R0, #0 
+    /*0000004c*/ BNE         HI_MPI_HDMI_GetAttr_x2a8
+    /*00000050*/ ADD         R1, SP, #4 
+    /*00000054*/ BL          HI_MPI_HDMI_ComGetAOAttr
+    /*00000058*/ SUBS        R6, R0, #0 
+    /*0000005c*/ BNE         HI_MPI_HDMI_GetAttr_x254
+    /*00000060*/ ADD         R1, SP, #32 
+    /*00000064*/ BL          HI_MPI_HDMI_ComGetVOAttr
+    /*00000068*/ SUBS        R6, R0, #0 
+    /*0000006c*/ BNE         HI_MPI_HDMI_GetAttr_x300
+    /*00000070*/ LDR         R3, [SP, #124]              @ 0x7c 
+    /*00000074*/ LDR         IP, [SP, #112]              @ 0x70 
+    /*00000078*/ LDR         R0, [SP, #116]              @ 0x74 
+    /*0000007c*/ CMP         R3, #0 
+    /*00000080*/ LDR         R1, [SP, #104]              @ 0x68 
+    /*00000084*/ LDR         R2, [SP, #36]               @ 0x24 
+    /*00000088*/ STR         IP, [R4] 
+    /*0000008c*/ STMIB       R4, {R0, R1} 
+    /*00000090*/ STR         R2, [R4, #108]              @ 0x6c 
+    /*00000094*/ STREQ       R6, [R4, #16] 
+    /*00000098*/ BEQ         HI_MPI_HDMI_GetAttr_xb8
+    /*0000009c*/ CMP         R3, #1 
+    /*000000a0*/ BEQ         HI_MPI_HDMI_GetAttr_xb4
+    /*000000a4*/ CMP         R3, #2 
+    /*000000a8*/ BEQ         HI_MPI_HDMI_GetAttr_xb4
+    /*000000ac*/ CMP         R3, #3 
+    /*000000b0*/ MOVNE       R3, #4 
+    HI_MPI_HDMI_GetAttr_xb4:
+    /*000000b4*/ STR         R3, [R4, #16] 
+    HI_MPI_HDMI_GetAttr_xb8:
+    /*000000b8*/ LDR         R3, [SP, #132]              @ 0x84 
+    /*000000bc*/ CMP         R3, #0 
+    /*000000c0*/ BNE         HI_MPI_HDMI_GetAttr_x2e4
+    HI_MPI_HDMI_GetAttr_xc4:
+    /*000000c4*/ STR         R3, [R4, #24] 
+    /*000000c8*/ LDR         R3, [SP, #128]              @ 0x80 
+    /*000000cc*/ LDR         R2, [SP, #136]              @ 0x88 
+    /*000000d0*/ CMP         R3, #1 
+    /*000000d4*/ STR         R2, [R4, #28] 
+    /*000000d8*/ MOVEQ       R3, #0 
+    /*000000dc*/ STREQ       R3, [R4, #20] 
+    /*000000e0*/ BEQ         HI_MPI_HDMI_GetAttr_xf4
+    /*000000e4*/ CMP         R3, #2 
+    /*000000e8*/ MOVEQ       R3, #1 
+    /*000000ec*/ MOVNE       R3, #2 
+    /*000000f0*/ STR         R3, [R4, #20] 
+    HI_MPI_HDMI_GetAttr_xf4:
+    /*000000f4*/ LDR         R2, [SP, #16] 
+    /*000000f8*/ LDR         R3, [SP, #12] 
+    /*000000fc*/ LDR         R0, [SP, #120]              @ 0x78 
+    /*00000100*/ CMP         R2, #2 
+    /*00000104*/ LDR         R1, [SP, #20] 
+    /*00000108*/ MOVLS       R2, #0 
+    /*0000010c*/ STR         R0, [R4, #32] 
+    /*00000110*/ MOVHI       R2, #1 
+    /*00000114*/ STR         R2, [R4, #40]               @ 0x28 
+    /*00000118*/ CMP         R3, #0 
+    /*0000011c*/ STR         R1, [R4, #36]               @ 0x24 
+    /*00000120*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*00000124*/ CMP         R3, #8000                   @ 0x1f40 
+    /*00000128*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*0000012c*/ MOVW        R2, #11025                  @ 0x2b11 
+    /*00000130*/ CMP         R3, R2 
+    /*00000134*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*00000138*/ MOVW        R2, #12000                  @ 0x2ee0 
+    /*0000013c*/ CMP         R3, R2 
+    /*00000140*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*00000144*/ CMP         R3, #16000                  @ 0x3e80 
+    /*00000148*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*0000014c*/ MOVW        R2, #22050                  @ 0x5622 
+    /*00000150*/ CMP         R3, R2 
+    /*00000154*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*00000158*/ MOVW        R2, #24000                  @ 0x5dc0 
+    /*0000015c*/ CMP         R3, R2 
+    /*00000160*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*00000164*/ CMP         R3, #32000                  @ 0x7d00 
+    /*00000168*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*0000016c*/ MOVW        R2, #44100                  @ 0xac44 
+    /*00000170*/ CMP         R3, R2 
+    /*00000174*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*00000178*/ MOVW        R2, #48000                  @ 0xbb80 
+    /*0000017c*/ CMP         R3, R2 
+    /*00000180*/ MOVEQ       R3, R2 
+    /*00000184*/ STREQ       R3, [R4, #44]               @ 0x2c 
+    /*00000188*/ BEQ         HI_MPI_HDMI_GetAttr_x1d4
+    /*0000018c*/ MOVW        R2, #22664                  @ 0x5888 
+    /*00000190*/ MOVT        R2, #1 
+    /*00000194*/ CMP         R3, R2 
+    /*00000198*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*0000019c*/ MOV         R2, #30464                  @ 0x7700 
+    /*000001a0*/ MOVT        R2, #1 
+    /*000001a4*/ CMP         R3, R2 
+    /*000001a8*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*000001ac*/ MOVW        R2, #45328                  @ 0xb110 
+    /*000001b0*/ MOVT        R2, #2 
+    /*000001b4*/ CMP         R3, R2 
+    /*000001b8*/ BEQ         HI_MPI_HDMI_GetAttr_x1d0
+    /*000001bc*/ MOV         R2, #60928                  @ 0xee00 
+    /*000001c0*/ MOVT        R2, #2 
+    /*000001c4*/ CMP         R3, R2 
+    /*000001c8*/ MOVWNE      R3, #47105                  @ 0xb801 
+    /*000001cc*/ MOVTNE      R3, #11 
+    HI_MPI_HDMI_GetAttr_x1d0:
+    /*000001d0*/ STR         R3, [R4, #44]               @ 0x2c 
+    HI_MPI_HDMI_GetAttr_x1d4:
+    /*000001d4*/ LDR         R2, [SP, #64]               @ 0x40 
+    /*000001d8*/ MOV         R3, #0 
+    /*000001dc*/ LDR         IP, [SP, #140]              @ 0x8c 
+    /*000001e0*/ MOV         R1, #9 
+    /*000001e4*/ LDR         R0, [SP, #152]              @ 0x98 
+    /*000001e8*/ CMP         R2, #8 
+    /*000001ec*/ STR         IP, [R4, #60]               @ 0x3c 
+    /*000001f0*/ MOVHI       R2, #0 
+    /*000001f4*/ LDR         IP, [SP, #148]              @ 0x94 
+    /*000001f8*/ MOVLS       R2, #1 
+    /*000001fc*/ STR         R2, [R4, #84]               @ 0x54 
+    /*00000200*/ LDR         R2, [SP, #144]              @ 0x90 
+    /*00000204*/ STR         R0, [R4, #64]               @ 0x40 
+    /*00000208*/ STR         R2, [R4, #68]               @ 0x44 
+    /*0000020c*/ LDR         R0, [SP, #160]              @ 0xa0 
+    /*00000210*/ LDR         R2, [SP, #164]              @ 0xa4 
+    /*00000214*/ LDR         LR, [SP, #24] 
+    /*00000218*/ STR         IP, [R4, #72]               @ 0x48 
+    /*0000021c*/ STR         R0, [R4, #80]               @ 0x50 
+    /*00000220*/ LDR         IP, [SP, #176]              @ 0xb0 
+    /*00000224*/ LDR         R0, [SP, #168]              @ 0xa8 
+    /*00000228*/ STR         R2, [R4, #92]               @ 0x5c 
+    /*0000022c*/ LDR         R2, [SP, #172]              @ 0xac 
+    /*00000230*/ STR         LR, [R4, #52]               @ 0x34 
+    /*00000234*/ STR         IP, [R4, #96]               @ 0x60 
+    /*00000238*/ STR         R0, [R4, #100]              @ 0x64 
+    /*0000023c*/ STR         R2, [R4, #104]              @ 0x68 
+    /*00000240*/ STRB        R3, [R4, #48]               @ 0x30 
+    /*00000244*/ STRB        R3, [R4, #56]               @ 0x38 
+    /*00000248*/ STR         R3, [R4, #76]               @ 0x4c 
+    /*0000024c*/ STRB        R1, [R4, #88]               @ 0x58 
+    /*00000250*/ B           HI_MPI_HDMI_GetAttr_x28c
+    HI_MPI_HDMI_GetAttr_x254:
+    /*00000254*/ LDR         R1, WORD_03d4               @ LDR         R1, [PC, #376]              @ 0x00000000000003d4 
+    /*00000258*/ MOVW        R3, #2379                   @ 0x94b 
+    /*0000025c*/ LDR         R2, WORD_03d8               @ LDR         R2, [PC, #372]              @ 0x00000000000003d8 
+    /*00000260*/ LDR         R4, [R7, R1] 
+    /*00000264*/ LDR         R1, WORD_03dc               @ LDR         R1, [PC, #368]              @ 0x00000000000003dc 
+    /*00000268*/ ADD         R2, PC, R2 
+    /*0000026c*/ ADD         R1, PC, R1 
+    /*00000270*/ LDR         R0, [R4] 
+    /*00000274*/ BL          fprintf
+    /*00000278*/ LDR         R1, WORD_03e0               @ LDR         R1, [PC, #352]              @ 0x00000000000003e0 
+    /*0000027c*/ MOV         R2, R6 
+    /*00000280*/ LDR         R0, [R4] 
+    /*00000284*/ ADD         R1, PC, R1 
+    /*00000288*/ BL          fprintf
+    HI_MPI_HDMI_GetAttr_x28c:
+    /*0000028c*/ LDR         R2, [SP, #188]              @ 0xbc 
+    /*00000290*/ MOV         R0, R6 
+    /*00000294*/ LDR         R3, [R8] 
+    /*00000298*/ CMP         R2, R3 
+    /*0000029c*/ BNE         HI_MPI_HDMI_GetAttr_x3c8
+    /*000002a0*/ ADD         SP, SP, #192                @ 0xc0 
+    /*000002a4*/ POP         {R4, R5, R6, R7, R8, PC} 
+    HI_MPI_HDMI_GetAttr_x2a8:
+    /*000002a8*/ LDR         R1, WORD_03d4               @ LDR         R1, [PC, #292]              @ 0x00000000000003d4 
+    /*000002ac*/ MOVW        R3, #2377                   @ 0x949 
+    /*000002b0*/ LDR         R2, WORD_03e4               @ LDR         R2, [PC, #300]              @ 0x00000000000003e4 
+    /*000002b4*/ LDR         R4, [R7, R1] 
+    /*000002b8*/ LDR         R1, WORD_03e8               @ LDR         R1, [PC, #296]              @ 0x00000000000003e8 
+    /*000002bc*/ ADD         R2, PC, R2 
+    /*000002c0*/ ADD         R1, PC, R1 
+    /*000002c4*/ LDR         R0, [R4] 
+    /*000002c8*/ BL          fprintf
+    /*000002cc*/ LDR         R1, WORD_03ec               @ LDR         R1, [PC, #280]              @ 0x00000000000003ec 
+    /*000002d0*/ MOV         R2, R6 
+    /*000002d4*/ LDR         R0, [R4] 
+    /*000002d8*/ ADD         R1, PC, R1 
+    /*000002dc*/ BL          fprintf
+    /*000002e0*/ B           HI_MPI_HDMI_GetAttr_x28c
+    HI_MPI_HDMI_GetAttr_x2e4:
+    /*000002e4*/ CMP         R3, #1 
+    /*000002e8*/ BEQ         HI_MPI_HDMI_GetAttr_xc4
+    /*000002ec*/ CMP         R3, #2 
+    /*000002f0*/ BEQ         HI_MPI_HDMI_GetAttr_xc4
+    /*000002f4*/ CMP         R3, #255                    @ 0xff 
+    /*000002f8*/ MOVNE       R3, #256                    @ 0x100 
+    /*000002fc*/ B           HI_MPI_HDMI_GetAttr_xc4
+    HI_MPI_HDMI_GetAttr_x300:
+    /*00000300*/ LDR         R1, WORD_03d4               @ LDR         R1, [PC, #204]              @ 0x00000000000003d4 
+    /*00000304*/ MOVW        R3, #2381                   @ 0x94d 
+    /*00000308*/ LDR         R2, WORD_03f0               @ LDR         R2, [PC, #224]              @ 0x00000000000003f0 
+    /*0000030c*/ LDR         R4, [R7, R1] 
+    /*00000310*/ LDR         R1, WORD_03f4               @ LDR         R1, [PC, #220]              @ 0x00000000000003f4 
+    /*00000314*/ ADD         R2, PC, R2 
+    /*00000318*/ ADD         R1, PC, R1 
+    /*0000031c*/ LDR         R0, [R4] 
+    /*00000320*/ BL          fprintf
+    /*00000324*/ LDR         R1, WORD_03f8               @ LDR         R1, [PC, #204]              @ 0x00000000000003f8 
+    /*00000328*/ MOV         R2, R6 
+    /*0000032c*/ LDR         R0, [R4] 
+    /*00000330*/ ADD         R1, PC, R1 
+    /*00000334*/ BL          fprintf
+    /*00000338*/ B           HI_MPI_HDMI_GetAttr_x28c
+    HI_MPI_HDMI_GetAttr_x33c:
+    /*0000033c*/ LDR         R1, WORD_03d4               @ LDR         R1, [PC, #144]              @ 0x00000000000003d4 
+    /*00000340*/ MOVW        R3, #2370                   @ 0x942 
+    /*00000344*/ LDR         R2, WORD_03fc               @ LDR         R2, [PC, #176]              @ 0x00000000000003fc 
+    /*00000348*/ MOVW        R6, #32770                  @ 0x8002 
+    /*0000034c*/ LDR         R4, [R7, R1] 
+    /*00000350*/ LDR         R1, WORD_0400               @ LDR         R1, [PC, #168]              @ 0x0000000000000400 
+    /*00000354*/ ADD         R2, PC, R2 
+    /*00000358*/ ADD         R1, PC, R1 
+    /*0000035c*/ LDR         R0, [R4] 
+    /*00000360*/ MOVT        R6, #41000                  @ 0xa028 
+    /*00000364*/ BL          fprintf
+    /*00000368*/ LDR         R1, WORD_0404               @ LDR         R1, [PC, #148]              @ 0x0000000000000404 
+    /*0000036c*/ MOV         R2, R5 
+    /*00000370*/ LDR         R0, [R4] 
+    /*00000374*/ ADD         R1, PC, R1 
+    /*00000378*/ BL          fprintf
+    /*0000037c*/ B           HI_MPI_HDMI_GetAttr_x28c
+    HI_MPI_HDMI_GetAttr_x380:
+    /*00000380*/ LDR         R1, WORD_03d4               @ LDR         R1, [PC, #76]               @ 0x00000000000003d4 
+    /*00000384*/ MOVW        R3, #2371                   @ 0x943 
+    /*00000388*/ LDR         R2, WORD_0408               @ LDR         R2, [PC, #120]              @ 0x0000000000000408 
+    /*0000038c*/ MOVW        R6, #32771                  @ 0x8003 
+    /*00000390*/ LDR         R4, [R7, R1] 
+    /*00000394*/ LDR         R1, WORD_040c               @ LDR         R1, [PC, #112]              @ 0x000000000000040c 
+    /*00000398*/ ADD         R2, PC, R2 
+    /*0000039c*/ ADD         R1, PC, R1 
+    /*000003a0*/ LDR         R0, [R4] 
+    /*000003a4*/ MOVT        R6, #41000                  @ 0xa028 
+    /*000003a8*/ BL          fprintf
+    /*000003ac*/ LDR         R0, WORD_0410               @ LDR         R0, [PC, #92]               @ 0x0000000000000410 
+    /*000003b0*/ MOV         R2, #15 
+    /*000003b4*/ LDR         R3, [R4] 
+    /*000003b8*/ MOV         R1, #1 
+    /*000003bc*/ ADD         R0, PC, R0 
+    /*000003c0*/ BL          fwrite
+    /*000003c4*/ B           HI_MPI_HDMI_GetAttr_x28c
+    HI_MPI_HDMI_GetAttr_x3c8:
+    /*000003c8*/ BL          __stack_chk_fail
+    /*000003cc*/ WORD_03cc: .word 0x000003b0
+    /*000003d0*/ WORD_03d0: .word 0x00000000
+    /*000003d4*/ WORD_03d4: .word 0x00000000
+    /*000003d8*/ WORD_03d8: .word 0x00000168
+    /*000003dc*/ WORD_03dc: .word 0x00000168
+    /*000003e0*/ WORD_03e0: .word 0x00000154
+    /*000003e4*/ WORD_03e4: .word 0x00000120
+    /*000003e8*/ WORD_03e8: .word 0x00000120
+    /*000003ec*/ WORD_03ec: .word 0x0000010c
+    /*000003f0*/ WORD_03f0: .word 0x000000d4
+    /*000003f4*/ WORD_03f4: .word 0x000000d4
+    /*000003f8*/ WORD_03f8: .word 0x000000c0
+    /*000003fc*/ WORD_03fc: .word 0x000000a0
+    /*00000400*/ WORD_0400: .word 0x000000a0
+    /*00000404*/ WORD_0404: .word 0x00000088
+    /*00000408*/ WORD_0408: .word 0x00000068
+    /*0000040c*/ WORD_040c: .word 0x00000068
+    /*00000410*/ WORD_0410: .word 0x0000004c
+FUNC_END HI_MPI_HDMI_GetAttr
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_Start
+@ Size: 0x74
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_Start
+    /*00000000*/ LDR         R1, WORD_0060               @ LDR         R1, [PC, #88]               @ 0x0000000000000060 
+    /*00000004*/ SUBS        R2, R0, #0 
+    /*00000008*/ ADD         R1, PC, R1 
+    /*0000000c*/ BNE         HI_MPI_HDMI_Start_x14
+    HI_MPI_HDMI_Start_x10:
+    /*00000010*/ B           HI_MPI_HDMI_Start_x10       @ HI_MPI_HDMI_ComStart [R_ARM_JUMP24: +0x0] 
+    HI_MPI_HDMI_Start_x14:
+    /*00000014*/ LDR         R0, WORD_0064               @ LDR         R0, [PC, #72]               @ 0x0000000000000064 
+    /*00000018*/ MOVW        R3, #2427                   @ 0x97b 
+    /*0000001c*/ PUSH        {R4, R5, R6, LR} 
+    /*00000020*/ MOV         R4, R2 
+    /*00000024*/ LDR         R5, [R1, R0] 
+    /*00000028*/ LDR         R2, WORD_0068               @ LDR         R2, [PC, #56]               @ 0x0000000000000068 
+    /*0000002c*/ LDR         R1, WORD_006c               @ LDR         R1, [PC, #56]               @ 0x000000000000006c 
+    /*00000030*/ ADD         R2, PC, R2 
+    /*00000034*/ ADD         R1, PC, R1 
+    /*00000038*/ LDR         R0, [R5] 
+    /*0000003c*/ BL          fprintf
+    /*00000040*/ LDR         R1, WORD_0070               @ LDR         R1, [PC, #40]               @ 0x0000000000000070 
+    /*00000044*/ MOV         R2, R4 
+    /*00000048*/ LDR         R0, [R5] 
+    /*0000004c*/ ADD         R1, PC, R1 
+    /*00000050*/ BL          fprintf
+    /*00000054*/ MOVW        R0, #32770                  @ 0x8002 
+    /*00000058*/ MOVT        R0, #41000                  @ 0xa028 
+    /*0000005c*/ POP         {R4, R5, R6, PC} 
+    /*00000060*/ WORD_0060: .word 0x00000050
+    /*00000064*/ WORD_0064: .word 0x00000000
+    /*00000068*/ WORD_0068: .word 0x00000030
+    /*0000006c*/ WORD_006c: .word 0x00000030
+    /*00000070*/ WORD_0070: .word 0x0000001c
+FUNC_END HI_MPI_HDMI_Start
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_Stop
+@ Size: 0x74
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_Stop
+    /*00000000*/ LDR         R1, WORD_0060               @ LDR         R1, [PC, #88]               @ 0x0000000000000060 
+    /*00000004*/ SUBS        R2, R0, #0 
+    /*00000008*/ ADD         R1, PC, R1 
+    /*0000000c*/ BNE         HI_MPI_HDMI_Stop_x14
+    HI_MPI_HDMI_Stop_x10:
+    /*00000010*/ B           HI_MPI_HDMI_Stop_x10        @ HI_MPI_HDMI_ComStop [R_ARM_JUMP24: +0x0] 
+    HI_MPI_HDMI_Stop_x14:
+    /*00000014*/ LDR         R0, WORD_0064               @ LDR         R0, [PC, #72]               @ 0x0000000000000064 
+    /*00000018*/ MOVW        R3, #2433                   @ 0x981 
+    /*0000001c*/ PUSH        {R4, R5, R6, LR} 
+    /*00000020*/ MOV         R4, R2 
+    /*00000024*/ LDR         R5, [R1, R0] 
+    /*00000028*/ LDR         R2, WORD_0068               @ LDR         R2, [PC, #56]               @ 0x0000000000000068 
+    /*0000002c*/ LDR         R1, WORD_006c               @ LDR         R1, [PC, #56]               @ 0x000000000000006c 
+    /*00000030*/ ADD         R2, PC, R2 
+    /*00000034*/ ADD         R1, PC, R1 
+    /*00000038*/ LDR         R0, [R5] 
+    /*0000003c*/ BL          fprintf
+    /*00000040*/ LDR         R1, WORD_0070               @ LDR         R1, [PC, #40]               @ 0x0000000000000070 
+    /*00000044*/ MOV         R2, R4 
+    /*00000048*/ LDR         R0, [R5] 
+    /*0000004c*/ ADD         R1, PC, R1 
+    /*00000050*/ BL          fprintf
+    /*00000054*/ MOVW        R0, #32770                  @ 0x8002 
+    /*00000058*/ MOVT        R0, #41000                  @ 0xa028 
+    /*0000005c*/ POP         {R4, R5, R6, PC} 
+    /*00000060*/ WORD_0060: .word 0x00000050
+    /*00000064*/ WORD_0064: .word 0x00000000
+    /*00000068*/ WORD_0068: .word 0x00000030
+    /*0000006c*/ WORD_006c: .word 0x00000030
+    /*00000070*/ WORD_0070: .word 0x0000001c
+FUNC_END HI_MPI_HDMI_Stop
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_Force_GetEDID
+@ Size: 0x100
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_Force_GetEDID
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R5, R0, #0 
+    /*00000008*/ LDR         IP, WORD_00e0               @ LDR         IP, [PC, #208]              @ 0x00000000000000e0 
+    /*0000000c*/ ADD         IP, PC, IP 
+    /*00000010*/ BNE         HI_MPI_HDMI_Force_GetEDID_x54
+    /*00000014*/ CMP         R1, #0 
+    /*00000018*/ MOV         R4, R1 
+    /*0000001c*/ BEQ         HI_MPI_HDMI_Force_GetEDID_x98
+    /*00000020*/ MOV         R3, #520                    @ 0x208 
+    /*00000024*/ MOV         R2, R5 
+    /*00000028*/ MOV         R1, R3 
+    /*0000002c*/ MOV         R0, R4 
+    /*00000030*/ BL          memset_s
+    /*00000034*/ MOV         R0, R5 
+    /*00000038*/ ADD         R2, R4, #4 
+    /*0000003c*/ ADD         R1, R4, #8 
+    /*00000040*/ BL          HI_MPI_HDMI_ComForceGetEDID
+    /*00000044*/ CLZ         R3, R0 
+    /*00000048*/ LSR         R3, R3, #5 
+    /*0000004c*/ STR         R3, [R4] 
+    /*00000050*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_Force_GetEDID_x54:
+    /*00000054*/ LDR         R1, WORD_00e4               @ LDR         R1, [PC, #136]              @ 0x00000000000000e4 
+    /*00000058*/ MOVW        R3, #2441                   @ 0x989 
+    /*0000005c*/ LDR         R2, WORD_00e8               @ LDR         R2, [PC, #132]              @ 0x00000000000000e8 
+    /*00000060*/ LDR         R4, [IP, R1] 
+    /*00000064*/ LDR         R1, WORD_00ec               @ LDR         R1, [PC, #128]              @ 0x00000000000000ec 
+    /*00000068*/ ADD         R2, PC, R2 
+    /*0000006c*/ ADD         R1, PC, R1 
+    /*00000070*/ LDR         R0, [R4] 
+    /*00000074*/ BL          fprintf
+    /*00000078*/ LDR         R1, WORD_00f0               @ LDR         R1, [PC, #112]              @ 0x00000000000000f0 
+    /*0000007c*/ MOV         R2, R5 
+    /*00000080*/ LDR         R0, [R4] 
+    /*00000084*/ ADD         R1, PC, R1 
+    /*00000088*/ BL          fprintf
+    /*0000008c*/ MOVW        R0, #32770                  @ 0x8002 
+    /*00000090*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000094*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_Force_GetEDID_x98:
+    /*00000098*/ LDR         R1, WORD_00e4               @ LDR         R1, [PC, #68]               @ 0x00000000000000e4 
+    /*0000009c*/ MOVW        R3, #2442                   @ 0x98a 
+    /*000000a0*/ LDR         R2, WORD_00f4               @ LDR         R2, [PC, #76]               @ 0x00000000000000f4 
+    /*000000a4*/ LDR         R4, [IP, R1] 
+    /*000000a8*/ LDR         R1, WORD_00f8               @ LDR         R1, [PC, #72]               @ 0x00000000000000f8 
+    /*000000ac*/ ADD         R2, PC, R2 
+    /*000000b0*/ ADD         R1, PC, R1 
+    /*000000b4*/ LDR         R0, [R4] 
+    /*000000b8*/ BL          fprintf
+    /*000000bc*/ LDR         R0, WORD_00fc               @ LDR         R0, [PC, #56]               @ 0x00000000000000fc 
+    /*000000c0*/ MOV         R2, #15 
+    /*000000c4*/ LDR         R3, [R4] 
+    /*000000c8*/ MOV         R1, #1 
+    /*000000cc*/ ADD         R0, PC, R0 
+    /*000000d0*/ BL          fwrite
+    /*000000d4*/ MOVW        R0, #32771                  @ 0x8003 
+    /*000000d8*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000dc*/ POP         {R4, R5, R6, PC} 
+    /*000000e0*/ WORD_00e0: .word 0x000000cc
+    /*000000e4*/ WORD_00e4: .word 0x00000000
+    /*000000e8*/ WORD_00e8: .word 0x00000078
+    /*000000ec*/ WORD_00ec: .word 0x00000078
+    /*000000f0*/ WORD_00f0: .word 0x00000064
+    /*000000f4*/ WORD_00f4: .word 0x00000040
+    /*000000f8*/ WORD_00f8: .word 0x00000040
+    /*000000fc*/ WORD_00fc: .word 0x00000028
+FUNC_END HI_MPI_HDMI_Force_GetEDID
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_SetInfoFrame
+@ Size: 0xe24
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_SetInfoFrame
+    /*00000000*/ PUSH        {R4, R5, R6, R7, R8, R9, SL, FP, LR} 
+    /*00000004*/ SUBS        R8, R0, #0 
+    /*00000008*/ LDR         R5, WORD_0cc0               @ LDR         R5, [PC, #3248]             @ 0x0000000000000cc0 
+    /*0000000c*/ SUB         SP, SP, #132                @ 0x84 
+    /*00000010*/ LDR         R3, WORD_0cc4               @ LDR         R3, [PC, #3244]             @ 0x0000000000000cc4 
+    /*00000014*/ ADD         R5, PC, R5 
+    /*00000018*/ LDR         R6, [R5, R3] 
+    /*0000001c*/ LDR         R3, [R6] 
+    /*00000020*/ STR         R3, [SP, #124]              @ 0x7c 
+    /*00000024*/ BNE         HI_MPI_HDMI_SetInfoFrame_x69c
+    /*00000028*/ CMP         R1, #0 
+    /*0000002c*/ MOV         R4, R1 
+    /*00000030*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x7f0
+    /*00000034*/ MOV         R3, #92                     @ 0x5c 
+    /*00000038*/ ADD         R7, SP, #32 
+    /*0000003c*/ MOV         R1, R3 
+    /*00000040*/ MOV         R2, R8 
+    /*00000044*/ MOV         R0, R7 
+    /*00000048*/ BL          memset_s
+    /*0000004c*/ LDR         R3, [R4] 
+    /*00000050*/ CMP         R3, #4 
+    /*00000054*/ ADDLS       PC, PC, R3, LSL #2 
+    /*00000058*/ B           HI_MPI_HDMI_SetInfoFrame_x488
+    /*0000005c*/ B           HI_MPI_HDMI_SetInfoFrame_x198
+    /*00000060*/ B           HI_MPI_HDMI_SetInfoFrame_x10c
+    /*00000064*/ B           HI_MPI_HDMI_SetInfoFrame_x70
+    /*00000068*/ B           HI_MPI_HDMI_SetInfoFrame_x10c
+    /*0000006c*/ B           HI_MPI_HDMI_SetInfoFrame_x10c
+    HI_MPI_HDMI_SetInfoFrame_x70:
+    /*00000070*/ LDR         R2, [R4, #4] 
+    /*00000074*/ CMP         R2, #7 
+    /*00000078*/ BHI         HI_MPI_HDMI_SetInfoFrame_x8c0
+    /*0000007c*/ LDR         R3, [R4, #8] 
+    /*00000080*/ CMP         R3, #15 
+    /*00000084*/ BHI         HI_MPI_HDMI_SetInfoFrame_x904
+    /*00000088*/ LDR         R1, [R4, #12] 
+    /*0000008c*/ CMP         R1, #3 
+    /*00000090*/ BHI         HI_MPI_HDMI_SetInfoFrame_x87c
+    /*00000094*/ LDR         R0, [R4, #16] 
+    /*00000098*/ CMP         R0, #7 
+    /*0000009c*/ BHI         HI_MPI_HDMI_SetInfoFrame_xa58
+    /*000000a0*/ LDR         IP, [R4, #24] 
+    /*000000a4*/ CMP         IP, #15 
+    /*000000a8*/ BHI         HI_MPI_HDMI_SetInfoFrame_x9d0
+    /*000000ac*/ LDR         LR, [R4, #28] 
+    /*000000b0*/ CMP         LR, #2 
+    /*000000b4*/ BHI         HI_MPI_HDMI_SetInfoFrame_xa14
+    /*000000b8*/ LDR         R8, [R4, #32] 
+    /*000000bc*/ CMP         R8, #1 
+    /*000000c0*/ BHI         HI_MPI_HDMI_SetInfoFrame_x724
+    /*000000c4*/ STRB        R2, [SP, #46]               @ 0x2e 
+    /*000000c8*/ CMP         R3, #0 
+    /*000000cc*/ MOV         R2, #132                    @ 0x84 
+    /*000000d0*/ STR         R2, [SP, #36]               @ 0x24 
+    /*000000d4*/ BNE         HI_MPI_HDMI_SetInfoFrame_x4cc
+    HI_MPI_HDMI_SetInfoFrame_xd8:
+    /*000000d8*/ STR         R3, [SP, #48]               @ 0x30 
+    /*000000dc*/ LDRB        R3, [R4, #20] 
+    /*000000e0*/ STR         R1, [SP, #52]               @ 0x34 
+    /*000000e4*/ STRB        R3, [SP, #64]               @ 0x40 
+    /*000000e8*/ STR         R0, [SP, #56]               @ 0x38 
+    /*000000ec*/ STRB        IP, [SP, #72]               @ 0x48 
+    /*000000f0*/ STR         LR, [SP, #68]               @ 0x44 
+    /*000000f4*/ STR         R8, [SP, #76]               @ 0x4c 
+    HI_MPI_HDMI_SetInfoFrame_xf8:
+    /*000000f8*/ MOV         R1, R7 
+    /*000000fc*/ MOV         R0, #0 
+    /*00000100*/ BL          HI_MPI_HDMI_ComSetInfoFrame
+    /*00000104*/ MOV         R7, R0 
+    /*00000108*/ B           HI_MPI_HDMI_SetInfoFrame_x17c
+    HI_MPI_HDMI_SetInfoFrame_x10c:
+    /*0000010c*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #2996]             @ 0x0000000000000cc8 
+    /*00000110*/ MOVW        R3, #1826                   @ 0x722 
+    /*00000114*/ LDR         R2, WORD_0ccc               @ LDR         R2, [PC, #2992]             @ 0x0000000000000ccc 
+    /*00000118*/ MOVW        R7, #32778                  @ 0x800a 
+    /*0000011c*/ LDR         R5, [R5, R1] 
+    /*00000120*/ LDR         R1, WORD_0cd0               @ LDR         R1, [PC, #2984]             @ 0x0000000000000cd0 
+    /*00000124*/ ADD         R2, PC, R2 
+    /*00000128*/ ADD         R1, PC, R1 
+    /*0000012c*/ LDR         R0, [R5] 
+    /*00000130*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000134*/ BL          fprintf
+    /*00000138*/ LDR         R1, WORD_0cd4               @ LDR         R1, [PC, #2964]             @ 0x0000000000000cd4 
+    /*0000013c*/ LDR         R2, [R4] 
+    /*00000140*/ LDR         R0, [R5] 
+    /*00000144*/ ADD         R1, PC, R1 
+    /*00000148*/ BL          fprintf
+    HI_MPI_HDMI_SetInfoFrame_x14c:
+    /*0000014c*/ LDR         R2, WORD_0cd8               @ LDR         R2, [PC, #2948]             @ 0x0000000000000cd8 
+    /*00000150*/ MOVW        R3, #2462                   @ 0x99e 
+    /*00000154*/ LDR         R1, WORD_0cdc               @ LDR         R1, [PC, #2944]             @ 0x0000000000000cdc 
+    /*00000158*/ ADD         R2, PC, R2 
+    /*0000015c*/ ADD         R1, PC, R1 
+    /*00000160*/ LDR         R0, [R5] 
+    /*00000164*/ BL          fprintf
+    /*00000168*/ LDR         R1, WORD_0ce0               @ LDR         R1, [PC, #2928]             @ 0x0000000000000ce0 
+    /*0000016c*/ MOV         R2, R7 
+    /*00000170*/ LDR         R0, [R5] 
+    /*00000174*/ ADD         R1, PC, R1 
+    /*00000178*/ BL          fprintf
+    HI_MPI_HDMI_SetInfoFrame_x17c:
+    /*0000017c*/ LDR         R2, [SP, #124]              @ 0x7c 
+    /*00000180*/ MOV         R0, R7 
+    /*00000184*/ LDR         R3, [R6] 
+    /*00000188*/ CMP         R2, R3 
+    /*0000018c*/ BNE         HI_MPI_HDMI_SetInfoFrame_xcbc
+    /*00000190*/ ADD         SP, SP, #132                @ 0x84 
+    /*00000194*/ POP         {R4, R5, R6, R7, R8, R9, SL, FP, PC} 
+    HI_MPI_HDMI_SetInfoFrame_x198:
+    /*00000198*/ LDR         R0, [R4, #4] 
+    /*0000019c*/ SUB         R3, R0, #12 
+    /*000001a0*/ SUB         R2, R0, #15 
+    /*000001a4*/ SUB         R1, R0, #27 
+    /*000001a8*/ CMP         R2, #3 
+    /*000001ac*/ CMPHI       R3, #1 
+    /*000001b0*/ SUB         R2, R0, #31 
+    /*000001b4*/ MOVLS       R3, #1 
+    /*000001b8*/ MOVHI       R3, #0 
+    /*000001bc*/ CMP         R0, #22 
+    /*000001c0*/ ORREQ       R3, R3, #1 
+    /*000001c4*/ CMP         R1, #1 
+    /*000001c8*/ ORRLS       R3, R3, #1 
+    /*000001cc*/ BICS        R2, R2, #2 
+    /*000001d0*/ ORREQ       R3, R3, #1 
+    /*000001d4*/ CMP         R3, #0 
+    /*000001d8*/ BNE         HI_MPI_HDMI_SetInfoFrame_x444
+    /*000001dc*/ CMP         R0, #50                     @ 0x32 
+    /*000001e0*/ BHI         HI_MPI_HDMI_SetInfoFrame_x948
+    /*000001e4*/ LDR         LR, [R4, #8] 
+    /*000001e8*/ CMP         LR, #3 
+    /*000001ec*/ BHI         HI_MPI_HDMI_SetInfoFrame_x838
+    /*000001f0*/ LDR         R3, [R4, #12] 
+    /*000001f4*/ STR         R3, [SP, #4] 
+    /*000001f8*/ CMP         R3, #1 
+    /*000001fc*/ BHI         HI_MPI_HDMI_SetInfoFrame_x6e0
+    /*00000200*/ LDR         SL, [R4, #16] 
+    /*00000204*/ CMP         SL, #3 
+    /*00000208*/ BHI         HI_MPI_HDMI_SetInfoFrame_x98c
+    /*0000020c*/ LDR         R9, [R4, #20] 
+    /*00000210*/ CMP         R9, #3 
+    /*00000214*/ BHI         HI_MPI_HDMI_SetInfoFrame_xa9c
+    /*00000218*/ LDR         R3, [R4, #24] 
+    /*0000021c*/ STR         R3, [SP, #8] 
+    /*00000220*/ CMP         R3, #3 
+    /*00000224*/ BHI         HI_MPI_HDMI_SetInfoFrame_xae0
+    /*00000228*/ LDR         IP, [R4, #28] 
+    /*0000022c*/ CMP         IP, #6 
+    /*00000230*/ BHI         HI_MPI_HDMI_SetInfoFrame_xb24
+    /*00000234*/ LDR         R8, [R4, #32] 
+    /*00000238*/ CMP         R8, #4 
+    /*0000023c*/ BHI         HI_MPI_HDMI_SetInfoFrame_xb68
+    /*00000240*/ LDR         R1, [R4, #36]               @ 0x24 
+    /*00000244*/ SUB         R3, R1, #2 
+    /*00000248*/ SUB         R2, R1, #5 
+    /*0000024c*/ CMP         R3, #13 
+    /*00000250*/ MOVLS       R3, #0 
+    /*00000254*/ MOVHI       R3, #1 
+    /*00000258*/ CMP         R2, #2 
+    /*0000025c*/ ORRLS       R3, R3, #1 
+    /*00000260*/ CMP         R3, #0 
+    /*00000264*/ BNE         HI_MPI_HDMI_SetInfoFrame_x540
+    /*00000268*/ CMP         R1, #12 
+    /*0000026c*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x540
+    /*00000270*/ LDR         R3, [R4, #40]               @ 0x28 
+    /*00000274*/ STR         R3, [SP, #12] 
+    /*00000278*/ CMP         R3, #3 
+    /*0000027c*/ BHI         HI_MPI_HDMI_SetInfoFrame_xbf0
+    /*00000280*/ LDR         R3, [R4, #44]               @ 0x2c 
+    /*00000284*/ STR         R3, [SP, #16] 
+    /*00000288*/ CMP         R3, #2 
+    /*0000028c*/ BHI         HI_MPI_HDMI_SetInfoFrame_xbac
+    /*00000290*/ LDR         R3, [R4, #48]               @ 0x30 
+    /*00000294*/ STR         R3, [SP, #20] 
+    /*00000298*/ CMP         R3, #1 
+    /*0000029c*/ BHI         HI_MPI_HDMI_SetInfoFrame_x768
+    /*000002a0*/ LDR         R3, [R4, #52]               @ 0x34 
+    /*000002a4*/ STR         R3, [SP, #24] 
+    /*000002a8*/ CMP         R3, #9 
+    /*000002ac*/ BHI         HI_MPI_HDMI_SetInfoFrame_xc78
+    /*000002b0*/ LDR         R3, [R4, #56]               @ 0x38 
+    /*000002b4*/ STR         R3, [SP, #28] 
+    /*000002b8*/ CMP         R3, #3 
+    /*000002bc*/ BHI         HI_MPI_HDMI_SetInfoFrame_xc34
+    /*000002c0*/ LDR         FP, [R4, #60]               @ 0x3c 
+    /*000002c4*/ CMP         FP, #1 
+    /*000002c8*/ BHI         HI_MPI_HDMI_SetInfoFrame_x7ac
+    /*000002cc*/ LDR         R5, WORD_0ce4               @ LDR         R5, [PC, #2576]             @ 0x0000000000000ce4 
+    /*000002d0*/ MOV         R3, #130                    @ 0x82 
+    /*000002d4*/ STR         R3, [SP, #36]               @ 0x24 
+    /*000002d8*/ MOV         R2, #0 
+    /*000002dc*/ ADD         R5, PC, R5 
+    /*000002e0*/ MOV         R3, R2 
+    /*000002e4*/ B           HI_MPI_HDMI_SetInfoFrame_x2f8
+    HI_MPI_HDMI_SetInfoFrame_x2e8:
+    /*000002e8*/ ADD         R3, R3, #1 
+    /*000002ec*/ CMP         R3, #50                     @ 0x32 
+    /*000002f0*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x624
+    /*000002f4*/ LDR         R2, [R5, R3, LSL #3] 
+    HI_MPI_HDMI_SetInfoFrame_x2f8:
+    /*000002f8*/ CMP         R0, R2 
+    /*000002fc*/ BNE         HI_MPI_HDMI_SetInfoFrame_x2e8
+    /*00000300*/ LDR         R2, WORD_0ce8               @ LDR         R2, [PC, #2528]             @ 0x0000000000000ce8 
+    /*00000304*/ ADD         R2, PC, R2 
+    /*00000308*/ ADD         R3, R2, R3, LSL #3 
+    /*0000030c*/ LDR         R0, [R3, #4] 
+    HI_MPI_HDMI_SetInfoFrame_x310:
+    /*00000310*/ STR         R0, [SP, #96]               @ 0x60 
+    /*00000314*/ CMP         LR, #0 
+    /*00000318*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x33c
+    /*0000031c*/ CMP         LR, #1 
+    /*00000320*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x33c
+    /*00000324*/ CMP         LR, #2 
+    /*00000328*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x33c
+    /*0000032c*/ CMP         LR, #3 
+    /*00000330*/ MOVNE       R3, #4 
+    /*00000334*/ STRNE       R3, [SP, #48]               @ 0x30 
+    /*00000338*/ BNE         HI_MPI_HDMI_SetInfoFrame_x340
+    HI_MPI_HDMI_SetInfoFrame_x33c:
+    /*0000033c*/ STR         LR, [SP, #48]               @ 0x30 
+    HI_MPI_HDMI_SetInfoFrame_x340:
+    /*00000340*/ LDR         R3, [SP, #4] 
+    /*00000344*/ CMP         R9, #0 
+    /*00000348*/ STR         R3, [SP, #52]               @ 0x34 
+    /*0000034c*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x614
+    /*00000350*/ CMP         R9, #1 
+    /*00000354*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x614
+    /*00000358*/ CMP         R9, #2 
+    /*0000035c*/ MOVNE       R3, #4 
+    /*00000360*/ STRNE       R3, [SP, #64]               @ 0x40 
+    /*00000364*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x614
+    HI_MPI_HDMI_SetInfoFrame_x368:
+    /*00000368*/ LDR         R3, [SP, #8] 
+    /*0000036c*/ CMP         IP, #0 
+    /*00000370*/ STR         R3, [SP, #68]               @ 0x44 
+    /*00000374*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x3b0
+    /*00000378*/ CMP         IP, #1 
+    /*0000037c*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x3b0
+    /*00000380*/ CMP         IP, #2 
+    /*00000384*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x3b0
+    /*00000388*/ CMP         IP, #3 
+    /*0000038c*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x3b0
+    /*00000390*/ CMP         IP, #4 
+    /*00000394*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x3b0
+    /*00000398*/ CMP         IP, #5 
+    /*0000039c*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x3b0
+    /*000003a0*/ CMP         IP, #6 
+    /*000003a4*/ MOVNE       R3, #8 
+    /*000003a8*/ STRNE       R3, [SP, #84]               @ 0x54 
+    /*000003ac*/ BNE         HI_MPI_HDMI_SetInfoFrame_x3b4
+    HI_MPI_HDMI_SetInfoFrame_x3b0:
+    /*000003b0*/ STR         IP, [SP, #84]               @ 0x54 
+    HI_MPI_HDMI_SetInfoFrame_x3b4:
+    /*000003b4*/ CMP         R8, #0 
+    /*000003b8*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x3e4
+    /*000003bc*/ CMP         R8, #1 
+    /*000003c0*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x3e4
+    /*000003c4*/ CMP         R8, #2 
+    /*000003c8*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x3e4
+    /*000003cc*/ CMP         R8, #3 
+    /*000003d0*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x3e4
+    /*000003d4*/ CMP         R8, #4 
+    /*000003d8*/ MOVNE       R3, #5 
+    /*000003dc*/ STRNE       R3, [SP, #72]               @ 0x48 
+    /*000003e0*/ BNE         HI_MPI_HDMI_SetInfoFrame_x3e8
+    HI_MPI_HDMI_SetInfoFrame_x3e4:
+    /*000003e4*/ STR         R8, [SP, #72]               @ 0x48 
+    HI_MPI_HDMI_SetInfoFrame_x3e8:
+    /*000003e8*/ CMP         R1, #2 
+    /*000003ec*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x584
+    /*000003f0*/ CMP         R1, #3 
+    /*000003f4*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x584
+    /*000003f8*/ CMP         R1, #4 
+    /*000003fc*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x584
+    /*00000400*/ CMP         R1, #8 
+    /*00000404*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x584
+    /*00000408*/ CMP         R1, #9 
+    /*0000040c*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x584
+    /*00000410*/ CMP         R1, #10 
+    /*00000414*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x584
+    /*00000418*/ CMP         R1, #11 
+    /*0000041c*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x584
+    /*00000420*/ CMP         R1, #13 
+    /*00000424*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x584
+    /*00000428*/ CMP         R1, #14 
+    /*0000042c*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x584
+    /*00000430*/ CMP         R1, #15 
+    /*00000434*/ MOVEQ       R3, #15 
+    /*00000438*/ MOVNE       R3, #16 
+    /*0000043c*/ STR         R3, [SP, #76]               @ 0x4c 
+    /*00000440*/ B           HI_MPI_HDMI_SetInfoFrame_x588
+    HI_MPI_HDMI_SetInfoFrame_x444:
+    /*00000444*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #2172]             @ 0x0000000000000cc8 
+    /*00000448*/ MOVW        R3, #1516                   @ 0x5ec 
+    /*0000044c*/ LDR         R2, WORD_0cec               @ LDR         R2, [PC, #2200]             @ 0x0000000000000cec 
+    /*00000450*/ MOVW        R7, #32778                  @ 0x800a 
+    /*00000454*/ LDR         R5, [R5, R1] 
+    /*00000458*/ LDR         R1, WORD_0cf0               @ LDR         R1, [PC, #2192]             @ 0x0000000000000cf0 
+    /*0000045c*/ ADD         R2, PC, R2 
+    /*00000460*/ ADD         R1, PC, R1 
+    /*00000464*/ LDR         R0, [R5] 
+    /*00000468*/ MOVT        R7, #41000                  @ 0xa028 
+    /*0000046c*/ BL          fprintf
+    /*00000470*/ LDR         R1, WORD_0cf4               @ LDR         R1, [PC, #2172]             @ 0x0000000000000cf4 
+    /*00000474*/ LDR         R2, [R4, #4] 
+    /*00000478*/ LDR         R0, [R5] 
+    /*0000047c*/ ADD         R1, PC, R1 
+    /*00000480*/ BL          fprintf
+    /*00000484*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x488:
+    /*00000488*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #2104]             @ 0x0000000000000cc8 
+    /*0000048c*/ MOVW        R3, #1829                   @ 0x725 
+    /*00000490*/ LDR         R2, WORD_0cf8               @ LDR         R2, [PC, #2144]             @ 0x0000000000000cf8 
+    /*00000494*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000498*/ LDR         R5, [R5, R1] 
+    /*0000049c*/ LDR         R1, WORD_0cfc               @ LDR         R1, [PC, #2136]             @ 0x0000000000000cfc 
+    /*000004a0*/ ADD         R2, PC, R2 
+    /*000004a4*/ ADD         R1, PC, R1 
+    /*000004a8*/ LDR         R0, [R5] 
+    /*000004ac*/ MOVT        R7, #41000                  @ 0xa028 
+    /*000004b0*/ BL          fprintf
+    /*000004b4*/ LDR         R1, WORD_0d00               @ LDR         R1, [PC, #2116]             @ 0x0000000000000d00 
+    /*000004b8*/ LDR         R2, [R4] 
+    /*000004bc*/ LDR         R0, [R5] 
+    /*000004c0*/ ADD         R1, PC, R1 
+    /*000004c4*/ BL          fprintf
+    /*000004c8*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x4cc:
+    /*000004cc*/ CMP         R3, #1 
+    /*000004d0*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*000004d4*/ CMP         R3, #2 
+    /*000004d8*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*000004dc*/ CMP         R3, #3 
+    /*000004e0*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*000004e4*/ CMP         R3, #4 
+    /*000004e8*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*000004ec*/ CMP         R3, #5 
+    /*000004f0*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*000004f4*/ CMP         R3, #6 
+    /*000004f8*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*000004fc*/ CMP         R3, #7 
+    /*00000500*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*00000504*/ CMP         R3, #8 
+    /*00000508*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*0000050c*/ CMP         R3, #9 
+    /*00000510*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*00000514*/ CMP         R3, #10 
+    /*00000518*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*0000051c*/ CMP         R3, #11 
+    /*00000520*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*00000524*/ CMP         R3, #12 
+    /*00000528*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*0000052c*/ CMP         R3, #13 
+    /*00000530*/ BEQ         HI_MPI_HDMI_SetInfoFrame_xd8
+    /*00000534*/ CMP         R3, #14 
+    /*00000538*/ MOVNE       R3, #15 
+    /*0000053c*/ B           HI_MPI_HDMI_SetInfoFrame_xd8
+    HI_MPI_HDMI_SetInfoFrame_x540:
+    /*00000540*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #1920]             @ 0x0000000000000cc8 
+    /*00000544*/ MOV         R3, #1600                   @ 0x640 
+    /*00000548*/ LDR         R2, WORD_0d04               @ LDR         R2, [PC, #1972]             @ 0x0000000000000d04 
+    /*0000054c*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000550*/ LDR         R5, [R5, R1] 
+    /*00000554*/ LDR         R1, WORD_0d08               @ LDR         R1, [PC, #1964]             @ 0x0000000000000d08 
+    /*00000558*/ ADD         R2, PC, R2 
+    /*0000055c*/ ADD         R1, PC, R1 
+    /*00000560*/ LDR         R0, [R5] 
+    /*00000564*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000568*/ BL          fprintf
+    /*0000056c*/ LDR         R1, WORD_0d0c               @ LDR         R1, [PC, #1944]             @ 0x0000000000000d0c 
+    /*00000570*/ LDR         R2, [R4, #36]               @ 0x24 
+    /*00000574*/ LDR         R0, [R5] 
+    /*00000578*/ ADD         R1, PC, R1 
+    /*0000057c*/ BL          fprintf
+    /*00000580*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x584:
+    /*00000584*/ STR         R1, [SP, #76]               @ 0x4c 
+    HI_MPI_HDMI_SetInfoFrame_x588:
+    /*00000588*/ LDR         R3, [SP, #12] 
+    /*0000058c*/ CMP         FP, #0 
+    /*00000590*/ STR         R3, [SP, #92]               @ 0x5c 
+    /*00000594*/ LDR         R3, [SP, #16] 
+    /*00000598*/ STR         R3, [SP, #88]               @ 0x58 
+    /*0000059c*/ LDR         R3, [SP, #24] 
+    /*000005a0*/ ADD         R3, R3, #1 
+    /*000005a4*/ STRB        R3, [SP, #112]              @ 0x70 
+    /*000005a8*/ LDR         R3, [SP, #20] 
+    /*000005ac*/ STR         R3, [SP, #80]               @ 0x50 
+    /*000005b0*/ LDR         R3, [SP, #28] 
+    /*000005b4*/ STR         R3, [SP, #108]              @ 0x6c 
+    /*000005b8*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x61c
+    /*000005bc*/ CMP         FP, #1 
+    /*000005c0*/ MOVNE       R3, #2 
+    /*000005c4*/ STRNE       R3, [SP, #104]              @ 0x68 
+    /*000005c8*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x61c
+    HI_MPI_HDMI_SetInfoFrame_x5cc:
+    /*000005cc*/ LDRH        R0, [R4, #64]               @ 0x40 
+    /*000005d0*/ CMP         SL, #2 
+    /*000005d4*/ LDRH        R1, [R4, #66]               @ 0x42 
+    /*000005d8*/ LDRH        R2, [R4, #68]               @ 0x44 
+    /*000005dc*/ LDRH        R3, [R4, #70]               @ 0x46 
+    /*000005e0*/ STRH        R0, [SP, #114]              @ 0x72 
+    /*000005e4*/ STRH        R1, [SP, #116]              @ 0x74 
+    /*000005e8*/ STRH        R2, [SP, #118]              @ 0x76 
+    /*000005ec*/ STRH        R3, [SP, #120]              @ 0x78 
+    /*000005f0*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x690
+    /*000005f4*/ CMP         SL, #3 
+    /*000005f8*/ BEQ         HI_MPI_HDMI_SetInfoFrame_x680
+    /*000005fc*/ CMP         SL, #1 
+    /*00000600*/ MOVNE       R3, #0 
+    /*00000604*/ STRNE       R3, [SP, #56]               @ 0x38 
+    /*00000608*/ STRNE       R3, [SP, #60]               @ 0x3c 
+    /*0000060c*/ STREQ       SL, [SP, #60]               @ 0x3c 
+    /*00000610*/ B           HI_MPI_HDMI_SetInfoFrame_xf8
+    HI_MPI_HDMI_SetInfoFrame_x614:
+    /*00000614*/ STR         R9, [SP, #64]               @ 0x40 
+    /*00000618*/ B           HI_MPI_HDMI_SetInfoFrame_x368
+    HI_MPI_HDMI_SetInfoFrame_x61c:
+    /*0000061c*/ STR         FP, [SP, #104]              @ 0x68 
+    /*00000620*/ B           HI_MPI_HDMI_SetInfoFrame_x5cc
+    HI_MPI_HDMI_SetInfoFrame_x624:
+    /*00000624*/ BL          Hdmi_Fmt2HdmiTiming.part.0
+    /*00000628*/ LDR         R3, [R4, #12] 
+    /*0000062c*/ LDR         LR, [R4, #8] 
+    /*00000630*/ STR         R3, [SP, #4] 
+    /*00000634*/ LDR         R3, [R4, #24] 
+    /*00000638*/ LDR         R9, [R4, #20] 
+    /*0000063c*/ STR         R3, [SP, #8] 
+    /*00000640*/ LDR         R3, [R4, #40]               @ 0x28 
+    /*00000644*/ LDR         IP, [R4, #28] 
+    /*00000648*/ STR         R3, [SP, #12] 
+    /*0000064c*/ LDR         R3, [R4, #44]               @ 0x2c 
+    /*00000650*/ LDR         R8, [R4, #32] 
+    /*00000654*/ STR         R3, [SP, #16] 
+    /*00000658*/ LDR         R3, [R4, #48]               @ 0x30 
+    /*0000065c*/ LDR         R1, [R4, #36]               @ 0x24 
+    /*00000660*/ STR         R3, [SP, #20] 
+    /*00000664*/ LDR         R3, [R4, #52]               @ 0x34 
+    /*00000668*/ LDR         FP, [R4, #60]               @ 0x3c 
+    /*0000066c*/ STR         R3, [SP, #24] 
+    /*00000670*/ LDR         R3, [R4, #56]               @ 0x38 
+    /*00000674*/ LDR         SL, [R4, #16] 
+    /*00000678*/ STR         R3, [SP, #28] 
+    /*0000067c*/ B           HI_MPI_HDMI_SetInfoFrame_x310
+    HI_MPI_HDMI_SetInfoFrame_x680:
+    /*00000680*/ MOV         R3, #1 
+    /*00000684*/ STR         R3, [SP, #56]               @ 0x38 
+    /*00000688*/ STR         R3, [SP, #60]               @ 0x3c 
+    /*0000068c*/ B           HI_MPI_HDMI_SetInfoFrame_xf8
+    HI_MPI_HDMI_SetInfoFrame_x690:
+    /*00000690*/ MOV         R3, #1 
+    /*00000694*/ STR         R3, [SP, #56]               @ 0x38 
+    /*00000698*/ B           HI_MPI_HDMI_SetInfoFrame_xf8
+    HI_MPI_HDMI_SetInfoFrame_x69c:
+    /*0000069c*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #1572]             @ 0x0000000000000cc8 
+    /*000006a0*/ MOVW        R3, #2456                   @ 0x998 
+    /*000006a4*/ LDR         R2, WORD_0d10               @ LDR         R2, [PC, #1636]             @ 0x0000000000000d10 
+    /*000006a8*/ MOVW        R7, #32770                  @ 0x8002 
+    /*000006ac*/ LDR         R4, [R5, R1] 
+    /*000006b0*/ LDR         R1, WORD_0d14               @ LDR         R1, [PC, #1628]             @ 0x0000000000000d14 
+    /*000006b4*/ ADD         R2, PC, R2 
+    /*000006b8*/ ADD         R1, PC, R1 
+    /*000006bc*/ LDR         R0, [R4] 
+    /*000006c0*/ MOVT        R7, #41000                  @ 0xa028 
+    /*000006c4*/ BL          fprintf
+    /*000006c8*/ LDR         R1, WORD_0d18               @ LDR         R1, [PC, #1608]             @ 0x0000000000000d18 
+    /*000006cc*/ MOV         R2, R8 
+    /*000006d0*/ LDR         R0, [R4] 
+    /*000006d4*/ ADD         R1, PC, R1 
+    /*000006d8*/ BL          fprintf
+    /*000006dc*/ B           HI_MPI_HDMI_SetInfoFrame_x17c
+    HI_MPI_HDMI_SetInfoFrame_x6e0:
+    /*000006e0*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #1504]             @ 0x0000000000000cc8 
+    /*000006e4*/ MOVW        R3, #1558                   @ 0x616 
+    /*000006e8*/ LDR         R2, WORD_0d1c               @ LDR         R2, [PC, #1580]             @ 0x0000000000000d1c 
+    /*000006ec*/ MOVW        R7, #32770                  @ 0x8002 
+    /*000006f0*/ LDR         R5, [R5, R1] 
+    /*000006f4*/ LDR         R1, WORD_0d20               @ LDR         R1, [PC, #1572]             @ 0x0000000000000d20 
+    /*000006f8*/ ADD         R2, PC, R2 
+    /*000006fc*/ ADD         R1, PC, R1 
+    /*00000700*/ LDR         R0, [R5] 
+    /*00000704*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000708*/ BL          fprintf
+    /*0000070c*/ LDR         R1, WORD_0d24               @ LDR         R1, [PC, #1552]             @ 0x0000000000000d24 
+    /*00000710*/ LDR         R2, [R4, #12] 
+    /*00000714*/ LDR         R0, [R5] 
+    /*00000718*/ ADD         R1, PC, R1 
+    /*0000071c*/ BL          fprintf
+    /*00000720*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x724:
+    /*00000724*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #1436]             @ 0x0000000000000cc8 
+    /*00000728*/ MOVW        R3, #1716                   @ 0x6b4 
+    /*0000072c*/ LDR         R2, WORD_0d28               @ LDR         R2, [PC, #1524]             @ 0x0000000000000d28 
+    /*00000730*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000734*/ LDR         R5, [R5, R1] 
+    /*00000738*/ LDR         R1, WORD_0d2c               @ LDR         R1, [PC, #1516]             @ 0x0000000000000d2c 
+    /*0000073c*/ ADD         R2, PC, R2 
+    /*00000740*/ ADD         R1, PC, R1 
+    /*00000744*/ LDR         R0, [R5] 
+    /*00000748*/ MOVT        R7, #41000                  @ 0xa028 
+    /*0000074c*/ BL          fprintf
+    /*00000750*/ LDR         R1, WORD_0d30               @ LDR         R1, [PC, #1496]             @ 0x0000000000000d30 
+    /*00000754*/ LDR         R2, [R4, #32] 
+    /*00000758*/ LDR         R0, [R5] 
+    /*0000075c*/ ADD         R1, PC, R1 
+    /*00000760*/ BL          fprintf
+    /*00000764*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x768:
+    /*00000768*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #1368]             @ 0x0000000000000cc8 
+    /*0000076c*/ MOVW        R3, #1622                   @ 0x656 
+    /*00000770*/ LDR         R2, WORD_0d34               @ LDR         R2, [PC, #1468]             @ 0x0000000000000d34 
+    /*00000774*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000778*/ LDR         R5, [R5, R1] 
+    /*0000077c*/ LDR         R1, WORD_0d38               @ LDR         R1, [PC, #1460]             @ 0x0000000000000d38 
+    /*00000780*/ ADD         R2, PC, R2 
+    /*00000784*/ ADD         R1, PC, R1 
+    /*00000788*/ LDR         R0, [R5] 
+    /*0000078c*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000790*/ BL          fprintf
+    /*00000794*/ LDR         R1, WORD_0d3c               @ LDR         R1, [PC, #1440]             @ 0x0000000000000d3c 
+    /*00000798*/ LDR         R2, [R4, #48]               @ 0x30 
+    /*0000079c*/ LDR         R0, [R5] 
+    /*000007a0*/ ADD         R1, PC, R1 
+    /*000007a4*/ BL          fprintf
+    /*000007a8*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x7ac:
+    /*000007ac*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #1300]             @ 0x0000000000000cc8 
+    /*000007b0*/ MOVW        R3, #1643                   @ 0x66b 
+    /*000007b4*/ LDR         R2, WORD_0d40               @ LDR         R2, [PC, #1412]             @ 0x0000000000000d40 
+    /*000007b8*/ MOVW        R7, #32770                  @ 0x8002 
+    /*000007bc*/ LDR         R5, [R5, R1] 
+    /*000007c0*/ LDR         R1, WORD_0d44               @ LDR         R1, [PC, #1404]             @ 0x0000000000000d44 
+    /*000007c4*/ ADD         R2, PC, R2 
+    /*000007c8*/ ADD         R1, PC, R1 
+    /*000007cc*/ LDR         R0, [R5] 
+    /*000007d0*/ MOVT        R7, #41000                  @ 0xa028 
+    /*000007d4*/ BL          fprintf
+    /*000007d8*/ LDR         R1, WORD_0d48               @ LDR         R1, [PC, #1384]             @ 0x0000000000000d48 
+    /*000007dc*/ LDR         R2, [R4, #60]               @ 0x3c 
+    /*000007e0*/ LDR         R0, [R5] 
+    /*000007e4*/ ADD         R1, PC, R1 
+    /*000007e8*/ BL          fprintf
+    /*000007ec*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x7f0:
+    /*000007f0*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #1232]             @ 0x0000000000000cc8 
+    /*000007f4*/ MOVW        R3, #2457                   @ 0x999 
+    /*000007f8*/ LDR         R2, WORD_0d4c               @ LDR         R2, [PC, #1356]             @ 0x0000000000000d4c 
+    /*000007fc*/ MOVW        R7, #32771                  @ 0x8003 
+    /*00000800*/ LDR         R4, [R5, R1] 
+    /*00000804*/ LDR         R1, WORD_0d50               @ LDR         R1, [PC, #1348]             @ 0x0000000000000d50 
+    /*00000808*/ ADD         R2, PC, R2 
+    /*0000080c*/ ADD         R1, PC, R1 
+    /*00000810*/ LDR         R0, [R4] 
+    /*00000814*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000818*/ BL          fprintf
+    /*0000081c*/ LDR         R0, WORD_0d54               @ LDR         R0, [PC, #1328]             @ 0x0000000000000d54 
+    /*00000820*/ MOV         R2, #15 
+    /*00000824*/ LDR         R3, [R4] 
+    /*00000828*/ MOV         R1, #1 
+    /*0000082c*/ ADD         R0, PC, R0 
+    /*00000830*/ BL          fwrite
+    /*00000834*/ B           HI_MPI_HDMI_SetInfoFrame_x17c
+    HI_MPI_HDMI_SetInfoFrame_x838:
+    /*00000838*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #1160]             @ 0x0000000000000cc8 
+    /*0000083c*/ MOVW        R3, #1550                   @ 0x60e 
+    /*00000840*/ LDR         R2, WORD_0d58               @ LDR         R2, [PC, #1296]             @ 0x0000000000000d58 
+    /*00000844*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000848*/ LDR         R5, [R5, R1] 
+    /*0000084c*/ LDR         R1, WORD_0d5c               @ LDR         R1, [PC, #1288]             @ 0x0000000000000d5c 
+    /*00000850*/ ADD         R2, PC, R2 
+    /*00000854*/ ADD         R1, PC, R1 
+    /*00000858*/ LDR         R0, [R5] 
+    /*0000085c*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000860*/ BL          fprintf
+    /*00000864*/ LDR         R1, WORD_0d60               @ LDR         R1, [PC, #1268]             @ 0x0000000000000d60 
+    /*00000868*/ LDR         R2, [R4, #8] 
+    /*0000086c*/ LDR         R0, [R5] 
+    /*00000870*/ ADD         R1, PC, R1 
+    /*00000874*/ BL          fprintf
+    /*00000878*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x87c:
+    /*0000087c*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #1092]             @ 0x0000000000000cc8 
+    /*00000880*/ MOV         R3, #1680                   @ 0x690 
+    /*00000884*/ LDR         R2, WORD_0d64               @ LDR         R2, [PC, #1240]             @ 0x0000000000000d64 
+    /*00000888*/ MOVW        R7, #32770                  @ 0x8002 
+    /*0000088c*/ LDR         R5, [R5, R1] 
+    /*00000890*/ LDR         R1, WORD_0d68               @ LDR         R1, [PC, #1232]             @ 0x0000000000000d68 
+    /*00000894*/ ADD         R2, PC, R2 
+    /*00000898*/ ADD         R1, PC, R1 
+    /*0000089c*/ LDR         R0, [R5] 
+    /*000008a0*/ MOVT        R7, #41000                  @ 0xa028 
+    /*000008a4*/ BL          fprintf
+    /*000008a8*/ LDR         R1, WORD_0d6c               @ LDR         R1, [PC, #1212]             @ 0x0000000000000d6c 
+    /*000008ac*/ LDR         R2, [R4, #12] 
+    /*000008b0*/ LDR         R0, [R5] 
+    /*000008b4*/ ADD         R1, PC, R1 
+    /*000008b8*/ BL          fprintf
+    /*000008bc*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x8c0:
+    /*000008c0*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #1024]             @ 0x0000000000000cc8 
+    /*000008c4*/ MOVW        R3, #1666                   @ 0x682 
+    /*000008c8*/ LDR         R2, WORD_0d70               @ LDR         R2, [PC, #1184]             @ 0x0000000000000d70 
+    /*000008cc*/ MOVW        R7, #32770                  @ 0x8002 
+    /*000008d0*/ LDR         R5, [R5, R1] 
+    /*000008d4*/ LDR         R1, WORD_0d74               @ LDR         R1, [PC, #1176]             @ 0x0000000000000d74 
+    /*000008d8*/ ADD         R2, PC, R2 
+    /*000008dc*/ ADD         R1, PC, R1 
+    /*000008e0*/ LDR         R0, [R5] 
+    /*000008e4*/ MOVT        R7, #41000                  @ 0xa028 
+    /*000008e8*/ BL          fprintf
+    /*000008ec*/ LDR         R1, WORD_0d78               @ LDR         R1, [PC, #1156]             @ 0x0000000000000d78 
+    /*000008f0*/ LDR         R2, [R4, #4] 
+    /*000008f4*/ LDR         R0, [R5] 
+    /*000008f8*/ ADD         R1, PC, R1 
+    /*000008fc*/ BL          fprintf
+    /*00000900*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x904:
+    /*00000904*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #956]              @ 0x0000000000000cc8 
+    /*00000908*/ MOVW        R3, #1673                   @ 0x689 
+    /*0000090c*/ LDR         R2, WORD_0d7c               @ LDR         R2, [PC, #1128]             @ 0x0000000000000d7c 
+    /*00000910*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000914*/ LDR         R5, [R5, R1] 
+    /*00000918*/ LDR         R1, WORD_0d80               @ LDR         R1, [PC, #1120]             @ 0x0000000000000d80 
+    /*0000091c*/ ADD         R2, PC, R2 
+    /*00000920*/ ADD         R1, PC, R1 
+    /*00000924*/ LDR         R0, [R5] 
+    /*00000928*/ MOVT        R7, #41000                  @ 0xa028 
+    /*0000092c*/ BL          fprintf
+    /*00000930*/ LDR         R1, WORD_0d84               @ LDR         R1, [PC, #1100]             @ 0x0000000000000d84 
+    /*00000934*/ LDR         R2, [R4, #8] 
+    /*00000938*/ LDR         R0, [R5] 
+    /*0000093c*/ ADD         R1, PC, R1 
+    /*00000940*/ BL          fprintf
+    /*00000944*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x948:
+    /*00000948*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #888]              @ 0x0000000000000cc8 
+    /*0000094c*/ MOVW        R3, #1543                   @ 0x607 
+    /*00000950*/ LDR         R2, WORD_0d88               @ LDR         R2, [PC, #1072]             @ 0x0000000000000d88 
+    /*00000954*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000958*/ LDR         R5, [R5, R1] 
+    /*0000095c*/ LDR         R1, WORD_0d8c               @ LDR         R1, [PC, #1064]             @ 0x0000000000000d8c 
+    /*00000960*/ ADD         R2, PC, R2 
+    /*00000964*/ ADD         R1, PC, R1 
+    /*00000968*/ LDR         R0, [R5] 
+    /*0000096c*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000970*/ BL          fprintf
+    /*00000974*/ LDR         R1, WORD_0d90               @ LDR         R1, [PC, #1044]             @ 0x0000000000000d90 
+    /*00000978*/ LDR         R2, [R4, #4] 
+    /*0000097c*/ LDR         R0, [R5] 
+    /*00000980*/ ADD         R1, PC, R1 
+    /*00000984*/ BL          fprintf
+    /*00000988*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x98c:
+    /*0000098c*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #820]              @ 0x0000000000000cc8 
+    /*00000990*/ MOVW        R3, #1565                   @ 0x61d 
+    /*00000994*/ LDR         R2, WORD_0d94               @ LDR         R2, [PC, #1016]             @ 0x0000000000000d94 
+    /*00000998*/ MOVW        R7, #32770                  @ 0x8002 
+    /*0000099c*/ LDR         R5, [R5, R1] 
+    /*000009a0*/ LDR         R1, WORD_0d98               @ LDR         R1, [PC, #1008]             @ 0x0000000000000d98 
+    /*000009a4*/ ADD         R2, PC, R2 
+    /*000009a8*/ ADD         R1, PC, R1 
+    /*000009ac*/ LDR         R0, [R5] 
+    /*000009b0*/ MOVT        R7, #41000                  @ 0xa028 
+    /*000009b4*/ BL          fprintf
+    /*000009b8*/ LDR         R1, WORD_0d9c               @ LDR         R1, [PC, #988]              @ 0x0000000000000d9c 
+    /*000009bc*/ LDR         R2, [R4, #16] 
+    /*000009c0*/ LDR         R0, [R5] 
+    /*000009c4*/ ADD         R1, PC, R1 
+    /*000009c8*/ BL          fprintf
+    /*000009cc*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_x9d0:
+    /*000009d0*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #752]              @ 0x0000000000000cc8 
+    /*000009d4*/ MOVW        R3, #1701                   @ 0x6a5 
+    /*000009d8*/ LDR         R2, WORD_0da0               @ LDR         R2, [PC, #960]              @ 0x0000000000000da0 
+    /*000009dc*/ MOVW        R7, #32770                  @ 0x8002 
+    /*000009e0*/ LDR         R5, [R5, R1] 
+    /*000009e4*/ LDR         R1, WORD_0da4               @ LDR         R1, [PC, #952]              @ 0x0000000000000da4 
+    /*000009e8*/ ADD         R2, PC, R2 
+    /*000009ec*/ ADD         R1, PC, R1 
+    /*000009f0*/ LDR         R0, [R5] 
+    /*000009f4*/ MOVT        R7, #41000                  @ 0xa028 
+    /*000009f8*/ BL          fprintf
+    /*000009fc*/ LDR         R1, WORD_0da8               @ LDR         R1, [PC, #932]              @ 0x0000000000000da8 
+    /*00000a00*/ LDR         R2, [R4, #24] 
+    /*00000a04*/ LDR         R0, [R5] 
+    /*00000a08*/ ADD         R1, PC, R1 
+    /*00000a0c*/ BL          fprintf
+    /*00000a10*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xa14:
+    /*00000a14*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #684]              @ 0x0000000000000cc8 
+    /*00000a18*/ MOVW        R3, #1708                   @ 0x6ac 
+    /*00000a1c*/ LDR         R2, WORD_0dac               @ LDR         R2, [PC, #904]              @ 0x0000000000000dac 
+    /*00000a20*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000a24*/ LDR         R5, [R5, R1] 
+    /*00000a28*/ LDR         R1, WORD_0db0               @ LDR         R1, [PC, #896]              @ 0x0000000000000db0 
+    /*00000a2c*/ ADD         R2, PC, R2 
+    /*00000a30*/ ADD         R1, PC, R1 
+    /*00000a34*/ LDR         R0, [R5] 
+    /*00000a38*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000a3c*/ BL          fprintf
+    /*00000a40*/ LDR         R1, WORD_0db4               @ LDR         R1, [PC, #876]              @ 0x0000000000000db4 
+    /*00000a44*/ LDR         R2, [R4, #28] 
+    /*00000a48*/ LDR         R0, [R5] 
+    /*00000a4c*/ ADD         R1, PC, R1 
+    /*00000a50*/ BL          fprintf
+    /*00000a54*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xa58:
+    /*00000a58*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #616]              @ 0x0000000000000cc8 
+    /*00000a5c*/ MOVW        R3, #1687                   @ 0x697 
+    /*00000a60*/ LDR         R2, WORD_0db8               @ LDR         R2, [PC, #848]              @ 0x0000000000000db8 
+    /*00000a64*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000a68*/ LDR         R5, [R5, R1] 
+    /*00000a6c*/ LDR         R1, WORD_0dbc               @ LDR         R1, [PC, #840]              @ 0x0000000000000dbc 
+    /*00000a70*/ ADD         R2, PC, R2 
+    /*00000a74*/ ADD         R1, PC, R1 
+    /*00000a78*/ LDR         R0, [R5] 
+    /*00000a7c*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000a80*/ BL          fprintf
+    /*00000a84*/ LDR         R1, WORD_0dc0               @ LDR         R1, [PC, #820]              @ 0x0000000000000dc0 
+    /*00000a88*/ LDR         R2, [R4, #16] 
+    /*00000a8c*/ LDR         R0, [R5] 
+    /*00000a90*/ ADD         R1, PC, R1 
+    /*00000a94*/ BL          fprintf
+    /*00000a98*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xa9c:
+    /*00000a9c*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #548]              @ 0x0000000000000cc8 
+    /*00000aa0*/ MOVW        R3, #1572                   @ 0x624 
+    /*00000aa4*/ LDR         R2, WORD_0dc4               @ LDR         R2, [PC, #792]              @ 0x0000000000000dc4 
+    /*00000aa8*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000aac*/ LDR         R5, [R5, R1] 
+    /*00000ab0*/ LDR         R1, WORD_0dc8               @ LDR         R1, [PC, #784]              @ 0x0000000000000dc8 
+    /*00000ab4*/ ADD         R2, PC, R2 
+    /*00000ab8*/ ADD         R1, PC, R1 
+    /*00000abc*/ LDR         R0, [R5] 
+    /*00000ac0*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000ac4*/ BL          fprintf
+    /*00000ac8*/ LDR         R1, WORD_0dcc               @ LDR         R1, [PC, #764]              @ 0x0000000000000dcc 
+    /*00000acc*/ LDR         R2, [R4, #20] 
+    /*00000ad0*/ LDR         R0, [R5] 
+    /*00000ad4*/ ADD         R1, PC, R1 
+    /*00000ad8*/ BL          fprintf
+    /*00000adc*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xae0:
+    /*00000ae0*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #480]              @ 0x0000000000000cc8 
+    /*00000ae4*/ MOVW        R3, #1579                   @ 0x62b 
+    /*00000ae8*/ LDR         R2, WORD_0dd0               @ LDR         R2, [PC, #736]              @ 0x0000000000000dd0 
+    /*00000aec*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000af0*/ LDR         R5, [R5, R1] 
+    /*00000af4*/ LDR         R1, WORD_0dd4               @ LDR         R1, [PC, #728]              @ 0x0000000000000dd4 
+    /*00000af8*/ ADD         R2, PC, R2 
+    /*00000afc*/ ADD         R1, PC, R1 
+    /*00000b00*/ LDR         R0, [R5] 
+    /*00000b04*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000b08*/ BL          fprintf
+    /*00000b0c*/ LDR         R1, WORD_0dd8               @ LDR         R1, [PC, #708]              @ 0x0000000000000dd8 
+    /*00000b10*/ LDR         R2, [R4, #24] 
+    /*00000b14*/ LDR         R0, [R5] 
+    /*00000b18*/ ADD         R1, PC, R1 
+    /*00000b1c*/ BL          fprintf
+    /*00000b20*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xb24:
+    /*00000b24*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #412]              @ 0x0000000000000cc8 
+    /*00000b28*/ MOVW        R3, #1586                   @ 0x632 
+    /*00000b2c*/ LDR         R2, WORD_0ddc               @ LDR         R2, [PC, #680]              @ 0x0000000000000ddc 
+    /*00000b30*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000b34*/ LDR         R5, [R5, R1] 
+    /*00000b38*/ LDR         R1, WORD_0de0               @ LDR         R1, [PC, #672]              @ 0x0000000000000de0 
+    /*00000b3c*/ ADD         R2, PC, R2 
+    /*00000b40*/ ADD         R1, PC, R1 
+    /*00000b44*/ LDR         R0, [R5] 
+    /*00000b48*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000b4c*/ BL          fprintf
+    /*00000b50*/ LDR         R1, WORD_0de4               @ LDR         R1, [PC, #652]              @ 0x0000000000000de4 
+    /*00000b54*/ LDR         R2, [R4, #28] 
+    /*00000b58*/ LDR         R0, [R5] 
+    /*00000b5c*/ ADD         R1, PC, R1 
+    /*00000b60*/ BL          fprintf
+    /*00000b64*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xb68:
+    /*00000b68*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #344]              @ 0x0000000000000cc8 
+    /*00000b6c*/ MOVW        R3, #1593                   @ 0x639 
+    /*00000b70*/ LDR         R2, WORD_0de8               @ LDR         R2, [PC, #624]              @ 0x0000000000000de8 
+    /*00000b74*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000b78*/ LDR         R5, [R5, R1] 
+    /*00000b7c*/ LDR         R1, WORD_0dec               @ LDR         R1, [PC, #616]              @ 0x0000000000000dec 
+    /*00000b80*/ ADD         R2, PC, R2 
+    /*00000b84*/ ADD         R1, PC, R1 
+    /*00000b88*/ LDR         R0, [R5] 
+    /*00000b8c*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000b90*/ BL          fprintf
+    /*00000b94*/ LDR         R1, WORD_0df0               @ LDR         R1, [PC, #596]              @ 0x0000000000000df0 
+    /*00000b98*/ LDR         R2, [R4, #32] 
+    /*00000b9c*/ LDR         R0, [R5] 
+    /*00000ba0*/ ADD         R1, PC, R1 
+    /*00000ba4*/ BL          fprintf
+    /*00000ba8*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xbac:
+    /*00000bac*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #276]              @ 0x0000000000000cc8 
+    /*00000bb0*/ MOVW        R3, #1614                   @ 0x64e 
+    /*00000bb4*/ LDR         R2, WORD_0df4               @ LDR         R2, [PC, #568]              @ 0x0000000000000df4 
+    /*00000bb8*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000bbc*/ LDR         R5, [R5, R1] 
+    /*00000bc0*/ LDR         R1, WORD_0df8               @ LDR         R1, [PC, #560]              @ 0x0000000000000df8 
+    /*00000bc4*/ ADD         R2, PC, R2 
+    /*00000bc8*/ ADD         R1, PC, R1 
+    /*00000bcc*/ LDR         R0, [R5] 
+    /*00000bd0*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000bd4*/ BL          fprintf
+    /*00000bd8*/ LDR         R1, WORD_0dfc               @ LDR         R1, [PC, #540]              @ 0x0000000000000dfc 
+    /*00000bdc*/ LDR         R2, [R4, #44]               @ 0x2c 
+    /*00000be0*/ LDR         R0, [R5] 
+    /*00000be4*/ ADD         R1, PC, R1 
+    /*00000be8*/ BL          fprintf
+    /*00000bec*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xbf0:
+    /*00000bf0*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #208]              @ 0x0000000000000cc8 
+    /*00000bf4*/ MOVW        R3, #1607                   @ 0x647 
+    /*00000bf8*/ LDR         R2, WORD_0e00               @ LDR         R2, [PC, #512]              @ 0x0000000000000e00 
+    /*00000bfc*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000c00*/ LDR         R5, [R5, R1] 
+    /*00000c04*/ LDR         R1, WORD_0e04               @ LDR         R1, [PC, #504]              @ 0x0000000000000e04 
+    /*00000c08*/ ADD         R2, PC, R2 
+    /*00000c0c*/ ADD         R1, PC, R1 
+    /*00000c10*/ LDR         R0, [R5] 
+    /*00000c14*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000c18*/ BL          fprintf
+    /*00000c1c*/ LDR         R1, WORD_0e08               @ LDR         R1, [PC, #484]              @ 0x0000000000000e08 
+    /*00000c20*/ LDR         R2, [R4, #40]               @ 0x28 
+    /*00000c24*/ LDR         R0, [R5] 
+    /*00000c28*/ ADD         R1, PC, R1 
+    /*00000c2c*/ BL          fprintf
+    /*00000c30*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xc34:
+    /*00000c34*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #140]              @ 0x0000000000000cc8 
+    /*00000c38*/ MOVW        R3, #1636                   @ 0x664 
+    /*00000c3c*/ LDR         R2, WORD_0e0c               @ LDR         R2, [PC, #456]              @ 0x0000000000000e0c 
+    /*00000c40*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000c44*/ LDR         R5, [R5, R1] 
+    /*00000c48*/ LDR         R1, WORD_0e10               @ LDR         R1, [PC, #448]              @ 0x0000000000000e10 
+    /*00000c4c*/ ADD         R2, PC, R2 
+    /*00000c50*/ ADD         R1, PC, R1 
+    /*00000c54*/ LDR         R0, [R5] 
+    /*00000c58*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000c5c*/ BL          fprintf
+    /*00000c60*/ LDR         R1, WORD_0e14               @ LDR         R1, [PC, #428]              @ 0x0000000000000e14 
+    /*00000c64*/ LDR         R2, [R4, #56]               @ 0x38 
+    /*00000c68*/ LDR         R0, [R5] 
+    /*00000c6c*/ ADD         R1, PC, R1 
+    /*00000c70*/ BL          fprintf
+    /*00000c74*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xc78:
+    /*00000c78*/ LDR         R1, WORD_0cc8               @ LDR         R1, [PC, #72]               @ 0x0000000000000cc8 
+    /*00000c7c*/ MOVW        R3, #1629                   @ 0x65d 
+    /*00000c80*/ LDR         R2, WORD_0e18               @ LDR         R2, [PC, #400]              @ 0x0000000000000e18 
+    /*00000c84*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000c88*/ LDR         R5, [R5, R1] 
+    /*00000c8c*/ LDR         R1, WORD_0e1c               @ LDR         R1, [PC, #392]              @ 0x0000000000000e1c 
+    /*00000c90*/ ADD         R2, PC, R2 
+    /*00000c94*/ ADD         R1, PC, R1 
+    /*00000c98*/ LDR         R0, [R5] 
+    /*00000c9c*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000ca0*/ BL          fprintf
+    /*00000ca4*/ LDR         R1, WORD_0e20               @ LDR         R1, [PC, #372]              @ 0x0000000000000e20 
+    /*00000ca8*/ LDR         R2, [R4, #52]               @ 0x34 
+    /*00000cac*/ LDR         R0, [R5] 
+    /*00000cb0*/ ADD         R1, PC, R1 
+    /*00000cb4*/ BL          fprintf
+    /*00000cb8*/ B           HI_MPI_HDMI_SetInfoFrame_x14c
+    HI_MPI_HDMI_SetInfoFrame_xcbc:
+    /*00000cbc*/ BL          __stack_chk_fail
+    /*00000cc0*/ WORD_0cc0: .word 0x00000ca4
+    /*00000cc4*/ WORD_0cc4: .word 0x00000000
+    /*00000cc8*/ WORD_0cc8: .word 0x00000000
+    /*00000ccc*/ WORD_0ccc: .word 0x00000ba0
+    /*00000cd0*/ WORD_0cd0: .word 0x00000ba0
+    /*00000cd4*/ WORD_0cd4: .word 0x00000b88
+    /*00000cd8*/ WORD_0cd8: .word 0x00000b78
+    /*00000cdc*/ WORD_0cdc: .word 0x00000b78
+    /*00000ce0*/ WORD_0ce0: .word 0x00000b64
+    /*00000ce4*/ WORD_0ce4: .word 0x00000a00
+    /*00000ce8*/ WORD_0ce8: .word 0x000009dc
+    /*00000cec*/ WORD_0cec: .word 0x00000888
+    /*00000cf0*/ WORD_0cf0: .word 0x00000888
+    /*00000cf4*/ WORD_0cf4: .word 0x00000870
+    /*00000cf8*/ WORD_0cf8: .word 0x00000850
+    /*00000cfc*/ WORD_0cfc: .word 0x00000850
+    /*00000d00*/ WORD_0d00: .word 0x00000838
+    /*00000d04*/ WORD_0d04: .word 0x000007a4
+    /*00000d08*/ WORD_0d08: .word 0x000007a4
+    /*00000d0c*/ WORD_0d0c: .word 0x0000078c
+    /*00000d10*/ WORD_0d10: .word 0x00000654
+    /*00000d14*/ WORD_0d14: .word 0x00000654
+    /*00000d18*/ WORD_0d18: .word 0x0000063c
+    /*00000d1c*/ WORD_0d1c: .word 0x0000061c
+    /*00000d20*/ WORD_0d20: .word 0x0000061c
+    /*00000d24*/ WORD_0d24: .word 0x00000604
+    /*00000d28*/ WORD_0d28: .word 0x000005e4
+    /*00000d2c*/ WORD_0d2c: .word 0x000005e4
+    /*00000d30*/ WORD_0d30: .word 0x000005cc
+    /*00000d34*/ WORD_0d34: .word 0x000005ac
+    /*00000d38*/ WORD_0d38: .word 0x000005ac
+    /*00000d3c*/ WORD_0d3c: .word 0x00000594
+    /*00000d40*/ WORD_0d40: .word 0x00000574
+    /*00000d44*/ WORD_0d44: .word 0x00000574
+    /*00000d48*/ WORD_0d48: .word 0x0000055c
+    /*00000d4c*/ WORD_0d4c: .word 0x0000053c
+    /*00000d50*/ WORD_0d50: .word 0x0000053c
+    /*00000d54*/ WORD_0d54: .word 0x00000520
+    /*00000d58*/ WORD_0d58: .word 0x00000500
+    /*00000d5c*/ WORD_0d5c: .word 0x00000500
+    /*00000d60*/ WORD_0d60: .word 0x000004e8
+    /*00000d64*/ WORD_0d64: .word 0x000004c8
+    /*00000d68*/ WORD_0d68: .word 0x000004c8
+    /*00000d6c*/ WORD_0d6c: .word 0x000004b0
+    /*00000d70*/ WORD_0d70: .word 0x00000490
+    /*00000d74*/ WORD_0d74: .word 0x00000490
+    /*00000d78*/ WORD_0d78: .word 0x00000478
+    /*00000d7c*/ WORD_0d7c: .word 0x00000458
+    /*00000d80*/ WORD_0d80: .word 0x00000458
+    /*00000d84*/ WORD_0d84: .word 0x00000440
+    /*00000d88*/ WORD_0d88: .word 0x00000420
+    /*00000d8c*/ WORD_0d8c: .word 0x00000420
+    /*00000d90*/ WORD_0d90: .word 0x00000408
+    /*00000d94*/ WORD_0d94: .word 0x000003e8
+    /*00000d98*/ WORD_0d98: .word 0x000003e8
+    /*00000d9c*/ WORD_0d9c: .word 0x000003d0
+    /*00000da0*/ WORD_0da0: .word 0x000003b0
+    /*00000da4*/ WORD_0da4: .word 0x000003b0
+    /*00000da8*/ WORD_0da8: .word 0x00000398
+    /*00000dac*/ WORD_0dac: .word 0x00000378
+    /*00000db0*/ WORD_0db0: .word 0x00000378
+    /*00000db4*/ WORD_0db4: .word 0x00000360
+    /*00000db8*/ WORD_0db8: .word 0x00000340
+    /*00000dbc*/ WORD_0dbc: .word 0x00000340
+    /*00000dc0*/ WORD_0dc0: .word 0x00000328
+    /*00000dc4*/ WORD_0dc4: .word 0x00000308
+    /*00000dc8*/ WORD_0dc8: .word 0x00000308
+    /*00000dcc*/ WORD_0dcc: .word 0x000002f0
+    /*00000dd0*/ WORD_0dd0: .word 0x000002d0
+    /*00000dd4*/ WORD_0dd4: .word 0x000002d0
+    /*00000dd8*/ WORD_0dd8: .word 0x000002b8
+    /*00000ddc*/ WORD_0ddc: .word 0x00000298
+    /*00000de0*/ WORD_0de0: .word 0x00000298
+    /*00000de4*/ WORD_0de4: .word 0x00000280
+    /*00000de8*/ WORD_0de8: .word 0x00000260
+    /*00000dec*/ WORD_0dec: .word 0x00000260
+    /*00000df0*/ WORD_0df0: .word 0x00000248
+    /*00000df4*/ WORD_0df4: .word 0x00000228
+    /*00000df8*/ WORD_0df8: .word 0x00000228
+    /*00000dfc*/ WORD_0dfc: .word 0x00000210
+    /*00000e00*/ WORD_0e00: .word 0x000001f0
+    /*00000e04*/ WORD_0e04: .word 0x000001f0
+    /*00000e08*/ WORD_0e08: .word 0x000001d8
+    /*00000e0c*/ WORD_0e0c: .word 0x000001b8
+    /*00000e10*/ WORD_0e10: .word 0x000001b8
+    /*00000e14*/ WORD_0e14: .word 0x000001a0
+    /*00000e18*/ WORD_0e18: .word 0x00000180
+    /*00000e1c*/ WORD_0e1c: .word 0x00000180
+    /*00000e20*/ WORD_0e20: .word 0x00000168
+FUNC_END HI_MPI_HDMI_SetInfoFrame
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_GetInfoFrame
+@ Size: 0x694
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_GetInfoFrame
+    /*00000000*/ PUSH        {R4, R5, R6, R7, R8, R9, LR} 
+    /*00000004*/ SUBS        R9, R0, #0 
+    /*00000008*/ LDR         R5, WORD_0614               @ LDR         R5, [PC, #1540]             @ 0x0000000000000614 
+    /*0000000c*/ SUB         SP, SP, #100                @ 0x64 
+    /*00000010*/ LDR         R3, WORD_0618               @ LDR         R3, [PC, #1536]             @ 0x0000000000000618 
+    /*00000014*/ ADD         R5, PC, R5 
+    /*00000018*/ LDR         R8, [R5, R3] 
+    /*0000001c*/ LDR         R3, [R8] 
+    /*00000020*/ STR         R3, [SP, #92]               @ 0x5c 
+    /*00000024*/ BNE         HI_MPI_HDMI_GetInfoFrame_x584
+    /*00000028*/ CMP         R2, #0 
+    /*0000002c*/ MOV         R4, R2 
+    /*00000030*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x5c8
+    /*00000034*/ MOV         R3, #92                     @ 0x5c 
+    /*00000038*/ MOV         R6, R1 
+    /*0000003c*/ MOV         R0, SP 
+    /*00000040*/ MOV         R1, R3 
+    /*00000044*/ MOV         R2, R9 
+    /*00000048*/ MOV         R7, SP 
+    /*0000004c*/ BL          memset_s
+    /*00000050*/ STR         R9, [SP] 
+    /*00000054*/ CMP         R6, #4 
+    /*00000058*/ ADDLS       PC, PC, R6, LSL #2 
+    /*0000005c*/ B           HI_MPI_HDMI_GetInfoFrame_x128
+    /*00000060*/ B           HI_MPI_HDMI_GetInfoFrame_x11c
+    /*00000064*/ B           HI_MPI_HDMI_GetInfoFrame_xc0
+    /*00000068*/ B           HI_MPI_HDMI_GetInfoFrame_x74
+    /*0000006c*/ B           HI_MPI_HDMI_GetInfoFrame_xc0
+    /*00000070*/ B           HI_MPI_HDMI_GetInfoFrame_xc0
+    HI_MPI_HDMI_GetInfoFrame_x74:
+    /*00000074*/ MOV         R3, #132                    @ 0x84 
+    /*00000078*/ STR         R3, [SP, #4] 
+    HI_MPI_HDMI_GetInfoFrame_x7c:
+    /*0000007c*/ MOV         R1, R7 
+    /*00000080*/ MOV         R0, #0 
+    /*00000084*/ BL          HI_MPI_HDMI_ComGetInfoFrame
+    /*00000088*/ SUBS        R7, R0, #0 
+    /*0000008c*/ BNE         HI_MPI_HDMI_GetInfoFrame_x4a8
+    /*00000090*/ LDR         R3, [SP, #4] 
+    /*00000094*/ SUB         R3, R3, #129                @ 0x81 
+    /*00000098*/ CMP         R3, #6 
+    /*0000009c*/ ADDLS       PC, PC, R3, LSL #2 
+    /*000000a0*/ B           HI_MPI_HDMI_GetInfoFrame_x4e4
+    /*000000a4*/ B           HI_MPI_HDMI_GetInfoFrame_x434
+    /*000000a8*/ B           HI_MPI_HDMI_GetInfoFrame_x230
+    /*000000ac*/ B           HI_MPI_HDMI_GetInfoFrame_x434
+    /*000000b0*/ B           HI_MPI_HDMI_GetInfoFrame_x16c
+    /*000000b4*/ B           HI_MPI_HDMI_GetInfoFrame_x434
+    /*000000b8*/ B           HI_MPI_HDMI_GetInfoFrame_x434
+    /*000000bc*/ B           HI_MPI_HDMI_GetInfoFrame_x434
+    HI_MPI_HDMI_GetInfoFrame_xc0:
+    /*000000c0*/ LDR         R1, WORD_061c               @ LDR         R1, [PC, #1364]             @ 0x000000000000061c 
+    /*000000c4*/ MOVW        R3, #2490                   @ 0x9ba 
+    /*000000c8*/ LDR         R2, WORD_0620               @ LDR         R2, [PC, #1360]             @ 0x0000000000000620 
+    /*000000cc*/ MOVW        R7, #32778                  @ 0x800a 
+    /*000000d0*/ LDR         R4, [R5, R1] 
+    /*000000d4*/ LDR         R1, WORD_0624               @ LDR         R1, [PC, #1352]             @ 0x0000000000000624 
+    /*000000d8*/ ADD         R2, PC, R2 
+    /*000000dc*/ ADD         R1, PC, R1 
+    /*000000e0*/ LDR         R0, [R4] 
+    /*000000e4*/ MOVT        R7, #41000                  @ 0xa028 
+    /*000000e8*/ BL          fprintf
+    /*000000ec*/ LDR         R1, WORD_0628               @ LDR         R1, [PC, #1332]             @ 0x0000000000000628 
+    /*000000f0*/ MOV         R2, R6 
+    /*000000f4*/ LDR         R0, [R4] 
+    /*000000f8*/ ADD         R1, PC, R1 
+    /*000000fc*/ BL          fprintf
+    HI_MPI_HDMI_GetInfoFrame_x100:
+    /*00000100*/ LDR         R2, [SP, #92]               @ 0x5c 
+    /*00000104*/ MOV         R0, R7 
+    /*00000108*/ LDR         R3, [R8] 
+    /*0000010c*/ CMP         R2, R3 
+    /*00000110*/ BNE         HI_MPI_HDMI_GetInfoFrame_x610
+    /*00000114*/ ADD         SP, SP, #100                @ 0x64 
+    /*00000118*/ POP         {R4, R5, R6, R7, R8, R9, PC} 
+    HI_MPI_HDMI_GetInfoFrame_x11c:
+    /*0000011c*/ MOV         R3, #130                    @ 0x82 
+    /*00000120*/ STR         R3, [SP, #4] 
+    /*00000124*/ B           HI_MPI_HDMI_GetInfoFrame_x7c
+    HI_MPI_HDMI_GetInfoFrame_x128:
+    /*00000128*/ LDR         R1, WORD_061c               @ LDR         R1, [PC, #1260]             @ 0x000000000000061c 
+    /*0000012c*/ MOVW        R3, #2493                   @ 0x9bd 
+    /*00000130*/ LDR         R2, WORD_062c               @ LDR         R2, [PC, #1268]             @ 0x000000000000062c 
+    /*00000134*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000138*/ LDR         R4, [R5, R1] 
+    /*0000013c*/ LDR         R1, WORD_0630               @ LDR         R1, [PC, #1260]             @ 0x0000000000000630 
+    /*00000140*/ ADD         R2, PC, R2 
+    /*00000144*/ ADD         R1, PC, R1 
+    /*00000148*/ LDR         R0, [R4] 
+    /*0000014c*/ MOVT        R7, #41000                  @ 0xa028 
+    /*00000150*/ BL          fprintf
+    /*00000154*/ LDR         R1, WORD_0634               @ LDR         R1, [PC, #1240]             @ 0x0000000000000634 
+    /*00000158*/ MOV         R2, R6 
+    /*0000015c*/ LDR         R0, [R4] 
+    /*00000160*/ ADD         R1, PC, R1 
+    /*00000164*/ BL          fprintf
+    /*00000168*/ B           HI_MPI_HDMI_GetInfoFrame_x100
+    HI_MPI_HDMI_GetInfoFrame_x16c:
+    /*0000016c*/ LDR         R3, [SP, #16] 
+    /*00000170*/ MOV         R1, #2 
+    /*00000174*/ LDRB        R2, [SP, #14] 
+    /*00000178*/ STR         R1, [R4] 
+    /*0000017c*/ CMP         R3, #0 
+    /*00000180*/ STR         R2, [R4, #4] 
+    /*00000184*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*00000188*/ CMP         R3, #1 
+    /*0000018c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*00000190*/ CMP         R3, #2 
+    /*00000194*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*00000198*/ CMP         R3, #3 
+    /*0000019c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001a0*/ CMP         R3, #4 
+    /*000001a4*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001a8*/ CMP         R3, #5 
+    /*000001ac*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001b0*/ CMP         R3, #6 
+    /*000001b4*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001b8*/ CMP         R3, #7 
+    /*000001bc*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001c0*/ CMP         R3, #8 
+    /*000001c4*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001c8*/ CMP         R3, #9 
+    /*000001cc*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001d0*/ CMP         R3, #10 
+    /*000001d4*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001d8*/ CMP         R3, #11 
+    /*000001dc*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001e0*/ CMP         R3, #12 
+    /*000001e4*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001e8*/ CMP         R3, #13 
+    /*000001ec*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x1f8
+    /*000001f0*/ CMP         R3, #14 
+    /*000001f4*/ MOVNE       R3, #15 
+    HI_MPI_HDMI_GetInfoFrame_x1f8:
+    /*000001f8*/ STR         R3, [R4, #8] 
+    /*000001fc*/ LDR         R3, [SP, #20] 
+    /*00000200*/ LDR         IP, [SP, #24] 
+    /*00000204*/ LDRB        R0, [SP, #32] 
+    /*00000208*/ LDRB        R1, [SP, #40]               @ 0x28 
+    /*0000020c*/ LDR         R2, [SP, #36]               @ 0x24 
+    /*00000210*/ STR         R3, [R4, #12] 
+    /*00000214*/ LDR         R3, [SP, #44]               @ 0x2c 
+    /*00000218*/ STR         IP, [R4, #16] 
+    /*0000021c*/ STRB        R0, [R4, #20] 
+    /*00000220*/ STR         R1, [R4, #24] 
+    /*00000224*/ STR         R2, [R4, #28] 
+    /*00000228*/ STR         R3, [R4, #32] 
+    /*0000022c*/ B           HI_MPI_HDMI_GetInfoFrame_x100
+    HI_MPI_HDMI_GetInfoFrame_x230:
+    /*00000230*/ LDR         R2, WORD_0638               @ LDR         R2, [PC, #1024]             @ 0x0000000000000638 
+    /*00000234*/ MOV         R1, #0 
+    /*00000238*/ STR         R1, [R4] 
+    /*0000023c*/ MOV         R3, R1 
+    /*00000240*/ LDR         R6, [SP, #64]               @ 0x40 
+    /*00000244*/ MOV         R1, #50                     @ 0x32 
+    /*00000248*/ ADD         R2, PC, R2 
+    /*0000024c*/ B           HI_MPI_HDMI_GetInfoFrame_x264
+    HI_MPI_HDMI_GetInfoFrame_x250:
+    /*00000250*/ ADD         R3, R3, #1 
+    /*00000254*/ ADD         R2, R2, #8 
+    /*00000258*/ CMP         R3, #50                     @ 0x32 
+    /*0000025c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x544
+    /*00000260*/ LDR         R1, [R2, #4] 
+    HI_MPI_HDMI_GetInfoFrame_x264:
+    /*00000264*/ CMP         R6, R1 
+    /*00000268*/ BNE         HI_MPI_HDMI_GetInfoFrame_x250
+    /*0000026c*/ LDR         R2, WORD_063c               @ LDR         R2, [PC, #968]              @ 0x000000000000063c 
+    /*00000270*/ ADD         R2, PC, R2 
+    /*00000274*/ LDR         R2, [R2, R3, LSL #3] 
+    HI_MPI_HDMI_GetInfoFrame_x278:
+    /*00000278*/ LDR         R3, [SP, #16] 
+    /*0000027c*/ STR         R2, [R4, #4] 
+    /*00000280*/ CMP         R3, #0 
+    /*00000284*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x2a0
+    /*00000288*/ CMP         R3, #1 
+    /*0000028c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x2a0
+    /*00000290*/ CMP         R3, #2 
+    /*00000294*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x2a0
+    /*00000298*/ CMP         R3, #3 
+    /*0000029c*/ BNE         HI_MPI_HDMI_GetInfoFrame_x2a4
+    HI_MPI_HDMI_GetInfoFrame_x2a0:
+    /*000002a0*/ STR         R3, [R4, #8] 
+    HI_MPI_HDMI_GetInfoFrame_x2a4:
+    /*000002a4*/ LDR         R3, [SP, #32] 
+    /*000002a8*/ LDR         R2, [SP, #20] 
+    /*000002ac*/ CMP         R3, #0 
+    /*000002b0*/ STR         R2, [R4, #12] 
+    /*000002b4*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x2c8
+    /*000002b8*/ CMP         R3, #1 
+    /*000002bc*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x2c8
+    /*000002c0*/ CMP         R3, #2 
+    /*000002c4*/ MOVNE       R3, #3 
+    HI_MPI_HDMI_GetInfoFrame_x2c8:
+    /*000002c8*/ STR         R3, [R4, #20] 
+    /*000002cc*/ LDR         R3, [SP, #52]               @ 0x34 
+    /*000002d0*/ LDR         R2, [SP, #36]               @ 0x24 
+    /*000002d4*/ CMP         R3, #0 
+    /*000002d8*/ STR         R2, [R4, #24] 
+    /*000002dc*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x310
+    /*000002e0*/ CMP         R3, #1 
+    /*000002e4*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x310
+    /*000002e8*/ CMP         R3, #2 
+    /*000002ec*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x310
+    /*000002f0*/ CMP         R3, #3 
+    /*000002f4*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x310
+    /*000002f8*/ CMP         R3, #4 
+    /*000002fc*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x310
+    /*00000300*/ CMP         R3, #5 
+    /*00000304*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x310
+    /*00000308*/ CMP         R3, #6 
+    /*0000030c*/ MOVNE       R3, #7 
+    HI_MPI_HDMI_GetInfoFrame_x310:
+    /*00000310*/ STR         R3, [R4, #28] 
+    /*00000314*/ LDR         R3, [SP, #40]               @ 0x28 
+    /*00000318*/ CMP         R3, #0 
+    /*0000031c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x340
+    /*00000320*/ CMP         R3, #1 
+    /*00000324*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x340
+    /*00000328*/ CMP         R3, #2 
+    /*0000032c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x340
+    /*00000330*/ CMP         R3, #3 
+    /*00000334*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x340
+    /*00000338*/ CMP         R3, #4 
+    /*0000033c*/ MOVNE       R3, #5 
+    HI_MPI_HDMI_GetInfoFrame_x340:
+    /*00000340*/ STR         R3, [R4, #32] 
+    /*00000344*/ LDR         R3, [SP, #44]               @ 0x2c 
+    /*00000348*/ CMP         R3, #2 
+    /*0000034c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x398
+    /*00000350*/ CMP         R3, #3 
+    /*00000354*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x398
+    /*00000358*/ CMP         R3, #4 
+    /*0000035c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x398
+    /*00000360*/ CMP         R3, #8 
+    /*00000364*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x398
+    /*00000368*/ CMP         R3, #9 
+    /*0000036c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x398
+    /*00000370*/ CMP         R3, #10 
+    /*00000374*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x398
+    /*00000378*/ CMP         R3, #11 
+    /*0000037c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x398
+    /*00000380*/ CMP         R3, #13 
+    /*00000384*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x398
+    /*00000388*/ CMP         R3, #14 
+    /*0000038c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x398
+    /*00000390*/ CMP         R3, #15 
+    /*00000394*/ MOVNE       R3, #0 
+    HI_MPI_HDMI_GetInfoFrame_x398:
+    /*00000398*/ STR         R3, [R4, #36]               @ 0x24 
+    /*0000039c*/ LDR         R3, [SP, #56]               @ 0x38 
+    /*000003a0*/ LDR         R2, [SP, #60]               @ 0x3c 
+    /*000003a4*/ CMP         R3, #0 
+    /*000003a8*/ STR         R2, [R4, #40]               @ 0x28 
+    /*000003ac*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x3c0
+    /*000003b0*/ CMP         R3, #1 
+    /*000003b4*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x3c0
+    /*000003b8*/ CMP         R3, #2 
+    /*000003bc*/ MOVNE       R3, #3 
+    HI_MPI_HDMI_GetInfoFrame_x3c0:
+    /*000003c0*/ STR         R3, [R4, #44]               @ 0x2c 
+    /*000003c4*/ LDR         R3, [SP, #72]               @ 0x48 
+    /*000003c8*/ LDR         R1, [SP, #48]               @ 0x30 
+    /*000003cc*/ LDR         R2, [SP, #76]               @ 0x4c 
+    /*000003d0*/ CMP         R3, #0 
+    /*000003d4*/ STR         R1, [R4, #48]               @ 0x30 
+    /*000003d8*/ STR         R2, [R4, #56]               @ 0x38 
+    /*000003dc*/ BNE         HI_MPI_HDMI_GetInfoFrame_x528
+    HI_MPI_HDMI_GetInfoFrame_x3e0:
+    /*000003e0*/ LDR         R2, [SP, #24] 
+    /*000003e4*/ STR         R3, [R4, #60]               @ 0x3c 
+    /*000003e8*/ LDRB        R3, [SP, #80]               @ 0x50 
+    /*000003ec*/ CMP         R2, #0 
+    /*000003f0*/ LDRH        IP, [SP, #82]               @ 0x52 
+    /*000003f4*/ LDRH        R0, [SP, #84]               @ 0x54 
+    /*000003f8*/ SUB         R3, R3, #1 
+    /*000003fc*/ LDRH        R1, [SP, #86]               @ 0x56 
+    /*00000400*/ LDRH        R2, [SP, #88]               @ 0x58 
+    /*00000404*/ STR         R3, [R4, #52]               @ 0x34 
+    /*00000408*/ STRH        IP, [R4, #64]               @ 0x40 
+    /*0000040c*/ STRH        R0, [R4, #66]               @ 0x42 
+    /*00000410*/ STRH        R1, [R4, #68]               @ 0x44 
+    /*00000414*/ STRH        R2, [R4, #70]               @ 0x46 
+    /*00000418*/ LDR         R3, [SP, #28] 
+    /*0000041c*/ BEQ         HI_MPI_HDMI_GetInfoFrame_x534
+    /*00000420*/ CMP         R3, #0 
+    /*00000424*/ MOVNE       R3, #3 
+    /*00000428*/ MOVEQ       R3, #2 
+    /*0000042c*/ STR         R3, [R4, #16] 
+    /*00000430*/ B           HI_MPI_HDMI_GetInfoFrame_x100
+    HI_MPI_HDMI_GetInfoFrame_x434:
+    /*00000434*/ LDR         R1, WORD_061c               @ LDR         R1, [PC, #480]              @ 0x000000000000061c 
+    /*00000438*/ MOVW        R3, #1464                   @ 0x5b8 
+    /*0000043c*/ LDR         R2, WORD_0640               @ LDR         R2, [PC, #508]              @ 0x0000000000000640 
+    /*00000440*/ MOVW        R7, #32778                  @ 0x800a 
+    /*00000444*/ LDR         R4, [R5, R1] 
+    /*00000448*/ LDR         R1, WORD_0644               @ LDR         R1, [PC, #500]              @ 0x0000000000000644 
+    /*0000044c*/ ADD         R2, PC, R2 
+    /*00000450*/ ADD         R1, PC, R1 
+    /*00000454*/ LDR         R0, [R4] 
+    /*00000458*/ MOVT        R7, #41000                  @ 0xa028 
+    /*0000045c*/ BL          fprintf
+    /*00000460*/ LDR         R1, WORD_0648               @ LDR         R1, [PC, #480]              @ 0x0000000000000648 
+    /*00000464*/ LDR         R0, [R4] 
+    /*00000468*/ LDR         R2, [SP, #4] 
+    /*0000046c*/ ADD         R1, PC, R1 
+    /*00000470*/ BL          fprintf
+    HI_MPI_HDMI_GetInfoFrame_x474:
+    /*00000474*/ LDR         R2, WORD_064c               @ LDR         R2, [PC, #464]              @ 0x000000000000064c 
+    /*00000478*/ MOVW        R3, #2502                   @ 0x9c6 
+    /*0000047c*/ LDR         R1, WORD_0650               @ LDR         R1, [PC, #460]              @ 0x0000000000000650 
+    /*00000480*/ ADD         R2, PC, R2 
+    /*00000484*/ ADD         R1, PC, R1 
+    /*00000488*/ LDR         R0, [R4] 
+    /*0000048c*/ BL          fprintf
+    /*00000490*/ LDR         R1, WORD_0654               @ LDR         R1, [PC, #444]              @ 0x0000000000000654 
+    /*00000494*/ MOV         R2, R7 
+    /*00000498*/ LDR         R0, [R4] 
+    /*0000049c*/ ADD         R1, PC, R1 
+    /*000004a0*/ BL          fprintf
+    /*000004a4*/ B           HI_MPI_HDMI_GetInfoFrame_x100
+    HI_MPI_HDMI_GetInfoFrame_x4a8:
+    /*000004a8*/ LDR         R1, WORD_061c               @ LDR         R1, [PC, #364]              @ 0x000000000000061c 
+    /*000004ac*/ MOVW        R3, #2499                   @ 0x9c3 
+    /*000004b0*/ LDR         R2, WORD_0658               @ LDR         R2, [PC, #416]              @ 0x0000000000000658 
+    /*000004b4*/ LDR         R4, [R5, R1] 
+    /*000004b8*/ LDR         R1, WORD_065c               @ LDR         R1, [PC, #412]              @ 0x000000000000065c 
+    /*000004bc*/ ADD         R2, PC, R2 
+    /*000004c0*/ ADD         R1, PC, R1 
+    /*000004c4*/ LDR         R0, [R4] 
+    /*000004c8*/ BL          fprintf
+    /*000004cc*/ LDR         R1, WORD_0660               @ LDR         R1, [PC, #396]              @ 0x0000000000000660 
+    /*000004d0*/ MOV         R2, R7 
+    /*000004d4*/ LDR         R0, [R4] 
+    /*000004d8*/ ADD         R1, PC, R1 
+    /*000004dc*/ BL          fprintf
+    /*000004e0*/ B           HI_MPI_HDMI_GetInfoFrame_x100
+    HI_MPI_HDMI_GetInfoFrame_x4e4:
+    /*000004e4*/ LDR         R1, WORD_061c               @ LDR         R1, [PC, #304]              @ 0x000000000000061c 
+    /*000004e8*/ MOVW        R3, #1467                   @ 0x5bb 
+    /*000004ec*/ LDR         R2, WORD_0664               @ LDR         R2, [PC, #368]              @ 0x0000000000000664 
+    /*000004f0*/ MOVW        R7, #32770                  @ 0x8002 
+    /*000004f4*/ LDR         R4, [R5, R1] 
+    /*000004f8*/ LDR         R1, WORD_0668               @ LDR         R1, [PC, #360]              @ 0x0000000000000668 
+    /*000004fc*/ ADD         R2, PC, R2 
+    /*00000500*/ ADD         R1, PC, R1 
+    /*00000504*/ LDR         R0, [R4] 
+    /*00000508*/ MOVT        R7, #41000                  @ 0xa028 
+    /*0000050c*/ BL          fprintf
+    /*00000510*/ LDR         R1, WORD_066c               @ LDR         R1, [PC, #340]              @ 0x000000000000066c 
+    /*00000514*/ LDR         R0, [R4] 
+    /*00000518*/ LDR         R2, [SP, #4] 
+    /*0000051c*/ ADD         R1, PC, R1 
+    /*00000520*/ BL          fprintf
+    /*00000524*/ B           HI_MPI_HDMI_GetInfoFrame_x474
+    HI_MPI_HDMI_GetInfoFrame_x528:
+    /*00000528*/ CMP         R3, #1 
+    /*0000052c*/ MOVNE       R3, #2 
+    /*00000530*/ B           HI_MPI_HDMI_GetInfoFrame_x3e0
+    HI_MPI_HDMI_GetInfoFrame_x534:
+    /*00000534*/ CMP         R3, #0 
+    /*00000538*/ MOVNE       R3, #1 
+    /*0000053c*/ STR         R3, [R4, #16] 
+    /*00000540*/ B           HI_MPI_HDMI_GetInfoFrame_x100
+    HI_MPI_HDMI_GetInfoFrame_x544:
+    /*00000544*/ LDR         R1, WORD_061c               @ LDR         R1, [PC, #208]              @ 0x000000000000061c 
+    /*00000548*/ MOVW        R3, #1383                   @ 0x567 
+    /*0000054c*/ LDR         R2, WORD_0670               @ LDR         R2, [PC, #284]              @ 0x0000000000000670 
+    /*00000550*/ LDR         R5, [R5, R1] 
+    /*00000554*/ LDR         R1, WORD_0674               @ LDR         R1, [PC, #280]              @ 0x0000000000000674 
+    /*00000558*/ ADD         R2, PC, R2 
+    /*0000055c*/ ADD         R1, PC, R1 
+    /*00000560*/ LDR         R0, [R5] 
+    /*00000564*/ BL          fprintf
+    /*00000568*/ LDR         R1, WORD_0678               @ LDR         R1, [PC, #264]              @ 0x0000000000000678 
+    /*0000056c*/ MOV         R2, R6 
+    /*00000570*/ LDR         R0, [R5] 
+    /*00000574*/ ADD         R1, PC, R1 
+    /*00000578*/ BL          fprintf
+    /*0000057c*/ MOV         R2, #52                     @ 0x34 
+    /*00000580*/ B           HI_MPI_HDMI_GetInfoFrame_x278
+    HI_MPI_HDMI_GetInfoFrame_x584:
+    /*00000584*/ LDR         R1, WORD_061c               @ LDR         R1, [PC, #144]              @ 0x000000000000061c 
+    /*00000588*/ MOVW        R3, #2471                   @ 0x9a7 
+    /*0000058c*/ LDR         R2, WORD_067c               @ LDR         R2, [PC, #232]              @ 0x000000000000067c 
+    /*00000590*/ MOVW        R7, #32770                  @ 0x8002 
+    /*00000594*/ LDR         R4, [R5, R1] 
+    /*00000598*/ LDR         R1, WORD_0680               @ LDR         R1, [PC, #224]              @ 0x0000000000000680 
+    /*0000059c*/ ADD         R2, PC, R2 
+    /*000005a0*/ ADD         R1, PC, R1 
+    /*000005a4*/ LDR         R0, [R4] 
+    /*000005a8*/ MOVT        R7, #41000                  @ 0xa028 
+    /*000005ac*/ BL          fprintf
+    /*000005b0*/ LDR         R1, WORD_0684               @ LDR         R1, [PC, #204]              @ 0x0000000000000684 
+    /*000005b4*/ MOV         R2, R9 
+    /*000005b8*/ LDR         R0, [R4] 
+    /*000005bc*/ ADD         R1, PC, R1 
+    /*000005c0*/ BL          fprintf
+    /*000005c4*/ B           HI_MPI_HDMI_GetInfoFrame_x100
+    HI_MPI_HDMI_GetInfoFrame_x5c8:
+    /*000005c8*/ LDR         R1, WORD_061c               @ LDR         R1, [PC, #76]               @ 0x000000000000061c 
+    /*000005cc*/ MOVW        R3, #2472                   @ 0x9a8 
+    /*000005d0*/ LDR         R2, WORD_0688               @ LDR         R2, [PC, #176]              @ 0x0000000000000688 
+    /*000005d4*/ MOVW        R7, #32771                  @ 0x8003 
+    /*000005d8*/ LDR         R4, [R5, R1] 
+    /*000005dc*/ LDR         R1, WORD_068c               @ LDR         R1, [PC, #168]              @ 0x000000000000068c 
+    /*000005e0*/ ADD         R2, PC, R2 
+    /*000005e4*/ ADD         R1, PC, R1 
+    /*000005e8*/ LDR         R0, [R4] 
+    /*000005ec*/ MOVT        R7, #41000                  @ 0xa028 
+    /*000005f0*/ BL          fprintf
+    /*000005f4*/ LDR         R0, WORD_0690               @ LDR         R0, [PC, #148]              @ 0x0000000000000690 
+    /*000005f8*/ MOV         R2, #15 
+    /*000005fc*/ LDR         R3, [R4] 
+    /*00000600*/ MOV         R1, #1 
+    /*00000604*/ ADD         R0, PC, R0 
+    /*00000608*/ BL          fwrite
+    /*0000060c*/ B           HI_MPI_HDMI_GetInfoFrame_x100
+    HI_MPI_HDMI_GetInfoFrame_x610:
+    /*00000610*/ BL          __stack_chk_fail
+    /*00000614*/ WORD_0614: .word 0x000005f8
+    /*00000618*/ WORD_0618: .word 0x00000000
+    /*0000061c*/ WORD_061c: .word 0x00000000
+    /*00000620*/ WORD_0620: .word 0x00000540
+    /*00000624*/ WORD_0624: .word 0x00000540
+    /*00000628*/ WORD_0628: .word 0x00000528
+    /*0000062c*/ WORD_062c: .word 0x000004e4
+    /*00000630*/ WORD_0630: .word 0x000004e4
+    /*00000634*/ WORD_0634: .word 0x000004cc
+    /*00000638*/ WORD_0638: .word 0x000003e8
+    /*0000063c*/ WORD_063c: .word 0x000003c4
+    /*00000640*/ WORD_0640: .word 0x000001ec
+    /*00000644*/ WORD_0644: .word 0x000001ec
+    /*00000648*/ WORD_0648: .word 0x000001d4
+    /*0000064c*/ WORD_064c: .word 0x000001c4
+    /*00000650*/ WORD_0650: .word 0x000001c4
+    /*00000654*/ WORD_0654: .word 0x000001b0
+    /*00000658*/ WORD_0658: .word 0x00000194
+    /*0000065c*/ WORD_065c: .word 0x00000194
+    /*00000660*/ WORD_0660: .word 0x00000180
+    /*00000664*/ WORD_0664: .word 0x00000160
+    /*00000668*/ WORD_0668: .word 0x00000160
+    /*0000066c*/ WORD_066c: .word 0x00000148
+    /*00000670*/ WORD_0670: .word 0x00000110
+    /*00000674*/ WORD_0674: .word 0x00000110
+    /*00000678*/ WORD_0678: .word 0x000000fc
+    /*0000067c*/ WORD_067c: .word 0x000000d8
+    /*00000680*/ WORD_0680: .word 0x000000d8
+    /*00000684*/ WORD_0684: .word 0x000000c0
+    /*00000688*/ WORD_0688: .word 0x000000a0
+    /*0000068c*/ WORD_068c: .word 0x000000a0
+    /*00000690*/ WORD_0690: .word 0x00000084
+FUNC_END HI_MPI_HDMI_GetInfoFrame
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_RegCallbackFunc
+@ Size: 0xd0
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_RegCallbackFunc
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R4, R0, #0 
+    /*00000008*/ LDR         IP, WORD_00b0               @ LDR         IP, [PC, #160]              @ 0x00000000000000b0 
+    /*0000000c*/ ADD         IP, PC, IP 
+    /*00000010*/ BNE         HI_MPI_HDMI_RegCallbackFunc_x24
+    /*00000014*/ CMP         R1, #0 
+    /*00000018*/ BEQ         HI_MPI_HDMI_RegCallbackFunc_x68
+    /*0000001c*/ POP         {R4, R5, R6, LR} 
+    HI_MPI_HDMI_RegCallbackFunc_x20:
+    /*00000020*/ B           HI_MPI_HDMI_RegCallbackFunc_x20@ HI_MPI_HDMI_ComRegCallbackFunc [R_ARM_JUMP24: +0x0] 
+    HI_MPI_HDMI_RegCallbackFunc_x24:
+    /*00000024*/ LDR         R1, WORD_00b4               @ LDR         R1, [PC, #136]              @ 0x00000000000000b4 
+    /*00000028*/ MOVW        R3, #2510                   @ 0x9ce 
+    /*0000002c*/ LDR         R2, WORD_00b8               @ LDR         R2, [PC, #132]              @ 0x00000000000000b8 
+    /*00000030*/ LDR         R5, [IP, R1] 
+    /*00000034*/ LDR         R1, WORD_00bc               @ LDR         R1, [PC, #128]              @ 0x00000000000000bc 
+    /*00000038*/ ADD         R2, PC, R2 
+    /*0000003c*/ ADD         R1, PC, R1 
+    /*00000040*/ LDR         R0, [R5] 
+    /*00000044*/ BL          fprintf
+    /*00000048*/ LDR         R1, WORD_00c0               @ LDR         R1, [PC, #112]              @ 0x00000000000000c0 
+    /*0000004c*/ MOV         R2, R4 
+    /*00000050*/ LDR         R0, [R5] 
+    /*00000054*/ ADD         R1, PC, R1 
+    /*00000058*/ BL          fprintf
+    /*0000005c*/ MOVW        R0, #32770                  @ 0x8002 
+    /*00000060*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000064*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_RegCallbackFunc_x68:
+    /*00000068*/ LDR         R1, WORD_00b4               @ LDR         R1, [PC, #68]               @ 0x00000000000000b4 
+    /*0000006c*/ MOVW        R3, #2511                   @ 0x9cf 
+    /*00000070*/ LDR         R2, WORD_00c4               @ LDR         R2, [PC, #76]               @ 0x00000000000000c4 
+    /*00000074*/ LDR         R4, [IP, R1] 
+    /*00000078*/ LDR         R1, WORD_00c8               @ LDR         R1, [PC, #72]               @ 0x00000000000000c8 
+    /*0000007c*/ ADD         R2, PC, R2 
+    /*00000080*/ ADD         R1, PC, R1 
+    /*00000084*/ LDR         R0, [R4] 
+    /*00000088*/ BL          fprintf
+    /*0000008c*/ LDR         R0, WORD_00cc               @ LDR         R0, [PC, #56]               @ 0x00000000000000cc 
+    /*00000090*/ MOV         R2, #15 
+    /*00000094*/ LDR         R3, [R4] 
+    /*00000098*/ MOV         R1, #1 
+    /*0000009c*/ ADD         R0, PC, R0 
+    /*000000a0*/ BL          fwrite
+    /*000000a4*/ MOVW        R0, #32771                  @ 0x8003 
+    /*000000a8*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000ac*/ POP         {R4, R5, R6, PC} 
+    /*000000b0*/ WORD_00b0: .word 0x0000009c
+    /*000000b4*/ WORD_00b4: .word 0x00000000
+    /*000000b8*/ WORD_00b8: .word 0x00000078
+    /*000000bc*/ WORD_00bc: .word 0x00000078
+    /*000000c0*/ WORD_00c0: .word 0x00000064
+    /*000000c4*/ WORD_00c4: .word 0x00000040
+    /*000000c8*/ WORD_00c8: .word 0x00000040
+    /*000000cc*/ WORD_00cc: .word 0x00000028
+FUNC_END HI_MPI_HDMI_RegCallbackFunc
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_UnRegCallbackFunc
+@ Size: 0xd0
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_UnRegCallbackFunc
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R4, R0, #0 
+    /*00000008*/ LDR         IP, WORD_00b0               @ LDR         IP, [PC, #160]              @ 0x00000000000000b0 
+    /*0000000c*/ ADD         IP, PC, IP 
+    /*00000010*/ BNE         HI_MPI_HDMI_UnRegCallbackFunc_x24
+    /*00000014*/ CMP         R1, #0 
+    /*00000018*/ BEQ         HI_MPI_HDMI_UnRegCallbackFunc_x68
+    /*0000001c*/ POP         {R4, R5, R6, LR} 
+    HI_MPI_HDMI_UnRegCallbackFunc_x20:
+    /*00000020*/ B           HI_MPI_HDMI_UnRegCallbackFunc_x20@ HI_MPI_HDMI_ComUnRegCallbackFunc [R_ARM_JUMP24: +0x0] 
+    HI_MPI_HDMI_UnRegCallbackFunc_x24:
+    /*00000024*/ LDR         R1, WORD_00b4               @ LDR         R1, [PC, #136]              @ 0x00000000000000b4 
+    /*00000028*/ MOVW        R3, #2518                   @ 0x9d6 
+    /*0000002c*/ LDR         R2, WORD_00b8               @ LDR         R2, [PC, #132]              @ 0x00000000000000b8 
+    /*00000030*/ LDR         R5, [IP, R1] 
+    /*00000034*/ LDR         R1, WORD_00bc               @ LDR         R1, [PC, #128]              @ 0x00000000000000bc 
+    /*00000038*/ ADD         R2, PC, R2 
+    /*0000003c*/ ADD         R1, PC, R1 
+    /*00000040*/ LDR         R0, [R5] 
+    /*00000044*/ BL          fprintf
+    /*00000048*/ LDR         R1, WORD_00c0               @ LDR         R1, [PC, #112]              @ 0x00000000000000c0 
+    /*0000004c*/ MOV         R2, R4 
+    /*00000050*/ LDR         R0, [R5] 
+    /*00000054*/ ADD         R1, PC, R1 
+    /*00000058*/ BL          fprintf
+    /*0000005c*/ MOVW        R0, #32770                  @ 0x8002 
+    /*00000060*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000064*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_UnRegCallbackFunc_x68:
+    /*00000068*/ LDR         R1, WORD_00b4               @ LDR         R1, [PC, #68]               @ 0x00000000000000b4 
+    /*0000006c*/ MOVW        R3, #2519                   @ 0x9d7 
+    /*00000070*/ LDR         R2, WORD_00c4               @ LDR         R2, [PC, #76]               @ 0x00000000000000c4 
+    /*00000074*/ LDR         R4, [IP, R1] 
+    /*00000078*/ LDR         R1, WORD_00c8               @ LDR         R1, [PC, #72]               @ 0x00000000000000c8 
+    /*0000007c*/ ADD         R2, PC, R2 
+    /*00000080*/ ADD         R1, PC, R1 
+    /*00000084*/ LDR         R0, [R4] 
+    /*00000088*/ BL          fprintf
+    /*0000008c*/ LDR         R0, WORD_00cc               @ LDR         R0, [PC, #56]               @ 0x00000000000000cc 
+    /*00000090*/ MOV         R2, #15 
+    /*00000094*/ LDR         R3, [R4] 
+    /*00000098*/ MOV         R1, #1 
+    /*0000009c*/ ADD         R0, PC, R0 
+    /*000000a0*/ BL          fwrite
+    /*000000a4*/ MOVW        R0, #32771                  @ 0x8003 
+    /*000000a8*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000ac*/ POP         {R4, R5, R6, PC} 
+    /*000000b0*/ WORD_00b0: .word 0x0000009c
+    /*000000b4*/ WORD_00b4: .word 0x00000000
+    /*000000b8*/ WORD_00b8: .word 0x00000078
+    /*000000bc*/ WORD_00bc: .word 0x00000078
+    /*000000c0*/ WORD_00c0: .word 0x00000064
+    /*000000c4*/ WORD_00c4: .word 0x00000040
+    /*000000c8*/ WORD_00c8: .word 0x00000040
+    /*000000cc*/ WORD_00cc: .word 0x00000028
+FUNC_END HI_MPI_HDMI_UnRegCallbackFunc
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_RegCECCallBackFunc
+@ Size: 0x118
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_RegCECCallBackFunc
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R4, R0, #0 
+    /*00000008*/ LDR         IP, WORD_00ec               @ LDR         IP, [PC, #220]              @ 0x00000000000000ec 
+    /*0000000c*/ ADD         IP, PC, IP 
+    /*00000010*/ BNE         HI_MPI_HDMI_RegCECCallBackFunc_x64
+    /*00000014*/ CMP         R1, #0 
+    /*00000018*/ LDR         R1, WORD_00f0               @ LDR         R1, [PC, #208]              @ 0x00000000000000f0 
+    /*0000001c*/ BEQ         HI_MPI_HDMI_RegCECCallBackFunc_xa8
+    /*00000020*/ LDR         R4, [IP, R1] 
+    /*00000024*/ MOVW        R3, #2530                   @ 0x9e2 
+    /*00000028*/ LDR         R2, WORD_00f4               @ LDR         R2, [PC, #196]              @ 0x00000000000000f4 
+    /*0000002c*/ LDR         R1, WORD_00f8               @ LDR         R1, [PC, #196]              @ 0x00000000000000f8 
+    /*00000030*/ ADD         R2, PC, R2 
+    /*00000034*/ ADD         R1, PC, R1 
+    /*00000038*/ LDR         R0, [R4] 
+    /*0000003c*/ BL          fprintf
+    /*00000040*/ LDR         R0, WORD_00fc               @ LDR         R0, [PC, #180]              @ 0x00000000000000fc 
+    /*00000044*/ MOV         R2, #17 
+    /*00000048*/ LDR         R3, [R4] 
+    /*0000004c*/ MOV         R1, #1 
+    /*00000050*/ ADD         R0, PC, R0 
+    /*00000054*/ BL          fwrite
+    /*00000058*/ MOVW        R0, #32778                  @ 0x800a 
+    /*0000005c*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000060*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_RegCECCallBackFunc_x64:
+    /*00000064*/ LDR         R1, WORD_00f0               @ LDR         R1, [PC, #132]              @ 0x00000000000000f0 
+    /*00000068*/ MOVW        R3, #2526                   @ 0x9de 
+    /*0000006c*/ LDR         R2, WORD_0100               @ LDR         R2, [PC, #140]              @ 0x0000000000000100 
+    /*00000070*/ LDR         R5, [IP, R1] 
+    /*00000074*/ LDR         R1, WORD_0104               @ LDR         R1, [PC, #136]              @ 0x0000000000000104 
+    /*00000078*/ ADD         R2, PC, R2 
+    /*0000007c*/ ADD         R1, PC, R1 
+    /*00000080*/ LDR         R0, [R5] 
+    /*00000084*/ BL          fprintf
+    /*00000088*/ LDR         R1, WORD_0108               @ LDR         R1, [PC, #120]              @ 0x0000000000000108 
+    /*0000008c*/ MOV         R2, R4 
+    /*00000090*/ LDR         R0, [R5] 
+    /*00000094*/ ADD         R1, PC, R1 
+    /*00000098*/ BL          fprintf
+    /*0000009c*/ MOVW        R0, #32770                  @ 0x8002 
+    /*000000a0*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000a4*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_RegCECCallBackFunc_xa8:
+    /*000000a8*/ LDR         R4, [IP, R1] 
+    /*000000ac*/ MOVW        R3, #2527                   @ 0x9df 
+    /*000000b0*/ LDR         R2, WORD_010c               @ LDR         R2, [PC, #84]               @ 0x000000000000010c 
+    /*000000b4*/ LDR         R1, WORD_0110               @ LDR         R1, [PC, #84]               @ 0x0000000000000110 
+    /*000000b8*/ ADD         R2, PC, R2 
+    /*000000bc*/ ADD         R1, PC, R1 
+    /*000000c0*/ LDR         R0, [R4] 
+    /*000000c4*/ BL          fprintf
+    /*000000c8*/ LDR         R0, WORD_0114               @ LDR         R0, [PC, #68]               @ 0x0000000000000114 
+    /*000000cc*/ MOV         R2, #15 
+    /*000000d0*/ LDR         R3, [R4] 
+    /*000000d4*/ MOV         R1, #1 
+    /*000000d8*/ ADD         R0, PC, R0 
+    /*000000dc*/ BL          fwrite
+    /*000000e0*/ MOVW        R0, #32771                  @ 0x8003 
+    /*000000e4*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000e8*/ POP         {R4, R5, R6, PC} 
+    /*000000ec*/ WORD_00ec: .word 0x000000d8
+    /*000000f0*/ WORD_00f0: .word 0x00000000
+    /*000000f4*/ WORD_00f4: .word 0x000000bc
+    /*000000f8*/ WORD_00f8: .word 0x000000bc
+    /*000000fc*/ WORD_00fc: .word 0x000000a4
+    /*00000100*/ WORD_0100: .word 0x00000080
+    /*00000104*/ WORD_0104: .word 0x00000080
+    /*00000108*/ WORD_0108: .word 0x0000006c
+    /*0000010c*/ WORD_010c: .word 0x0000004c
+    /*00000110*/ WORD_0110: .word 0x0000004c
+    /*00000114*/ WORD_0114: .word 0x00000034
+FUNC_END HI_MPI_HDMI_RegCECCallBackFunc
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_UnRegCECCallBackFunc
+@ Size: 0x118
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_UnRegCECCallBackFunc
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R4, R0, #0 
+    /*00000008*/ LDR         IP, WORD_00ec               @ LDR         IP, [PC, #220]              @ 0x00000000000000ec 
+    /*0000000c*/ ADD         IP, PC, IP 
+    /*00000010*/ BNE         HI_MPI_HDMI_UnRegCECCallBackFunc_x64
+    /*00000014*/ CMP         R1, #0 
+    /*00000018*/ LDR         R1, WORD_00f0               @ LDR         R1, [PC, #208]              @ 0x00000000000000f0 
+    /*0000001c*/ BEQ         HI_MPI_HDMI_UnRegCECCallBackFunc_xa8
+    /*00000020*/ LDR         R4, [IP, R1] 
+    /*00000024*/ MOVW        R3, #2543                   @ 0x9ef 
+    /*00000028*/ LDR         R2, WORD_00f4               @ LDR         R2, [PC, #196]              @ 0x00000000000000f4 
+    /*0000002c*/ LDR         R1, WORD_00f8               @ LDR         R1, [PC, #196]              @ 0x00000000000000f8 
+    /*00000030*/ ADD         R2, PC, R2 
+    /*00000034*/ ADD         R1, PC, R1 
+    /*00000038*/ LDR         R0, [R4] 
+    /*0000003c*/ BL          fprintf
+    /*00000040*/ LDR         R0, WORD_00fc               @ LDR         R0, [PC, #180]              @ 0x00000000000000fc 
+    /*00000044*/ MOV         R2, #17 
+    /*00000048*/ LDR         R3, [R4] 
+    /*0000004c*/ MOV         R1, #1 
+    /*00000050*/ ADD         R0, PC, R0 
+    /*00000054*/ BL          fwrite
+    /*00000058*/ MOVW        R0, #32778                  @ 0x800a 
+    /*0000005c*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000060*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_UnRegCECCallBackFunc_x64:
+    /*00000064*/ LDR         R1, WORD_00f0               @ LDR         R1, [PC, #132]              @ 0x00000000000000f0 
+    /*00000068*/ MOVW        R3, #2539                   @ 0x9eb 
+    /*0000006c*/ LDR         R2, WORD_0100               @ LDR         R2, [PC, #140]              @ 0x0000000000000100 
+    /*00000070*/ LDR         R5, [IP, R1] 
+    /*00000074*/ LDR         R1, WORD_0104               @ LDR         R1, [PC, #136]              @ 0x0000000000000104 
+    /*00000078*/ ADD         R2, PC, R2 
+    /*0000007c*/ ADD         R1, PC, R1 
+    /*00000080*/ LDR         R0, [R5] 
+    /*00000084*/ BL          fprintf
+    /*00000088*/ LDR         R1, WORD_0108               @ LDR         R1, [PC, #120]              @ 0x0000000000000108 
+    /*0000008c*/ MOV         R2, R4 
+    /*00000090*/ LDR         R0, [R5] 
+    /*00000094*/ ADD         R1, PC, R1 
+    /*00000098*/ BL          fprintf
+    /*0000009c*/ MOVW        R0, #32770                  @ 0x8002 
+    /*000000a0*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000a4*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_UnRegCECCallBackFunc_xa8:
+    /*000000a8*/ LDR         R4, [IP, R1] 
+    /*000000ac*/ MOVW        R3, #2540                   @ 0x9ec 
+    /*000000b0*/ LDR         R2, WORD_010c               @ LDR         R2, [PC, #84]               @ 0x000000000000010c 
+    /*000000b4*/ LDR         R1, WORD_0110               @ LDR         R1, [PC, #84]               @ 0x0000000000000110 
+    /*000000b8*/ ADD         R2, PC, R2 
+    /*000000bc*/ ADD         R1, PC, R1 
+    /*000000c0*/ LDR         R0, [R4] 
+    /*000000c4*/ BL          fprintf
+    /*000000c8*/ LDR         R0, WORD_0114               @ LDR         R0, [PC, #68]               @ 0x0000000000000114 
+    /*000000cc*/ MOV         R2, #15 
+    /*000000d0*/ LDR         R3, [R4] 
+    /*000000d4*/ MOV         R1, #1 
+    /*000000d8*/ ADD         R0, PC, R0 
+    /*000000dc*/ BL          fwrite
+    /*000000e0*/ MOVW        R0, #32771                  @ 0x8003 
+    /*000000e4*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000e8*/ POP         {R4, R5, R6, PC} 
+    /*000000ec*/ WORD_00ec: .word 0x000000d8
+    /*000000f0*/ WORD_00f0: .word 0x00000000
+    /*000000f4*/ WORD_00f4: .word 0x000000bc
+    /*000000f8*/ WORD_00f8: .word 0x000000bc
+    /*000000fc*/ WORD_00fc: .word 0x000000a4
+    /*00000100*/ WORD_0100: .word 0x00000080
+    /*00000104*/ WORD_0104: .word 0x00000080
+    /*00000108*/ WORD_0108: .word 0x0000006c
+    /*0000010c*/ WORD_010c: .word 0x0000004c
+    /*00000110*/ WORD_0110: .word 0x0000004c
+    /*00000114*/ WORD_0114: .word 0x00000034
+FUNC_END HI_MPI_HDMI_UnRegCECCallBackFunc
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_SetCECCommand
+@ Size: 0x118
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_SetCECCommand
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R4, R0, #0 
+    /*00000008*/ LDR         IP, WORD_00ec               @ LDR         IP, [PC, #220]              @ 0x00000000000000ec 
+    /*0000000c*/ ADD         IP, PC, IP 
+    /*00000010*/ BNE         HI_MPI_HDMI_SetCECCommand_x64
+    /*00000014*/ CMP         R1, #0 
+    /*00000018*/ LDR         R1, WORD_00f0               @ LDR         R1, [PC, #208]              @ 0x00000000000000f0 
+    /*0000001c*/ BEQ         HI_MPI_HDMI_SetCECCommand_xa8
+    /*00000020*/ LDR         R4, [IP, R1] 
+    /*00000024*/ MOVW        R3, #2556                   @ 0x9fc 
+    /*00000028*/ LDR         R2, WORD_00f4               @ LDR         R2, [PC, #196]              @ 0x00000000000000f4 
+    /*0000002c*/ LDR         R1, WORD_00f8               @ LDR         R1, [PC, #196]              @ 0x00000000000000f8 
+    /*00000030*/ ADD         R2, PC, R2 
+    /*00000034*/ ADD         R1, PC, R1 
+    /*00000038*/ LDR         R0, [R4] 
+    /*0000003c*/ BL          fprintf
+    /*00000040*/ LDR         R0, WORD_00fc               @ LDR         R0, [PC, #180]              @ 0x00000000000000fc 
+    /*00000044*/ MOV         R2, #17 
+    /*00000048*/ LDR         R3, [R4] 
+    /*0000004c*/ MOV         R1, #1 
+    /*00000050*/ ADD         R0, PC, R0 
+    /*00000054*/ BL          fwrite
+    /*00000058*/ MOVW        R0, #32778                  @ 0x800a 
+    /*0000005c*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000060*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_SetCECCommand_x64:
+    /*00000064*/ LDR         R1, WORD_00f0               @ LDR         R1, [PC, #132]              @ 0x00000000000000f0 
+    /*00000068*/ MOVW        R3, #2552                   @ 0x9f8 
+    /*0000006c*/ LDR         R2, WORD_0100               @ LDR         R2, [PC, #140]              @ 0x0000000000000100 
+    /*00000070*/ LDR         R5, [IP, R1] 
+    /*00000074*/ LDR         R1, WORD_0104               @ LDR         R1, [PC, #136]              @ 0x0000000000000104 
+    /*00000078*/ ADD         R2, PC, R2 
+    /*0000007c*/ ADD         R1, PC, R1 
+    /*00000080*/ LDR         R0, [R5] 
+    /*00000084*/ BL          fprintf
+    /*00000088*/ LDR         R1, WORD_0108               @ LDR         R1, [PC, #120]              @ 0x0000000000000108 
+    /*0000008c*/ MOV         R2, R4 
+    /*00000090*/ LDR         R0, [R5] 
+    /*00000094*/ ADD         R1, PC, R1 
+    /*00000098*/ BL          fprintf
+    /*0000009c*/ MOVW        R0, #32770                  @ 0x8002 
+    /*000000a0*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000a4*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_SetCECCommand_xa8:
+    /*000000a8*/ LDR         R4, [IP, R1] 
+    /*000000ac*/ MOVW        R3, #2553                   @ 0x9f9 
+    /*000000b0*/ LDR         R2, WORD_010c               @ LDR         R2, [PC, #84]               @ 0x000000000000010c 
+    /*000000b4*/ LDR         R1, WORD_0110               @ LDR         R1, [PC, #84]               @ 0x0000000000000110 
+    /*000000b8*/ ADD         R2, PC, R2 
+    /*000000bc*/ ADD         R1, PC, R1 
+    /*000000c0*/ LDR         R0, [R4] 
+    /*000000c4*/ BL          fprintf
+    /*000000c8*/ LDR         R0, WORD_0114               @ LDR         R0, [PC, #68]               @ 0x0000000000000114 
+    /*000000cc*/ MOV         R2, #15 
+    /*000000d0*/ LDR         R3, [R4] 
+    /*000000d4*/ MOV         R1, #1 
+    /*000000d8*/ ADD         R0, PC, R0 
+    /*000000dc*/ BL          fwrite
+    /*000000e0*/ MOVW        R0, #32771                  @ 0x8003 
+    /*000000e4*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000e8*/ POP         {R4, R5, R6, PC} 
+    /*000000ec*/ WORD_00ec: .word 0x000000d8
+    /*000000f0*/ WORD_00f0: .word 0x00000000
+    /*000000f4*/ WORD_00f4: .word 0x000000bc
+    /*000000f8*/ WORD_00f8: .word 0x000000bc
+    /*000000fc*/ WORD_00fc: .word 0x000000a4
+    /*00000100*/ WORD_0100: .word 0x00000080
+    /*00000104*/ WORD_0104: .word 0x00000080
+    /*00000108*/ WORD_0108: .word 0x0000006c
+    /*0000010c*/ WORD_010c: .word 0x0000004c
+    /*00000110*/ WORD_0110: .word 0x0000004c
+    /*00000114*/ WORD_0114: .word 0x00000034
+FUNC_END HI_MPI_HDMI_SetCECCommand
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_CECStatus
+@ Size: 0x118
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_CECStatus
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R4, R0, #0 
+    /*00000008*/ LDR         IP, WORD_00ec               @ LDR         IP, [PC, #220]              @ 0x00000000000000ec 
+    /*0000000c*/ ADD         IP, PC, IP 
+    /*00000010*/ BNE         HI_MPI_HDMI_CECStatus_x64
+    /*00000014*/ CMP         R1, #0 
+    /*00000018*/ LDR         R1, WORD_00f0               @ LDR         R1, [PC, #208]              @ 0x00000000000000f0 
+    /*0000001c*/ BEQ         HI_MPI_HDMI_CECStatus_xa8
+    /*00000020*/ LDR         R4, [IP, R1] 
+    /*00000024*/ MOVW        R3, #2569                   @ 0xa09 
+    /*00000028*/ LDR         R2, WORD_00f4               @ LDR         R2, [PC, #196]              @ 0x00000000000000f4 
+    /*0000002c*/ LDR         R1, WORD_00f8               @ LDR         R1, [PC, #196]              @ 0x00000000000000f8 
+    /*00000030*/ ADD         R2, PC, R2 
+    /*00000034*/ ADD         R1, PC, R1 
+    /*00000038*/ LDR         R0, [R4] 
+    /*0000003c*/ BL          fprintf
+    /*00000040*/ LDR         R0, WORD_00fc               @ LDR         R0, [PC, #180]              @ 0x00000000000000fc 
+    /*00000044*/ MOV         R2, #17 
+    /*00000048*/ LDR         R3, [R4] 
+    /*0000004c*/ MOV         R1, #1 
+    /*00000050*/ ADD         R0, PC, R0 
+    /*00000054*/ BL          fwrite
+    /*00000058*/ MOVW        R0, #32778                  @ 0x800a 
+    /*0000005c*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000060*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_CECStatus_x64:
+    /*00000064*/ LDR         R1, WORD_00f0               @ LDR         R1, [PC, #132]              @ 0x00000000000000f0 
+    /*00000068*/ MOVW        R3, #2565                   @ 0xa05 
+    /*0000006c*/ LDR         R2, WORD_0100               @ LDR         R2, [PC, #140]              @ 0x0000000000000100 
+    /*00000070*/ LDR         R5, [IP, R1] 
+    /*00000074*/ LDR         R1, WORD_0104               @ LDR         R1, [PC, #136]              @ 0x0000000000000104 
+    /*00000078*/ ADD         R2, PC, R2 
+    /*0000007c*/ ADD         R1, PC, R1 
+    /*00000080*/ LDR         R0, [R5] 
+    /*00000084*/ BL          fprintf
+    /*00000088*/ LDR         R1, WORD_0108               @ LDR         R1, [PC, #120]              @ 0x0000000000000108 
+    /*0000008c*/ MOV         R2, R4 
+    /*00000090*/ LDR         R0, [R5] 
+    /*00000094*/ ADD         R1, PC, R1 
+    /*00000098*/ BL          fprintf
+    /*0000009c*/ MOVW        R0, #32770                  @ 0x8002 
+    /*000000a0*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000a4*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_CECStatus_xa8:
+    /*000000a8*/ LDR         R4, [IP, R1] 
+    /*000000ac*/ MOVW        R3, #2566                   @ 0xa06 
+    /*000000b0*/ LDR         R2, WORD_010c               @ LDR         R2, [PC, #84]               @ 0x000000000000010c 
+    /*000000b4*/ LDR         R1, WORD_0110               @ LDR         R1, [PC, #84]               @ 0x0000000000000110 
+    /*000000b8*/ ADD         R2, PC, R2 
+    /*000000bc*/ ADD         R1, PC, R1 
+    /*000000c0*/ LDR         R0, [R4] 
+    /*000000c4*/ BL          fprintf
+    /*000000c8*/ LDR         R0, WORD_0114               @ LDR         R0, [PC, #68]               @ 0x0000000000000114 
+    /*000000cc*/ MOV         R2, #15 
+    /*000000d0*/ LDR         R3, [R4] 
+    /*000000d4*/ MOV         R1, #1 
+    /*000000d8*/ ADD         R0, PC, R0 
+    /*000000dc*/ BL          fwrite
+    /*000000e0*/ MOVW        R0, #32771                  @ 0x8003 
+    /*000000e4*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000e8*/ POP         {R4, R5, R6, PC} 
+    /*000000ec*/ WORD_00ec: .word 0x000000d8
+    /*000000f0*/ WORD_00f0: .word 0x00000000
+    /*000000f4*/ WORD_00f4: .word 0x000000bc
+    /*000000f8*/ WORD_00f8: .word 0x000000bc
+    /*000000fc*/ WORD_00fc: .word 0x000000a4
+    /*00000100*/ WORD_0100: .word 0x00000080
+    /*00000104*/ WORD_0104: .word 0x00000080
+    /*00000108*/ WORD_0108: .word 0x0000006c
+    /*0000010c*/ WORD_010c: .word 0x0000004c
+    /*00000110*/ WORD_0110: .word 0x0000004c
+    /*00000114*/ WORD_0114: .word 0x00000034
+FUNC_END HI_MPI_HDMI_CECStatus
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_CEC_Enable
+@ Size: 0xbc
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_CEC_Enable
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R4, R0, #0 
+    /*00000008*/ LDR         R1, WORD_009c               @ LDR         R1, [PC, #140]              @ 0x000000000000009c 
+    /*0000000c*/ LDR         R0, WORD_00a0               @ LDR         R0, [PC, #140]              @ 0x00000000000000a0 
+    /*00000010*/ ADD         R1, PC, R1 
+    /*00000014*/ BNE         HI_MPI_HDMI_CEC_Enable_x5c
+    /*00000018*/ LDR         R4, [R1, R0] 
+    /*0000001c*/ MOVW        R3, #2581                   @ 0xa15 
+    /*00000020*/ LDR         R2, WORD_00a4               @ LDR         R2, [PC, #124]              @ 0x00000000000000a4 
+    /*00000024*/ LDR         R1, WORD_00a8               @ LDR         R1, [PC, #124]              @ 0x00000000000000a8 
+    /*00000028*/ ADD         R2, PC, R2 
+    /*0000002c*/ ADD         R1, PC, R1 
+    /*00000030*/ LDR         R0, [R4] 
+    /*00000034*/ BL          fprintf
+    /*00000038*/ LDR         R0, WORD_00ac               @ LDR         R0, [PC, #108]              @ 0x00000000000000ac 
+    /*0000003c*/ MOV         R2, #17 
+    /*00000040*/ LDR         R3, [R4] 
+    /*00000044*/ MOV         R1, #1 
+    /*00000048*/ ADD         R0, PC, R0 
+    /*0000004c*/ BL          fwrite
+    /*00000050*/ MOVW        R0, #32778                  @ 0x800a 
+    /*00000054*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000058*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_CEC_Enable_x5c:
+    /*0000005c*/ LDR         R5, [R1, R0] 
+    /*00000060*/ MOVW        R3, #2578                   @ 0xa12 
+    /*00000064*/ LDR         R2, WORD_00b0               @ LDR         R2, [PC, #68]               @ 0x00000000000000b0 
+    /*00000068*/ LDR         R1, WORD_00b4               @ LDR         R1, [PC, #68]               @ 0x00000000000000b4 
+    /*0000006c*/ ADD         R2, PC, R2 
+    /*00000070*/ ADD         R1, PC, R1 
+    /*00000074*/ LDR         R0, [R5] 
+    /*00000078*/ BL          fprintf
+    /*0000007c*/ LDR         R1, WORD_00b8               @ LDR         R1, [PC, #52]               @ 0x00000000000000b8 
+    /*00000080*/ MOV         R2, R4 
+    /*00000084*/ LDR         R0, [R5] 
+    /*00000088*/ ADD         R1, PC, R1 
+    /*0000008c*/ BL          fprintf
+    /*00000090*/ MOVW        R0, #32770                  @ 0x8002 
+    /*00000094*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000098*/ POP         {R4, R5, R6, PC} 
+    /*0000009c*/ WORD_009c: .word 0x00000084
+    /*000000a0*/ WORD_00a0: .word 0x00000000
+    /*000000a4*/ WORD_00a4: .word 0x00000074
+    /*000000a8*/ WORD_00a8: .word 0x00000074
+    /*000000ac*/ WORD_00ac: .word 0x0000005c
+    /*000000b0*/ WORD_00b0: .word 0x0000003c
+    /*000000b4*/ WORD_00b4: .word 0x0000003c
+    /*000000b8*/ WORD_00b8: .word 0x00000028
+FUNC_END HI_MPI_HDMI_CEC_Enable
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_CEC_Disable
+@ Size: 0xbc
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_CEC_Disable
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R4, R0, #0 
+    /*00000008*/ LDR         R1, WORD_009c               @ LDR         R1, [PC, #140]              @ 0x000000000000009c 
+    /*0000000c*/ LDR         R0, WORD_00a0               @ LDR         R0, [PC, #140]              @ 0x00000000000000a0 
+    /*00000010*/ ADD         R1, PC, R1 
+    /*00000014*/ BNE         HI_MPI_HDMI_CEC_Disable_x5c
+    /*00000018*/ LDR         R4, [R1, R0] 
+    /*0000001c*/ MOVW        R3, #2593                   @ 0xa21 
+    /*00000020*/ LDR         R2, WORD_00a4               @ LDR         R2, [PC, #124]              @ 0x00000000000000a4 
+    /*00000024*/ LDR         R1, WORD_00a8               @ LDR         R1, [PC, #124]              @ 0x00000000000000a8 
+    /*00000028*/ ADD         R2, PC, R2 
+    /*0000002c*/ ADD         R1, PC, R1 
+    /*00000030*/ LDR         R0, [R4] 
+    /*00000034*/ BL          fprintf
+    /*00000038*/ LDR         R0, WORD_00ac               @ LDR         R0, [PC, #108]              @ 0x00000000000000ac 
+    /*0000003c*/ MOV         R2, #17 
+    /*00000040*/ LDR         R3, [R4] 
+    /*00000044*/ MOV         R1, #1 
+    /*00000048*/ ADD         R0, PC, R0 
+    /*0000004c*/ BL          fwrite
+    /*00000050*/ MOVW        R0, #32778                  @ 0x800a 
+    /*00000054*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000058*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_CEC_Disable_x5c:
+    /*0000005c*/ LDR         R5, [R1, R0] 
+    /*00000060*/ MOVW        R3, #2590                   @ 0xa1e 
+    /*00000064*/ LDR         R2, WORD_00b0               @ LDR         R2, [PC, #68]               @ 0x00000000000000b0 
+    /*00000068*/ LDR         R1, WORD_00b4               @ LDR         R1, [PC, #68]               @ 0x00000000000000b4 
+    /*0000006c*/ ADD         R2, PC, R2 
+    /*00000070*/ ADD         R1, PC, R1 
+    /*00000074*/ LDR         R0, [R5] 
+    /*00000078*/ BL          fprintf
+    /*0000007c*/ LDR         R1, WORD_00b8               @ LDR         R1, [PC, #52]               @ 0x00000000000000b8 
+    /*00000080*/ MOV         R2, R4 
+    /*00000084*/ LDR         R0, [R5] 
+    /*00000088*/ ADD         R1, PC, R1 
+    /*0000008c*/ BL          fprintf
+    /*00000090*/ MOVW        R0, #32770                  @ 0x8002 
+    /*00000094*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000098*/ POP         {R4, R5, R6, PC} 
+    /*0000009c*/ WORD_009c: .word 0x00000084
+    /*000000a0*/ WORD_00a0: .word 0x00000000
+    /*000000a4*/ WORD_00a4: .word 0x00000074
+    /*000000a8*/ WORD_00a8: .word 0x00000074
+    /*000000ac*/ WORD_00ac: .word 0x0000005c
+    /*000000b0*/ WORD_00b0: .word 0x0000003c
+    /*000000b4*/ WORD_00b4: .word 0x0000003c
+    /*000000b8*/ WORD_00b8: .word 0x00000028
+FUNC_END HI_MPI_HDMI_CEC_Disable
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_SetModParam
+@ Size: 0x18c
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_SetModParam
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R4, R0, #0 
+    /*00000008*/ LDR         IP, WORD_0154               @ LDR         IP, [PC, #324]              @ 0x0000000000000154 
+    /*0000000c*/ ADD         IP, PC, IP 
+    /*00000010*/ BNE         HI_MPI_HDMI_SetModParam_x38
+    /*00000014*/ CMP         R1, #0 
+    /*00000018*/ BEQ         HI_MPI_HDMI_SetModParam_x10c
+    /*0000001c*/ LDR         R4, [R1] 
+    /*00000020*/ CMP         R4, #2 
+    /*00000024*/ BHI         HI_MPI_HDMI_SetModParam_x7c
+    /*00000028*/ CMP         R4, #1 
+    /*0000002c*/ BEQ         HI_MPI_HDMI_SetModParam_xc4
+    /*00000030*/ POP         {R4, R5, R6, LR} 
+    HI_MPI_HDMI_SetModParam_x34:
+    /*00000034*/ B           HI_MPI_HDMI_SetModParam_x34 @ HI_MPI_HDMI_ComModParamSet [R_ARM_JUMP24: +0x0] 
+    HI_MPI_HDMI_SetModParam_x38:
+    /*00000038*/ LDR         R1, WORD_0158               @ LDR         R1, [PC, #280]              @ 0x0000000000000158 
+    /*0000003c*/ MOVW        R3, #2603                   @ 0xa2b 
+    /*00000040*/ LDR         R2, WORD_015c               @ LDR         R2, [PC, #276]              @ 0x000000000000015c 
+    /*00000044*/ LDR         R5, [IP, R1] 
+    /*00000048*/ LDR         R1, WORD_0160               @ LDR         R1, [PC, #272]              @ 0x0000000000000160 
+    /*0000004c*/ ADD         R2, PC, R2 
+    /*00000050*/ ADD         R1, PC, R1 
+    /*00000054*/ LDR         R0, [R5] 
+    /*00000058*/ BL          fprintf
+    /*0000005c*/ LDR         R1, WORD_0164               @ LDR         R1, [PC, #256]              @ 0x0000000000000164 
+    /*00000060*/ MOV         R2, R4 
+    /*00000064*/ LDR         R0, [R5] 
+    /*00000068*/ ADD         R1, PC, R1 
+    /*0000006c*/ BL          fprintf
+    /*00000070*/ MOVW        R0, #32770                  @ 0x8002 
+    /*00000074*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000078*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_SetModParam_x7c:
+    /*0000007c*/ LDR         R1, WORD_0158               @ LDR         R1, [PC, #212]              @ 0x0000000000000158 
+    /*00000080*/ MOV         R3, #2608                   @ 0xa30 
+    /*00000084*/ LDR         R2, WORD_0168               @ LDR         R2, [PC, #220]              @ 0x0000000000000168 
+    /*00000088*/ LDR         R4, [IP, R1] 
+    /*0000008c*/ LDR         R1, WORD_016c               @ LDR         R1, [PC, #216]              @ 0x000000000000016c 
+    /*00000090*/ ADD         R2, PC, R2 
+    /*00000094*/ ADD         R1, PC, R1 
+    /*00000098*/ LDR         R0, [R4] 
+    /*0000009c*/ BL          fprintf
+    /*000000a0*/ LDR         R0, WORD_0170               @ LDR         R0, [PC, #200]              @ 0x0000000000000170 
+    /*000000a4*/ MOV         R2, #15 
+    /*000000a8*/ LDR         R3, [R4] 
+    /*000000ac*/ MOV         R1, #1 
+    /*000000b0*/ ADD         R0, PC, R0 
+    /*000000b4*/ BL          fwrite
+    /*000000b8*/ MOVW        R0, #32770                  @ 0x8002 
+    /*000000bc*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000c0*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_SetModParam_xc4:
+    /*000000c4*/ LDR         R1, WORD_0158               @ LDR         R1, [PC, #140]              @ 0x0000000000000158 
+    /*000000c8*/ MOVW        R3, #2621                   @ 0xa3d 
+    /*000000cc*/ LDR         R2, WORD_0174               @ LDR         R2, [PC, #160]              @ 0x0000000000000174 
+    /*000000d0*/ LDR         R5, [IP, R1] 
+    /*000000d4*/ LDR         R1, WORD_0178               @ LDR         R1, [PC, #156]              @ 0x0000000000000178 
+    /*000000d8*/ ADD         R2, PC, R2 
+    /*000000dc*/ ADD         R1, PC, R1 
+    /*000000e0*/ LDR         R0, [R5] 
+    /*000000e4*/ BL          fprintf
+    /*000000e8*/ LDR         R0, WORD_017c               @ LDR         R0, [PC, #140]              @ 0x000000000000017c 
+    /*000000ec*/ MOV         R1, R4 
+    /*000000f0*/ LDR         R3, [R5] 
+    /*000000f4*/ MOV         R2, #13 
+    /*000000f8*/ ADD         R0, PC, R0 
+    /*000000fc*/ BL          fwrite
+    /*00000100*/ MOVW        R0, #32778                  @ 0x800a 
+    /*00000104*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000108*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_SetModParam_x10c:
+    /*0000010c*/ LDR         R1, WORD_0158               @ LDR         R1, [PC, #68]               @ 0x0000000000000158 
+    /*00000110*/ MOVW        R3, #2604                   @ 0xa2c 
+    /*00000114*/ LDR         R2, WORD_0180               @ LDR         R2, [PC, #100]              @ 0x0000000000000180 
+    /*00000118*/ LDR         R4, [IP, R1] 
+    /*0000011c*/ LDR         R1, WORD_0184               @ LDR         R1, [PC, #96]               @ 0x0000000000000184 
+    /*00000120*/ ADD         R2, PC, R2 
+    /*00000124*/ ADD         R1, PC, R1 
+    /*00000128*/ LDR         R0, [R4] 
+    /*0000012c*/ BL          fprintf
+    /*00000130*/ LDR         R0, WORD_0188               @ LDR         R0, [PC, #80]               @ 0x0000000000000188 
+    /*00000134*/ MOV         R2, #15 
+    /*00000138*/ LDR         R3, [R4] 
+    /*0000013c*/ MOV         R1, #1 
+    /*00000140*/ ADD         R0, PC, R0 
+    /*00000144*/ BL          fwrite
+    /*00000148*/ MOVW        R0, #32771                  @ 0x8003 
+    /*0000014c*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000150*/ POP         {R4, R5, R6, PC} 
+    /*00000154*/ WORD_0154: .word 0x00000140
+    /*00000158*/ WORD_0158: .word 0x00000000
+    /*0000015c*/ WORD_015c: .word 0x00000108
+    /*00000160*/ WORD_0160: .word 0x00000108
+    /*00000164*/ WORD_0164: .word 0x000000f4
+    /*00000168*/ WORD_0168: .word 0x000000d0
+    /*0000016c*/ WORD_016c: .word 0x000000d0
+    /*00000170*/ WORD_0170: .word 0x000000b8
+    /*00000174*/ WORD_0174: .word 0x00000094
+    /*00000178*/ WORD_0178: .word 0x00000094
+    /*0000017c*/ WORD_017c: .word 0x0000007c
+    /*00000180*/ WORD_0180: .word 0x00000058
+    /*00000184*/ WORD_0184: .word 0x00000058
+    /*00000188*/ WORD_0188: .word 0x00000040
+FUNC_END HI_MPI_HDMI_SetModParam
+
+
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+@ .text.HI_MPI_HDMI_GetModParam
+@ Size: 0xd0
+@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+FUNC_BEGIN HI_MPI_HDMI_GetModParam
+    /*00000000*/ PUSH        {R4, R5, R6, LR} 
+    /*00000004*/ SUBS        R4, R0, #0 
+    /*00000008*/ LDR         IP, WORD_00b0               @ LDR         IP, [PC, #160]              @ 0x00000000000000b0 
+    /*0000000c*/ ADD         IP, PC, IP 
+    /*00000010*/ BNE         HI_MPI_HDMI_GetModParam_x24
+    /*00000014*/ CMP         R1, #0 
+    /*00000018*/ BEQ         HI_MPI_HDMI_GetModParam_x68
+    /*0000001c*/ POP         {R4, R5, R6, LR} 
+    HI_MPI_HDMI_GetModParam_x20:
+    /*00000020*/ B           HI_MPI_HDMI_GetModParam_x20 @ HI_MPI_HDMI_ComModParamGet [R_ARM_JUMP24: +0x0] 
+    HI_MPI_HDMI_GetModParam_x24:
+    /*00000024*/ LDR         R1, WORD_00b4               @ LDR         R1, [PC, #136]              @ 0x00000000000000b4 
+    /*00000028*/ MOVW        R3, #2631                   @ 0xa47 
+    /*0000002c*/ LDR         R2, WORD_00b8               @ LDR         R2, [PC, #132]              @ 0x00000000000000b8 
+    /*00000030*/ LDR         R5, [IP, R1] 
+    /*00000034*/ LDR         R1, WORD_00bc               @ LDR         R1, [PC, #128]              @ 0x00000000000000bc 
+    /*00000038*/ ADD         R2, PC, R2 
+    /*0000003c*/ ADD         R1, PC, R1 
+    /*00000040*/ LDR         R0, [R5] 
+    /*00000044*/ BL          fprintf
+    /*00000048*/ LDR         R1, WORD_00c0               @ LDR         R1, [PC, #112]              @ 0x00000000000000c0 
+    /*0000004c*/ MOV         R2, R4 
+    /*00000050*/ LDR         R0, [R5] 
+    /*00000054*/ ADD         R1, PC, R1 
+    /*00000058*/ BL          fprintf
+    /*0000005c*/ MOVW        R0, #32770                  @ 0x8002 
+    /*00000060*/ MOVT        R0, #41000                  @ 0xa028 
+    /*00000064*/ POP         {R4, R5, R6, PC} 
+    HI_MPI_HDMI_GetModParam_x68:
+    /*00000068*/ LDR         R1, WORD_00b4               @ LDR         R1, [PC, #68]               @ 0x00000000000000b4 
+    /*0000006c*/ MOVW        R3, #2632                   @ 0xa48 
+    /*00000070*/ LDR         R2, WORD_00c4               @ LDR         R2, [PC, #76]               @ 0x00000000000000c4 
+    /*00000074*/ LDR         R4, [IP, R1] 
+    /*00000078*/ LDR         R1, WORD_00c8               @ LDR         R1, [PC, #72]               @ 0x00000000000000c8 
+    /*0000007c*/ ADD         R2, PC, R2 
+    /*00000080*/ ADD         R1, PC, R1 
+    /*00000084*/ LDR         R0, [R4] 
+    /*00000088*/ BL          fprintf
+    /*0000008c*/ LDR         R0, WORD_00cc               @ LDR         R0, [PC, #56]               @ 0x00000000000000cc 
+    /*00000090*/ MOV         R2, #15 
+    /*00000094*/ LDR         R3, [R4] 
+    /*00000098*/ MOV         R1, #1 
+    /*0000009c*/ ADD         R0, PC, R0 
+    /*000000a0*/ BL          fwrite
+    /*000000a4*/ MOVW        R0, #32771                  @ 0x8003 
+    /*000000a8*/ MOVT        R0, #41000                  @ 0xa028 
+    /*000000ac*/ POP         {R4, R5, R6, PC} 
+    /*000000b0*/ WORD_00b0: .word 0x0000009c
+    /*000000b4*/ WORD_00b4: .word 0x00000000
+    /*000000b8*/ WORD_00b8: .word 0x00000078
+    /*000000bc*/ WORD_00bc: .word 0x00000078
+    /*000000c0*/ WORD_00c0: .word 0x00000064
+    /*000000c4*/ WORD_00c4: .word 0x00000040
+    /*000000c8*/ WORD_00c8: .word 0x00000040
+    /*000000cc*/ WORD_00cc: .word 0x00000028
+FUNC_END HI_MPI_HDMI_GetModParam
+
+

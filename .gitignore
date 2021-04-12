@@ -1,32 +1,21 @@
-# Prerequisites
-*.d
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+SDK
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+[Bb]uild/
+[Ii]nstall/
 
-# Precompiled Headers
-*.gch
-*.pch
+.DS_Store/**/*
+.DS_Store
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+*.ko
+*.orig
