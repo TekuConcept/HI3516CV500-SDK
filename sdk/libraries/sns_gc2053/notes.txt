@@ -1,0 +1,262 @@
+
+HI_U32 field_0;             // 0x00 ----
+HI_U32 field_4;             // 0x04 
+HI_U8 field_8;              // 0x08 
+HI_U8 field_9;              // 0x09 
+HI_U8 field_A;              // 0x0A 
+HI_U8 field_B;              // 0x0B 
+HI_U32 field_C;             // 0x0C 
+
+ISP_SNS_TYPE_E enSnsType;   // 0x10 
+HI_U32 u32RegNum;           // 0x14 
+HI_U8 u8Cfg2ValidDelayMax;  // 0x18 0x00
+ISP_SNS_COMMBUS_U unComBus; // 0x19 0x01
+                            // 0x1A 0x02
+                            // 0x1B 0x03
+
+HI_BOOL bUpdate;            // 0x1C 0x04
+HI_U8   u8DelayFrmNum;      // 0x20 0x08
+HI_U8   u8IntPos;           // 0x21 0x09
+HI_U8   u8DevAddr;          // 0x22 0x0A
+                            // 0x23 0x0B
+HI_U32  u32RegAddr;         // 0x24 0x0C
+HI_U32  u32AddrByteNum;     // 0x28 0x10
+HI_U32  u32Data;            // 0x2C 0x14
+HI_U32  u32DataByteNum;     // 0x30 0x18
+
+HI_BOOL bUpdate;            // 0x34 
+HI_U8   u8DelayFrmNum;      // 0x38 
+HI_U8   u8IntPos;           // 0x3C 
+HI_U8   u8DevAddr;          // 0x40 
+HI_U32  u32RegAddr;         // 0x44 
+HI_U32  u32AddrByteNum;     // 0x48 
+HI_U32  u32Data;            // 0x4C 
+HI_U32  u32DataByteNum;     // 0x50 
+
+...
+
+
+
+---------------------------------
+
+
+HI_U16  u16WbRefTemp;                       //
+HI_U16  au16GainOffset[ISP_BAYER_CHN_NUM];  //
+HI_S32  as32WbPara[AWB_CURVE_PARA_NUM];     //
+HI_U16  u16GoldenRgain;                     //
+HI_U16  u16GoldenBgain;                     //
+HI_U16  u16SampleRgain;                     //
+HI_U16  u16SampleBgain;                     //
+AWB_AGC_TABLE_S stAgcTbl;                   //
+AWB_CCM_S stCcm;                            //
+HI_U16    u16InitRgain;                     //
+HI_U16    u16InitGgain;                     //
+HI_U16    u16InitBgain;                     //
+HI_U8     u8AWBRunInterval;                 //
+HI_U16    au16InitCCM[CCM_MATRIX_SIZE];     //
+
+-----------------------------------------
+
+
+
+HI_U32 field_0;                      //
+HI_U32 field_4;                      //
+HI_U8 u8SensorMode;                  // [field_8]
+HI_U8 field_9;                       //
+HI_U8 field_A;                       //
+HI_U8 field_B;                       //
+HI_U32 field_C;                      //
+ISP_SNS_REGS_INFO_S stIspRegsInfo_A; // [field_10]
+ISP_SNS_REGS_INFO_S stIspRegsInfo_B; // [field_430]
++++++++++++++++++++++++++++++++++++
+ISP_SNS_TYPE_E enSnsType;            // 0x430
+HI_U32  u32RegNum;                   // 0x434
+HI_U8   u8Cfg2ValidDelayMax;         // 0x438
+ISP_SNS_COMMBUS_U  unComBus;         // 0x439
+ISP_I2C_DATA_S astI2cData[ISP_MAX_SNS_REGS]; // 0x43C
+ISP_SSP_DATA_S astSspData[ISP_MAX_SNS_REGS]; // 0x43C
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [0]
+HI_BOOL bUpdate;            // 0x43C
+HI_U8   u8DelayFrmNum;      // 0x440
+HI_U8   u8IntPos;           // 0x444
+HI_U8   u8DevAddr;          // 0x448
+HI_U32  u32RegAddr;         // 0x44C
+HI_U32  u32AddrByteNum;     // 0x450
+HI_U32  u32Data;            // 0x454
+HI_U32  u32DataByteNum;     // 0x458
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [1]
+HI_BOOL bUpdate;            // 0x45C
+HI_U8   u8DelayFrmNum;      // 0x460
+HI_U8   u8IntPos;           // 0x464
+HI_U8   u8DevAddr;          // 0x468
+HI_U32  u32RegAddr;         // 0x46C
+HI_U32  u32AddrByteNum;     // 0x470
+HI_U32  u32Data;            // 0x474
+HI_U32  u32DataByteNum;     // 0x478
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [2]
+HI_BOOL bUpdate;            // 0x47C
+HI_U8   u8DelayFrmNum;      // 0x480
+HI_U8   u8IntPos;           // 0x484
+HI_U8   u8DevAddr;          // 0x488
+HI_U32  u32RegAddr;         // 0x48C
+HI_U32  u32AddrByteNum;     // 0x490
+HI_U32  u32Data;            // 0x494
+HI_U32  u32DataByteNum;     // 0x498
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [3]
+HI_BOOL bUpdate;            // 0x49C
+HI_U8   u8DelayFrmNum;      // 0x4A0
+HI_U8   u8IntPos;           // 0x4A4
+HI_U8   u8DevAddr;          // 0x4A8
+HI_U32  u32RegAddr;         // 0x4AC
+HI_U32  u32AddrByteNum;     // 0x4B0
+HI_U32  u32Data;            // 0x4B4
+HI_U32  u32DataByteNum;     // 0x4B8
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [4]
+HI_BOOL bUpdate;            // 0x4BC
+HI_U8   u8DelayFrmNum;      // 0x4C0
+HI_U8   u8IntPos;           // 0x4C4
+HI_U8   u8DevAddr;          // 0x4C8
+HI_U32  u32RegAddr;         // 0x4CC
+HI_U32  u32AddrByteNum;     // 0x4D0
+HI_U32  u32Data;            // 0x4D4
+HI_U32  u32DataByteNum;     // 0x4D8
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [5]
+HI_BOOL bUpdate;            // 0x4DC
+HI_U8   u8DelayFrmNum;      // 0x4E0
+HI_U8   u8IntPos;           // 0x4E4
+HI_U8   u8DevAddr;          // 0x4E8
+HI_U32  u32RegAddr;         // 0x4EC
+HI_U32  u32AddrByteNum;     // 0x4F0
+HI_U32  u32Data;            // 0x4F4
+HI_U32  u32DataByteNum;     // 0x4F8
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [6]
+HI_BOOL bUpdate;            // 0x4FC
+HI_U8   u8DelayFrmNum;      // 0x500
+HI_U8   u8IntPos;           // 0x504
+HI_U8   u8DevAddr;          // 0x508
+HI_U32  u32RegAddr;         // 0x50C
+HI_U32  u32AddrByteNum;     // 0x510
+HI_U32  u32Data;            // 0x514
+HI_U32  u32DataByteNum;     // 0x518
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [7]
+HI_BOOL bUpdate;            // 0x51C
+HI_U8   u8DelayFrmNum;      // 0x520
+HI_U8   u8IntPos;           // 0x524
+HI_U8   u8DevAddr;          // 0x528
+HI_U32  u32RegAddr;         // 0x52C
+HI_U32  u32AddrByteNum;     // 0x530
+HI_U32  u32Data;            // 0x534
+HI_U32  u32DataByteNum;     // 0x538
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [8]
+HI_BOOL bUpdate;            // 0x53C
+HI_U8   u8DelayFrmNum;      // 0x540
+HI_U8   u8IntPos;           // 0x544
+HI_U8   u8DevAddr;          // 0x548
+HI_U32  u32RegAddr;         // 0x54C
+HI_U32  u32AddrByteNum;     // 0x550
+HI_U32  u32Data;            // 0x554
+HI_U32  u32DataByteNum;     // 0x558
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [9]
+HI_BOOL bUpdate;            // 0x55C
+HI_U8   u8DelayFrmNum;      // 0x560
+HI_U8   u8IntPos;           // 0x564
+HI_U8   u8DevAddr;          // 0x568
+HI_U32  u32RegAddr;         // 0x56C
+HI_U32  u32AddrByteNum;     // 0x570
+HI_U32  u32Data;            // 0x574
+HI_U32  u32DataByteNum;     // 0x578
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [10]
+HI_BOOL bUpdate;            // 0x57C
+HI_U8   u8DelayFrmNum;      // 0x580
+HI_U8   u8IntPos;           // 0x584
+HI_U8   u8DevAddr;          // 0x588
+HI_U32  u32RegAddr;         // 0x58C
+HI_U32  u32AddrByteNum;     // 0x590
+HI_U32  u32Data;            // 0x594
+HI_U32  u32DataByteNum;     // 0x598
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [11]
+HI_BOOL bUpdate;            // 0x59C
+HI_U8   u8DelayFrmNum;      // 0x5A0
+HI_U8   u8IntPos;           // 0x5A4
+HI_U8   u8DevAddr;          // 0x5A8
+HI_U32  u32RegAddr;         // 0x5AC
+HI_U32  u32AddrByteNum;     // 0x5B0
+HI_U32  u32Data;            // 0x5B4
+HI_U32  u32DataByteNum;     // 0x5B8
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [12]
+HI_BOOL bUpdate;            // 0x5BC
+HI_U8   u8DelayFrmNum;      // 0x5C0
+HI_U8   u8IntPos;           // 0x5C4
+HI_U8   u8DevAddr;          // 0x5C8
+HI_U32  u32RegAddr;         // 0x5CC
+HI_U32  u32AddrByteNum;     // 0x5D0
+HI_U32  u32Data;            // 0x5D4
+HI_U32  u32DataByteNum;     // 0x5D8
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [13]
+HI_BOOL bUpdate;            // 0x5DC
+HI_U8   u8DelayFrmNum;      // 0x5E0
+HI_U8   u8IntPos;           // 0x5E4
+HI_U8   u8DevAddr;          // 0x5E8
+HI_U32  u32RegAddr;         // 0x5EC
+HI_U32  u32AddrByteNum;     // 0x5F0
+HI_U32  u32Data;            // 0x5F4
+HI_U32  u32DataByteNum;     // 0x5F8
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [14]
+HI_BOOL bUpdate;            // 0x5FC
+HI_U8   u8DelayFrmNum;      // 0x600
+HI_U8   u8IntPos;           // 0x604
+HI_U8   u8DevAddr;          // 0x608
+HI_U32  u32RegAddr;         // 0x60C
+HI_U32  u32AddrByteNum;     // 0x610
+HI_U32  u32Data;            // 0x614
+HI_U32  u32DataByteNum;     // 0x618
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [15]
+HI_BOOL bUpdate;            // 0x61C
+HI_U8   u8DelayFrmNum;      // 0x620
+HI_U8   u8IntPos;           // 0x624
+HI_U8   u8DevAddr;          // 0x628
+HI_U32  u32RegAddr;         // 0x62C
+HI_U32  u32AddrByteNum;     // 0x630
+HI_U32  u32Data;            // 0x634
+HI_U32  u32DataByteNum;     // 0x638
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [16]
+HI_BOOL bUpdate;            // 0x63C
+HI_U8   u8DelayFrmNum;      // 0x640
+HI_U8   u8IntPos;           // 0x644
+HI_U8   u8DevAddr;          // 0x648
+HI_U32  u32RegAddr;         // 0x64C
+HI_U32  u32AddrByteNum;     // 0x650
+HI_U32  u32Data;            // 0x654
+HI_U32  u32DataByteNum;     // 0x658
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [17]
+HI_BOOL bUpdate;            // 0x65C
+HI_U8   u8DelayFrmNum;      // 0x660
+HI_U8   u8IntPos;           // 0x664
+HI_U8   u8DevAddr;          // 0x668
+HI_U32  u32RegAddr;         // 0x66C
+HI_U32  u32AddrByteNum;     // 0x670
+HI_U32  u32Data;            // 0x674
+HI_U32  u32DataByteNum;     // 0x678
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+struct {
+    HI_BOOL bUpdate;                 // 0x83C
+    HI_U8   u8DelayFrmNum;           // 0x840
+    HI_U32  u32SlaveVsTime;          // 0x844
+    HI_U32  u32SlaveBindDev;         // 0x848
+} stSlvSync;                         // 0x83C
+
+HI_BOOL bConfig;                     // 0x84C
++++++++++++++++++++++++++++++++++++
+HI_U32 u32FullLines;                 // [field_850]
+HI_U32 field_854;                    // likely u32FullLinesMax
+HI_U32 u32FullLinesStd;              // [field_858]
+HI_U32 field_85C;                    //
+HI_U32 field_860;                    //
+HI_U32 field_864;                    //
+HI_U32 field_868;                    //
+HI_U32 field_86C;                    //
+HI_U32 field_870;                    //
+HI_U32 field_874;                    //
+HI_U32 field_878;                    //

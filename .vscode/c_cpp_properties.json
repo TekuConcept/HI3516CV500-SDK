@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/sdk/libraries/include/",
-                "${workspaceFolder}/sdk/drivers/hi3516cv500_aio"
+                "${workspaceFolder}/sdk/drivers/hi3516cv500_aio",
+                "${workspaceFolder}/sdk/libraries/mpi"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/arm-linux-gnueabihf-gcc",

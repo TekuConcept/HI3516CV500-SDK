@@ -24,8 +24,7 @@ HI_S32 HI_MPI_AE_Register(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib);
 HI_S32 HI_MPI_AE_UnRegister(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib);
 
 /* The callback function of sensor register to ae lib. */
-HI_S32 HI_MPI_AE_SensorRegCallBack(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ISP_SNS_ATTR_INFO_S *pstSnsAttrInfo,
-                                   AE_SENSOR_REGISTER_S *pstRegister);
+HI_S32 HI_MPI_AE_SensorRegCallBack(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ISP_SNS_ATTR_INFO_S *pstSnsAttrInfo, AE_SENSOR_REGISTER_S *pstRegister);
 HI_S32 HI_MPI_AE_SensorUnRegCallBack(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, SENSOR_ID SensorId);
 
 HI_S32 HI_MPI_ISP_SetExposureAttr(VI_PIPE ViPipe, const ISP_EXPOSURE_ATTR_S *pstExpAttr);

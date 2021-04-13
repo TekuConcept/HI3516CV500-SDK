@@ -76,6 +76,8 @@
         "ios": "c",
         "locale": "c",
         "queue": "c",
-        "cstdbool": "c"
+        "cstdbool": "c",
+        "unistd.h": "c",
+        "mpi_isp.h": "c"
     }
 }

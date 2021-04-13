@@ -23,8 +23,7 @@ HI_S32 HI_MPI_AWB_Register(VI_PIPE ViPipe, ALG_LIB_S *pstAwbLib);
 HI_S32 HI_MPI_AWB_UnRegister(VI_PIPE ViPipe, ALG_LIB_S *pstAwbLib);
 
 /* The callback function of sensor register to awb lib. */
-HI_S32 HI_MPI_AWB_SensorRegCallBack(VI_PIPE ViPipe, ALG_LIB_S *pstAwbLib, ISP_SNS_ATTR_INFO_S *pstSnsAttrInfo,
-                                    AWB_SENSOR_REGISTER_S *pstRegister);
+HI_S32 HI_MPI_AWB_SensorRegCallBack(VI_PIPE ViPipe, ALG_LIB_S *pstAwbLib, ISP_SNS_ATTR_INFO_S *pstSnsAttrInfo, AWB_SENSOR_REGISTER_S *pstRegister);
 HI_S32 HI_MPI_AWB_SensorUnRegCallBack(VI_PIPE ViPipe, ALG_LIB_S *pstAwbLib, SENSOR_ID SensorId);
 
 HI_S32 HI_MPI_ISP_SetWBAttr(VI_PIPE ViPipe, const ISP_WB_ATTR_S *pstWBAttr);
