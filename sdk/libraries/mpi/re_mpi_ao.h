@@ -7,89 +7,154 @@
 
 #include "mpi_audio.h"
 #include "mpi_errno.h"
-#include "re_dnvqe_comm.h"
+#include "re_audio_comm.h"
+
 #include <pthread.h>
 #include <sys/ioctl.h>
 
-typedef struct hiMPI_AO_CHN_CTX { // sizeof=0x98
-    pthread_mutex_t mutex;
-    HI_BOOL field_18;                // field_18 (resmp?)
-    DNVQE_RESAMPLER_S *pstReSampler; // field_1C
-    HI_BOOL field_20;                // field_20 (resmp?)
-    HI_CHAR *pResampleProcBuf;       // field_24
-    DNVQE_RESAMPLER_S *pstReadCache; // field_28 likely pointer to struct(size=0x43C)
-    HI_U32 field_2C;
-    HI_BOOL bVqeConfig;  // field_30
-    HI_BOOL bVqeEnable;  // field_34
-    DNVQE_CTX *pstDnVqe; // field_38
-    HI_U32 field_3C;
-    HI_U32 field_40;
-    HI_U32 field_44;
-    HI_U64 u64PhyAddr;
-    HI_U32 u32VirAddr;
-    HI_U32 field_54;
-    HI_U32 field_58;
-    HI_U32 field_5C;
-    HI_U32 field_60;
-    HI_U32 field_64;
-    HI_U64 field_68;
-    HI_U32 field_70;
-    HI_U32 field_74;
-    HI_U32 field_78;
-    HI_U32 field_7C;
-    HI_U32 field_80;
-    HI_U32 field_84;
-    HI_U32 field_88;
-    HI_U32 field_8C;
-    HI_U32 field_90;
-    HI_BOOL bEnabled;   // field_94
-} MPI_AO_CHN_CTX;
+#define VQE_MASK_HPF 1
+#define VQE_MASK_ANR 2
+#define VQE_MASK_AGC 4
+#define VQE_MASK_EQ  8
 
-typedef struct hiMPI_AO_ENABLE_CHN { // sizeof=0x28
-    HI_S32 field_0;
-    HI_S32 field_4;
-    HI_S32 field_8;
-    HI_S32 field_C;
-    HI_S32 field_10;
-    HI_S32 field_14;
-    HI_S32 field_18;
-    HI_S32 field_1C;
-    HI_S32 field_20;
-    HI_S32 field_24;
-} MPI_AO_ENABLE_CHN;
+#define AO_CHN_MEM_BUFS 3
+#define AO_CHN_DATA 0x4000u
 
-typedef struct hiMPI_AO_MUTE_INFO { // sizeof=0x10
-    HI_BOOL bEnable;
-    AUDIO_FADE_S stFade;
-} MPI_AO_MUTE_INFO;
+typedef struct hiMPI_AO_RESMP { // (sizeof=0xC)
+    HI_U32 u32PtNumPerFrm;               // 0x00
+    AUDIO_SAMPLE_RATE_E enInSampleRate;  // 0x04
+    AUDIO_SAMPLE_RATE_E enOutSampleRate; // 0x08
+} AO_RESMP_S;
 
-#define AO_CTL_SETPRIVATEDATA           _IOR( 'X', 0x00, 0x004)                          /* 0x40045800 */
-#define AO_CTL_SETPUBATTR               _IOR( 'X', 0x01, sizeof(AIO_ATTR_S))             /* 0x40285801 */
-#define AO_CTL_GETPUBATTR               _IOW( 'X', 0x02, sizeof(AIO_ATTR_S))             /* 0x80285802 */
-#define AO_CTL_ENABLE                   _IO(  'X', 0x03)                                 /* 0x00005803 */
-#define AO_CTL_DISABLE                  _IO(  'X', 0x04)                                 /* 0x00005804 */
-#define AO_CTL_PUTFRAME                 _IOWR('X', 0x05, 0x088)                          /* 0xC0885805 */
-#define AO_CTL_ENABLECHN                _IO(  'X', 0x06)                                 /* 0x00005806 */
-#define AO_CTL_DISABLECHN               _IO(  'X', 0x07)                                 /* 0x00005807 */
-#define AO_CTL_PAUSECHN                 _IO(  'X', 0x08)                                 /* 0x00005808 */
-#define AO_CTL_RESUMECHN                _IO(  'X', 0x09)                                 /* 0x00005809 */
-/* 0x????580A */
-/* 0x????580B */
-#define AO_CTL_CLEARCHNBUF              _IO(  'X', 0x0C)                                 /* 0x0000580C */
-#define AO_CTL_QUERYCHNSTAT             _IOW( 'X', 0x0D, sizeof(AO_CHN_STATE_S))         /* 0x800C580D */
-#define AO_SET_CHNRESMPINFO             _IOR( 'X', 0x0E, 0x010)                          /* 0x4010580E */
-#define AO_CTL_SETVQEDBGINFO            _IOR( 'X', 0x0F, sizeof(DNVQE_DBG_INFO))         /* 0x4440580F */
-#define AO_CTL_SETTRACKMODE             _IOR( 'X', 0x10, sizeof(AUDIO_TRACK_MODE_E))     /* 0x40045810 */
-#define AO_CTL_GETTRACKMODE             _IOW( 'X', 0x11, sizeof(AUDIO_TRACK_MODE_E))     /* 0x80045811 */
-#define AO_CTL_SETCLKDIR                _IOR( 'X', 0x12, sizeof(HI_U32))                 /* 0x40045812 */
-#define AO_CTL_GETCLKDIR                _IOW( 'X', 0x13, sizeof(HI_U32))                 /* 0x80045813 */
-#define AO_CTL_SETVOLUME                _IOR( 'X', 0x14, sizeof(HI_S32))                 /* 0x40045814 */
-#define AO_CTL_GETVOLUME                _IOW( 'X', 0x15, sizeof(HI_S32))                 /* 0x80045815 */
-#define AO_CTL_SETMUTE                  _IOR( 'X', 0x16, sizeof(MPI_AO_MUTE_INFO))       /* 0x40105816 */
-#define AO_CTL_GETMUTE                  _IOWR('X', 0x17, sizeof(MPI_AO_MUTE_INFO))       /* 0xC0105817 */
-#define AO_CTL_CLRPUBATTR               _IO(  'X', 0x18)                                 /* 0x00005818 */
-#define AO_CTL_SAVEFILE                 _IOR( 'X', 0x19, sizeof(AUDIO_SAVE_FILE_INFO_S)) /* 0x42085819 */
-#define AO_CTL_QUERYFILESTATUS          _IOW( 'X', 0x1A, sizeof(AUDIO_SAVE_FILE_INFO_S)) /* 0x8208581A */
-#define AO_CTL_GETCHNSTATE              _IOW( 'X', 0x1B, 0x004)                          /* 0x8004581B */
+typedef struct hiMPI_AO_RESMP_DBG_INFO { // (sizeof=0x10)
+    HI_BOOL bEnable;    // 0x00
+    AO_RESMP_S stResmp; // 0x04
+} AO_RESMP_DBG_S;
+
+typedef struct hiMPI_AO_MUTE_CFG { // (sizeof=0x10)
+    HI_BOOL bEnable;     // 0x00
+    AUDIO_FADE_S stFade; // 0x04
+} AO_MUTE_S;
+
+typedef struct hiMPI_AO_CHN_MEM { // (sizeof=0x20)
+    HI_U64 u64PhyAddr;  // 0x00
+    HI_U32 u32VirAddr;  // 0x08
+    HI_U32 u32Size;     // 0x0C
+    HI_U32 u32Read;     // 0x10
+    HI_U32 u32Write;    // 0x14
+    HI_BOOL bWriteJump; // 0x18
+    HI_U32 reserved;    // 0x1C (struct padding?)
+} AO_CIR_BUF_S;
+
+typedef struct hiMPI_AO_CHN_CTX { // (sizeof=0x98)
+    pthread_mutex_t mutex;           // 0x00
+    HI_BOOL bResmpEnabled;           // 0x18
+    HI_BOOL bAnrConfigured;          // 0x1C
+    HI_BOOL field_20;                // 0x20
+    HI_BOOL bAgcConfigured;          // 0x24
+    HI_BOOL bHpfConfigured;          // 0x28
+    HI_BOOL bEqConfigured;           // 0x2C
+    HI_BOOL bVqeConfigured;          // 0x30
+    HI_BOOL bVqeEnabled;             // 0x34
+    HI_VOID* pDnvqeHandle;           // 0x38
+    AO_RESMP_S stAoResmp;            // 0x3C
+    AO_CIR_BUF_S stCirBuf[2];        // 0x48
+    HI_CHAR* acBuf[AO_CHN_MEM_BUFS]; // 0x88
+    HI_BOOL bEnabled;                // 0x94
+} AO_CHN_CTX_S;
+
+typedef struct hiMPI_AO_DATA_INFO { // (sizeof=0x88)
+    AUDIO_FRAME_S stData; // 0x00
+    HI_U32 field_38[18];
+    HI_S32 s32MilliSec;   // 0x80
+    HI_U32 field_84;      // 0x84
+} AO_FRAME_DATA_S;
+
+typedef struct hiVQE_ATTR_S { // (sizeof=0x43C)
+    HI_BOOL bHpfEnabled;                 // 0x00
+    HI_BOOL bAnrEnabled;                 // 0x04
+    HI_BOOL bAgcEnabled;                 // 0x08
+    HI_BOOL bEqEnabled;                  // 0x0C
+    HI_U32 field_10;                     // 0x10
+    AUDIO_SAMPLE_RATE_E enInSampleRate;  // 0x14
+    HI_S32 s32WorkSampleRate;            // 0x18
+    AUDIO_SAMPLE_RATE_E enOutSampleRate; // 0x1C
+    HI_S32 s32FrameSample;               // 0x20
+    VQE_WORKSTATE_E enWorkstate;         // 0x24
+    AUDIO_HPF_CONFIG_S stHpfCfg;         // 0x28
+    AUDIO_ANR_CONFIG_S stAnrCfg;         // 0x30
+    AUDIO_AGC_CONFIG_S stAgcCfg;         // 0x40
+    AUDIO_EQ_CONFIG_S stEqCfg;           // 0x54
+
+    HI_U32 field_64[245]; // 0x64
+    HI_U32 field_438;     // 0x438
+} VQE_ATTR_S;
+
+typedef struct hiVQE_ATTR_DBG_INFO { // (sizeof=0x440)
+    HI_BOOL    bEnabled;
+    VQE_ATTR_S stVqeAttr;
+} VQE_ATTR_DBG_S;
+
+
+#define IOC_TYPE_AO 'X'
+typedef enum hiAO_IOCTL_E {
+    IOC_NR_SET_CHN_ID         = 0x00, // 0x00
+    IOC_NR_SET_PUB_ATTR,              // 0x01
+    IOC_NR_GET_PUB_ATTR,              // 0x02
+    IOC_NR_ENABLE,                    // 0x03
+    IOC_NR_DISABLE,                   // 0x04
+    IOC_NR_SEND_FRAME,                // 0x05
+    IOC_NR_ENABLE_CHN,                // 0x06
+    IOC_NR_DISABLE_CHN,               // 0x07
+    IOC_NR_PAUSE_CHN,                 // 0x08
+    IOC_NR_RESUME_CHN,                // 0x09
+    // 0x0A (not supported on HI3516CV500)
+    // 0x0B (not supported on HI3516CV500)
+    IOC_NR_CLEAR_CHN_BUF      = 0x0C, // 0x0C
+    IOC_NR_QUERY_CHN_STAT,            // 0x0D
+    IOC_NR_SET_RESMP_DBG_INFO,        // 0x0E
+    IOC_NR_SET_VQE_DBG_INFO,          // 0x0F
+    IOC_NR_SET_TRACK_MODE,            // 0x10
+    IOC_NR_GET_TRACK_MODE,            // 0x11
+    IOC_NR_SET_CLK_DIR,               // 0x12
+    IOC_NR_GET_CLK_DIR,               // 0x13
+    IOC_NR_SET_VOLUME,                // 0x14
+    IOC_NR_GET_VOLUME,                // 0x15
+    IOC_NR_SET_MUTE,                  // 0x16
+    IOC_NR_GET_MUTE,                  // 0x17
+    IOC_NR_CLR_PUB_ATTR,              // 0x18
+    IOC_NR_SAVE_FILE,                 // 0x19
+    IOC_NR_QUERY_FILE_STATUS,         // 0x1A
+    IOC_NR_GET_CHN_STATE,             // 0x1B
+} AO_IOCTL_E;
+
+#define AO_SET_CHN_ID         _IOR( IOC_TYPE_AO, IOC_NR_SET_CHN_ID,         AO_CHN                ) /* 0x40045800u */
+#define AO_SET_PUB_ATTR       _IOR( IOC_TYPE_AO, IOC_NR_SET_PUB_ATTR,       AIO_ATTR_S            ) /* 0x40285801u */
+#define AO_GET_PUB_ATTR       _IOW( IOC_TYPE_AO, IOC_NR_GET_PUB_ATTR,       AIO_ATTR_S            ) /* 0x80285802u */
+#define AO_ENABLE             _IO(  IOC_TYPE_AO, IOC_NR_ENABLE                                    ) /* 0x00005803u */
+#define AO_DISABLE            _IO(  IOC_TYPE_AO, IOC_NR_DISABLE                                   ) /* 0x00005804u */
+#define AO_SEND_FRAME         _IOWR(IOC_TYPE_AO, IOC_NR_SEND_FRAME,         AO_FRAME_DATA_S       ) /* 0xC0885805u */
+#define AO_ENABLE_CHN         _IO(  IOC_TYPE_AO, IOC_NR_ENABLE_CHN                                ) /* 0x00005806u */
+#define AO_DISABLE_CHN        _IO(  IOC_TYPE_AO, IOC_NR_DISABLE_CHN                               ) /* 0x00005807u */
+#define AO_PAUSE_CHN          _IO(  IOC_TYPE_AO, IOC_NR_PAUSE_CHN                                 ) /* 0x00005808u */
+#define AO_RESUME_CHN         _IO(  IOC_TYPE_AO, IOC_NR_RESUME_CHN                                ) /* 0x00005809u */
+// 0x0A (not supported on HI3516CV500)
+// 0x0B (not supported on HI3516CV500)
+#define AO_CLEAR_CHN_BUF      _IO(  IOC_TYPE_AO, IOC_NR_CLEAR_CHN_BUF                             ) /* 0x0000580Cu */
+#define AO_QUERY_CHN_STAT     _IOW( IOC_TYPE_AO, IOC_NR_QUERY_CHN_STAT,     AO_CHN_STATE_S        ) /* 0x800C580Du */
+#define AO_SET_RESMP_DBG_INFO _IOR( IOC_TYPE_AO, IOC_NR_SET_RESMP_DBG_INFO, AO_RESMP_DBG_S        ) /* 0x4010580Eu */
+#define AO_SET_VQE_DBG_INFO   _IOR( IOC_TYPE_AO, IOC_NR_SET_VQE_DBG_INFO,   VQE_ATTR_DBG_S        ) /* 0x4440580Fu */
+#define AO_SET_TRACK_MODE     _IOR( IOC_TYPE_AO, IOC_NR_SET_TRACK_MODE,     AUDIO_TRACK_MODE_E    ) /* 0x40045810u */
+#define AO_GET_TRACK_MODE     _IOW( IOC_TYPE_AO, IOC_NR_GET_TRACK_MODE,     AUDIO_TRACK_MODE_E    ) /* 0x80045811u */
+#define AO_SET_CLK_DIR        _IOR( IOC_TYPE_AO, IOC_NR_SET_CLK_DIR,        AUDIO_CLKSEL_E        ) /* 0x40045812u */
+#define AO_GET_CLK_DIR        _IOW( IOC_TYPE_AO, IOC_NR_GET_CLK_DIR,        AUDIO_CLKSEL_E        ) /* 0x80045813u */
+#define AO_SET_VOLUME         _IOR( IOC_TYPE_AO, IOC_NR_SET_VOLUME,         HI_S32                ) /* 0x40045814u */
+#define AO_GET_VOLUME         _IOW( IOC_TYPE_AO, IOC_NR_GET_VOLUME,         HI_S32                ) /* 0x80045815u */
+#define AO_SET_MUTE           _IOR( IOC_TYPE_AO, IOC_NR_SET_MUTE,           AO_MUTE_S             ) /* 0x40105816u */
+#define AO_GET_MUTE           _IOWR(IOC_TYPE_AO, IOC_NR_GET_MUTE,           AO_MUTE_S             ) /* 0xC0105817u */
+#define AO_CLR_PUB_ATTR       _IO(  IOC_TYPE_AO, IOC_NR_CLR_PUB_ATTR                              ) /* 0x00005818u */
+#define AO_SAVE_FILE          _IOR( IOC_TYPE_AO, IOC_NR_SAVE_FILE,          AUDIO_SAVE_FILE_INFO_S) /* 0x42085819u */
+#define AO_QUERY_FILE_STATUS  _IOW( IOC_TYPE_AO, IOC_NR_QUERY_FILE_STATUS,  AUDIO_SAVE_FILE_INFO_S) /* 0x8208581Au */
+#define AO_GET_CHN_STATE      _IOW( IOC_TYPE_AO, IOC_NR_GET_CHN_STATE,      HI_BOOL               ) /* 0x8004581Bu */
 
 #endif

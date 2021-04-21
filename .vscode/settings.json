@@ -78,6 +78,9 @@
         "queue": "c",
         "cstdbool": "c",
         "unistd.h": "c",
-        "mpi_isp.h": "c"
+        "mpi_isp.h": "c",
+        "re_mpi_ao.h": "c",
+        "mpi_audio.h": "c",
+        "re_dnvqe_comm.h": "c"
     }
 }

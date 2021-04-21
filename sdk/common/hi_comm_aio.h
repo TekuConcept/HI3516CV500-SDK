@@ -168,7 +168,7 @@ typedef struct hiAI_CHN_PARAM_S {
     HI_U32 u32UsrFrmDepth;
 } AI_CHN_PARAM_S;
 
-typedef struct hiAUDIO_FRAME_S {
+typedef struct hiAUDIO_FRAME_S { // (sizeof=0x38)
     AUDIO_BIT_WIDTH_E   enBitwidth;     /* audio frame bitwidth */
     AUDIO_SOUND_MODE_E  enSoundmode;    /* audio frame momo or stereo mode */
     HI_U8*  u64VirAddr[2];
@@ -179,14 +179,14 @@ typedef struct hiAUDIO_FRAME_S {
     HI_U32  u32PoolId[2];
 } AUDIO_FRAME_S;
 
-typedef struct hiAEC_FRAME_S {
+typedef struct hiAEC_FRAME_S { // (sizeof=0x40)
     AUDIO_FRAME_S   stRefFrame;    /* AEC reference audio frame */
     HI_BOOL         bValid;        /* whether frame is valid */
     HI_BOOL         bSysBind;      /* whether is sysbind */
 } AEC_FRAME_S;
 
 
-typedef struct hiAUDIO_FRAME_INFO_S {
+typedef struct hiAUDIO_FRAME_INFO_S { // (sizeof=0x08)
     AUDIO_FRAME_S *pstFrame; /* frame ptr */
     HI_U32         u32Id;   /* frame id */
 } AUDIO_FRAME_INFO_S;

@@ -271,7 +271,7 @@ typedef struct hiMPP_CHN_S {
 #define MPP_MOD_PM             "pm"
 #define MPP_MOD_MFUSION        "motionfusion"
 
-/* We just coyp this value of payload type from RTP/RTSP definition */
+/* We just copy this value of payload type from RTP/RTSP definition */
 typedef enum {
     PT_PCMU          = 0,
     PT_1016          = 1,

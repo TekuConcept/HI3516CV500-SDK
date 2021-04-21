@@ -106,8 +106,8 @@ HI_MPI_VB_CreatePool(VB_POOL_CONFIG_S *pstVbPoolCfg)
     strncpy_s(data.pcMmzName, 16, pstVbPoolCfg->acMmzName, 15);
     u32BlkCnt        = pstVbPoolCfg->u32BlkCnt;
     enRemapMode      = pstVbPoolCfg->enRemapMode;
-    data.field_18    = 0;
     u62BlkSize       = pstVbPoolCfg->u64BlkSize;
+    data.field_18    = 0;
     data.u32BlkCnt   = u32BlkCnt;
     data.u64BlkSize  = u62BlkSize;
     data.enRemapMode = enRemapMode;
@@ -125,7 +125,7 @@ HI_MPI_VB_DestroyPool(VB_POOL Pool)
     HI_S32 result;
 
     if ( Pool >= 0x200 ) {
-        fprintf((FILE *)stderr, "[Func]:%s [Line]:%d [Info]:illegal poolid %d!\n", "hi_mpi_vb_destroy_pool", 162, Pool);
+        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:illegal poolid %d!\n", "hi_mpi_vb_destroy_pool", 162, Pool);
         result = ERR_VB_ILLEGAL_PARAM;
     }
 
@@ -135,7 +135,7 @@ HI_MPI_VB_DestroyPool(VB_POOL Pool)
     pthread_mutex_lock(&g_vb_ctx_mutex);
     if ( g_vb_ctx[Pool].bMapped == HI_TRUE ) {
         fprintf(
-            (FILE *)stderr,
+            stderr,
             "[Func]:%s [Line]:%d [Info]:pool %d hasn't mummap!\n",
             __FUNCTION__, __LINE__, Pool);
         pthread_mutex_unlock(&g_vb_ctx_mutex);

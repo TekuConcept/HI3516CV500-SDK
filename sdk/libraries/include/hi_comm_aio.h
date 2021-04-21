@@ -156,11 +156,11 @@ typedef struct hiAIO_ATTR_S { // sizeof=0x28
     AUDIO_SOUND_MODE_E  enSoundmode;    /* momo or steror */
     HI_U32              u32EXFlag;      /* expand 8bit to 16bit, use AI_EXPAND(only valid for AI 8bit),use AI_CUT(only valid for extern Codec for 24bit) */
     HI_U32              u32FrmNum;      /* frame num in buf[2,MAX_AUDIO_FRAME_NUM] */
-    HI_U32              u32PtNumPerFrm; /* point num per frame (80/160/240/320/480/1024/2048)
-                                                (ADPCM IMA should add 1 point, AMR only support 160) */
+    HI_U32              u32PtNumPerFrm; /* number of sampling points in each frame (80/160/240/320/480/1024/2048)
+                                           (ADPCM IMA should add 1 point, AMR only support 160) */
     HI_U32              u32ChnCnt;      /* channle number on FS, valid value:1/2/4/8 */
     HI_U32              u32ClkSel;      /* 0: AI and AO clock is separate
-                                                 1: AI and AO clock is inseparate, AI use AO's clock */
+                                           1: AI and AO clock is inseparate, AI use AO's clock */
     AIO_I2STYPE_E       enI2sType;      /* i2s type */
 } AIO_ATTR_S;
 
@@ -240,7 +240,7 @@ typedef struct hiAUDIO_FADE_S { // sizof=0xC
 } AUDIO_FADE_S;
 
 /* Defines the configure parameters of AEC. */
-typedef struct hiAI_AEC_CONFIG_S { // sizeof=0x34AI_AEC_CONFIG_S
+typedef struct hiAI_AEC_CONFIG_S { // sizeof=0x34 AI_AEC_CONFIG_S
     HI_BOOL bUsrMode;                            /* mode 0: auto mode 1: mannual. */
     HI_S8 s8CngMode;                             /* cozy noisy mode: 0 close, 1 open, recommend 1 */
     HI_S8 s8NearAllPassEnergy;                   /* the far-end energy threshold for judging whether unvarnished transmission: 0 -59dBm0,

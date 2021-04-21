@@ -3,78 +3,79 @@
  */
 
 #include <pthread.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #include "re_mpi_audio.h"
 #include "re_mpi_comm.h"
 
-pthread_mutex_t g_aiao_fdmutex;
-int             g_aio_init;
-int             g_aiofd = -1;
+pthread_mutex_t s_audio_fdmutex;
+HI_S32 g_audio_fd = -1;
+HI_BOOL g_aio_init = HI_FALSE;
 
 HI_S32
 mpi_aio_init()
 {
-    HI_S32 result = 0;
-    if (g_aio_init != 1) g_aio_init = 1;
-    return result;
+    if ( g_aio_init != HI_TRUE )
+        g_aio_init = HI_TRUE;
+    return HI_SUCCESS;
 }
 
 HI_S32
 mpi_aio_exit()
 {
-    HI_S32 result = 0;
-    if (g_aio_init) g_aio_init = 0;
-    return result;
+    if ( g_aio_init == HI_TRUE )
+        g_aio_init = HI_FALSE;
+    return HI_SUCCESS;
 }
 
 HI_S32
-HI_MPI_AUDIO_SetModParam(const AUDIO_MOD_PARAM_S* pstModParam)
+HI_MPI_AUDIO_SetModParam(const AUDIO_MOD_PARAM_S *pstModParam)
 {
-    HI_S32 result;
+    pthread_mutex_lock(&s_audio_fdmutex);
 
-    pthread_mutex_lock(&g_aiao_fdmutex);
+    if ( g_audio_fd < 0 )
+        g_audio_fd = open("/dev/aio", O_RDWR);
 
-    if (g_aiofd >= 0 || (g_aiofd = open("/dev/aio", 2), g_aiofd >= 0)) {
-        pthread_mutex_unlock(&g_aiao_fdmutex);
-        result = ioctl(g_aiofd, 0x40045300u, pstModParam);
-    }
-    else {
-        pthread_mutex_unlock(&g_aiao_fdmutex);
+    if ( g_audio_fd < 0 ) {
+        pthread_mutex_unlock(&s_audio_fdmutex);
         puts("open aio dev fail");
-        result = -1;
+        return HI_FAILURE;
     }
 
-    return result;
+    pthread_mutex_unlock(&s_audio_fdmutex);
+    return ioctl(g_audio_fd, AUDIO_CTL_SETMODPARAM, pstModParam);
 }
 
 HI_S32
-HI_MPI_AUDIO_GetModParam(AUDIO_MOD_PARAM_S* pstModParam)
+HI_MPI_AUDIO_GetModParam(AUDIO_MOD_PARAM_S *pstModParam)
 {
     HI_S32 result;
 
-    pthread_mutex_lock(&g_aiao_fdmutex);
+    pthread_mutex_lock(&s_audio_fdmutex);
 
-    if (g_aiofd >= 0 || (g_aiofd = open("/dev/aio", 2), g_aiofd >= 0)) {
-        pthread_mutex_unlock(&g_aiao_fdmutex);
-        result = ioctl(g_aiofd, 0x80045301, pstModParam);
-    }
-    else {
-        pthread_mutex_unlock(&g_aiao_fdmutex);
+    if ( g_audio_fd < 0 )
+        g_audio_fd = open("/dev/aio", O_RDWR);
+    
+    if ( g_audio_fd < 0 ) {
+        pthread_mutex_unlock(&s_audio_fdmutex);
         puts("open aio dev fail");
-        result = -1;
+        return HI_FAILURE;
     }
 
-    return result;
+    pthread_mutex_unlock(&s_audio_fdmutex);
+    return ioctl(g_audio_fd, AUDIO_CTL_GETMODPARAM, pstModParam);
 }
 
 HI_S32
 HI_MPI_AUDIO_RegisterVQEModule(const AUDIO_VQE_REGISTER_S* pstVqeRegister)
 {
     fprintf(
-        (FILE*)stderr,
+        stderr,
         "[Func]:%s [Line]:%d [Info]:this chip not support vqe module "
         "register!\n",
         __FUNCTION__,
         __LINE__);
-    return 0xA0148009;
+    return ERR_AUDIO_NOT_PERM;
 }

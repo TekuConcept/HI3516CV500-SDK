@@ -154,6 +154,8 @@
 #define ERR_RGN_BADADDR               0xA0038011 // "The address is invalid.",
 #define ERR_RGN_BUSY                  0xA0038012 // "The system is busy.",
 
+#define ERR_AUDIO_NOT_PERM            0xA0148009 // "The operation is forbidden.",
+
 #define ERR_AI_INVALID_DEVID          0xA0158001 // "The AI device ID is invalid.",
 #define ERR_AI_INVALID_CHNID          0xA0158002 // "The AI channel ID is invalid.",
 #define ERR_AI_ILLEGAL_PARAM          0xA0158003 // "The settings of the AI parameters are invalid.",
