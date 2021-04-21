@@ -1,12 +1,29 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.8.2)
 PROJECT(hi3516cv500 C ASM)
 
+# BUILD WITH `cmake -DCMAKE_TOOLCHAIN_FILE=../CMake/ArmhfToolchain.cmake ..`
+
 INCLUDE(CMake/KernelBuildTools.cmake)
 MESSAGE(STATUS "${CROSS_COMPILER_PREFIX}")
 
-# INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/common")
+OPTION(BUILD_KERNEL_MODULES "Build supported kernel modules" OFF)
+OPTION(BUILD_USER_SPACE_LIBRARIES "Build supported user-space libraries" ON)
 
-ADD_SUBDIRECTORY("sdk/drivers")
+IF (${BUILD_KERNEL_MODULES})
+    ADD_SUBDIRECTORY("sdk/drivers")
+ENDIF ()
+
+IF (${BUILD_USER_SPACE_LIBRARIES})
+    ADD_SUBDIRECTORY("sdk/libraries")
+ENDIF ()
+
+
+
+# -----------------------------------------------------------------------------
+# EXPERIMENTAL STUFF (- IGNORE -)
+# -----------------------------------------------------------------------------
+
+# INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/common")
 
 # INCLUDE_DIRECTORIES(
 #     "Include"

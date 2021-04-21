@@ -1,5 +1,5 @@
 /**
- * Reverse Engineered by TekuConcept on October 17, 2020
+ * Reverse Engineered by TekuConcept on April 21, 2021
  */
 
 #include "re_mpi_ao.h"
@@ -8,6 +8,11 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+
+#define min(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+    __typeof__ (b) _b = (b); \
+    _a < _b ? _a : _b; })
 
 pthread_mutex_t s_ao_fdmutex;
 HI_BOOL s_ao_init = HI_FALSE;
@@ -22,90 +27,14 @@ extern HI_S32 HI_DNVQE_GetConfig(HI_VOID* pHandle, VQE_ATTR_S* pstVqeAttr);
 extern HI_S32 HI_DNVQE_WriteFrame(HI_VOID* pHandle, HI_CHAR* buffer, HI_U32 u32PointNum);
 extern HI_S32 HI_DNVQE_ReadFrame(HI_VOID* pHandle, HI_CHAR* buffer, HI_U32 u32PointNum, HI_BOOL bBlock);
 
-extern HI_S32 mpi_sys_bind_register_receiver(HI_U32*);
+extern HI_S32 mpi_sys_bind_register_receiver(SYS_ENTRY_S* pstEntry);
+extern HI_VOID mpi_sys_bind_un_register_receiver(MOD_ID_E ModId);
+
+static void
+_assert_fail(const HI_CHAR *assertion, const HI_CHAR *file, HI_U32 line, const HI_CHAR *function)
+{ __assert_fail(assertion, file, line, function); }
 
 // ============================================================================
-
-HI_S32
-mpi_ao_receive_frm(AUDIO_DEV AoDevId, AO_CHN AoChn, int unknown, mpp_data_type data_type, HI_VOID *pstData)
-{
-    if ( data_type != MPP_DATA_AUDIO_FRAME ) {
-        printf(
-            "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-            __FUNCTION__, __LINE__,
-            "data_type == MPP_DATA_AUDIO_FRAME");
-        _assert_fail(
-            "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-            0xD4u, __FUNCTION__);
-    }
-    if ( pstData == HI_NULL ) {
-        printf(
-            "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-            __FUNCTION__, __LINE__, "data != NULL");
-        _assert_fail(
-            "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-            0xD5u, __FUNCTION__);
-    }
-    return hi_mpi_ao_send_frame(AoDevId, AoChn, (const AUDIO_FRAME_S *)pstData, -1);
-}
-
-HI_S32
-mpi_ao_init()
-{
-    HI_S32 result, i;
-    SYS_ENTRY_S stEntry;
-
-    if ( s_ao_init == HI_TRUE )
-        return HI_SUCCESS;
-
-    stEntry.ModId         = HI_ID_AO;
-    stEntry.field_4       = 2;
-    stEntry.field_8       = 3;
-    stEntry.pfCallback    = (HI_S32 (*)(HI_S32, HI_S32, int, mpp_data_type, HI_VOID*))mpi_ao_receive_frm;
-    stEntry.enPayloadType = PT_PCMU;
-
-    result = mpi_sys_bind_register_receiver(&stEntry);
-    if ( result != HI_SUCCESS )
-        return HI_ERR_AO_SYS_NOTREADY;
-
-    memset_s(g_mpi_ao_chn_ctx, sizeof(g_mpi_ao_chn_ctx), 0, sizeof(g_mpi_ao_chn_ctx));
-
-    for (i = 0; i < 6; i++) {
-        result = pthread_mutex_init(&g_mpi_ao_chn_ctx[i].mutex, NULL);
-        if (result != HI_SUCCESS) return HI_FAILURE;
-    }
-
-    result = pthread_mutex_init(&s_ao_fdmutex, NULL);
-    if ( result != HI_SUCCESS ) return HI_FAILURE;
-
-    s_ao_init = HI_TRUE;
-    return HI_SUCCESS;
-}
-
-HI_S32
-mpi_ao_exit()
-{
-    HI_S32 result, i;
-
-    if ( s_ao_init == HI_FALSE )
-        return HI_SUCCESS;
-
-    mpi_sys_bind_un_register_receiver(22);
-
-    for (i = 0; i < 6; i++) {
-        if ( g_mpi_ao_chn_ctx[i].stCirBuf[0].u32VirAddr ) {
-            audio_free(g_mpi_ao_chn_ctx[i].stCirBuf[0].u64PhyAddr);
-            g_mpi_ao_chn_ctx[i].stCirBuf[0].u32VirAddr = 0;
-        }
-        pthread_mutex_destroy(&g_mpi_ao_chn_ctx[i].mutex);
-    }
-
-    pthread_mutex_destroy(&s_ao_fdmutex);
-
-    memset_s(g_mpi_ao_chn_ctx, 6 * sizeof(AO_CHN_CTX_S), 0, 6 * sizeof(AO_CHN_CTX_S));
-    s_ao_init = HI_FALSE;
-    return HI_SUCCESS;
-}
 
 HI_S32
 ao_check_open(AO_CHN AoChn)
@@ -438,6 +367,77 @@ mpi_ao_disable_resmp(AO_CHN AoChn)
         "[Func]:%s [Line]:%d [Info]:ao_dev: %d haven't set attr!\n",
         __FUNCTION__, __LINE__, AoChn / 3);
     return HI_ERR_AO_NOT_CONFIG;
+}
+
+inline HI_BOOL
+mpi_vqe_compare_hpf_cfg(const AUDIO_HPF_CONFIG_S *lhs, const AUDIO_HPF_CONFIG_S *rhs)
+{
+    return lhs->bUsrMode == rhs->bUsrMode &&
+    (
+        lhs->bUsrMode != HI_TRUE ||
+        lhs->enHpfFreq == rhs->enHpfFreq
+    );
+}
+
+inline HI_BOOL
+mpi_vqe_compare_anr_cfg(const AUDIO_ANR_CONFIG_S *lhs, const AUDIO_ANR_CONFIG_S *rhs)
+{
+    return lhs->bUsrMode == rhs->bUsrMode &&
+    (
+        lhs->bUsrMode       != HI_TRUE ||
+        lhs->s16NrIntensity == rhs->s16NrIntensity &&
+        lhs->s16NoiseDbThr  == rhs->s16NoiseDbThr &&
+        lhs->s8SpProSwitch  == rhs->s8SpProSwitch
+    );
+}
+
+inline HI_BOOL
+mpi_vqe_compare_agc_cfg(const AUDIO_AGC_CONFIG_S *lhs, const AUDIO_AGC_CONFIG_S *rhs)
+{
+    return lhs->bUsrMode == rhs->bUsrMode &&
+    (
+        lhs->bUsrMode          != HI_TRUE ||
+        lhs->s8TargetLevel     == rhs->s8TargetLevel &&
+        lhs->s8NoiseFloor      == rhs->s8NoiseFloor &&
+        lhs->s8MaxGain         == rhs->s8MaxGain &&
+        lhs->s8AdjustSpeed     == rhs->s8MaxGain &&
+        lhs->s8ImproveSNR      == rhs->s8ImproveSNR &&
+        lhs->s8UseHighPassFilt == rhs->s8UseHighPassFilt &&
+        lhs->s8OutputMode      == rhs->s8OutputMode &&
+        lhs->s16NoiseSupSwitch == rhs->s16NoiseSupSwitch
+    );
+}
+
+inline HI_BOOL
+mpi_vqe_compare_eq_cfg(const AUDIO_EQ_CONFIG_S *lhs, const AUDIO_EQ_CONFIG_S *rhs)
+{ return !memcmp(lhs, rhs, sizeof(AUDIO_EQ_CONFIG_S)); }
+
+HI_S32
+mpi_ao_set_vqe_dbg_info(AUDIO_DEV AoDevId, AO_CHN AoChn, VQE_ATTR_DBG_S *pstVqeAttrDbg)
+{
+    HI_S32 result;
+
+    if ( AoDevId > 1 ) {
+        fprintf(stderr,
+        "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
+        __FUNCTION__, __LINE__, AoDevId);
+        return HI_ERR_AO_INVALID_DEVID;
+    }
+
+    if ( AoChn > 2 ) {
+        fprintf(stderr,
+            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
+            __FUNCTION__, __LINE__, AoChn);
+        return HI_ERR_AO_INVALID_CHNID;
+    }
+
+    if ( pstVqeAttrDbg == HI_NULL )
+        return HI_ERR_AO_NULL_PTR;
+
+    result = ao_check_open(AoChn + 3 * AoDevId);
+    if ( result != HI_SUCCESS ) return result;
+
+    return ioctl(g_ao_fd[AoChn + 3 * AoDevId], AO_SET_VQE_DBG_INFO, pstVqeAttrDbg);
 }
 
 HI_S32
@@ -1437,6 +1437,87 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
     return HI_SUCCESS;
 }
 
+HI_S32
+mpi_ao_receive_frm(AUDIO_DEV AoDevId, AO_CHN AoChn, int unknown, mpp_data_type data_type, HI_VOID *pstData)
+{
+    if ( data_type != MPP_DATA_AUDIO_FRAME ) {
+        printf(
+            "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
+            __FUNCTION__, __LINE__,
+            "data_type == MPP_DATA_AUDIO_FRAME");
+        _assert_fail(
+            "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
+            0xD4u, __FUNCTION__);
+    }
+    if ( pstData == HI_NULL ) {
+        printf(
+            "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
+            __FUNCTION__, __LINE__, "data != NULL");
+        _assert_fail(
+            "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
+            0xD5u, __FUNCTION__);
+    }
+    return hi_mpi_ao_send_frame(AoDevId, AoChn, (const AUDIO_FRAME_S *)pstData, -1);
+}
+
+HI_S32
+mpi_ao_init()
+{
+    HI_S32 result, i;
+    SYS_ENTRY_S stEntry;
+
+    if ( s_ao_init == HI_TRUE )
+        return HI_SUCCESS;
+
+    stEntry.ModId         = HI_ID_AO;
+    stEntry.field_4       = 2;
+    stEntry.field_8       = 3;
+    stEntry.pfCallback    = (HI_S32 (*)(HI_S32, HI_S32, int, mpp_data_type, HI_VOID*))mpi_ao_receive_frm;
+    stEntry.enPayloadType = PT_PCMU;
+
+    result = mpi_sys_bind_register_receiver(&stEntry);
+    if ( result != HI_SUCCESS )
+        return HI_ERR_AO_SYS_NOTREADY;
+
+    memset_s(g_mpi_ao_chn_ctx, sizeof(g_mpi_ao_chn_ctx), 0, sizeof(g_mpi_ao_chn_ctx));
+
+    for (i = 0; i < 6; i++) {
+        result = pthread_mutex_init(&g_mpi_ao_chn_ctx[i].mutex, NULL);
+        if (result != HI_SUCCESS) return HI_FAILURE;
+    }
+
+    result = pthread_mutex_init(&s_ao_fdmutex, NULL);
+    if ( result != HI_SUCCESS ) return HI_FAILURE;
+
+    s_ao_init = HI_TRUE;
+    return HI_SUCCESS;
+}
+
+HI_S32
+mpi_ao_exit()
+{
+    HI_S32 result, i;
+
+    if ( s_ao_init == HI_FALSE )
+        return HI_SUCCESS;
+
+    mpi_sys_bind_un_register_receiver(HI_ID_AO);
+
+    for (i = 0; i < 6; i++) {
+        if ( g_mpi_ao_chn_ctx[i].stCirBuf[0].u32VirAddr ) {
+            audio_free(g_mpi_ao_chn_ctx[i].stCirBuf[0].u64PhyAddr);
+            g_mpi_ao_chn_ctx[i].stCirBuf[0].u32VirAddr = 0;
+        }
+        pthread_mutex_destroy(&g_mpi_ao_chn_ctx[i].mutex);
+    }
+
+    pthread_mutex_destroy(&s_ao_fdmutex);
+
+    memset_s(g_mpi_ao_chn_ctx, 6 * sizeof(AO_CHN_CTX_S), 0, 6 * sizeof(AO_CHN_CTX_S));
+    s_ao_init = HI_FALSE;
+    return HI_SUCCESS;
+}
+
 inline HI_S32
 ao_check_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *pstVqeConfig)
 {
@@ -1475,14 +1556,14 @@ ao_check_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *pstVqeConfi
     if ( pstVqeConfig->u32OpenMask > 0xF ) {
         fprintf(stderr,
             "[Func]:%s [Line]:%d [Info]:open_mask(0x%x) is exclude agc",
-            __FUNCTION__, __LINE__, pstVqeConfig->u32OpenMask, AoChn);
+            __FUNCTION__, __LINE__, pstVqeConfig->u32OpenMask);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     if ( pstVqeConfig->u32OpenMask == 0 ) {
         fprintf(stderr,
             "[Func]:%s [Line]:%d [Info]:open_mask(0x%x) ,agc",
-            __FUNCTION__, __LINE__, 0, AoChn);
+            __FUNCTION__, __LINE__, pstVqeConfig->u32OpenMask);
         return HI_ERR_AO_NOT_PERM;
     }
 
@@ -1624,77 +1705,6 @@ ao_check_eq(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_EQ_CONFIG_S *pstEqCfg)
     return HI_SUCCESS;
 }
 
-inline HI_BOOL
-mpi_vqe_compare_hpf_cfg(const AUDIO_HPF_CONFIG_S *lhs, const AUDIO_HPF_CONFIG_S *rhs)
-{
-    return lhs->bUsrMode == rhs->bUsrMode &&
-    (
-        lhs->bUsrMode != HI_TRUE ||
-        lhs->enHpfFreq == rhs->enHpfFreq
-    );
-}
-
-inline HI_BOOL
-mpi_vqe_compare_anr_cfg(const AUDIO_ANR_CONFIG_S *lhs, const AUDIO_ANR_CONFIG_S *rhs)
-{
-    return lhs->bUsrMode == rhs->bUsrMode &&
-    (
-        lhs->bUsrMode       != HI_TRUE ||
-        lhs->s16NrIntensity == rhs->s16NrIntensity &&
-        lhs->s16NoiseDbThr  == rhs->s16NoiseDbThr &&
-        lhs->s8SpProSwitch  == rhs->s8SpProSwitch
-    );
-}
-
-inline HI_BOOL
-mpi_vqe_compare_agc_cfg(const AUDIO_AGC_CONFIG_S *lhs, const AUDIO_AGC_CONFIG_S *rhs)
-{
-    return lhs->bUsrMode == rhs->bUsrMode &&
-    (
-        lhs->bUsrMode          != HI_TRUE ||
-        lhs->s8TargetLevel     == rhs->s8TargetLevel &&
-        lhs->s8NoiseFloor      == rhs->s8NoiseFloor &&
-        lhs->s8MaxGain         == rhs->s8MaxGain &&
-        lhs->s8AdjustSpeed     == rhs->s8MaxGain &&
-        lhs->s8ImproveSNR      == rhs->s8ImproveSNR &&
-        lhs->s8UseHighPassFilt == rhs->s8UseHighPassFilt &&
-        lhs->s8OutputMode      == rhs->s8OutputMode &&
-        lhs->s16NoiseSupSwitch == rhs->s16NoiseSupSwitch
-    );
-}
-
-inline HI_BOOL
-mpi_vqe_compare_eq_cfg(const AUDIO_EQ_CONFIG_S *lhs, const AUDIO_EQ_CONFIG_S *rhs)
-{ return !memcmp(lhs, rhs, sizeof(AUDIO_EQ_CONFIG_S)); }
-
-HI_S32
-mpi_ao_set_vqe_dbg_info(AUDIO_DEV AoDevId, AO_CHN AoChn, VQE_ATTR_DBG_S *pstVqeAttrDbg)
-{
-    HI_S32 result;
-
-    if ( AoDevId > 1 ) {
-        fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-        __FUNCTION__, __LINE__, AoDevId);
-        return HI_ERR_AO_INVALID_DEVID;
-    }
-
-    if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
-        return HI_ERR_AO_INVALID_CHNID;
-    }
-
-    if ( pstVqeAttrDbg == HI_NULL )
-        return HI_ERR_AO_NULL_PTR;
-
-    result = ao_check_open(AoChn + 3 * AoDevId);
-    if ( result != HI_SUCCESS ) return result;
-
-    return ioctl(g_ao_fd[AoChn + 3 * AoDevId], AO_SET_VQE_DBG_INFO, pstVqeAttrDbg);
-}
-
 HI_S32
 hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *pstVqeConfig)
 {
@@ -1780,10 +1790,10 @@ hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *p
             if ( stLastVqeAttr.bEqEnabled  ) u32OpenMask |= VQE_MASK_EQ;
 
             if ( pstVqeConfig->u32OpenMask == u32OpenMask &&
-                ((u32OpenMask & VQE_MASK_HPF) == 0 || mpi_vqe_compare_hpf_cfg(&stLastVqeAttr, &pstVqeConfig->stHpfCfg))          &&
+                ((u32OpenMask & VQE_MASK_HPF) == 0 || mpi_vqe_compare_hpf_cfg(&stLastVqeAttr.stHpfCfg, &pstVqeConfig->stHpfCfg)) &&
                 ((u32OpenMask & VQE_MASK_ANR) == 0 || mpi_vqe_compare_anr_cfg(&stLastVqeAttr.stAnrCfg, &pstVqeConfig->stAnrCfg)) &&
                 ((u32OpenMask & VQE_MASK_AGC) == 0 || mpi_vqe_compare_agc_cfg(&stLastVqeAttr.stAgcCfg, &pstVqeConfig->stAgcCfg)) &&
-                ((u32OpenMask & VQE_MASK_EQ ) == 0 || mpi_vqe_compare_eq_cfg(&stLastVqeAttr.stEqCfg, &pstVqeConfig->stEqCfg))
+                ((u32OpenMask & VQE_MASK_EQ ) == 0 || mpi_vqe_compare_eq_cfg( &stLastVqeAttr.stEqCfg,  &pstVqeConfig->stEqCfg))
             ) {
                 pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
                 return HI_SUCCESS;
@@ -2328,7 +2338,7 @@ HI_MPI_AO_EnableChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
     AIO_ATTR_S stAttr;
     HI_CHAR acName[17] = { 0 };
     HI_U64 u64PhyAddr = 0;
-    HI_U32 u32VirAddr = 0;
+    HI_CHAR* u32VirAddr = HI_NULL;
 
     if ( AoDevId > 1 ) {
         fprintf(stderr,
@@ -2360,7 +2370,7 @@ HI_MPI_AO_EnableChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
         return HI_SUCCESS;
     }
 
-    snprintf_s(&acName, 17, 16, "AO(%d,%d) cir_buf", AoDevId, AoChn);
+    snprintf_s(acName, 17, 16, "AO(%d,%d) cir_buf", AoDevId, AoChn);
 
     u32FrameBufSize = min(stAttr.u32PtNumPerFrm * stAttr.u32FrmNum, AO_CHN_DATA)
         << stAttr.enBitwidth;
@@ -2371,7 +2381,7 @@ HI_MPI_AO_EnableChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
     result = audio_alloc(
         acName,
         &u64PhyAddr,
-        &u32VirAddr,
+        (HI_U32*)&u32VirAddr,
         u32RawBufSize);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
@@ -2383,10 +2393,10 @@ HI_MPI_AO_EnableChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
 
     result = ioctl(g_ao_fd[AoChn + 3 * AoDevId], AO_ENABLE_CHN);
     if ( result != HI_SUCCESS ) {
-        if ( u32VirAddr ) {
+        if ( u32VirAddr != HI_NULL ) {
             audio_free(u64PhyAddr);
-            g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[0].u64PhyAddr = 0;
-            g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[0].u32VirAddr = 0;
+            g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[0].u64PhyAddr = HI_NULL;
+            g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[0].u32VirAddr = HI_NULL;
         }
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
         return result;
@@ -2403,7 +2413,7 @@ HI_MPI_AO_EnableChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
         g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[1].u64PhyAddr =
             u64PhyAddr + u32FrameBufSize;
         g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[1].u32VirAddr =
-            (HI_U32 *)((HI_CHAR *)u32VirAddr + u32FrameBufSize);
+            u32VirAddr + u32FrameBufSize;
         g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[1].u32Size    = u32FrameBufSize;
         g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[1].u32Read    = 0;
         g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[1].u32Write   = 0;
@@ -2429,10 +2439,10 @@ HI_MPI_AO_EnableChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
         g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].acBuf[i] = HI_NULL;
     }
 
-    if ( u32VirAddr ) {
+    if ( u32VirAddr != HI_NULL ) {
         audio_free(u64PhyAddr);
-        g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[0].u64PhyAddr = 0ull;
-        g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[0].u32VirAddr = 0u;
+        g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[0].u64PhyAddr = HI_NULL;
+        g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].stCirBuf[0].u32VirAddr = HI_NULL;
     }
 
     pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);

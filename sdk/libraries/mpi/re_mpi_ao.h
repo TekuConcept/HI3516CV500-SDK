@@ -1,5 +1,5 @@
 /**
- * Reverse Engineered by TekuConcept on October 17, 2020
+ * Reverse Engineered by TekuConcept on April 21, 2021
  */
 
 #ifndef RE_MPI_AUDIO_H
@@ -37,13 +37,13 @@ typedef struct hiMPI_AO_MUTE_CFG { // (sizeof=0x10)
 } AO_MUTE_S;
 
 typedef struct hiMPI_AO_CHN_MEM { // (sizeof=0x20)
-    HI_U64 u64PhyAddr;  // 0x00
-    HI_U32 u32VirAddr;  // 0x08
-    HI_U32 u32Size;     // 0x0C
-    HI_U32 u32Read;     // 0x10
-    HI_U32 u32Write;    // 0x14
-    HI_BOOL bWriteJump; // 0x18
-    HI_U32 reserved;    // 0x1C (struct padding?)
+    HI_U64 u64PhyAddr;   // 0x00
+    HI_CHAR* u32VirAddr; // 0x08
+    HI_U32 u32Size;      // 0x0C
+    HI_U32 u32Read;      // 0x10
+    HI_U32 u32Write;     // 0x14
+    HI_BOOL bWriteJump;  // 0x18
+    HI_U32 reserved;     // 0x1C (struct padding?)
 } AO_CIR_BUF_S;
 
 typedef struct hiMPI_AO_CHN_CTX { // (sizeof=0x98)
