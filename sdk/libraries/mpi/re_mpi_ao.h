@@ -6,8 +6,8 @@
 #define RE_MPI_AUDIO_H
 
 #include "mpi_audio.h"
-#include "mpi_errno.h"
 #include "re_audio_comm.h"
+#include "hi_comm_ao.h"
 
 #include <pthread.h>
 #include <sys/ioctl.h>

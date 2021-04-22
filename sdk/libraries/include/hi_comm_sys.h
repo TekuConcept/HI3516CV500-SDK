@@ -35,12 +35,10 @@ typedef struct hiVPSS_VENC_WRAP_PARAM_S {
 
     SIZE_S stLargeStreamSize; /* VENC Large Stream Size */
     SIZE_S stSmallStreamSize; /* VENC Small Stream Size */
-
 } VPSS_VENC_WRAP_PARAM_S;
 
 typedef struct hiMPP_SYS_CONFIG_S {
     HI_U32 u32Align;
-
 } MPP_SYS_CONFIG_S;
 
 typedef struct hiSYS_VIRMEM_INFO_S {
