@@ -10,6 +10,7 @@ OPTION(BUILD_STATIC_LIBS "Build static user-space libraries" ON)
 
 SET(MPI_FILES
     "mpi/mpi_ao.c"
+    "mpi/mpi_sys.c"
 )
 ADD_LIBRARY(mpi_obj OBJECT ${MPI_FILES})
 IF (${BUILD_SHARED_LIBS})
