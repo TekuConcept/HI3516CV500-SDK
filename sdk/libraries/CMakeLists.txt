@@ -13,6 +13,7 @@ SET(MPI_FILES
     "mpi/as_buf.c"
     "mpi/mpi_ao.c"
     "mpi/mpi_sys.c"
+    "mpi/mpi_bind.c"
 )
 ADD_LIBRARY(mpi_obj OBJECT ${MPI_FILES})
 IF (${BUILD_SHARED_LIBS})
@@ -25,7 +26,6 @@ IF (${BUILD_STATIC_LIBS})
 ENDIF ()
 TARGET_INCLUDE_DIRECTORIES(mpi_obj PUBLIC
     "../common"
-    "../drivers"
     "mpi"
 )
 

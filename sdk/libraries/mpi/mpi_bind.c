@@ -9,22 +9,28 @@
 pthread_mutex_t g_sys_bind_lock;
 pthread_mutex_t g_sys_dev_sem;
 
-hi_binder_info *g_sender_tbl[HI_ID_BUTT];   // (sizeof=0xF8)
-hi_binder_info *g_receiver_tbl[HI_ID_BUTT]; // (sizeof=0xF8)
-SYS_BIND_ENTRY_S g_bind_send[HI_ID_BUTT];   // (sizeof=0x1F0)
+SYS_BINDER_INFO_S *g_sender_tbl[HI_ID_BUTT];   // (sizeof=0xF8)
+SYS_BINDER_INFO_S *g_receiver_tbl[HI_ID_BUTT]; // (sizeof=0xF8)
+SYS_BIND_ENTRY_S g_bind_send[HI_ID_BUTT];      // (sizeof=0x1F0)
 
 HI_CHAR g_bind_name[MAX_BIND_NAME_LEN];
 
-hi_mpp_bind_dest send_bind_src;
+MPP_BIND_DEST_S send_bind_src;
+
+// ============================================================================
+
+static void
+_assert_fail(const HI_CHAR *assertion, const HI_CHAR *file, HI_U32 line, const HI_CHAR *function)
+{ __assert_fail(assertion, file, line, function); }
 
 // ============================================================================
 
 HI_U32
-mpi_sys_get_idx_by_dev_chn(hi_binder_info *binder, HI_S32 dev_id, HI_S32 chn_id)
+mpi_sys_get_idx_by_dev_chn(SYS_BINDER_INFO_S *binder, HI_S32 dev_id, HI_S32 chn_id)
 { return chn_id + binder->max_chn_cnt * dev_id; }
 
 HI_S32
-mpi_sys_get_dev_chn_by_idx(hi_binder_info *binder_ctx, HI_S32 index, HI_S32 *dev_id, HI_S32 *chn_id)
+mpi_sys_get_dev_chn_by_idx(SYS_BINDER_INFO_S *binder_ctx, HI_S32 index, HI_S32 *dev_id, HI_S32 *chn_id)
 {
     if ( binder_ctx->max_dev_cnt == 0 ) {
         printf(
@@ -44,12 +50,12 @@ mpi_sys_get_dev_chn_by_idx(hi_binder_info *binder_ctx, HI_S32 index, HI_S32 *dev
 HI_S32
 mpi_sys_check_bind_chn(HI_BOOL bReceiver, MPP_CHN_S *pstMppChn)
 {
-    hi_binder_info *binder;
+    SYS_BINDER_INFO_S *binder;
 
     if ( pstMppChn->enModId > HI_ID_MCF ) {
         fprintf(stderr,
             "[Func]:%s [Line]:%d [Info]:mod_id:%d is invalid !\n",
-            __FUNCTION__, __FUNCTION__, pstMppChn->enModId);
+            __FUNCTION__, __LINE__, pstMppChn->enModId);
         return HI_ERR_SYS_ILLEGAL_PARAM;
     }
 
@@ -78,13 +84,12 @@ mpi_sys_check_bind_chn(HI_BOOL bReceiver, MPP_CHN_S *pstMppChn)
 }
 
 HI_S32
-mpi_sys_get_binder_by_src(hi_mpp_chn *src_chn, hi_mpp_bind_dest *bind_src)
+mpi_sys_get_binder_by_src(MPP_CHN_S *src_chn, MPP_BIND_DEST_S *bind_src)
 {
     HI_S32 result;
     HI_U32 idx;
-    struc_9 *prev;
-    struc_10 *next;
-    struc_10 *next_next;
+    SYS_SRC_BIND_S *root;
+    SYS_SRC_LINK_S *link;
 
     if ( src_chn == HI_NULL ) {
         fprintf(stderr,
@@ -104,26 +109,26 @@ mpi_sys_get_binder_by_src(hi_mpp_chn *src_chn, hi_mpp_bind_dest *bind_src)
     if ( result != HI_SUCCESS ) return result;
 
     idx = mpi_sys_get_idx_by_dev_chn(
-        g_sender_tbl[src_chn->mod_id],
-        src_chn->dev_id, src_chn->chn_id);
+        g_sender_tbl[src_chn->enModId],
+        src_chn->s32DevId, src_chn->s32ChnId);
 
-    bind_src->num = 0;
-    prev = (struc_9 *)&g_sender_tbl[src_chn->mod_id]->ppstruc_9[idx];
-    next = (struc_10 *)g_sender_tbl[src_chn->mod_id]->ppstruc_9[idx].list.next;
+    bind_src->u32Num = 0;
+    root = (SYS_SRC_BIND_S *)&g_sender_tbl[src_chn->enModId]->src_bind[idx];
+    link = (SYS_SRC_LINK_S *)g_sender_tbl[src_chn->enModId]->src_bind[idx].list.next;
 
-    while ( next != prev ) {
+    while ( (HI_VOID*)link != (HI_VOID*)root ) {
         memcpy_s(
-            &bind_src->mpp_chn[bind_src->num], sizeof(hi_mpp_chn),
-            &next->mpp_chn, sizeof(hi_mpp_chn));
+            &bind_src->astMppChn[bind_src->u32Num], sizeof(MPP_CHN_S),
+            &link->mpp_chn, sizeof(MPP_CHN_S));
 
-        next = (struc_9 *)next->list.next;
-        bind_src->num++;
+        link = (SYS_SRC_LINK_S *)link->list.next;
+        bind_src->u32Num++;
 
-        if ( bind_src->num >= BIND_DEST_MAXNUM ) {
+        if ( bind_src->u32Num >= BIND_DEST_MAXNUM ) {
             fprintf(stderr,
                 "[Func]:%s [Line]:%d [Info]:bind src(mod:%d,dev:%d,chn:%d) too many \n",
                 __FUNCTION__, __LINE__,
-                src_chn->mod_id, src_chn->dev_id, src_chn->chn_id);
+                src_chn->enModId, src_chn->s32DevId, src_chn->s32ChnId);
             break;
         }
     }
@@ -132,12 +137,12 @@ mpi_sys_get_binder_by_src(hi_mpp_chn *src_chn, hi_mpp_bind_dest *bind_src)
 }
 
 HI_S32
-mpi_sys_register_binder(HI_BOOL bReceiver, bind_sender_info *pstSender, bind_receiver_info *pstReceiver)
+mpi_sys_register_binder(HI_BOOL bReceiver, SYS_BIND_SENDER_INFO_S *pstSender, SYS_BIND_RECEIVER_INFO_S *pstReceiver)
 {
     HI_U32 i, k, u32Size;
     HI_SIZE_T bind_name_len;
     MOD_ID_E mod_id;
-    hi_binder_info *stBinderInfo;
+    SYS_BINDER_INFO_S *stBinderInfo;
 
     if ( bReceiver ) {
         if ( pstReceiver == HI_NULL ) {
@@ -191,7 +196,7 @@ mpi_sys_register_binder(HI_BOOL bReceiver, bind_sender_info *pstSender, bind_rec
         return HI_ERR_SYS_ILLEGAL_PARAM;
     }
 
-    stBinderInfo = (hi_binder_info *)malloc(sizeof(hi_binder_info));
+    stBinderInfo = (SYS_BINDER_INFO_S *)malloc(sizeof(SYS_BINDER_INFO_S));
     if ( stBinderInfo == HI_NULL ) return HI_ERR_SYS_NOMEM;
 
     bind_name_len = strnlen(g_bind_name, MAX_BIND_NAME_LEN);
@@ -207,8 +212,9 @@ mpi_sys_register_binder(HI_BOOL bReceiver, bind_sender_info *pstSender, bind_rec
     stBinderInfo->u32Size = u32Size;
 
     if ( bReceiver ) {
-        stBinderInfo->ppstruc_8 = (struc_8 *)malloc(sizeof(struc_8) * u32Size);
-        if ( stBinderInfo->ppstruc_8 == HI_NULL ) {
+        stBinderInfo->dst_bind = (SYS_DEST_BIND_S *)malloc(
+            sizeof(SYS_DEST_BIND_S) * u32Size);
+        if ( stBinderInfo->dst_bind == HI_NULL ) {
             fprintf(stderr,
                 "[Func]:%s [Line]:%d [Info]:no memory for bind table!\n",
                 __FUNCTION__, __LINE__);
@@ -217,7 +223,7 @@ mpi_sys_register_binder(HI_BOOL bReceiver, bind_sender_info *pstSender, bind_rec
         }
 
         for ( i = 0; i < u32Size; i++ )
-            stBinderInfo->ppstruc_8[i].field_0 = 0;
+            stBinderInfo->dst_bind[i].has_source = HI_FALSE;
 
         stBinderInfo->mod_id          = pstReceiver->mod_id;
         stBinderInfo->max_dev_cnt     = pstReceiver->max_dev_cnt;
@@ -228,8 +234,8 @@ mpi_sys_register_binder(HI_BOOL bReceiver, bind_sender_info *pstSender, bind_rec
         g_receiver_tbl[mod_id] = stBinderInfo;
     }
     else {
-        stBinderInfo->ppstruc_9 = (struc_9 *)malloc(sizeof(struc_9) * u32Size);
-        if ( stBinderInfo->ppstruc_9 == HI_NULL ) {
+        stBinderInfo->src_bind = (SYS_SRC_BIND_S *)malloc(sizeof(SYS_SRC_BIND_S) * u32Size);
+        if ( stBinderInfo->src_bind == HI_NULL ) {
             fprintf(stderr,
                 "[Func]:%s [Line]:%d [Info]:no memory for bind table!\n",
                 __FUNCTION__, __LINE__);
@@ -238,15 +244,15 @@ mpi_sys_register_binder(HI_BOOL bReceiver, bind_sender_info *pstSender, bind_rec
         }
 
         if ( g_bind_send[mod_id].info == HI_NULL ) {
-            k = sizeof(HI_VOID*) * u32Size;
+            k = sizeof(MPP_BIND_DEST_S*) * u32Size;
             g_bind_send[mod_id].u32Size = u32Size;
-            g_bind_send[mod_id].info = (HI_VOID **)malloc(k);
+            g_bind_send[mod_id].info = (MPP_BIND_DEST_S **)malloc(k);
 
             if ( g_bind_send[mod_id].info == HI_NULL ) {
                 fprintf(stderr,
                     "[Func]:%s [Line]:%d [Info]:no memory for bind SRC!\n",
                     __FUNCTION__, __LINE__);
-                free(stBinderInfo->ppstruc_9);
+                free(stBinderInfo->src_bind);
                 free(stBinderInfo);
                 return HI_ERR_SYS_NOMEM;
             }
@@ -255,8 +261,8 @@ mpi_sys_register_binder(HI_BOOL bReceiver, bind_sender_info *pstSender, bind_rec
         }
 
         for (i = 0; i < u32Size; i++) {
-            INIT_LIST_HEAD(&stBinderInfo->ppstruc_9[i].list);
-            stBinderInfo->ppstruc_9[i].dest_num = 0;
+            INIT_LIST_HEAD(&stBinderInfo->src_bind[i].list);
+            stBinderInfo->src_bind[i].dest_num = 0;
         }
 
         stBinderInfo->mod_id              = pstSender->mod_id;
@@ -274,9 +280,9 @@ HI_S32
 mpi_sys_unregister_binder(HI_BOOL bReceiver, MOD_ID_E ModId)
 {
     HI_U32 i;
-    struc_9 *next;
-    struc_9 *prev;
-    struc_9 *next_next;
+    SYS_SRC_BIND_S *root;
+    SYS_SRC_BIND_S *next;
+    SYS_SRC_BIND_S *next_next;
 
     if ( ModId > HI_ID_MCF )
         return HI_ERR_SYS_ILLEGAL_PARAM;
@@ -292,7 +298,7 @@ mpi_sys_unregister_binder(HI_BOOL bReceiver, MOD_ID_E ModId)
             return HI_ERR_SYS_NOT_PERM;
         }
 
-        free(g_receiver_tbl[ModId]->ppstruc_8);
+        free(g_receiver_tbl[ModId]->dst_bind);
         free(g_receiver_tbl[ModId]);
         g_receiver_tbl[ModId] = HI_NULL;
     }
@@ -306,18 +312,18 @@ mpi_sys_unregister_binder(HI_BOOL bReceiver, MOD_ID_E ModId)
         }
 
         for (i = 0; i < g_sender_tbl[ModId]->u32Size; i++) {
-            next = (struc_9 *)g_sender_tbl[ModId]->ppstruc_9[i].list.next;
-            prev = (struc_9 *)&g_sender_tbl[ModId]->ppstruc_9[i];
+            root = (SYS_SRC_BIND_S *)&g_sender_tbl[ModId]->src_bind[i];
+            next = (SYS_SRC_BIND_S *)g_sender_tbl[ModId]->src_bind[i].list.next;
 
-            while ( next != prev ) {
-                next_next = next->list.next;
-                list_del(next);
+            while ( next != root ) {
+                next_next = (SYS_SRC_BIND_S *)next->list.next;
+                list_del((struct list_head *)next);
                 free(next);
                 next = next_next;
             }
         }
 
-        free(g_sender_tbl[ModId]->ppstruc_9);
+        free(g_sender_tbl[ModId]->src_bind);
         free(g_sender_tbl[ModId]);
         g_sender_tbl[ModId] = HI_NULL;
     }
@@ -331,13 +337,11 @@ mpi_sys_bind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
 {
     HI_S32 result;
     HI_U32 idx, idx2;
-    hi_s32 (*give_bind_call_back)(hi_s32 dev_id, hi_s32 chn_id, hi_mpp_bind_dest *bind_send);
-    struc_8 *pstruc_8;
-    struc_9 *next;
-    struc_10 *pstruc_10;
-    hi_mpp_bind_dest *binder;
-
-    hi_mpp_chn *v15; // r3
+    HI_S32 (*give_bind_call_back)(HI_S32 dev_id, HI_S32 chn_id, MPP_BIND_DEST_S *bind_send);
+    SYS_DEST_BIND_S *dst_bind;
+    SYS_SRC_BIND_S *root;
+    SYS_SRC_LINK_S *link;
+    MPP_BIND_DEST_S *binder;
 
     if ( pstMppChnSrc == HI_NULL ) {
         fprintf(stderr,
@@ -365,13 +369,13 @@ mpi_sys_bind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
         g_receiver_tbl[pstMppChnDst->enModId],
         pstMppChnDst->s32DevId, pstMppChnDst->s32ChnId);
     
-    pstruc_8 = &g_receiver_tbl[pstMppChnDst->enModId]->ppstruc_8[idx];
+    dst_bind = &g_receiver_tbl[pstMppChnDst->enModId]->dst_bind[idx];
 
-    if ( pstruc_8->field_0 == HI_TRUE ) {
+    if ( dst_bind->has_source ) {
         fprintf(stderr,
             "[Func]:%s [Line]:%d [Info]:dest have bind src:(%s,%d,%d) !\n",
             __FUNCTION__, __LINE__, g_bind_name,
-            pstruc_8->mpp_chn.s32DevId, pstruc_8->mpp_chn.s32ChnId);
+            dst_bind->mpp_chn.s32DevId, dst_bind->mpp_chn.s32ChnId);
         return HI_ERR_SYS_NOT_PERM;
     }
 
@@ -379,16 +383,16 @@ mpi_sys_bind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
         g_sender_tbl[pstMppChnSrc->enModId],
         pstMppChnSrc->s32DevId, pstMppChnSrc->s32ChnId);
 
-    next = &g_sender_tbl[pstMppChnSrc->enModId]->ppstruc_9[idx2];
-    if ( next->dest_num >= BIND_DEST_MAXNUM ) {
+    root = &g_sender_tbl[pstMppChnSrc->enModId]->src_bind[idx2];
+    if ( root->dest_num >= BIND_DEST_MAXNUM ) {
         fprintf(stderr,
             "[Func]:%s [Line]:%d [Info]:src bind max(%d) err!\n",
-            __FUNCTION__, __LINE__, next->dest_num);
+            __FUNCTION__, __LINE__, root->dest_num);
         return HI_ERR_SYS_NOT_PERM;
     }
 
     if ( g_bind_send[pstMppChnSrc->enModId].info[idx2] == HI_NULL ) {
-        binder = (hi_mpp_bind_dest *)malloc(sizeof(hi_mpp_bind_dest));
+        binder = (MPP_BIND_DEST_S *)malloc(sizeof(MPP_BIND_DEST_S));
         if ( binder == HI_NULL ) {
             fprintf(stderr,
                 "[Func]:%s [Line]:%d [Info]:no memory for bind SRC!\n",
@@ -396,30 +400,30 @@ mpi_sys_bind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
             return HI_ERR_SYS_NOMEM;
         }
 
-        memset_s(binder, sizeof(hi_mpp_bind_dest), 0, sizeof(hi_mpp_bind_dest));
+        memset_s(binder, sizeof(MPP_BIND_DEST_S), 0, sizeof(MPP_BIND_DEST_S));
         g_bind_send[pstMppChnSrc->enModId].info[idx2] = binder;
     }
 
-    pstruc_10 = (struc_10 *)malloc(sizeof(pstruc_10));
-    if ( pstruc_10 == HI_NULL ) {
+    link = (SYS_SRC_LINK_S *)malloc(sizeof(SYS_SRC_LINK_S));
+    if ( link == HI_NULL ) {
         fprintf(stderr,
             "[Func]:%s [Line]:%d [Info]:BIND_MALLOC err!\n",
             __FUNCTION__, __LINE__);
         return HI_ERR_SYS_NOMEM;
     }
 
-    memcpy_s(&pstruc_10[1], sizeof(MPP_CHN_S), pstMppChnDst, sizeof(MPP_CHN_S));
+    memcpy_s(&link[1], sizeof(MPP_CHN_S), pstMppChnDst, sizeof(MPP_CHN_S));
     pthread_mutex_lock(&g_sys_bind_lock);
-    memcpy_s(&pstruc_8->mpp_chn, sizeof(MPP_CHN_S), pstMppChnSrc, sizeof(MPP_CHN_S));
+    memcpy_s(&dst_bind->mpp_chn, sizeof(MPP_CHN_S), pstMppChnSrc, sizeof(MPP_CHN_S));
 
-    pstruc_8->field_0   = 1;
-    pstruc_8->field_10  = 0;
-    pstruc_8->field_14  = 0;
-    pstruc_10->field_14 = 0;
-    pstruc_10->field_18 = 0;
+    dst_bind->has_source  = HI_TRUE;
+    dst_bind->send_count  = 0;
+    dst_bind->reset_count = 0;
+    link->field_14        = 0;
+    link->field_18        = 0;
 
-    list_add(pstruc_10, next);
-    next->dest_num++;
+    list_add((struct list_head *)link, (struct list_head *)root);
+    root->dest_num++;
 
     pthread_mutex_unlock(&g_sys_bind_lock);
 
@@ -427,8 +431,8 @@ mpi_sys_bind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
         pstMppChnSrc->enModId == HI_ID_VPSS)
     {
         memset_s(
-            &send_bind_src, sizeof(hi_mpp_bind_dest),
-            0, sizeof(hi_mpp_bind_dest));
+            &send_bind_src, sizeof(MPP_BIND_DEST_S),
+            0, sizeof(MPP_BIND_DEST_S));
         if ( mpi_sys_get_binder_by_src(pstMppChnSrc, &send_bind_src) == HI_SUCCESS ) {
             give_bind_call_back = g_sender_tbl[pstMppChnSrc->enModId]->give_bind_call_back;
             if ( give_bind_call_back != HI_NULL )
@@ -445,12 +449,12 @@ mpi_sys_unbind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
 {
     HI_S32 result;
     HI_U32 idx, idx2;
-    struc_8 *pstruc_8;
-    struc_9 *prev;
-    struc_10 *next;
-    hi_s32 (*give_bind_call_back)(hi_s32 dev_id, hi_s32 chn_id, hi_mpp_bind_dest *bind_send);
-    hi_s32 (*reset_call_back)(hi_s32 dev_id, hi_s32 chn_id, hi_void *pv_data);
-    hi_mpp_chn src_chn;
+    SYS_DEST_BIND_S *dst_bind;
+    SYS_SRC_BIND_S *root;
+    SYS_SRC_LINK_S *link;
+    HI_S32 (*give_bind_call_back)(HI_S32 dev_id, HI_S32 chn_id, MPP_BIND_DEST_S *bind_send);
+    HI_S32 (*reset_call_back)(HI_S32 dev_id, HI_S32 chn_id, HI_VOID *pv_data);
+    MPP_CHN_S src_chn;
 
     if ( pstMppChnSrc == HI_NULL ) {
         fprintf(stderr,
@@ -484,15 +488,15 @@ mpi_sys_unbind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
         pstMppChnDst->s32DevId,
         pstMppChnDst->s32ChnId);
 
-    pstruc_8 = &g_receiver_tbl[pstMppChnDst->enModId]->ppstruc_8[idx];
-    if ( pstruc_8->field_0 == 0 ) {
+    dst_bind = &g_receiver_tbl[pstMppChnDst->enModId]->dst_bind[idx];
+    if ( !dst_bind->has_source ) {
         pthread_mutex_unlock(&g_sys_dev_sem);
         return result;
     }
 
-    if (pstruc_8->mpp_chn.enModId  != pstMppChnSrc->enModId  ||
-        pstruc_8->mpp_chn.s32DevId != pstMppChnSrc->s32DevId ||
-        pstruc_8->mpp_chn.s32ChnId != pstMppChnSrc->s32ChnId)
+    if (dst_bind->mpp_chn.enModId  != pstMppChnSrc->enModId  ||
+        dst_bind->mpp_chn.s32DevId != pstMppChnSrc->s32DevId ||
+        dst_bind->mpp_chn.s32ChnId != pstMppChnSrc->s32ChnId)
     {
         pthread_mutex_unlock(&g_sys_dev_sem);
         fprintf(stderr,
@@ -502,17 +506,17 @@ mpi_sys_unbind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
     }
 
     idx2 = mpi_sys_get_idx_by_dev_chn(
-        g_sender_tbl[pstruc_8->mpp_chn.enModId],
-        pstruc_8->mpp_chn.s32DevId,
-        pstruc_8->mpp_chn.s32ChnId);
+        g_sender_tbl[dst_bind->mpp_chn.enModId],
+        dst_bind->mpp_chn.s32DevId,
+        dst_bind->mpp_chn.s32ChnId);
 
     pthread_mutex_lock(&g_sys_bind_lock);
 
-    prev = (struc_9 *)&g_sender_tbl[pstruc_8->mpp_chn.enModId]->ppstruc_9[idx2];
-    next = (struc_10 *)g_sender_tbl[pstruc_8->mpp_chn.enModId]->ppstruc_9[idx2].list.next;
+    root = (SYS_SRC_BIND_S *)&g_sender_tbl[dst_bind->mpp_chn.enModId]->src_bind[idx2];
+    link = (SYS_SRC_LINK_S *)g_sender_tbl[dst_bind->mpp_chn.enModId]->src_bind[idx2].list.next;
 
     do {
-        if ( next == prev ) {
+        if ( (HI_VOID *)link == (HI_VOID *)root ) {
             printf(
                 "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
                 __FUNCTION__, __LINE__,
@@ -522,18 +526,18 @@ mpi_sys_unbind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
                 0x26Cu, __FUNCTION__);
         }
 
-        if (pstMppChnDst->enModId  != next->mpp_chn.enModId  ||
-            pstMppChnDst->s32DevId != next->mpp_chn.s32DevId ||
-            pstMppChnDst->s32ChnId != next->mpp_chn.s32ChnId)
+        if (pstMppChnDst->enModId  != link->mpp_chn.enModId  ||
+            pstMppChnDst->s32DevId != link->mpp_chn.s32DevId ||
+            pstMppChnDst->s32ChnId != link->mpp_chn.s32ChnId)
             break;
 
-        next = next->list.next;
+        link = (SYS_SRC_LINK_S *)link->list.next;
     } while ( HI_TRUE );
 
-    list_del(next);
-    free(next);
+    list_del((struct list_head *)link);
+    free(link);
 
-    if ( prev->dest_num == 0 ) {
+    if ( root->dest_num == 0 ) {
         printf(
             "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
             __FUNCTION__, __LINE__,
@@ -543,30 +547,30 @@ mpi_sys_unbind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
             0x267u, __FUNCTION__);
     }
 
-    prev->dest_num--;
-    g_receiver_tbl[pstMppChnDst->enModId]->ppstruc_8[idx].field_0 = 0;
+    root->dest_num--;
+    dst_bind->has_source = HI_FALSE;
 
     pthread_mutex_unlock(&g_sys_bind_lock);
 
-    if (pstruc_8->mpp_chn.enModId == HI_ID_VI ||
-        pstruc_8->mpp_chn.enModId == HI_ID_VPSS)
+    if (dst_bind->mpp_chn.enModId == HI_ID_VI ||
+        dst_bind->mpp_chn.enModId == HI_ID_VPSS)
     {
         memset_s(
-            &send_bind_src, sizeof(hi_mpp_bind_dest),
-            0, sizeof(hi_mpp_bind_dest));
+            &send_bind_src, sizeof(MPP_BIND_DEST_S),
+            0, sizeof(MPP_BIND_DEST_S));
 
-        src_chn.mod_id = pstruc_8->mpp_chn.enModId;
-        src_chn.dev_id = pstruc_8->mpp_chn.s32DevId;
-        src_chn.chn_id = pstruc_8->mpp_chn.s32ChnId;
+        src_chn.enModId  = dst_bind->mpp_chn.enModId;
+        src_chn.s32DevId = dst_bind->mpp_chn.s32DevId;
+        src_chn.s32ChnId = dst_bind->mpp_chn.s32ChnId;
 
         if ( mpi_sys_get_binder_by_src(&src_chn, &send_bind_src) == HI_SUCCESS ) {
-            give_bind_call_back = g_sender_tbl[pstruc_8->mpp_chn.enModId]->give_bind_call_back;
+            give_bind_call_back = g_sender_tbl[dst_bind->mpp_chn.enModId]->give_bind_call_back;
             if ( give_bind_call_back != HI_NULL )
-                give_bind_call_back(pstruc_8->mpp_chn.s32DevId, pstruc_8->mpp_chn.s32ChnId, &send_bind_src);
+                give_bind_call_back(dst_bind->mpp_chn.s32DevId, dst_bind->mpp_chn.s32ChnId, &send_bind_src);
         }
     }
 
-    if ( pstruc_8->mpp_chn.enModId == HI_ID_VDEC ) {
+    if ( dst_bind->mpp_chn.enModId == HI_ID_VDEC ) {
         reset_call_back = g_receiver_tbl[pstMppChnDst->enModId]->reset_call_back;
         if ( reset_call_back != HI_NULL )
             reset_call_back(pstMppChnDst->s32DevId, pstMppChnDst->s32ChnId, HI_NULL);
@@ -577,7 +581,7 @@ mpi_sys_unbind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst)
 }
 
 HI_S32
-mpi_sys_get_bind_by_dest(hi_mpp_chn *dest_chn, hi_mpp_chn *src_chn)
+mpi_sys_get_bind_by_dest(MPP_CHN_S *dest_chn, MPP_CHN_S *src_chn)
 {
     HI_S32 result;
     HI_U32 idx;
@@ -605,11 +609,11 @@ mpi_sys_get_bind_by_dest(hi_mpp_chn *dest_chn, hi_mpp_chn *src_chn)
     }
 
     idx = mpi_sys_get_idx_by_dev_chn(
-        g_receiver_tbl[dest_chn->mod_id],
-        dest_chn->dev_id, dest_chn->chn_id);
+        g_receiver_tbl[dest_chn->enModId],
+        dest_chn->s32DevId, dest_chn->s32ChnId);
 
-    if ( g_receiver_tbl[dest_chn->mod_id]->ppstruc_8[idx].field_0 == 0 ) {
-        if ( dest_chn->mod_id != HI_ID_AENC )
+    if ( !g_receiver_tbl[dest_chn->enModId]->dst_bind[idx].has_source ) {
+        if ( dest_chn->enModId != HI_ID_AENC )
             fprintf(stderr,
                 "[Func]:%s [Line]:%d [Info]:dest have not bind any src \n",
                 __FUNCTION__, __LINE__);
@@ -619,13 +623,13 @@ mpi_sys_get_bind_by_dest(hi_mpp_chn *dest_chn, hi_mpp_chn *src_chn)
 
     memcpy_s(
         src_chn, sizeof(MPP_CHN_S),
-        &g_receiver_tbl[dest_chn->mod_id]->ppstruc_8[idx].mpp_chn, sizeof(MPP_CHN_S));
+        &g_receiver_tbl[dest_chn->enModId]->dst_bind[idx].mpp_chn, sizeof(MPP_CHN_S));
     pthread_mutex_unlock(&g_sys_bind_lock);
     return HI_SUCCESS;
 }
 
 HI_S32
-mpi_sys_get_bind_by_src(hi_mpp_chn *src_chn, hi_mpp_bind_dest *bind_src)
+mpi_sys_get_bind_by_src(MPP_CHN_S *src_chn, MPP_BIND_DEST_S *bind_src)
 {
     HI_S32 resut;
     pthread_mutex_lock(&g_sys_dev_sem);
@@ -635,11 +639,11 @@ mpi_sys_get_bind_by_src(hi_mpp_chn *src_chn, hi_mpp_bind_dest *bind_src)
 }
 
 HI_S32
-mpi_sys_bind_register_sender(bind_sender_info *pstBindInfo)
+mpi_sys_bind_register_sender(SYS_BIND_SENDER_INFO_S *pstBindInfo)
 { return mpi_sys_register_binder(HI_FALSE, pstBindInfo, HI_NULL); }
 
 HI_S32
-mpi_sys_bind_register_receiver(bind_receiver_info *pstBindInfo)
+mpi_sys_bind_register_receiver(SYS_BIND_RECEIVER_INFO_S *pstBindInfo)
 { return mpi_sys_register_binder(HI_TRUE, HI_NULL, pstBindInfo); }
 
 HI_S32
@@ -651,11 +655,11 @@ mpi_sys_bind_un_register_receiver(MOD_ID_E ModId)
 { return mpi_sys_unregister_binder(HI_TRUE, ModId); }
 
 HI_S32
-mpi_sys_bind_send_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, HI_U32 flag, mpp_data_type data_type, HI_VOID *pv_data)
+mpi_sys_bind_send_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, HI_U32 flag, MPP_DATA_TYPE_E data_type, HI_VOID *pv_data)
 {
     HI_S32 result, i;
     HI_U32 idx, idx2;
-    hi_binder_info *binder;
+    SYS_BINDER_INFO_S *binder;
     MPP_CHN_S stMppChn;
     MPP_CHN_S *pstChn;
 
@@ -716,7 +720,7 @@ mpi_sys_bind_send_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, HI_U32 fla
         return HI_ERR_SYS_NOT_PERM;
     }
 
-    g_bind_send[mod_id].info[idx]->num = 0;
+    g_bind_send[mod_id].info[idx]->u32Num = 0;
 
     result = mpi_sys_get_binder_by_src(&stMppChn, g_bind_send[mod_id].info[idx]);
     if ( result != HI_SUCCESS ) {
@@ -730,13 +734,13 @@ mpi_sys_bind_send_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, HI_U32 fla
 
     pthread_mutex_unlock(&g_sys_bind_lock);
 
-    if ( g_bind_send[mod_id].info[idx]->num == 0 )
+    if ( g_bind_send[mod_id].info[idx]->u32Num == 0 )
         return HI_ERR_SYS_NOT_PERM;
 
-    for (i = 0; i < g_bind_send[mod_id].info[idx]->num; i++) {
+    for (i = 0; i < g_bind_send[mod_id].info[idx]->u32Num; i++) {
         pthread_mutex_lock(&g_sys_bind_lock);
 
-        pstChn = &g_bind_send[mod_id].info[idx]->mpp_chn[i];
+        pstChn = &g_bind_send[mod_id].info[idx]->astMppChn[i];
         binder = g_receiver_tbl[pstChn->enModId];
 
         if ( pstChn->enModId >= HI_ID_BUTT ) {
@@ -755,7 +759,7 @@ mpi_sys_bind_send_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, HI_U32 fla
         }
 
         idx2 = mpi_sys_get_idx_by_dev_chn(binder, pstChn->s32DevId, pstChn->s32ChnId);
-        binder->ppstruc_8[idx2].field_10++;
+        binder->dst_bind[idx2].send_count++;
         pthread_mutex_unlock(&g_sys_bind_lock);
 
         result = binder->call_back(pstChn->s32DevId, pstChn->s32ChnId, (HI_BOOL)flag, data_type, pv_data);
@@ -766,11 +770,11 @@ mpi_sys_bind_send_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, HI_U32 fla
 }
 
 HI_S32
-mpi_sys_bind_reset_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, void *pv_data)
+mpi_sys_bind_reset_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, HI_VOID *pv_data)
 {
     HI_S32 result, i;
     HI_U32 idx, idx2;
-    hi_binder_info *binder;
+    SYS_BINDER_INFO_S *binder;
     MPP_CHN_S stMppChn;
     MPP_CHN_S *pstChn;
 
@@ -821,7 +825,7 @@ mpi_sys_bind_reset_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, void *pv_
         return HI_SUCCESS;
     }
 
-    g_bind_send[mod_id].info[idx]->num = 0;
+    g_bind_send[mod_id].info[idx]->u32Num = 0;
 
     result = mpi_sys_get_binder_by_src(&stMppChn, g_bind_send[mod_id].info[idx]);
     if ( result != HI_SUCCESS ) {
@@ -836,13 +840,13 @@ mpi_sys_bind_reset_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, void *pv_
 
     pthread_mutex_unlock(&g_sys_dev_sem);
 
-    if ( g_bind_send[mod_id].info[idx]->num == 0 )
+    if ( g_bind_send[mod_id].info[idx]->u32Num == 0 )
         return HI_SUCCESS;
 
-    for (i = 0; i < g_bind_send[mod_id].info[idx]->num; i++) {
+    for (i = 0; i < g_bind_send[mod_id].info[idx]->u32Num; i++) {
         pthread_mutex_lock(&g_sys_dev_sem);
 
-        pstChn = &g_bind_send[mod_id].info[idx]->mpp_chn[i];
+        pstChn = &g_bind_send[mod_id].info[idx]->astMppChn[i];
         binder = g_receiver_tbl[pstChn->enModId];
 
         if ( pstChn->enModId >= HI_ID_BUTT ) {
@@ -861,7 +865,7 @@ mpi_sys_bind_reset_data(MOD_ID_E mod_id, HI_S32 dev_id, HI_S32 chn_id, void *pv_
         }
 
         idx2 = mpi_sys_get_idx_by_dev_chn(binder, pstChn->s32DevId, pstChn->s32ChnId);
-        binder->ppstruc_8[idx2].field_14++;
+        binder->dst_bind[idx2].reset_count++;
         pthread_mutex_unlock(&g_sys_bind_lock);
 
         binder->reset_call_back(pstChn->s32DevId, pstChn->s32ChnId, pv_data);

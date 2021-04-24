@@ -27,7 +27,7 @@ extern HI_S32 HI_DNVQE_GetConfig(HI_VOID* pHandle, VQE_ATTR_S* pstVqeAttr);
 extern HI_S32 HI_DNVQE_WriteFrame(HI_VOID* pHandle, HI_CHAR* buffer, HI_U32 u32PointNum);
 extern HI_S32 HI_DNVQE_ReadFrame(HI_VOID* pHandle, HI_CHAR* buffer, HI_U32 u32PointNum, HI_BOOL bBlock);
 
-extern HI_S32 mpi_sys_bind_register_receiver(bind_receiver_info* pstBindInfo);
+extern HI_S32 mpi_sys_bind_register_receiver(SYS_BIND_RECEIVER_INFO_S* pstBindInfo);
 extern HI_VOID mpi_sys_bind_un_register_receiver(MOD_ID_E ModId);
 
 static void
@@ -1438,7 +1438,7 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
 }
 
 HI_S32
-mpi_ao_receive_frm(AUDIO_DEV AoDevId, AO_CHN AoChn, int unknown, mpp_data_type data_type, HI_VOID *pstData)
+mpi_ao_receive_frm(AUDIO_DEV AoDevId, AO_CHN AoChn, int unknown, MPP_DATA_TYPE_E data_type, HI_VOID *pstData)
 {
     if ( data_type != MPP_DATA_AUDIO_FRAME ) {
         printf(
@@ -1464,7 +1464,7 @@ HI_S32
 mpi_ao_init()
 {
     HI_S32 result, i;
-    bind_receiver_info stBindInfo;
+    SYS_BIND_RECEIVER_INFO_S stBindInfo;
 
     if ( s_ao_init == HI_TRUE )
         return HI_SUCCESS;
@@ -1472,7 +1472,7 @@ mpi_ao_init()
     stBindInfo.mod_id             = HI_ID_AO;
     stBindInfo.max_dev_cnt        = 2;
     stBindInfo.max_chn_cnt        = 3;
-    stBindInfo.call_back          = (HI_S32 (*)(HI_S32, HI_S32, HI_BOOL, mpp_data_type, HI_VOID*))mpi_ao_receive_frm;
+    stBindInfo.call_back          = (HI_S32 (*)(HI_S32, HI_S32, HI_BOOL, MPP_DATA_TYPE_E, HI_VOID*))mpi_ao_receive_frm;
     stBindInfo.reset_call_back    = HI_NULL;
     stBindInfo.support_delay_data = HI_FALSE;
 
