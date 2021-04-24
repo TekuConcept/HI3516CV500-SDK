@@ -33,6 +33,10 @@ extern HI_S32 HI_DNVQE_GetConfig(HI_VOID* pHandle, VQE_ATTR_S* pstVqeAttr);
 extern HI_S32 HI_DNVQE_WriteFrame(HI_VOID* pHandle, HI_CHAR* buffer, HI_U32 u32PointNum);
 extern HI_S32 HI_DNVQE_ReadFrame(HI_VOID* pHandle, HI_CHAR* buffer, HI_U32 u32PointNum, HI_BOOL bBlock);
 
+// -- file: audio_comm.c --
+extern HI_S32 audio_alloc(const HI_CHAR *acName, HI_U64 *u64PhyAddr, HI_U32 **u32VirAddr, HI_U32 u32Size);
+extern HI_S32 audio_free(HI_U64 u64PhyAddr);
+
 // -- file: mpi_bind.c --
 extern HI_S32 mpi_sys_bind_register_receiver(SYS_BIND_RECEIVER_INFO_S* pstBindInfo);
 extern HI_VOID mpi_sys_bind_un_register_receiver(MOD_ID_E ModId);
@@ -2098,7 +2102,7 @@ HI_MPI_AO_EnableChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
     result = audio_alloc(
         acName,
         &u64PhyAddr,
-        (HI_U32*)&u32VirAddr,
+        (HI_U32**)&u32VirAddr,
         u32RawBufSize);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);

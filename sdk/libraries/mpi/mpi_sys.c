@@ -610,7 +610,7 @@ HI_MPI_SYS_MmapCache(HI_U64 u64PhyAddr, HI_U32 u32Size)
 }
 
 HI_S32
-HI_MPI_SYS_MflushCache(HI_U64 u64PhyAddr, void *pVirAddr, HI_U32 u32Size)
+HI_MPI_SYS_MflushCache(HI_U64 u64PhyAddr, HI_VOID *pVirAddr, HI_U32 u32Size)
 {
     HI_S32 result;
     HI_U32 offset;
@@ -689,24 +689,25 @@ HI_MPI_SYS_CloseFd()
 }
 
 HI_S32
-HI_MPI_SYS_MmzAlloc(HI_U64 *pu64PhyAddr, void **ppVirAddr, const HI_CHAR *strMmb, const HI_CHAR *strZone, HI_U32 u32Len)
+HI_MPI_SYS_MmzAlloc(HI_U64 *pu64PhyAddr, HI_VOID **ppVirAddr, const HI_CHAR *strMmb, const HI_CHAR *strMmz, HI_U32 u32Len)
 {
     HI_S32 result;
-    MMZ_MEM_INFO_S stMemInfo;
+    struct mmb_info info;
 
-    memset(&stMemInfo, 0, sizeof(stMemInfo));
+    memset(&info, 0, sizeof(info));
 
-    stMemInfo.u32Len   = u32Len;
-    stMemInfo.field_14 = 0x103;
+    info.size  = u32Len;
+    info.prot  = PROT_READ | PROT_WRITE;
+    info.flags = MAP_SHARED;
 
     if ( strMmb != HI_NULL )
         strncpy_s(
-            stMemInfo.acMmzName, MAX_MMZ_NAME_LEN,
+            info.mmb_name, MAX_MMZ_NAME_LEN,
             strMmb, MAX_MMZ_NAME_LEN - 1);
-    if ( strZone != HI_NULL )
+    if ( strMmz != HI_NULL )
         strncpy_s(
-            stMemInfo.acZoneName, MAX_ZONE_NAME_LEN,
-            strZone, MAX_ZONE_NAME_LEN - 1);
+            info.mmz_name, MAX_ZONE_NAME_LEN,
+            strMmz, MAX_ZONE_NAME_LEN - 1);
 
     if ( pu64PhyAddr == HI_NULL || ppVirAddr == HI_NULL ) {
         HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
@@ -718,47 +719,48 @@ HI_MPI_SYS_MmzAlloc(HI_U64 *pu64PhyAddr, void **ppVirAddr, const HI_CHAR *strMmb
 
     pthread_mutex_lock(&g_sys_mem_mutex);
 
-    result = ioctl(g_mmz_fd, MMZ_ALLOC_MEMORY, &stMemInfo);
+    result = ioctl(g_mmz_fd, IOC_MMB_ALLOC, &info);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_sys_mem_mutex);
         HI_TRACE_SYS(RE_DBG_LVL, "system alloc mmz memory failed!\n");
         return result;
     }
 
-    result = ioctl(g_mmz_fd, MMZ_REMAP_MEMORY, &stMemInfo);
+    result = ioctl(g_mmz_fd, IOC_MMB_USER_REMAP, &info);
     if ( result != HI_SUCCESS ) {
-        ioctl(g_mmz_fd, MMZ_FREE_MEMORY, &stMemInfo);
+        ioctl(g_mmz_fd, IOC_MMB_FREE, &info);
         pthread_mutex_unlock(&g_sys_mem_mutex);
         HI_TRACE_SYS(RE_DBG_LVL, "system remap mmz memory failed!\n");
         return result;
     }
 
-    *pu64PhyAddr = stMemInfo.u32PhyAddr;
-    *ppVirAddr   = (HI_VOID*)stMemInfo.u32VirAddr;
+    *pu64PhyAddr = info.phys_addr;
+    *ppVirAddr   = info.mapped;
 
     pthread_mutex_unlock(&g_sys_mem_mutex);
     return result;
 }
 
 HI_S32
-HI_MPI_SYS_MmzAlloc_Cached(HI_U64 *pu64PhyAddr, void **ppVirAddr, const HI_CHAR *pstrMmb, const HI_CHAR *pstrZone, HI_U32 u32Len)
+HI_MPI_SYS_MmzAlloc_Cached(HI_U64 *pu64PhyAddr, HI_VOID **ppVirAddr, const HI_CHAR *pstrMmb, const HI_CHAR *pstrMmz, HI_U32 u32Len)
 {
     HI_S32 result;
-    MMZ_MEM_INFO_S stMemInfo;
+    struct mmb_info info;
 
-    memset(&stMemInfo, 0, sizeof(stMemInfo));
+    memset(&info, 0, sizeof(info));
 
-    stMemInfo.u32Len   = u32Len;
-    stMemInfo.field_14 = 0x103;
+    info.size = u32Len;
+    info.prot = PROT_READ | PROT_WRITE;
+    info.flags = MAP_SHARED;
 
     if ( pstrMmb != HI_NULL )
         strncpy_s(
-            stMemInfo.acMmzName, MAX_MMZ_NAME_LEN,
+            info.mmb_name, MAX_MMZ_NAME_LEN,
             pstrMmb, MAX_MMZ_NAME_LEN - 1);
-    if ( pstrZone != HI_NULL )
+    if ( pstrMmz != HI_NULL )
         strncpy_s(
-            stMemInfo.acZoneName, MAX_ZONE_NAME_LEN,
-            pstrZone, MAX_ZONE_NAME_LEN - 1);
+            info.mmz_name, MAX_ZONE_NAME_LEN,
+            pstrMmz, MAX_ZONE_NAME_LEN - 1);
 
     if ( pu64PhyAddr == HI_NULL || ppVirAddr == HI_NULL ) {
         HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
@@ -770,23 +772,23 @@ HI_MPI_SYS_MmzAlloc_Cached(HI_U64 *pu64PhyAddr, void **ppVirAddr, const HI_CHAR 
 
     pthread_mutex_lock(&g_sys_mem_mutex);
 
-    result = ioctl(g_mmz_fd, MMZ_ALLOC_MEMORY, &stMemInfo);
+    result = ioctl(g_mmz_fd, IOC_MMB_ALLOC, &info);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_sys_mem_mutex);
         HI_TRACE_SYS(RE_DBG_LVL, "system alloc mmz memory failed!\n");
         return result;
     }
 
-    result = ioctl(g_mmz_fd, MMZ_REMAP_CACHE_MEMORY, &stMemInfo);
+    result = ioctl(g_mmz_fd, IOC_MMB_USER_REMAP_CACHED, &info);
     if ( result != HI_SUCCESS ) {
-        ioctl(g_mmz_fd, MMZ_FREE_MEMORY, &stMemInfo);
+        ioctl(g_mmz_fd, IOC_MMB_FREE, &info);
         pthread_mutex_unlock(&g_sys_mem_mutex);
         HI_TRACE_SYS(RE_DBG_LVL, "system remap mmz memory failed!\n");
         return result;
     }
 
-    *pu64PhyAddr = stMemInfo.u32PhyAddr;
-    *ppVirAddr   = (HI_VOID*)stMemInfo.u32VirAddr;
+    *pu64PhyAddr = info.phys_addr;
+    *ppVirAddr   = info.mapped;
 
     pthread_mutex_unlock(&g_sys_mem_mutex);
     return HI_SUCCESS;
@@ -796,24 +798,24 @@ HI_S32
 HI_MPI_SYS_MmzFree(HI_U64 u64PhyAddr, HI_VOID *pVirAddr)
 {
     HI_S32 result;
-    MMZ_MEM_INFO_S stMemInfo;
+    struct mmb_info info;
 
-    memset(&stMemInfo, 0, sizeof(stMemInfo));
-    stMemInfo.u32PhyAddr = u64PhyAddr;
+    memset(&info, 0, sizeof(info));
+    info.phys_addr = u64PhyAddr;
 
     result = sys_check_mmz_open();
     if ( result != HI_SUCCESS ) return result;
 
     pthread_mutex_lock(&g_sys_mem_mutex);
 
-    result = ioctl(g_mmz_fd, MMZ_UNMAP_MEMORY, &stMemInfo);
+    result = ioctl(g_mmz_fd, IOC_MMB_USER_UNMAP, &info);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_sys_mem_mutex);
         HI_TRACE_SYS(RE_DBG_LVL, "system unmap mmz memory failed!\n");
         return result;
     }
 
-    result = ioctl(g_mmz_fd, MMZ_FREE_MEMORY, &stMemInfo);
+    result = ioctl(g_mmz_fd, IOC_MMB_FREE, &info);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_sys_mem_mutex);
         HI_TRACE_SYS(RE_DBG_LVL, "system free mmz memory failed!\n");
@@ -854,12 +856,12 @@ HI_MPI_SYS_MmzFlushCache(HI_U64 u64PhyAddr, void *pVirAddr, HI_U32 u32Size)
 }
 
 HI_S32
-HI_MPI_SYS_GetVirMemInfo(const void *pVirAddr, SYS_VIRMEM_INFO_S *pstMemInfo)
+HI_MPI_SYS_GetVirMemInfo(const HI_VOID *pVirAddr, SYS_VIRMEM_INFO_S *pstMemInfo)
 {
     HI_S32 result;
-    MMZ_MEM_INFO_S stMmzInfo;
+    struct mmb_info info;
 
-    memset(&stMmzInfo, 0, sizeof(stMmzInfo));
+    memset(&info, 0, sizeof(info));
 
     result = sys_check_mmz_open();
     if ( result != HI_SUCCESS ) return result;
@@ -871,11 +873,11 @@ HI_MPI_SYS_GetVirMemInfo(const void *pVirAddr, SYS_VIRMEM_INFO_S *pstMemInfo)
 
     pthread_mutex_lock(&g_sys_mem_mutex);
 
-    stMmzInfo.u32VirAddr = (HI_U32)pVirAddr;
+    info.mapped = (HI_VOID*)pVirAddr;
 
-    if ( ioctl(g_mmz_fd, MMZ_GET_MEM_CONFIG, &stMmzInfo) == HI_SUCCESS ) {
-        pstMemInfo->bCached = stMmzInfo.u32PhyAddr & 1u;
-        pstMemInfo->u64PhyAddr = stMmzInfo.u32PhyAddr & 0xFFFFFFFEu;
+    if ( ioctl(g_mmz_fd, IOC_MMB_VIRT_GET_PHYS, &info) == HI_SUCCESS ) {
+        pstMemInfo->bCached    = info.phys_addr & 1u;
+        pstMemInfo->u64PhyAddr = info.phys_addr & 0xFFFFFFFEu;
     }
 
     pthread_mutex_unlock(&g_sys_mem_mutex);

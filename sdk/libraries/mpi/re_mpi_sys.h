@@ -8,6 +8,7 @@
 #include "mpi_sys.h"
 #include "hi_common.h"
 #include "hi_comm_sys.h"
+#include "osal_mmz.h"
 
 #include <pthread.h>
 #include <sys/ioctl.h>
@@ -15,6 +16,11 @@
 #define MAX_ZONE_NAME_LEN 32   /* 0x0020 */
 #define MMZ_BLOCK_SIZE    64   /* 0x0040 */
 #define MMAP_BLOCK_SIZE   4096 /* 0x1000 */
+
+extern HI_S32 g_log_fd;
+extern HI_S32 g_sys_fd;
+extern HI_S32 g_mmz_fd;
+extern HI_S32 g_mem_dev;
 
 typedef struct hiMMZ_CACHE_S { // (sizeof=0x18)
     HI_U32 u32Size;    // 0x00
@@ -24,18 +30,18 @@ typedef struct hiMMZ_CACHE_S { // (sizeof=0x18)
     HI_U32 field_14;   // 0x14 (padding)
 } MMZ_CACHE_S;
 
-typedef struct hiMMZ_MEM_INFO_S { // (sizeof=0x50)
-    HI_U32 u32PhyAddr;                     // 0x00 (likely u64PhyAddr)
-    HI_U32 field_4;                        // 0x04 (likely u64PhyAddr)
-    HI_U32 u32Len;                         // 0x08
-    HI_U32 field_C;                        // 0x0C (liekly padding)
-    HI_U32 u32VirAddr;                     // 0x10
-    HI_U32 field_14;                       // 0x14 (assigned 0x103, likely bitmask)
-    HI_CHAR acMmzName[MAX_MMZ_NAME_LEN];   // 0x18
-    HI_CHAR acZoneName[MAX_ZONE_NAME_LEN]; // 0x28
-    HI_U32 field_48;                       // 0x48
-    HI_U32 field_4C;                       // 0x4C
-} MMZ_MEM_INFO_S;
+// typedef struct hiMMZ_MEM_INFO_S { // (sizeof=0x50)
+//     HI_U32 u32PhyAddr;                     // 0x00 (likely u64PhyAddr)
+//     HI_U32 field_4;                        // 0x04 (likely u64PhyAddr)
+//     HI_U32 u32Len;                         // 0x08
+//     HI_U32 field_C;                        // 0x0C (liekly padding)
+//     HI_U32 u32VirAddr;                     // 0x10
+//     HI_U32 field_14;                       // 0x14 (assigned 0x103, likely bitmask)
+//     HI_CHAR acMmzName[MAX_MMZ_NAME_LEN];   // 0x18
+//     HI_CHAR acZoneName[MAX_ZONE_NAME_LEN]; // 0x28
+//     HI_U32 field_48;                       // 0x48
+//     HI_U32 field_4C;                       // 0x4C
+// } MMZ_MEM_INFO_S;
 
 typedef struct hiMMZ_MEM_S { // (sizeof=0x0C)
     HI_U32 u32PhyAddr; // 0x00
@@ -108,59 +114,13 @@ typedef enum hiMMZ_D_IOCTL_E {
 
 
 
-#define IOC_TYPE_MMZ 'm' // 0x6D (memory)
-typedef enum hiMMZ_IOCTL_E {
-    // 0x00
-    // 0x01
-    // 0x02
-    // 0x03
-    // 0x04
-    // 0x05
-    // 0x06
-    // 0x07
-    // 0x08
-    // 0x09
-    IOC_NR_ALLOC_MEMORY       = 0x0A, // 0x0A
-    // 0x0B
-    IOC_NR_FREE_MEMORY        = 0x0C, // 0x0C
-    // 0x0D
-    // 0x0E
-    // 0x0F
-    // 0x10
-    // 0x11
-    // 0x12
-    // 0x13
-    // 0x14
-    IOC_NR_REMAP_MEMORY       = 0x14, // 0x14
-    IOC_NR_REMAP_CACHE_MEMORY,        // 0x15
-    IOC_NR_UNMAP_MEMORY,              // 0x16
-    IOC_NR_GET_VIR_MEM_INFO,          // 0x17
-} MMZ_IOCTL_E;
-
-// 0x00
-// 0x01
-// 0x02
-// 0x03
-// 0x04
-// 0x05
-// 0x06
-// 0x07
-// 0x08
-// 0x09
-#define MMZ_ALLOC_MEMORY       _IOWR(IOC_TYPE_MMZ, IOC_NR_ALLOC_MEMORY,       MMZ_MEM_INFO_S) /* 0xC0506D0Au */
-// 0x0B
-#define MMZ_FREE_MEMORY        _IOR( IOC_TYPE_MMZ, IOC_NR_FREE_MEMORY,        MMZ_MEM_INFO_S) /* 0x40506D0Cu */
-// 0x0D
-// 0x0E
-// 0x0F
-// 0x10
-// 0x11
-// 0x12
-// 0x13
-#define MMZ_REMAP_MEMORY       _IOWR(IOC_TYPE_MMZ, IOC_NR_REMAP_MEMORY,       MMZ_MEM_INFO_S) /* 0xC0506D14u */
-#define MMZ_REMAP_CACHE_MEMORY _IOWR(IOC_TYPE_MMZ, IOC_NR_REMAP_CACHE_MEMORY, MMZ_MEM_INFO_S) /* 0xC0506D15u */
-#define MMZ_UNMAP_MEMORY       _IOWR(IOC_TYPE_MMZ, IOC_NR_UNMAP_MEMORY,       MMZ_MEM_INFO_S) /* 0xC0506D16u */
-#define MMZ_GET_MEM_CONFIG     _IOWR(IOC_TYPE_MMZ, IOC_NR_GET_VIR_MEM_INFO,   MMZ_MEM_INFO_S) /* 0xC0506D17u */
+// #define IOC_TYPE_MMZ 'm' // 0x6D (memory)
+// #define MMZ_ALLOC_MEMORY       /* 0xC0506D0Au (10) */
+// #define MMZ_FREE_MEMORY        /* 0x40506D0Cu (12) */
+// #define MMZ_REMAP_MEMORY       /* 0xC0506D14u (20) */
+// #define MMZ_REMAP_CACHE_MEMORY /* 0xC0506D15u (21) */
+// #define MMZ_UNMAP_MEMORY       /* 0xC0506D16u (22) */
+// #define MMZ_GET_MEM_CONFIG     /* 0xC0506D17u (23) */
 
 
 
