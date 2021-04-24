@@ -12,7 +12,6 @@
 #include <pthread.h>
 #include <sys/ioctl.h>
 
-#define MAX_VER_NAME_LEN  64   /* 0x0040 */
 #define MAX_ZONE_NAME_LEN 32   /* 0x0020 */
 #define MMZ_BLOCK_SIZE    64   /* 0x0040 */
 #define MMAP_BLOCK_SIZE   4096 /* 0x1000 */

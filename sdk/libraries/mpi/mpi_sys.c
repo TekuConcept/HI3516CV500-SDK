@@ -15,7 +15,12 @@ HI_S32 g_log_fd  = -1;
 HI_S32 g_sys_fd  = -1;
 HI_S32 g_mmz_fd  = -1;
 HI_S32 g_mem_dev = -1;
-HI_CHAR g_version[MAX_VER_NAME_LEN] = "HI_VERSION=Hi3516CV500_MPP_V2.0.2.0 B030 Release\0";
+
+// hi_mpp_version in hi_common_adapt.h
+hi_mpp_version g_version = {
+    .version = "HI_VERSION=Hi3516CV500_MPP_V2.0.2.0 B030 Release\0";
+};
+
 HI_S32 g_hr_timer;
 
 // ============================================================================
@@ -546,8 +551,8 @@ HI_MPI_SYS_GetVersion(MPP_VERSION_S *pstVersion)
 {
     HI_SIZE_T length;
     if ( pstVersion == HI_NULL ) return HI_ERR_SYS_NULL_PTR;
-    length = strnlen(g_version, MAX_VER_NAME_LEN);
-    snprintf_s(pstVersion->aVersion, MAX_VER_NAME_LEN, length, "%s", g_version);
+    length = strnlen(g_version.version, MAX_VER_NAME_LEN);
+    snprintf_s(pstVersion->aVersion, MAX_VER_NAME_LEN, length, "%s", g_version.version);
     return HI_SUCCESS;
 }
 

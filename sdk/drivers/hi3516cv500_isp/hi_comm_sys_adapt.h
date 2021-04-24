@@ -40,7 +40,7 @@ typedef struct {
     hi_bool cached;
 } hi_sys_vir_mem_info;
 
-typedef struct {
+typedef struct { // (sizeof=0x304)
     hi_u32 num;
     hi_mpp_chn mpp_chn[BIND_DEST_MAXNUM];
 } hi_mpp_bind_dest;

@@ -27,7 +27,7 @@ extern HI_S32 HI_DNVQE_GetConfig(HI_VOID* pHandle, VQE_ATTR_S* pstVqeAttr);
 extern HI_S32 HI_DNVQE_WriteFrame(HI_VOID* pHandle, HI_CHAR* buffer, HI_U32 u32PointNum);
 extern HI_S32 HI_DNVQE_ReadFrame(HI_VOID* pHandle, HI_CHAR* buffer, HI_U32 u32PointNum, HI_BOOL bBlock);
 
-extern HI_S32 mpi_sys_bind_register_receiver(SYS_ENTRY_S* pstEntry);
+extern HI_S32 mpi_sys_bind_register_receiver(bind_receiver_info* pstBindInfo);
 extern HI_VOID mpi_sys_bind_un_register_receiver(MOD_ID_E ModId);
 
 static void
@@ -1464,18 +1464,19 @@ HI_S32
 mpi_ao_init()
 {
     HI_S32 result, i;
-    SYS_ENTRY_S stEntry;
+    bind_receiver_info stBindInfo;
 
     if ( s_ao_init == HI_TRUE )
         return HI_SUCCESS;
 
-    stEntry.ModId         = HI_ID_AO;
-    stEntry.field_4       = 2;
-    stEntry.field_8       = 3;
-    stEntry.pfCallback    = (HI_S32 (*)(HI_S32, HI_S32, int, mpp_data_type, HI_VOID*))mpi_ao_receive_frm;
-    stEntry.enPayloadType = PT_PCMU;
+    stBindInfo.mod_id             = HI_ID_AO;
+    stBindInfo.max_dev_cnt        = 2;
+    stBindInfo.max_chn_cnt        = 3;
+    stBindInfo.call_back          = (HI_S32 (*)(HI_S32, HI_S32, HI_BOOL, mpp_data_type, HI_VOID*))mpi_ao_receive_frm;
+    stBindInfo.reset_call_back    = HI_NULL;
+    stBindInfo.support_delay_data = HI_FALSE;
 
-    result = mpi_sys_bind_register_receiver(&stEntry);
+    result = mpi_sys_bind_register_receiver(&stBindInfo);
     if ( result != HI_SUCCESS )
         return HI_ERR_AO_SYS_NOTREADY;
 

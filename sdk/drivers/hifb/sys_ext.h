@@ -50,14 +50,14 @@ typedef enum {
     MPP_DATA_BUTT
 } mpp_data_type;
 
-typedef struct {
+typedef struct { // (sizeof=0x10)
     hi_mod_id mod_id;
     hi_u32 max_dev_cnt;
     hi_u32 max_chn_cnt;
     hi_s32 (*give_bind_call_back)(hi_s32 dev_id, hi_s32 chn_id, hi_mpp_bind_dest *bind_send);
 } bind_sender_info;
 
-typedef struct {
+typedef struct { // (sizeof=0x18)
     hi_mod_id mod_id;
     hi_u32 max_dev_cnt;
     hi_u32 max_chn_cnt;

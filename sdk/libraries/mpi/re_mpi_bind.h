@@ -10,31 +10,51 @@
 #include "hi_types.h"
 #include "hi_comm_sys.h"
 #include "hi_common.h"
+#include "list.h"
 
 #include "hifb/sys_ext.h"
 
 #include <pthread.h>
 #include <sys/ioctl.h>
 
-#define BIND_TBL_ENT_SZ 31
+#define MAX_BIND_NAME_LEN 8
 
 typedef struct hiMPI_BIND_ENTRY { // (sizeof=0x02)
-    HI_U32 field_0;    // 0x00 (u32Size)
-    HI_VOID** field_4; // 0x04
+    HI_U32 u32Size;          // 0x00
+    hi_mpp_bind_dest** info; // 0x04
 } SYS_BIND_ENTRY_S;
 
-typedef struct hiMPI_BIND_TABLE { // (sizeof=0xF8)
-    SYS_BIND_ENTRY_S field_0[BIND_TBL_ENT_SZ];
-} SYS_BIND_TABLE_S;
+typedef struct histruc_8 { // (sizeof=0x18)
+    HI_BOOL field_0;    // 0x00 (assigned 0, have_source)
+    MPP_CHN_S mpp_chn; // 0x04
+    HI_U32 field_10;   // 0x10 (field_10++, call_back)
+    HI_U32 field_14;   // 0x14 (field_14++, reset_call_back)
+} struc_8; // receiver (dst_bind)
 
-typedef struct hiMPI { // (sizeof=0x18)
-    MOD_ID_E ModId;  // 0x00 (maybe MPP_CHN_S)
-    HI_U32 field_4;  // 0x04
-    HI_U32 field_8;  // 0x08
-    HI_S32 (*pfCallback)(HI_S32, HI_S32, int, mpp_data_type, HI_VOID*); // 0x0C
-    PAYLOAD_TYPE_E enPayloadType; // 0x10
-    HI_U32 field_14; // 0x14 (reserved?)
-} SYS_ENTRY_S;
+typedef struct histruc_9 { // (sizeof=0xC)
+    struct list_head list; // 0x00
+    HI_U32 dest_num;       // 0x08
+} struc_9; // sender (src_bind)
 
+typedef struct histruc_10 { // (sizeof=0x1C)
+    struct list_head list; // 0x00
+    MPP_CHN_S mpp_chn;     // 0x08
+    HI_U32 field_14;       // 0x14 (assigned 0)
+    HI_U32 field_18;       // 0x18 (assigned 0)
+} struc_10;
+
+typedef struct hi_binder_info { // (sizeof=0x30)
+    /*0x00*/ MOD_ID_E mod_id;
+    /*0x04*/ HI_CHAR acBindName[MAX_BIND_NAME_LEN];
+    /*0x0C*/ HI_U32 max_dev_cnt;
+    /*0x10*/ HI_U32 max_chn_cnt;
+    /*0x14*/ hi_s32 (*call_back)(hi_s32 dev_id, hi_s32 chn_id, hi_bool block, mpp_data_type data_type, hi_void *pv_data);
+    /*0x18*/ hi_s32 (*reset_call_back)(hi_s32 dev_id, hi_s32 chn_id, hi_void *pv_data);
+    /*0x1C*/ hi_s32 (*give_bind_call_back)(hi_s32 dev_id, hi_s32 chn_id, hi_mpp_bind_dest *bind_send);
+    /*0x20*/ HI_U32 field_20; // (likely hi_bool support_delay_data)
+    /*0x24*/ HI_U32 u32Size;
+    /*0x28*/ struc_9 *ppstruc_9; // sender list (src_bind)
+    /*0x2C*/ struc_8 *ppstruc_8; // receiver list (dst_bind)
+} hi_binder_info;
 
 #endif

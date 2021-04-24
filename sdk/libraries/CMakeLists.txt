@@ -9,6 +9,8 @@ OPTION(BUILD_STATIC_LIBS "Build static user-space libraries" ON)
 #
 
 SET(MPI_FILES
+    "mpi/af_buf.c"
+    "mpi/as_buf.c"
     "mpi/mpi_ao.c"
     "mpi/mpi_sys.c"
 )
