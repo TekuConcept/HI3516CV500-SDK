@@ -11,9 +11,26 @@ OPTION(BUILD_STATIC_LIBS "Build static user-space libraries" ON)
 SET(MPI_FILES
     "mpi/af_buf.c"
     "mpi/as_buf.c"
+    # mpi/audio_comm.c
+    # mpi/audio_voice_adp.c
+    # mpi/hiisp_gdc_fw_pointquery.c
+    # mpi/hiisp_gdc_fw_user.c
+    # mpi/mpi_adec.c
+    # mpi/mpi_aenc.c
+    # mpi/mpi_ai.c
     "mpi/mpi_ao.c"
-    "mpi/mpi_sys.c"
+    # mpi/mpi_audio.c
     "mpi/mpi_bind.c"
+    # mpi/mpi_gdc.c
+    # mpi/mpi_region.c
+    "mpi/mpi_sys.c"
+    # mpi/mpi_vb.c
+    # mpi/mpi_vdec.c
+    # mpi/mpi_venc.c
+    # mpi/mpi_vgs.c
+    # mpi/mpi_vi.c
+    # mpi/mpi_vo.c
+    # mpi/mpi_vpss.c
 )
 ADD_LIBRARY(mpi_obj OBJECT ${MPI_FILES})
 IF (${BUILD_SHARED_LIBS})

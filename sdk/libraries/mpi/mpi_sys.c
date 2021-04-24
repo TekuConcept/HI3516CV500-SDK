@@ -10,6 +10,14 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 
+#define LOG_DEV_NAME "/dev/logmpp"
+#define SYS_DEV_NAME "/dev/sys"
+#define MMZ_DEV_NAME "/dev/mmz_userdev"
+
+#define RE_DBG_LVL HI_DBG_ERR
+
+// ============================================================================
+
 pthread_mutex_t g_sys_fd_mutex;
 pthread_mutex_t g_sys_mem_mutex;
 HI_S32 g_log_fd  = -1;
@@ -17,7 +25,6 @@ HI_S32 g_sys_fd  = -1;
 HI_S32 g_mmz_fd  = -1;
 HI_S32 g_mem_dev = -1;
 
-// MPP_VERSION_S in hi_common.h
 MPP_VERSION_S g_version = {
     .aVersion = "HI_VERSION=Hi3516CV500_MPP_V2.0.2.0 B030 Release\0"
 };
@@ -44,9 +51,9 @@ extern HI_VOID mpi_aio_exit();
 extern HI_VOID mpi_aenc_exit();
 extern HI_VOID mpi_adec_exit();
 
+// -- file: mpi_bind.c --
 extern HI_S32 mpi_sys_bind_init();
 extern HI_VOID mpi_sys_bind_exit();
-
 extern HI_S32 mpi_sys_get_bind_by_src(MPP_CHN_S *pstMppChnSrc, MPP_BIND_DEST_S *pstBindDest);
 extern HI_S32 mpi_sys_get_bind_by_dest(MPP_CHN_S *pstMppChnDst, MPP_CHN_S *pstMppChnSrc);
 extern HI_S32 mpi_sys_unbind(MPP_CHN_S *pstMppChnSrc, MPP_CHN_S *pstMppChnDst);
@@ -64,7 +71,7 @@ log_check_open()
         return HI_SUCCESS;
     }
 
-    g_log_fd = open("/dev/logmpp", O_RDWR);
+    g_log_fd = open(LOG_DEV_NAME, O_RDWR);
 
     if ( g_log_fd < 0 ) {
         pthread_mutex_unlock(&g_sys_fd_mutex);
@@ -88,7 +95,7 @@ sys_check_open()
         return HI_SUCCESS;
     }
 
-    g_sys_fd = open("/dev/sys", O_RDWR);
+    g_sys_fd = open(SYS_DEV_NAME, O_RDWR);
 
     if ( g_sys_fd < 0 ) {
         pthread_mutex_unlock(&g_sys_fd_mutex);
@@ -106,17 +113,8 @@ hi_mpi_sys_get_bind_by_src(const MPP_CHN_S *pstSrcChn, MPP_BIND_DEST_S *pstBindD
     HI_S32 result;
     SYS_CHN_BIND_DEST_S stChnBind;
 
-    if ( pstSrcChn == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
-        return result;
-    }
-
-    if ( pstBindDest == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+    if ( pstSrcChn == HI_NULL || pstBindDest == HI_NULL ) {
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return result;
     }
 
@@ -152,7 +150,7 @@ sys_check_mmz_open()
         return HI_SUCCESS;
     }
 
-    g_mmz_fd = open("/dev/mmz_userdev", O_RDWR);
+    g_mmz_fd = open(MMZ_DEV_NAME, O_RDWR);
 
     if ( g_mmz_fd < 0 ) {
         pthread_mutex_unlock(&g_sys_fd_mutex);
@@ -168,37 +166,27 @@ HI_S32
 mpi_audio_init()
 {
     if ( mpi_aio_init() ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:initialize audio mpi failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "initialize audio mpi failed!\n");
         return HI_FAILURE;
     }
 
     if ( mpi_ai_init() ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:initialize ai mpi failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "initialize ai mpi failed!\n");
         return HI_FAILURE;
     }
 
     if ( mpi_ao_init() ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:initialize ao mpi failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "initialize ao mpi failed!\n");
         return HI_FAILURE;
     }
 
     if ( mpi_aenc_init() ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:initialize aenc mpi failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "initialize aenc mpi failed!\n");
         return HI_FAILURE;
     }
 
     if ( mpi_adec_init() ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:initialize adec mpi failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "initialize adec mpi failed!\n");
         return HI_FAILURE;
     }
 
@@ -223,9 +211,7 @@ HI_MPI_LOG_SetLevelConf(LOG_LEVEL_CONF_S *pstConf)
     HI_S32 result;
 
     if ( pstConf == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:null ptr!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "null ptr!\n");
         return HI_FAILURE;
     }
 
@@ -241,9 +227,7 @@ HI_MPI_LOG_GetLevelConf(LOG_LEVEL_CONF_S *pstConf)
     HI_S32 result;
 
     if ( pstConf == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:null ptr!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "null ptr!\n");
         return HI_FAILURE;
     }
 
@@ -267,9 +251,7 @@ HI_MPI_LOG_Read(HI_CHAR *pBuf, HI_U32 u32Size)
     HI_S32 result;
 
     if ( pBuf == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -307,8 +289,7 @@ HI_MPI_SYS_Init()
         return result;
     }
 
-    // double check
-    if ( sys_check_open() != HI_SUCCESS ) goto error1;
+    if ( sys_check_open() != HI_SUCCESS ) goto error1; // double check
 
     if ( ioctl(g_sys_fd, SYS_GET_TIMER_INFO, &stTimerInfo) != HI_SUCCESS ) goto error2;
 
@@ -318,17 +299,13 @@ HI_MPI_SYS_Init()
 
     if ( mpi_audio_init() != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_sys_mem_mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:initialize audio mpi failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "initialize audio mpi failed!\n");
         return HI_FAILURE;
     }
 
     if ( mpi_venc_init() != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_sys_mem_mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:initialize venc mpi failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "initialize venc mpi failed!\n");
         return HI_FAILURE;
     }
 
@@ -336,14 +313,10 @@ HI_MPI_SYS_Init()
     return HI_SUCCESS;
 
     error2:
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:system get kernel config failed!\n",
-        __FUNCTION__, __LINE__);
+    HI_TRACE_SYS(RE_DBG_LVL, "system get kernel config failed!\n");
     error1:
     pthread_mutex_unlock(&g_sys_mem_mutex);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:get kernel config failed!\n",
-        __FUNCTION__, __LINE__);
+    HI_TRACE_SYS(RE_DBG_LVL, "get kernel config failed!\n");
     return HI_FAILURE;
 }
 
@@ -371,9 +344,7 @@ HI_MPI_SYS_SetConfig(const MPP_SYS_CONFIG_S *pstSysConfig)
     HI_S32 result;
 
     if ( pstSysConfig == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:null ptr!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "null ptr!\n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -389,9 +360,7 @@ HI_MPI_SYS_GetConfig(MPP_SYS_CONFIG_S *pstSysConfig)
     HI_S32 result;
 
     if ( pstSysConfig == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:null ptr!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "null ptr!\n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -407,17 +376,8 @@ HI_MPI_SYS_Bind(const MPP_CHN_S *pstSrcChn, const MPP_CHN_S *pstDestChn)
     HI_S32 result;
     SYS_CHN_BIND_S stChnBind;
 
-    if ( pstSrcChn == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
-        return HI_ERR_SYS_NULL_PTR;
-    }
-
-    if ( pstDestChn == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+    if ( pstSrcChn == HI_NULL || pstDestChn == HI_NULL ) {
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -450,17 +410,8 @@ HI_MPI_SYS_UnBind(const MPP_CHN_S *pstSrcChn, const MPP_CHN_S *pstDestChn)
     HI_S32 result;
     SYS_CHN_BIND_S stChnBind;
 
-    if ( pstSrcChn == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
-        return HI_ERR_SYS_NULL_PTR;
-    }
-
-    if ( pstDestChn == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+    if ( pstSrcChn == HI_NULL || pstDestChn == HI_NULL ) {
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -493,17 +444,8 @@ HI_MPI_SYS_GetBindbyDest(const MPP_CHN_S *pstDestChn, MPP_CHN_S *pstSrcChn)
     HI_S32 result;
     SYS_CHN_BIND_S stChnBind;
 
-    if ( pstSrcChn == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
-        return HI_ERR_SYS_NULL_PTR;
-    }
-
-    if ( pstDestChn == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+    if ( pstSrcChn == HI_NULL || pstDestChn == HI_NULL ) {
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -626,16 +568,14 @@ HI_MPI_SYS_Munmap(HI_VOID *pVirAddr, HI_U32 u32Size)
     HI_U32 offset;
 
     if ( pVirAddr == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
     offset = (HI_U32)((HI_U32)pVirAddr & 0xFFF);
     return munmap(
-            /*address=*/(HI_VOID *)((HI_U32)pVirAddr & 0xFFFFF000),
-            /*length=*/((offset + u32Size - 1) & 0xFFFFF000) + MMAP_BLOCK_SIZE);
+        /*address=*/(HI_VOID *)((HI_U32)pVirAddr & 0xFFFFF000),
+        /*length=*/((offset + u32Size - 1) & 0xFFFFF000) + MMAP_BLOCK_SIZE);
 }
 
 HI_VOID*
@@ -677,9 +617,7 @@ HI_MPI_SYS_MflushCache(HI_U64 u64PhyAddr, void *pVirAddr, HI_U32 u32Size)
     MMZ_CACHE_S stCache;
 
     if ( pVirAddr == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -718,7 +656,7 @@ HI_MPI_SYS_CloseFd()
 
     if ( g_sys_fd >= 0 ) {
         result = close(g_sys_fd);
-        if ( result ) {
+        if ( result != HI_SUCCESS ) {
             pthread_mutex_unlock(&g_sys_fd_mutex);
             perror("close SYS fail");
             return result;
@@ -728,7 +666,7 @@ HI_MPI_SYS_CloseFd()
 
     if ( g_mem_dev >= 0 ) {
         result = close(g_mem_dev);
-        if ( result ) {
+        if ( result != HI_SUCCESS ) {
             pthread_mutex_unlock(&g_sys_fd_mutex);
             perror("close mem/dev fail");
             return result;
@@ -738,7 +676,7 @@ HI_MPI_SYS_CloseFd()
 
     if ( g_mmz_fd >= 0 ) {
         result = close(g_mmz_fd);
-        if ( result ) {
+        if ( result != HI_SUCCESS ) {
             pthread_mutex_unlock(&g_sys_fd_mutex);
             perror("close mmz fail");
             return result;
@@ -770,17 +708,8 @@ HI_MPI_SYS_MmzAlloc(HI_U64 *pu64PhyAddr, void **ppVirAddr, const HI_CHAR *strMmb
             stMemInfo.acZoneName, MAX_ZONE_NAME_LEN,
             strZone, MAX_ZONE_NAME_LEN - 1);
 
-    if ( pu64PhyAddr == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
-        return HI_ERR_SYS_NULL_PTR;
-    }
-
-    if ( ppVirAddr == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+    if ( pu64PhyAddr == HI_NULL || ppVirAddr == HI_NULL ) {
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -792,9 +721,7 @@ HI_MPI_SYS_MmzAlloc(HI_U64 *pu64PhyAddr, void **ppVirAddr, const HI_CHAR *strMmb
     result = ioctl(g_mmz_fd, MMZ_ALLOC_MEMORY, &stMemInfo);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_sys_mem_mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:system alloc mmz memory failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "system alloc mmz memory failed!\n");
         return result;
     }
 
@@ -802,9 +729,7 @@ HI_MPI_SYS_MmzAlloc(HI_U64 *pu64PhyAddr, void **ppVirAddr, const HI_CHAR *strMmb
     if ( result != HI_SUCCESS ) {
         ioctl(g_mmz_fd, MMZ_FREE_MEMORY, &stMemInfo);
         pthread_mutex_unlock(&g_sys_mem_mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:system remap mmz memory failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "system remap mmz memory failed!\n");
         return result;
     }
 
@@ -835,17 +760,8 @@ HI_MPI_SYS_MmzAlloc_Cached(HI_U64 *pu64PhyAddr, void **ppVirAddr, const HI_CHAR 
             stMemInfo.acZoneName, MAX_ZONE_NAME_LEN,
             pstrZone, MAX_ZONE_NAME_LEN - 1);
 
-    if ( pu64PhyAddr == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
-        return HI_ERR_SYS_NULL_PTR;
-    }
-
-    if ( ppVirAddr == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+    if ( pu64PhyAddr == HI_NULL || ppVirAddr == HI_NULL ) {
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -857,9 +773,7 @@ HI_MPI_SYS_MmzAlloc_Cached(HI_U64 *pu64PhyAddr, void **ppVirAddr, const HI_CHAR 
     result = ioctl(g_mmz_fd, MMZ_ALLOC_MEMORY, &stMemInfo);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_sys_mem_mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:system alloc mmz memory failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "system alloc mmz memory failed!\n");
         return result;
     }
 
@@ -867,9 +781,7 @@ HI_MPI_SYS_MmzAlloc_Cached(HI_U64 *pu64PhyAddr, void **ppVirAddr, const HI_CHAR 
     if ( result != HI_SUCCESS ) {
         ioctl(g_mmz_fd, MMZ_FREE_MEMORY, &stMemInfo);
         pthread_mutex_unlock(&g_sys_mem_mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:system remap mmz memory failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "system remap mmz memory failed!\n");
         return result;
     }
 
@@ -896,19 +808,15 @@ HI_MPI_SYS_MmzFree(HI_U64 u64PhyAddr, HI_VOID *pVirAddr)
 
     result = ioctl(g_mmz_fd, MMZ_UNMAP_MEMORY, &stMemInfo);
     if ( result != HI_SUCCESS ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:system unmap mmz memory failed!\n",
-            __FUNCTION__, __LINE__);
         pthread_mutex_unlock(&g_sys_mem_mutex);
+        HI_TRACE_SYS(RE_DBG_LVL, "system unmap mmz memory failed!\n");
         return result;
     }
 
     result = ioctl(g_mmz_fd, MMZ_FREE_MEMORY, &stMemInfo);
     if ( result != HI_SUCCESS ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:system free mmz memory failed!\n",
-            __FUNCTION__, __LINE__);
         pthread_mutex_unlock(&g_sys_mem_mutex);
+        HI_TRACE_SYS(RE_DBG_LVL, "system free mmz memory failed!\n");
         return result;
     }
 
@@ -922,9 +830,7 @@ HI_MPI_SYS_MmzFlushCache(HI_U64 u64PhyAddr, void *pVirAddr, HI_U32 u32Size)
     MMZ_MEM_S stMem;
 
     if ( pVirAddr == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -958,17 +864,8 @@ HI_MPI_SYS_GetVirMemInfo(const void *pVirAddr, SYS_VIRMEM_INFO_S *pstMemInfo)
     result = sys_check_mmz_open();
     if ( result != HI_SUCCESS ) return result;
 
-    if ( pVirAddr == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
-        return HI_ERR_SYS_NULL_PTR;
-    }
-
-    if ( pstMemInfo == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+    if ( pVirAddr == HI_NULL || pstMemInfo == HI_NULL ) {
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -993,9 +890,7 @@ HI_MPI_SYS_SetMemConfig(const MPP_CHN_S *pstMppChn, const HI_CHAR *pcMmzName)
     SYS_MEM_CONFIG_S data;
 
     if ( pstMppChn == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1029,9 +924,7 @@ HI_MPI_SYS_GetMemConfig(const MPP_CHN_S *pstMppChn, HI_CHAR *pcMmzName)
     SYS_MEM_CONFIG_S data;
 
     if ( pstMppChn == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1057,26 +950,19 @@ HI_MPI_SYS_GetMemConfig(const MPP_CHN_S *pstMppChn, HI_CHAR *pcMmzName)
 HI_S32
 HI_MPI_SYS_SetTuningConnect(HI_S32 s32Connect)
 {
-    HI_S32 result;
-
-    result = sys_check_open();
+    HI_S32 result = sys_check_open();
     if ( result != HI_SUCCESS ) return result;
-
     return ioctl(g_sys_fd, SYS_SET_TUNING_CONNECT, &s32Connect);
 }
 
 HI_S32
 HI_MPI_SYS_GetTuningConnect(HI_S32 *ps32Connect)
 {
-    HI_S32 result;
-
-    result = sys_check_open();
+    HI_S32 result = sys_check_open();
     if ( result != HI_SUCCESS ) return result;
 
     if ( ps32Connect == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1092,17 +978,8 @@ HI_MPI_SYS_SetScaleCoefLevel(const SCALE_RANGE_S *pstScaleRange, const SCALE_COE
     result = sys_check_open();
     if ( result != HI_SUCCESS ) return result;
 
-    if ( pstScaleRange == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
-        return HI_ERR_SYS_NULL_PTR;
-    }
-
-    if ( pstScaleCoeffLevel == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+    if ( pstScaleRange == HI_NULL || pstScaleCoeffLevel == HI_NULL ) {
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1125,17 +1002,8 @@ HI_MPI_SYS_GetScaleCoefLevel(const SCALE_RANGE_S *pstScaleRange, SCALE_COEFF_LEV
     result = sys_check_open();
     if ( result != HI_SUCCESS ) return result;
 
-    if ( pstScaleRange == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
-        return HI_ERR_SYS_NULL_PTR;
-    }
-
-    if ( pstScaleCoeffLevel == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+    if ( pstScaleRange == HI_NULL || pstScaleCoeffLevel == HI_NULL ) {
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1156,11 +1024,8 @@ HI_MPI_SYS_GetScaleCoefLevel(const SCALE_RANGE_S *pstScaleRange, SCALE_COEFF_LEV
 HI_S32
 HI_MPI_SYS_SetTimeZone(HI_S32 s32TimeZone)
 {
-    HI_S32 result;
-
-    result = sys_check_open();
+    HI_S32 result = sys_check_open();
     if ( result != HI_SUCCESS ) return result;
-
     return ioctl(g_sys_fd, SYS_SET_TIME_ZONE, &s32TimeZone);
 }
 
@@ -1170,9 +1035,7 @@ HI_MPI_SYS_GetTimeZone(HI_S32 *ps32TimeZone)
     HI_S32 result;
 
     if ( ps32TimeZone == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1188,9 +1051,7 @@ HI_MPI_SYS_SetGPSInfo(const GPS_INFO_S *pstGPSInfo)
     HI_S32 result;
 
     if ( pstGPSInfo == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1206,9 +1067,7 @@ HI_MPI_SYS_GetGPSInfo(GPS_INFO_S *pstGPSInfo)
     HI_S32 result;
 
     if ( pstGPSInfo == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1224,9 +1083,7 @@ HI_MPI_SYS_SetVIVPSSMode(const VI_VPSS_MODE_S *pstVIVPSSMode)
     HI_S32 result;
 
     if ( pstVIVPSSMode == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1242,9 +1099,7 @@ HI_MPI_SYS_GetVIVPSSMode(VI_VPSS_MODE_S *pstVIVPSSMode)
     HI_S32 result;
 
     if ( pstVIVPSSMode == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1260,9 +1115,7 @@ HI_MPI_SYS_GetChipId(HI_U32 *pu32ChipId)
     HI_S32 result;
 
     if ( pu32ChipId == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1278,9 +1131,7 @@ HI_MPI_SYS_GetCustomCode(HI_U32 *pu32CustomCode)
     HI_S32 result;
 
     if ( pu32CustomCode == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1288,9 +1139,7 @@ HI_MPI_SYS_GetCustomCode(HI_U32 *pu32CustomCode)
     if ( result != HI_SUCCESS ) return result;
 
     if ( ioctl(g_sys_fd, SYS_GET_CUSTOM_CODE, pu32CustomCode) != HI_SUCCESS ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:system get customer ID failed!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "system get customer ID failed!\n");
         return HI_ERR_SYS_NOTREADY;
     }
 
@@ -1303,9 +1152,7 @@ HI_MPI_SYS_SetRawFrameCompressParam(const RAW_FRAME_COMPRESS_PARAM_S *pstCompres
     HI_S32 result;
 
     if ( pstCompressParam == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         result = HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1321,9 +1168,7 @@ HI_MPI_SYS_GetRawFrameCompressParam(RAW_FRAME_COMPRESS_PARAM_S *pstCompressParam
     HI_S32 result;
 
     if ( pstCompressParam == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 
@@ -1339,17 +1184,8 @@ HI_MPI_SYS_GetVPSSVENCWrapBufferLine(VPSS_VENC_WRAP_PARAM_S *pWrapParam, HI_U32 
     HI_S32 result;
     SYS_WRAP_BUFLINE_S dest;
 
-    if ( pWrapParam == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
-        return HI_ERR_SYS_NULL_PTR;
-    }
-
-    if ( pu32BufLine == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:Null point \n",
-            __FUNCTION__, __LINE__);
+    if ( pWrapParam == HI_NULL || pu32BufLine == HI_NULL ) {
+        HI_TRACE_SYS(RE_DBG_LVL, "Null point \n");
         return HI_ERR_SYS_NULL_PTR;
     }
 

@@ -4,6 +4,7 @@
 
 #include "re_mpi_ao.h"
 #include "re_mpi_bind.h"
+#include "re_mpi_common.h"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -13,6 +14,11 @@
    ({ __typeof__ (a) _a = (a); \
     __typeof__ (b) _b = (b); \
     _a < _b ? _a : _b; })
+
+#define AO_DEV_NAME "/dev/ao"
+#define RE_DBG_LVL HI_DBG_ERR
+
+// ============================================================================
 
 pthread_mutex_t s_ao_fdmutex;
 HI_BOOL s_ao_init = HI_FALSE;
@@ -27,12 +33,9 @@ extern HI_S32 HI_DNVQE_GetConfig(HI_VOID* pHandle, VQE_ATTR_S* pstVqeAttr);
 extern HI_S32 HI_DNVQE_WriteFrame(HI_VOID* pHandle, HI_CHAR* buffer, HI_U32 u32PointNum);
 extern HI_S32 HI_DNVQE_ReadFrame(HI_VOID* pHandle, HI_CHAR* buffer, HI_U32 u32PointNum, HI_BOOL bBlock);
 
+// -- file: mpi_bind.c --
 extern HI_S32 mpi_sys_bind_register_receiver(SYS_BIND_RECEIVER_INFO_S* pstBindInfo);
 extern HI_VOID mpi_sys_bind_un_register_receiver(MOD_ID_E ModId);
-
-static void
-_assert_fail(const HI_CHAR *assertion, const HI_CHAR *file, HI_U32 line, const HI_CHAR *function)
-{ __assert_fail(assertion, file, line, function); }
 
 // ============================================================================
 
@@ -46,7 +49,7 @@ ao_check_open(AO_CHN AoChn)
         return HI_SUCCESS;
     }
 
-    g_ao_fd[AoChn] = open("/dev/ao", O_RDWR, 0);
+    g_ao_fd[AoChn] = open(AO_DEV_NAME, O_RDWR, 0);
     if ( g_ao_fd[AoChn] < 0 ) goto error;
 
     if ( ioctl(g_ao_fd[AoChn], AO_SET_CHN_ID, &AoChn) != HI_SUCCESS ) {
@@ -82,62 +85,55 @@ mpi_ao_check_resmp(AUDIO_DEV AoDevId, AO_CHN chnid, AUDIO_SAMPLE_RATE_E enInSamp
         enInSampleRate != AUDIO_SAMPLE_RATE_48000 &&
         enInSampleRate != AUDIO_SAMPLE_RATE_64000)
     {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao_chn %d resample in rate:%d is illegal!\n",
-            __FUNCTION__, __LINE__, chnid, enInSampleRate);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "ao_chn %d resample in rate:%d is illegal!\n",
+            chnid, enInSampleRate);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         goto not_config;
     }
 
     if ( ao_check_open(3 * AoDevId) ) goto not_config;
 
     result = ioctl(g_ao_fd[3 * AoDevId], AO_GET_PUB_ATTR, &stAttr);
-    if ( result ) goto not_config;
+    if ( result != HI_SUCCESS ) goto not_config;
 
     if ( enInSampleRate == stAttr.enSamplerate )
         goto not_perm;
 
     if ( chnid != 2 && stAttr.enSoundmode == AUDIO_SOUND_MODE_STEREO ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:resample don't support stereo!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_AO(RE_DBG_LVL, "resample don't support stereo!\n");
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     if ( stAttr.u32ChnCnt <= chnid ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:enable resample fail,aodev%d don't have chn%d\n",
-            __FUNCTION__, __LINE__, AoDevId, chnid);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "enable resample fail,aodev%d don't have chn%d\n",
+            AoDevId, chnid);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
-    if ((enInSampleRate == AUDIO_SAMPLE_RATE_64000) &&
-        (stAttr.enSamplerate != AUDIO_SAMPLE_RATE_8000 &&
-         stAttr.enSamplerate != AUDIO_SAMPLE_RATE_16000)) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:resample only support 64k->8k/16k!\n",
-            __FUNCTION__, __LINE__);
+    if (enInSampleRate == AUDIO_SAMPLE_RATE_64000     &&
+        stAttr.enSamplerate != AUDIO_SAMPLE_RATE_8000 &&
+        stAttr.enSamplerate != AUDIO_SAMPLE_RATE_16000)
+    {
+        HI_TRACE_AO(RE_DBG_LVL, "resample only support 64k->8k/16k!\n");
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     return HI_SUCCESS;
 
     not_config:
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:can't get aodev%d's attribute!\n",
-        __FUNCTION__, __LINE__, AoDevId);
+    HI_TRACE_AO(RE_DBG_LVL, "can't get aodev%d's attribute!\n", AoDevId);
     return HI_ERR_AO_NOT_CONFIG;
 
     not_perm:
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:resample out rate is the same as resample in rate, it's not allowed!\n",
-        __FUNCTION__, __LINE__);
+    HI_TRACE_AO(RE_DBG_LVL,
+        "resample out rate is the same as resample in rate, "
+        "it's not allowed!\n");
     return HI_ERR_AO_NOT_PERM;
 }
 
@@ -148,16 +144,12 @@ mpi_ao_get_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, VQE_ATTR_S *pstVqeAttr)
     VQE_ATTR_S stVqeAttr;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
     
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -165,7 +157,7 @@ mpi_ao_get_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, VQE_ATTR_S *pstVqeAttr)
         return HI_ERR_AO_NULL_PTR;
 
     result = ao_check_open(AoChn + 3 * AoDevId);
-    if ( result ) return result;
+    if ( result != HI_SUCCESS ) return result;
 
     pthread_mutex_lock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
 
@@ -174,26 +166,24 @@ mpi_ao_get_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, VQE_ATTR_S *pstVqeAttr)
         !g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].field_20)
     {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:AO chn %d is not config vqe and resmp!\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "AO chn %d is not config vqe and resmp!\n", AoChn);
         return HI_ERR_AO_NOT_PERM;
     }
 
     if ( g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].pDnvqeHandle == HI_NULL ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:AO chn %d is not config vqe and resmp!\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "AO chn %d is not config vqe and resmp!\n", AoChn);
         return HI_ERR_AO_NOT_PERM;
     }
 
     result = HI_DNVQE_GetConfig(g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].pDnvqeHandle, &stVqeAttr);
-    if ( result ) {
+    if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:AO dev: %d, ao chn:%d, get vqe attr fail, ret: 0x%x.\n",
-            __FUNCTION__, __LINE__, AoDevId, AoChn, result);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "AO dev: %d, ao chn:%d, get vqe attr fail, ret: 0x%x.\n",
+            AoDevId, AoChn, result);
         return HI_ERR_AO_VQE_ERR;
     }
 
@@ -227,9 +217,7 @@ mpi_ao_enable_resmp(AO_CHN chnid, AO_RESMP_S *resmp)
     {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[chnid].mutex);
         if ( mpi_ao_get_vqe_attr(AoDevId, AoChn, &stLastVqeAttr) ) {
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:ao_dev: %d get vqe attr failed!\n",
-                __FUNCTION__, __LINE__, AoDevId);
+            HI_TRACE_AO(RE_DBG_LVL, "ao_dev: %d get vqe attr failed!\n", AoDevId);
             return HI_ERR_AO_NOT_CONFIG;
         }
         pthread_mutex_lock(&g_mpi_ao_chn_ctx[chnid].mutex);
@@ -253,9 +241,9 @@ mpi_ao_enable_resmp(AO_CHN chnid, AO_RESMP_S *resmp)
     result = HI_DNVQE_Create(&g_mpi_ao_chn_ctx[chnid].pDnvqeHandle, &stNextVqeAttr);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[chnid].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev: %d, ao chn:%d, create resampler fail.\n",
-            __FUNCTION__, __LINE__, AoDevId, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "ao dev: %d, ao chn:%d, create resampler fail.\n",
+            AoDevId, AoChn);
         return HI_ERR_AO_VQE_ERR;
     }
 
@@ -275,16 +263,12 @@ mpi_ao_set_resmp_dbg_info(AUDIO_DEV AoDevId, AO_CHN chnid, AO_RESMP_DBG_S *pstRe
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( chnid > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, chnid);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", chnid);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -301,9 +285,12 @@ HI_S32
 mpi_ao_disable_resmp(AO_CHN AoChn)
 {
     HI_S32 result;
+    AUDIO_DEV AoDevId;
     AIO_ATTR_S stAttr;
     VQE_ATTR_S stLastVqeAttr;
     VQE_ATTR_S stNextVqeAttr;
+
+    AoDevId = AoChn / 3;
 
     pthread_mutex_lock(&g_mpi_ao_chn_ctx[AoChn].mutex);
 
@@ -314,27 +301,23 @@ mpi_ao_disable_resmp(AO_CHN AoChn)
 
     pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn].mutex);
 
-    if ( mpi_ao_get_vqe_attr(AoChn / 3, AoChn % 3, &stLastVqeAttr) ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao_dev: %d get vqe attr failed!\n",
-            __FUNCTION__, __LINE__, AoChn / 3);
+    if ( mpi_ao_get_vqe_attr(AoDevId, AoChn % 3, &stLastVqeAttr) ) {
+        HI_TRACE_AO(RE_DBG_LVL, "ao_dev: %d get vqe attr failed!\n", AoDevId);
         return HI_ERR_AO_NOT_CONFIG;
     }
 
     pthread_mutex_lock(&g_mpi_ao_chn_ctx[AoChn].mutex);
     memset_s(&stAttr, sizeof(AIO_ATTR_S), 0, sizeof(AIO_ATTR_S));
 
-    if ( (AoChn / 3) > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn / 3);
+    if ( AoDevId > 1 ) {
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         goto not_config;
     }
 
-    result = ao_check_open(3 * (AoChn / 3));
+    result = ao_check_open(3 * AoDevId);
     if ( result != HI_SUCCESS ) goto not_config;
 
-    result = ioctl(g_ao_fd[3 * (AoChn / 3)], AO_GET_PUB_ATTR, &stAttr);
+    result = ioctl(g_ao_fd[3 * AoDevId], AO_GET_PUB_ATTR, &stAttr);
     if ( result != HI_SUCCESS ) goto not_config;
 
     HI_DNVQE_Destroy(g_mpi_ao_chn_ctx[AoChn].pDnvqeHandle);
@@ -350,9 +333,9 @@ mpi_ao_disable_resmp(AO_CHN AoChn)
     result = HI_DNVQE_Create(&g_mpi_ao_chn_ctx[AoChn].pDnvqeHandle, &stNextVqeAttr);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev: %d, ao chn:%d, create resampler fail.\n",
-            __FUNCTION__, __LINE__, AoChn / 3, AoChn % 3);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "ao dev: %d, ao chn:%d, create resampler fail.\n",
+            AoDevId, AoChn % 3);
         return HI_ERR_AO_VQE_ERR;
     }
 
@@ -363,17 +346,14 @@ mpi_ao_disable_resmp(AO_CHN AoChn)
 
     not_config:
     pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn].mutex);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:ao_dev: %d haven't set attr!\n",
-        __FUNCTION__, __LINE__, AoChn / 3);
+    HI_TRACE_AO(RE_DBG_LVL, "ao_dev: %d haven't set attr!\n", AoDevId);
     return HI_ERR_AO_NOT_CONFIG;
 }
 
 inline HI_BOOL
 mpi_vqe_compare_hpf_cfg(const AUDIO_HPF_CONFIG_S *lhs, const AUDIO_HPF_CONFIG_S *rhs)
 {
-    return lhs->bUsrMode == rhs->bUsrMode &&
-    (
+    return lhs->bUsrMode == rhs->bUsrMode && (
         lhs->bUsrMode != HI_TRUE ||
         lhs->enHpfFreq == rhs->enHpfFreq
     );
@@ -382,8 +362,7 @@ mpi_vqe_compare_hpf_cfg(const AUDIO_HPF_CONFIG_S *lhs, const AUDIO_HPF_CONFIG_S 
 inline HI_BOOL
 mpi_vqe_compare_anr_cfg(const AUDIO_ANR_CONFIG_S *lhs, const AUDIO_ANR_CONFIG_S *rhs)
 {
-    return lhs->bUsrMode == rhs->bUsrMode &&
-    (
+    return lhs->bUsrMode == rhs->bUsrMode && (
         lhs->bUsrMode       != HI_TRUE ||
         lhs->s16NrIntensity == rhs->s16NrIntensity &&
         lhs->s16NoiseDbThr  == rhs->s16NoiseDbThr &&
@@ -394,8 +373,7 @@ mpi_vqe_compare_anr_cfg(const AUDIO_ANR_CONFIG_S *lhs, const AUDIO_ANR_CONFIG_S 
 inline HI_BOOL
 mpi_vqe_compare_agc_cfg(const AUDIO_AGC_CONFIG_S *lhs, const AUDIO_AGC_CONFIG_S *rhs)
 {
-    return lhs->bUsrMode == rhs->bUsrMode &&
-    (
+    return lhs->bUsrMode == rhs->bUsrMode && (
         lhs->bUsrMode          != HI_TRUE ||
         lhs->s8TargetLevel     == rhs->s8TargetLevel &&
         lhs->s8NoiseFloor      == rhs->s8NoiseFloor &&
@@ -418,16 +396,12 @@ mpi_ao_set_vqe_dbg_info(AUDIO_DEV AoDevId, AO_CHN AoChn, VQE_ATTR_DBG_S *pstVqeA
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-        __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -448,16 +422,12 @@ hi_mpi_ao_clear_chn_buf(AUDIO_DEV AoDevId, AO_CHN AoChn)
     VQE_ATTR_S stNextVqeAttr;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -484,9 +454,7 @@ hi_mpi_ao_clear_chn_buf(AUDIO_DEV AoDevId, AO_CHN AoChn)
 
     result = mpi_ao_get_vqe_attr(AoDevId, AoChn, &stLastVqeAttr);
     if ( result != HI_SUCCESS ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao_dev: %d get vqe attr failed!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao_dev: %d get vqe attr failed!\n", AoDevId);
         return HI_ERR_AO_NOT_CONFIG;
     }
 
@@ -500,9 +468,8 @@ hi_mpi_ao_clear_chn_buf(AUDIO_DEV AoDevId, AO_CHN AoChn)
     result = HI_DNVQE_Create(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].pDnvqeHandle, &stNextVqeAttr);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev: %d, ao chn:%d, create vqe fail.\n",
-            __FUNCTION__, __LINE__, AoDevId, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "ao dev: %d, ao chn:%d, create vqe fail.\n", AoDevId, AoChn);
         return result;
     }
 
@@ -518,16 +485,12 @@ hi_mpi_ao_disable_chn(AUDIO_DEV AoDevId, AO_CHN AoChn)
     VQE_ATTR_DBG_S stVqeAttrDbg;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -607,9 +570,7 @@ mpi_ao_query_circle_buffer_read_data(AUDIO_DEV AoDevId, AO_CHN AoChn, AUDIO_BIT_
     memset_s(&stAttr, sizeof(AIO_ATTR_S), 0, sizeof(AIO_ATTR_S));
 
     if ( base_dev > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, base_dev);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", base_dev);
         goto pub_attr_error;
     }
 
@@ -627,31 +588,13 @@ mpi_ao_query_circle_buffer_read_data(AUDIO_DEV AoDevId, AO_CHN AoChn, AUDIO_BIT_
                 return HI_FAILURE;
         }
         else {
-            if ( pstCirBuf->bWriteJump ) {
-                printf(
-                    "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                    __FUNCTION__, __LINE__,
-                    "ao_chn_ctx->cir_buf[chn].write_jump == HI_FALSE");
-                _assert_fail(
-                    "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                    0x2AEu, __FUNCTION__);
-            }
-
+            HI_ASSERT(pstCirBuf->bWriteJump == HI_FALSE);
             if ( u32ReadEnd > pstCirBuf->u32Write )
                 return HI_FAILURE;
         }
     }
     else {
-        if ( !pstCirBuf->bWriteJump ) {
-            printf(
-                "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                __FUNCTION__, __LINE__,
-                "ao_chn_ctx->cir_buf[chn].write_jump == HI_TRUE");
-            _assert_fail(
-                "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                0x29Du, __FUNCTION__);
-        }
-
+        HI_ASSERT(pstCirBuf->bWriteJump == HI_TRUE);
         if ( u32ReadEnd > pstCirBuf->u32Size ) {
             if ( u32ReadEnd - pstCirBuf->u32Size > pstCirBuf->u32Write )
                 return HI_FAILURE;
@@ -661,9 +604,7 @@ mpi_ao_query_circle_buffer_read_data(AUDIO_DEV AoDevId, AO_CHN AoChn, AUDIO_BIT_
     return HI_SUCCESS;
 
     pub_attr_error:
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:get AO(%d) pub attr failed.\n",
-        __FUNCTION__, __LINE__, base_dev);
+    HI_TRACE_AO(RE_DBG_LVL, "get AO(%d) pub attr failed.\n", base_dev);
     return HI_FAILURE;
 }
 
@@ -681,9 +622,7 @@ mpi_ao_update_circle_buffer_read_ptr(AUDIO_DEV AoDevId, AO_CHN AoChn, AUDIO_BIT_
     memset_s(&stAttr, sizeof(AIO_ATTR_S), 0, sizeof(AIO_ATTR_S));
 
     if ( base_dev > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, base_dev);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", base_dev);
         goto pub_attr_error;
     }
 
@@ -696,25 +635,10 @@ mpi_ao_update_circle_buffer_read_ptr(AUDIO_DEV AoDevId, AO_CHN AoChn, AUDIO_BIT_
     u32ReadEnd = (stAttr.u32PtNumPerFrm << enBitwidth) + pstCirBuf->u32Read;
 
     if ( pstCirBuf->u32Read > pstCirBuf->u32Write ) {
-        if ( !pstCirBuf->bWriteJump ) {
-            printf(
-                "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                __FUNCTION__, __LINE__,
-                "ao_chn_ctx->cir_buf[chn].write_jump == HI_TRUE");
-            _assert_fail(
-                "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                0x2CDu, __FUNCTION__);
-        }
+        HI_ASSERT(pstCirBuf->bWriteJump == HI_TRUE);
 
         if ( u32ReadEnd > pstCirBuf->u32Size ) {
-            if ( u32ReadEnd - pstCirBuf->u32Size > pstCirBuf->u32Write ) {
-                printf(
-                    "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                    __FUNCTION__, __LINE__, "0");
-                _assert_fail(
-                    "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                    0x2D8u, __FUNCTION__);
-            }
+            HI_ASSERT(u32ReadEnd - pstCirBuf->u32Size <= pstCirBuf->u32Write); // condition: 0
 
             pstCirBuf->u32Read    = u32ReadEnd - pstCirBuf->u32Size;
             pstCirBuf->bWriteJump = HI_FALSE;
@@ -722,36 +646,13 @@ mpi_ao_update_circle_buffer_read_ptr(AUDIO_DEV AoDevId, AO_CHN AoChn, AUDIO_BIT_
         else pstCirBuf->u32Read = u32ReadEnd;
     }
     else if ( pstCirBuf->u32Read != pstCirBuf->u32Write ) {
-        if ( pstCirBuf->bWriteJump ) {
-            printf(
-                "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                __FUNCTION__, __LINE__,
-                "ao_chn_ctx->cir_buf[chn].write_jump == HI_FALSE");
-            _assert_fail(
-                "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                0x2E9u, __FUNCTION__);
-        }
-
-        if ( u32ReadEnd > pstCirBuf->u32Write ) {
-            printf(
-                "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                __FUNCTION__, __LINE__, "0");
-            _assert_fail(
-                "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                0x2EDu, __FUNCTION__);
-        }
+        HI_ASSERT(pstCirBuf->bWriteJump == HI_FALSE);
+        HI_ASSERT(u32ReadEnd <= pstCirBuf->u32Write); // condition: 0
 
         pstCirBuf->u32Read = u32ReadEnd;
     }
     else {
-        if ( !pstCirBuf->bWriteJump ) {
-            printf(
-                "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                __FUNCTION__, __LINE__, "0");
-            _assert_fail(
-                "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                0x2E6u, __FUNCTION__);
-        }
+        HI_ASSERT(pstCirBuf->bWriteJump == HI_TRUE); // condition: 0
 
         if ( u32ReadEnd > pstCirBuf->u32Size ) {
             pstCirBuf->u32Read    = u32ReadEnd - pstCirBuf->u32Size;
@@ -768,9 +669,7 @@ mpi_ao_update_circle_buffer_read_ptr(AUDIO_DEV AoDevId, AO_CHN AoChn, AUDIO_BIT_
     return HI_SUCCESS;
 
     pub_attr_error:
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:get AO(%d) pub attr failed.\n",
-        __FUNCTION__, __LINE__, base_dev);
+    HI_TRACE_AO(RE_DBG_LVL, "get AO(%d) pub attr failed.\n", base_dev);
     return HI_FAILURE;
 }
 
@@ -789,30 +688,14 @@ mpi_ao_query_circle_buffer_write_data(AUDIO_DEV AoDevId, AO_CHN AoChn, AO_FRAME_
                 return HI_FAILURE;
         }
         else {
-            if ( !pstCirBuf->bWriteJump ) {
-                printf(
-                    "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                    __FUNCTION__, __LINE__,
-                    "ao_chn_ctx->cir_buf[chn].write_jump == HI_TRUE");
-                _assert_fail(
-                    "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                    0x211u, __FUNCTION__);
-            }
+            HI_ASSERT(pstCirBuf->bWriteJump == HI_TRUE);
 
             if ( u32WriteEnd > pstCirBuf->u32Read )
                 return HI_FAILURE;
         }
     }
     else {
-        if ( pstCirBuf->bWriteJump ) {
-            printf(
-                "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                __FUNCTION__, __LINE__,
-                "ao_chn_ctx->cir_buf[chn].write_jump == HI_FALSE");
-            _assert_fail(
-                "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                0x201u, __FUNCTION__);
-        }
+        HI_ASSERT(pstCirBuf->bWriteJump == HI_FALSE);
 
         if ( u32WriteEnd > pstCirBuf->u32Size ) {
             if ( u32WriteEnd - pstCirBuf->u32Size > pstCirBuf->u32Read )
@@ -829,27 +712,18 @@ mpi_ao_put_data_to_circle_buffer_and_update_write_ptr(AUDIO_DEV AoDev, AO_CHN Ao
     HI_S32 result;
     HI_U32 u32Count;
     HI_U32 u32WriteEnd;
-    AO_CIR_BUF_S *pstCirBuf;
-
-    pstCirBuf = &g_mpi_ao_chn_ctx[AoDev].stCirBuf[AoChn];
+    AO_CIR_BUF_S *pstCirBuf = &g_mpi_ao_chn_ctx[AoDev].stCirBuf[AoChn];
 
     if ( pstCirBuf->u32Write > pstCirBuf->u32Read ) {
-        if ( pstCirBuf->bWriteJump ) {
-            printf(
-                "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                __FUNCTION__, __LINE__,
-                "ao_chn_ctx->cir_buf[chn].write_jump == HI_FALSE");
-            _assert_fail(
-                "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                0x224u, __FUNCTION__);
-        }
+        HI_ASSERT(pstCirBuf->bWriteJump == HI_FALSE);
 
         u32WriteEnd = pstCirBuf->u32Write + pstFrameData->stData.u32Len;
         if ( u32WriteEnd > pstCirBuf->u32Size ) {
             if (u32WriteEnd - pstCirBuf->u32Size > pstCirBuf->u32Read) {
-                fprintf(stderr,
-                    "[Func]:%s [Line]:%d [Info]:it's no free buffer to save data! frame len:%d, write:%d, read:%d\n",
-                    __FUNCTION__, __LINE__, pstFrameData->stData.u32Len,
+                HI_TRACE_AO(RE_DBG_LVL,
+                    "it's no free buffer to save data! "
+                    "frame len:%d, write:%d, read:%d\n",
+                    pstFrameData->stData.u32Len,
                     pstCirBuf->u32Write, pstCirBuf->u32Read);
                 return HI_FAILURE;
             }
@@ -860,9 +734,7 @@ mpi_ao_put_data_to_circle_buffer_and_update_write_ptr(AUDIO_DEV AoDev, AO_CHN Ao
                 pstFrameData->stData.u64VirAddr[AoChn],
                 pstCirBuf->u32Size - pstCirBuf->u32Write);
             if ( result != HI_SUCCESS )
-                fprintf(stderr,
-                    "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                    __FUNCTION__, __LINE__, result);
+                HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
 
             u32Count = pstCirBuf->u32Size - pstCirBuf->u32Write;
             result = memcpy_s(
@@ -871,9 +743,7 @@ mpi_ao_put_data_to_circle_buffer_and_update_write_ptr(AUDIO_DEV AoDev, AO_CHN Ao
                     pstFrameData->stData.u64VirAddr[AoChn] + u32Count,
                     pstFrameData->stData.u32Len - u32Count);
             if ( result != HI_SUCCESS )
-                fprintf(stderr,
-                    "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                    __FUNCTION__, __LINE__, result);
+                HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
 
             pstCirBuf->u32Write   = pstFrameData->stData.u32Len - u32Count;
             pstCirBuf->bWriteJump = HI_TRUE;
@@ -885,29 +755,20 @@ mpi_ao_put_data_to_circle_buffer_and_update_write_ptr(AUDIO_DEV AoDev, AO_CHN Ao
                 pstFrameData->stData.u64VirAddr[AoChn],
                 pstFrameData->stData.u32Len);
             if ( result != HI_SUCCESS )
-                result = fprintf(stderr,
-                    "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                    __FUNCTION__, __LINE__, result);
+                HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
 
             pstCirBuf->u32Write += pstFrameData->stData.u32Len;
         }
     }
     else if ( pstCirBuf->u32Write != pstCirBuf->u32Read ) {
-        if ( !pstCirBuf->bWriteJump ) {
-            printf(
-                "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-                __FUNCTION__, __LINE__,
-                "ao_chn_ctx->cir_buf[chn].write_jump == HI_TRUE");
-            _assert_fail(
-                "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-                0x270u, __FUNCTION__);
-        }
+        HI_ASSERT(pstCirBuf->bWriteJump == HI_TRUE);
 
         u32WriteEnd = pstCirBuf->u32Write + pstFrameData->stData.u32Len;
         if ( u32WriteEnd > pstCirBuf->u32Read ) {
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:it's no free buffer to save data! frame len:%d, write:%d, read:%d\n",
-                __FUNCTION__, __LINE__, pstFrameData->stData.u32Len,
+            HI_TRACE_AO(RE_DBG_LVL,
+                "it's no free buffer to save data! "
+                "frame len:%d, write:%d, read:%d\n",
+                pstFrameData->stData.u32Len,
                 pstCirBuf->u32Write, pstCirBuf->u32Read);
             return HI_FAILURE;
         }
@@ -918,17 +779,16 @@ mpi_ao_put_data_to_circle_buffer_and_update_write_ptr(AUDIO_DEV AoDev, AO_CHN Ao
             pstFrameData->stData.u64VirAddr[AoChn],
             pstFrameData->stData.u32Len);
         if ( result != HI_SUCCESS )
-            result = fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                __FUNCTION__, __LINE__, result);
+            HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
 
         pstCirBuf->u32Write += pstFrameData->stData.u32Len;
     }
     else {
         if ( pstCirBuf->bWriteJump ) {
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:it's no free buffer to save data! frame len:%d, write:%d, read:%d\n",
-                __FUNCTION__, __LINE__, pstFrameData->stData.u32Len,
+            HI_TRACE_AO(RE_DBG_LVL,
+                "it's no free buffer to save data! "
+                "frame len:%d, write:%d, read:%d\n",
+                pstFrameData->stData.u32Len,
                 pstCirBuf->u32Write, pstCirBuf->u32Write);
             return HI_FAILURE;
         }
@@ -941,9 +801,7 @@ mpi_ao_put_data_to_circle_buffer_and_update_write_ptr(AUDIO_DEV AoDev, AO_CHN Ao
                 pstFrameData->stData.u64VirAddr[AoChn],
                 pstFrameData->stData.u32Len);
             if ( result != HI_SUCCESS )
-                result = fprintf(stderr,
-                    "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                    __FUNCTION__, __LINE__, result);
+                HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
 
             pstCirBuf->u32Write += pstFrameData->stData.u32Len;
         }
@@ -955,9 +813,7 @@ mpi_ao_put_data_to_circle_buffer_and_update_write_ptr(AUDIO_DEV AoDev, AO_CHN Ao
                 pstFrameData->stData.u64VirAddr[AoChn],
                 u32Count);
             if ( result != HI_SUCCESS )
-                fprintf(stderr,
-                    "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                    __FUNCTION__, __LINE__, result);
+                HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
 
             result = memcpy_s(
                     pstCirBuf->u32VirAddr,
@@ -965,9 +821,7 @@ mpi_ao_put_data_to_circle_buffer_and_update_write_ptr(AUDIO_DEV AoDev, AO_CHN Ao
                     pstFrameData->stData.u64VirAddr[AoChn] + u32Count,
                     pstFrameData->stData.u32Len - u32Count);
             if ( result != HI_SUCCESS )
-                fprintf(stderr,
-                    "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                    __FUNCTION__, __LINE__, result);
+                HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
 
             pstCirBuf->u32Write   = pstFrameData->stData.u32Len - u32Count;
             pstCirBuf->bWriteJump = HI_TRUE;
@@ -986,51 +840,45 @@ HI_S32
 ao_check_frame_info(AUDIO_FRAME_S *pstData, AIO_ATTR_S *pstAttr)
 {
     if ( pstData->enSoundmode > AUDIO_SOUND_MODE_STEREO ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:invalid soundmode(%d)!\n",
-            __FUNCTION__, __LINE__, pstData->enSoundmode);
+        HI_TRACE_AO(RE_DBG_LVL, "invalid soundmode(%d)!\n", pstData->enSoundmode);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
-    if ( pstData->enBitwidth > (unsigned int)AUDIO_BIT_WIDTH_24 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:invalid bitwidth(%d)!\n",
-            __FUNCTION__, __LINE__, pstData->enBitwidth);
+    if ( pstData->enBitwidth > AUDIO_BIT_WIDTH_24 ) {
+        HI_TRACE_AO(RE_DBG_LVL, "invalid bitwidth(%d)!\n", pstData->enBitwidth);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     if ( pstData->enBitwidth != pstAttr->enBitwidth ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:bitwidth(%d), aio_attr.bitwidth(%d)!\n",
-            __FUNCTION__, __LINE__, pstData->enBitwidth, pstAttr->enBitwidth);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "bitwidth(%d), aio_attr.bitwidth(%d)!\n",
+            pstData->enBitwidth, pstAttr->enBitwidth);
         return HI_ERR_AO_NOT_SUPPORT;
     }
 
     if ( pstData->u64VirAddr[0] == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:NULL pointer vir_addr[0]!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_AO(RE_DBG_LVL, "NULL pointer vir_addr[0]!\n");
         return HI_ERR_AO_NULL_PTR;
     }
 
     if (pstData->enSoundmode == AUDIO_SOUND_MODE_STEREO &&
-        pstData->u64VirAddr[1] == HI_NULL) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:NULL pointer vir_addr[1]!\n",
-            __FUNCTION__, __LINE__);
+        pstData->u64VirAddr[1] == HI_NULL)
+    {
+        HI_TRACE_AO(RE_DBG_LVL, "NULL pointer vir_addr[1]!\n");
         return HI_ERR_AO_NULL_PTR;
     }
 
-    if ((pstData->u32Len >> pstData->enBitwidth) >= 0x1001 ||
+    if ((pstData->u32Len >> pstData->enBitwidth) > MAX_AO_POINT_NUM ||
         (pstData->u32Len >> pstData->enBitwidth) >
-        (pstAttr->u32PtNumPerFrm * pstAttr->u32FrmNum) ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:point_num of input frame is:%d, it's big than MAX_AO_POINT_NUM:%d or channel "
-            "buffer size:%d , or small than 0\n",
-            __FUNCTION__, __LINE__,
-            pstData->u32Len >> pstData->enBitwidth, 4096,
+        (pstAttr->u32PtNumPerFrm * pstAttr->u32FrmNum))
+    {
+        HI_TRACE_AO(RE_DBG_LVL,
+            "point_num of input frame is:%d, it's big than "
+            "MAX_AO_POINT_NUM:%d or channel buffer size:%d , "
+            "or small than 0\n",
+            pstData->u32Len >> pstData->enBitwidth, MAX_AO_POINT_NUM,
             pstAttr->u32PtNumPerFrm * pstAttr->u32FrmNum);
-            return HI_ERR_AO_ILLEGAL_PARAM;
+        return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     return HI_SUCCESS;
@@ -1048,37 +896,42 @@ ao_parse_sound_mode(AO_CHN AoChn, AIO_ATTR_S *pstAttr, AO_FRAME_DATA_S *pstLastD
 
         if ( pstLastData->stData.enSoundmode == AUDIO_SOUND_MODE_MONO )
             return;
-
-        sound_mode = pstLastData->stData.enSoundmode;
-        bError = HI_FALSE;
+        else {
+            sound_mode = pstLastData->stData.enSoundmode;
+            bError = HI_FALSE;
+        }
     }
     else {
         *penSoundmode = pstAttr->enSoundmode;
 
         if ( pstAttr->enSoundmode == pstLastData->stData.enSoundmode )
             return;
-
-        if ( pstAttr->enSoundmode == AUDIO_SOUND_MODE_STEREO ) {
-            if ( pstLastData->stData.enSoundmode )
-                goto error;
-            else {
+        else if ( pstAttr->enSoundmode == AUDIO_SOUND_MODE_STEREO ) {
+            if ( pstLastData->stData.enSoundmode == AUDIO_SOUND_MODE_MONO ) {
                 pstLastData->stData.u64VirAddr[1] = pstLastData->stData.u64VirAddr[0];
                 pstLastData->stData.enSoundmode = pstAttr->enSoundmode;
+                return;
             }
-            return;
+            bError = HI_TRUE;
         }
-
-        sound_mode = pstLastData->stData.enSoundmode;
-        bError = pstAttr->enSoundmode != AUDIO_SOUND_MODE_MONO;
+        else {
+            sound_mode = pstLastData->stData.enSoundmode;
+            bError = pstAttr->enSoundmode != AUDIO_SOUND_MODE_MONO;
+        }
     }
 
-    bError |= sound_mode != AUDIO_SOUND_MODE_STEREO;
-
-    if ( bError ) goto error;
+    if ( bError || sound_mode != AUDIO_SOUND_MODE_STEREO ) {
+        HI_TRACE_AO(RE_DBG_LVL,
+            "soundmode(%d), aio_attr.soundmode(%d)!\n",
+            sound_mode, *penSoundmode);
+        return;
+    }
 
     if ( pstLastData->stData.enBitwidth != AUDIO_BIT_WIDTH_16 ) {
-        sound_mode = AUDIO_SOUND_MODE_STEREO;
-        goto error;
+        HI_TRACE_AO(RE_DBG_LVL,
+            "soundmode(%d), aio_attr.soundmode(%d)!\n",
+            AUDIO_SOUND_MODE_STEREO, *penSoundmode);
+        return;
     }
 
     if ( (pstLastData->stData.u32Len >> 1) != 0 ) {
@@ -1092,12 +945,6 @@ ao_parse_sound_mode(AO_CHN AoChn, AIO_ATTR_S *pstAttr, AO_FRAME_DATA_S *pstLastD
     }
 
     pstLastData->stData.enSoundmode = AUDIO_SOUND_MODE_MONO;
-    return;
-
-    error:
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:soundmode(%d), aio_attr.soundmode(%d)!\n",
-        __FUNCTION__, __LINE__, sound_mode, *penSoundmode);
 }
 
 HI_S32
@@ -1124,16 +971,12 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
     memset(&stAttr, 0, sizeof(AIO_ATTR_S));
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -1141,16 +984,15 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
     if ( result != HI_SUCCESS ) return result;
 
     if ( s32MilliSec < -1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:milli_sec(%d) can not be lower than -1.\n",
-            __FUNCTION__, __LINE__, s32MilliSec);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "milli_sec(%d) can not be lower than -1.\n", s32MilliSec);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     if ( pstData == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:the audio_frame pointer for is ao(%d, %d) NULL!\n",
-            __FUNCTION__, __LINE__, AoDevId, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "the audio_frame pointer for is ao(%d, %d) NULL!\n",
+            AoDevId, AoChn);
         return HI_ERR_AO_NULL_PTR;
     }
 
@@ -1158,9 +1000,7 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
 
     if ( !pstChnCtx->bEnabled ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:AO chn %d is not enable\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "AO chn %d is not enable\n", AoChn);
         return HI_ERR_AO_NOT_ENABLED;
     }
 
@@ -1179,9 +1019,7 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
         ioctl(g_ao_fd[3 * AoDevId], AO_GET_PUB_ATTR, &stAttr) != HI_SUCCESS)
     {
         pthread_mutex_unlock(&pstChnCtx->mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:can't get aodev%d's attribute!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "can't get aodev%d's attribute!\n", AoDevId);
         return HI_ERR_AO_NOT_CONFIG;
     }
 
@@ -1190,18 +1028,14 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
     result = ao_check_frame_info(&stLastData.stData, &stAttr);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&pstChnCtx->mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev: %d, ao chn:%d, frame info error.\n",
-            __FUNCTION__, __LINE__, AoDevId, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "ao dev: %d, ao chn:%d, frame info error.\n", AoDevId, AoChn);
         return result;
     }
 
     u32PtNumPerFrm = stLastData.stData.u32Len >> stLastData.stData.enBitwidth;
 
-    if (pstChnCtx->bResmpEnabled ||
-        pstChnCtx->bVqeEnabled   ||
-        pstChnCtx->field_20)
-    {
+    if (pstChnCtx->bResmpEnabled || pstChnCtx->bVqeEnabled || pstChnCtx->field_20) {
         if ( pstChnCtx->bResmpEnabled ) {
             n0 = pstChnCtx->stAoResmp.enInSampleRate;
             n1 = pstChnCtx->stAoResmp.enOutSampleRate * u32PtNumPerFrm;
@@ -1211,12 +1045,13 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
                 ++u32PointNum;
 
             max_point_num = stAttr.u32PtNumPerFrm * stAttr.u32FrmNum;
-            if ( u32PointNum >= 0x1001 || u32PointNum > max_point_num ) {
-                fprintf(stderr,
-                    "[Func]:%s [Line]:%d [Info]:point_num after ao resample is:%d, it's bigger than MAX_AO_POINT_NUM:%d, or b"
-                    "igger than channel buffer size:%d, or small than 0\n",
-                    __FUNCTION__, __LINE__, u32PointNum, 4096, max_point_num);
+            if ( u32PointNum > MAX_AO_POINT_NUM || u32PointNum > max_point_num ) {
                 pthread_mutex_unlock(&pstChnCtx->mutex);
+                HI_TRACE_AO(RE_DBG_LVL,
+                    "point_num after ao resample is:%d, it's bigger "
+                    "than MAX_AO_POINT_NUM:%d, or bigger than channel "
+                    "buffer size:%d, or small than 0\n",
+                    u32PointNum, MAX_AO_POINT_NUM, max_point_num);
                 return HI_ERR_AO_ILLEGAL_PARAM;
             }
         }
@@ -1232,17 +1067,15 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
         result = memcpy_s(pcBufWr, AO_CHN_DATA,
             stLastData.stData.u64VirAddr[0], stLastData.stData.u32Len);
         if ( result != HI_SUCCESS )
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                __FUNCTION__, __LINE__, result);
+            HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
 
         result = HI_DNVQE_WriteFrame(
             pstChnCtx->pDnvqeHandle,
             pcBufWr, u32PtNumPerFrm);
         if ( result != HI_SUCCESS ) {
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:hi_dnvqe_write_frame failed, ret:0x%x.!\n",
-                __FUNCTION__, __LINE__, result);
+            HI_TRACE_AO(RE_DBG_LVL,
+                "hi_dnvqe_write_frame failed, ret:0x%x.!\n", result);
+
             if ( pstChnCtx->bResmpEnabled ) {
                 pthread_mutex_unlock(&pstChnCtx->mutex);
                 return HI_ERR_AO_VQE_ERR;
@@ -1253,12 +1086,9 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
                 pstChnCtx->pDnvqeHandle,
                 pcBufRd, u32PointNum, /*bBlock=*/HI_TRUE);
             if ( result == HI_FAILURE ) {
-                fprintf(stderr,
-                    "[Func]:%s [Line]:%d [Info]:####%s, %d , ret:%d######\n",
-                    __FUNCTION__, __LINE__,
-                    __FUNCTION__, __LINE__,
-                    HI_ERR_AO_VQE_ERR);
                 pthread_mutex_unlock(&pstChnCtx->mutex);
+                HI_TRACE_AO(RE_DBG_LVL, "####%s, %d , ret:%d######\n",
+                    __FUNCTION__, __LINE__, HI_ERR_AO_VQE_ERR);
                 return HI_ERR_AO_VQE_ERR;
             }
 
@@ -1298,29 +1128,23 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
                         pstChnCtx->acBuf[i], AO_CHN_DATA,
                         pstChnCtx->stCirBuf[k].u32VirAddr +
                         pstChnCtx->stCirBuf[k].u32Read, u32Count);
-                    if ( result )
-                        fprintf(stderr,
-                            "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                            __FUNCTION__, __LINE__, result);
+                    if ( result != HI_SUCCESS )
+                        HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
 
                     result = memcpy_s(
                         pstChnCtx->acBuf[k] + u32Count, AO_CHN_DATA,
                         pstChnCtx->stCirBuf[k].u32VirAddr,
                         stNextData.stData.u32Len - u32Count);
-                    if ( result )
-                        fprintf(stderr,
-                            "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                            __FUNCTION__, __LINE__, result);
+                    if ( result != HI_SUCCESS )
+                        HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
                 }
                 else {
                     result = memcpy_s(
                         pstChnCtx->acBuf[k], AO_CHN_DATA,
                         pstChnCtx->stCirBuf[k].u32VirAddr +
                         pstChnCtx->stCirBuf[k].u32Read, u32Count);
-                    if ( result )
-                        fprintf(stderr,
-                            "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                            __FUNCTION__, __LINE__, result);
+                    if ( result != HI_SUCCESS )
+                        HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
                 }
 
                 stNextData.stData.u64VirAddr[k] = pstChnCtx->acBuf[k];
@@ -1330,10 +1154,9 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
 
         while ( !ioctl(g_ao_fd[AoChn + 3 * AoDevId], AO_SEND_FRAME, &stNextData) ) {
             if ( stNextData.stData.enSoundmode != -1 ) {
-                for (k = 0; k < stNextData.stData.enSoundmode + 1; k++) {
+                for (k = 0; k < stNextData.stData.enSoundmode + 1; k++)
                     mpi_ao_update_circle_buffer_read_ptr(
                         AoChn + 3 * AoDevId, k, stNextData.stData.enBitwidth);
-                }
                 i = 0;
                 break;
             }
@@ -1390,29 +1213,23 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
                         pstChnCtx->acBuf[i], AO_CHN_DATA,
                         pstChnCtx->stCirBuf[k].u32VirAddr +
                         pstChnCtx->stCirBuf[k].u32Read, u32Count);
-                    if ( result )
-                        fprintf(stderr,
-                            "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                            __FUNCTION__, __LINE__, result);
+                    if ( result != HI_SUCCESS )
+                        HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
 
                     result = memcpy_s(
                         pstChnCtx->acBuf[k] + u32Count, AO_CHN_DATA,
                         pstChnCtx->stCirBuf[k].u32VirAddr,
                         stNextData.stData.u32Len - u32Count);
-                    if ( result )
-                        fprintf(stderr,
-                            "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                            __FUNCTION__, __LINE__, result);
+                    if ( result != HI_SUCCESS )
+                        HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
                 }
                 else {
                     result = memcpy_s(
                         pstChnCtx->acBuf[k], AO_CHN_DATA,
                         pstChnCtx->stCirBuf[k].u32VirAddr +
                         pstChnCtx->stCirBuf[k].u32Read, u32Count);
-                    if ( result )
-                        fprintf(stderr,
-                            "[Func]:%s [Line]:%d [Info]:memcpy_s fail, ret:0x%x\n",
-                            __FUNCTION__, __LINE__, result);
+                    if ( result != HI_SUCCESS )
+                        HI_TRACE_AO(RE_DBG_LVL, "memcpy_s fail, ret:0x%x\n", result);
                 }
 
                 stNextData.stData.u64VirAddr[k] = pstChnCtx->acBuf[k];
@@ -1422,10 +1239,9 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
 
         while ( !ioctl(g_ao_fd[AoChn + 3 * AoDevId], AO_SEND_FRAME, &stNextData) ) {
             if ( stNextData.stData.enSoundmode != -1 ) {
-                for (k = 0; k < stNextData.stData.enSoundmode + 1; k++) {
+                for (k = 0; k < stNextData.stData.enSoundmode + 1; k++)
                     mpi_ao_update_circle_buffer_read_ptr(
                         AoChn + 3 * AoDevId, k, stNextData.stData.enBitwidth);
-                }
                 i = 0;
                 break;
             }
@@ -1440,23 +1256,8 @@ hi_mpi_ao_send_frame(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_FRAME_S *pstDa
 HI_S32
 mpi_ao_receive_frm(AUDIO_DEV AoDevId, AO_CHN AoChn, int unknown, MPP_DATA_TYPE_E data_type, HI_VOID *pstData)
 {
-    if ( data_type != MPP_DATA_AUDIO_FRAME ) {
-        printf(
-            "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-            __FUNCTION__, __LINE__,
-            "data_type == MPP_DATA_AUDIO_FRAME");
-        _assert_fail(
-            "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-            0xD4u, __FUNCTION__);
-    }
-    if ( pstData == HI_NULL ) {
-        printf(
-            "\nASSERT at:\n  >Function : %s\n  >Line No. : %d\n  >Condition: %s\n",
-            __FUNCTION__, __LINE__, "data != NULL");
-        _assert_fail(
-            "0", "/home/pub/himpp_git_hi3516cv500/himpp/board/mpp/./../mpp/cbb/audio/mpi/adapt/mpi_ao_adapt.c",
-            0xD5u, __FUNCTION__);
-    }
+    HI_ASSERT(data_type == MPP_DATA_AUDIO_FRAME);
+    HI_ASSERT(pstData != HI_NULL);
     return hi_mpi_ao_send_frame(AoDevId, AoChn, (const AUDIO_FRAME_S *)pstData, -1);
 }
 
@@ -1522,56 +1323,54 @@ mpi_ao_exit()
 inline HI_S32
 ao_check_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *pstVqeConfig)
 {
-    if ( pstVqeConfig->s32FrameSample > 0x1000 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:frame length: %d is invalid, ao chn:%d.\n",
-            __FUNCTION__, __LINE__, pstVqeConfig->s32FrameSample, AoChn);
+    if ( pstVqeConfig->s32FrameSample > MAX_AO_POINT_NUM ) {
+        HI_TRACE_AO(RE_DBG_LVL,
+            "frame length: %d is invalid, ao chn:%d.\n",
+            pstVqeConfig->s32FrameSample, AoChn);
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     if ( pstVqeConfig->enWorkstate > VQE_WORKSTATE_NOISY ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:work mode: %d is invalid, ao chn:%d.\n",
-            __FUNCTION__, __LINE__, pstVqeConfig->enWorkstate, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "work mode: %d is invalid, ao chn:%d.\n",
+            pstVqeConfig->enWorkstate, AoChn);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
-    if (pstVqeConfig->s32WorkSampleRate !=  8000 &&
-        pstVqeConfig->s32WorkSampleRate != 16000 &&
-        pstVqeConfig->s32WorkSampleRate != 48000) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:work sample rate: %d is invalid, ao chn:%d.\n",
-            __FUNCTION__, __LINE__, pstVqeConfig->s32WorkSampleRate, AoChn);
+    if (pstVqeConfig->s32WorkSampleRate != AUDIO_SAMPLE_RATE_8000  &&
+        pstVqeConfig->s32WorkSampleRate != AUDIO_SAMPLE_RATE_16000 &&
+        pstVqeConfig->s32WorkSampleRate != AUDIO_SAMPLE_RATE_48000)
+    {
+        HI_TRACE_AO(RE_DBG_LVL,
+            "work sample rate: %d is invalid, ao chn:%d.\n",
+            pstVqeConfig->s32WorkSampleRate, AoChn);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
-    if ( pstVqeConfig->s32WorkSampleRate == 48000 &&
-        (pstVqeConfig->u32OpenMask & 0xE) != 0 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]: work sample rate: %d is valid only for hpf, ao chn:%d.\n",
-            __FUNCTION__, __LINE__, 48000, AoChn);
+    if ( pstVqeConfig->s32WorkSampleRate == AUDIO_SAMPLE_RATE_48000 &&
+        (pstVqeConfig->u32OpenMask & 0xE) != 0 )
+    {
+        HI_TRACE_AO(RE_DBG_LVL,
+            " work sample rate: %d is valid only for hpf, ao chn:%d.\n",
+            AUDIO_SAMPLE_RATE_48000, AoChn);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     if ( pstVqeConfig->u32OpenMask > 0xF ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:open_mask(0x%x) is exclude agc",
-            __FUNCTION__, __LINE__, pstVqeConfig->u32OpenMask);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "open_mask(0x%x) is exclude agc", pstVqeConfig->u32OpenMask);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     if ( pstVqeConfig->u32OpenMask == 0 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:open_mask(0x%x) ,agc",
-            __FUNCTION__, __LINE__, pstVqeConfig->u32OpenMask);
+        HI_TRACE_AO(RE_DBG_LVL, "open_mask(0x%x) ,agc", pstVqeConfig->u32OpenMask);
         return HI_ERR_AO_NOT_PERM;
     }
 
     if ( (pstVqeConfig->u32OpenMask & 0xC) == 8 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]: eq cannot be open when agc close, , ao chn:%d\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            " eq cannot be open when agc close, , ao chn:%d\n", AoChn);
         return HI_ERR_AO_NOT_PERM;
     }
 
@@ -1582,9 +1381,7 @@ inline HI_S32
 ao_check_hpf(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_HPF_CONFIG_S *pstHpfCfg)
 {
     if ( pstHpfCfg->bUsrMode > HI_TRUE ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:usr_mode: %d error!\n",
-            "ao_check_hpf", __LINE__, pstHpfCfg->bUsrMode);
+        HI_TRACE_AO(RE_DBG_LVL, "usr_mode: %d error!\n", pstHpfCfg->bUsrMode);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
@@ -1594,9 +1391,9 @@ ao_check_hpf(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_HPF_CONFIG_S *pstHpfCf
         pstHpfCfg->enHpfFreq == AUDIO_HPF_FREQ_80)
         return HI_SUCCESS;
 
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:hpf freq: %d is invalid, ai chn:%d.\n",
-        "ao_check_hpf", __LINE__, pstHpfCfg->enHpfFreq, AoChn);
+    HI_TRACE_AO(RE_DBG_LVL,
+        "hpf freq: %d is invalid, ai chn:%d.\n",
+        pstHpfCfg->enHpfFreq, AoChn);
     return HI_ERR_AO_ILLEGAL_PARAM;
 }
 
@@ -1604,9 +1401,7 @@ inline HI_S32
 ao_check_anr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_ANR_CONFIG_S *pstAnrCfg)
 {
     if ( pstAnrCfg->bUsrMode > HI_TRUE ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:usr_mode: %d error!\n",
-            "ao_check_anr", __LINE__, pstAnrCfg->bUsrMode);
+        HI_TRACE_AO(RE_DBG_LVL, "usr_mode: %d error!\n", pstAnrCfg->bUsrMode);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
@@ -1614,23 +1409,23 @@ ao_check_anr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_ANR_CONFIG_S *pstAnrCf
         return HI_SUCCESS;
 
     if ( pstAnrCfg->s16NrIntensity > 0x19u ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:anr nr_intensity: %d is invalid, ao chn:%d.\n",
-            "ao_check_anr", __LINE__, pstAnrCfg->s16NrIntensity, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "anr nr_intensity: %d is invalid, ao chn:%d.\n",
+            pstAnrCfg->s16NrIntensity, AoChn);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
     
     if ( pstAnrCfg->s16NoiseDbThr > 0x3Cu ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:anr noise_db_thr: %d is invalid, ao chn:%d.\n",
-            "ao_check_anr", __LINE__, pstAnrCfg->s16NoiseDbThr, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "anr noise_db_thr: %d is invalid, ao chn:%d.\n",
+            pstAnrCfg->s16NoiseDbThr, AoChn);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     if ( pstAnrCfg->s8SpProSwitch > 1u ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:anr sp_pro_switch: %d is invalid, ao chn:%d.\n",
-            "ao_check_anr", __LINE__, pstAnrCfg->s8SpProSwitch, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "anr sp_pro_switch: %d is invalid, ao chn:%d.\n",
+            pstAnrCfg->s8SpProSwitch, AoChn);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
@@ -1641,9 +1436,7 @@ inline HI_S32
 ao_check_agc(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_AGC_CONFIG_S *pstAgcCfg)
 {
     if ( pstAgcCfg->bUsrMode > HI_TRUE ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:usr_mode: %d error!\n",
-            __FUNCTION__, __LINE__, pstAgcCfg->bUsrMode);
+        HI_TRACE_AO(RE_DBG_LVL, "usr_mode: %d error!\n", pstAgcCfg->bUsrMode);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
@@ -1658,33 +1451,18 @@ ao_check_agc(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_AGC_CONFIG_S *pstAgcCf
         pstAgcCfg->s8UseHighPassFilt <= 5u)
         return HI_SUCCESS;
 
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:ao dev: %d, ao chn:%d, enable agc failed because of wrong param!\n",
-        __FUNCTION__, __LINE__, AoDevId, AoChn);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:noise_sup_switch: %d [0,1]\n",
-        __FUNCTION__, __LINE__, pstAgcCfg->s16NoiseSupSwitch);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:improve_snr: %d [0,2]\n",
-        __FUNCTION__, __LINE__, pstAgcCfg->s8ImproveSNR);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:adjust_speed: %d [0,10]\n",
-        __FUNCTION__, __LINE__, pstAgcCfg->s8AdjustSpeed);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:max_gain: %d[0,30]\n",
-        __FUNCTION__, __LINE__, pstAgcCfg->s8MaxGain);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:noise_floor: %d[-65,-20]\n",
-        __FUNCTION__, __LINE__, pstAgcCfg->s8NoiseFloor);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:output_mode: %d [0,1]\n",
-        __FUNCTION__, __LINE__, pstAgcCfg->s8OutputMode);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:target_level: %d [-40,-1]\n",
-        __FUNCTION__, __LINE__, pstAgcCfg->s8TargetLevel);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:use_high_pass_filt: %d [0,5]\n",
-        __FUNCTION__, __LINE__, pstAgcCfg->s8UseHighPassFilt);
+    HI_TRACE_AO(RE_DBG_LVL,
+        "ao dev: %d, ao chn:%d, enable agc "
+        "failed because of wrong param!\n",
+        AoDevId, AoChn);
+    HI_TRACE_AO(RE_DBG_LVL, "noise_sup_switch: %d [0,1]\n",   pstAgcCfg->s16NoiseSupSwitch);
+    HI_TRACE_AO(RE_DBG_LVL, "improve_snr: %d [0,2]\n",        pstAgcCfg->s8ImproveSNR);
+    HI_TRACE_AO(RE_DBG_LVL, "adjust_speed: %d [0,10]\n",      pstAgcCfg->s8AdjustSpeed);
+    HI_TRACE_AO(RE_DBG_LVL, "max_gain: %d[0,30]\n",           pstAgcCfg->s8MaxGain);
+    HI_TRACE_AO(RE_DBG_LVL, "noise_floor: %d[-65,-20]\n",     pstAgcCfg->s8NoiseFloor);
+    HI_TRACE_AO(RE_DBG_LVL, "output_mode: %d [0,1]\n",        pstAgcCfg->s8OutputMode);
+    HI_TRACE_AO(RE_DBG_LVL, "target_level: %d [-40,-1]\n",    pstAgcCfg->s8TargetLevel);
+    HI_TRACE_AO(RE_DBG_LVL, "use_high_pass_filt: %d [0,5]\n", pstAgcCfg->s8UseHighPassFilt);
     
     return HI_ERR_AO_ILLEGAL_PARAM;
 }
@@ -1695,10 +1473,10 @@ ao_check_eq(AUDIO_DEV AoDevId, AO_CHN AoChn, const AUDIO_EQ_CONFIG_S *pstEqCfg)
     HI_S32 i;
 
     for (i = 0; i < VQE_EQ_BAND_NUM; i++) {
-        if ( (pstEqCfg->s8GaindB[i] + 100) > 0x78u ) {
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:eq gain_db[%d]: %d[-100,20] is invalid, ao chn:%d.\n",
-                "ao_check_eq", __LINE__, i, pstEqCfg->s8GaindB[i], AoChn);
+        if ( (pstEqCfg->s8GaindB[i] + 100) > 0x78u ) { // TODO: correct condition
+            HI_TRACE_AO(RE_DBG_LVL,
+                "eq gain_db[%d]: %d[-100,20] is invalid, ao chn:%d.\n",
+                i, pstEqCfg->s8GaindB[i], AoChn);
             return HI_ERR_AO_ILLEGAL_PARAM;
         }
     }
@@ -1718,16 +1496,12 @@ hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *p
     memset(&stAttr, 0, sizeof(AIO_ATTR_S));
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -1741,26 +1515,23 @@ hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *p
 
     if ( g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].bEnabled != HI_TRUE ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:AO chn %d is not enable\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "AO chn %d is not enable\n", AoChn);
         return HI_ERR_AO_NOT_ENABLED;
     }
 
     if ( g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].bVqeEnabled == HI_TRUE ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:AO chn %d has enable vqe! please disable vqe then config it!\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "AO chn %d has enable vqe! "
+            "please disable vqe then config it!\n", AoChn);
         return HI_ERR_AO_NOT_PERM;
     }
 
     result = ao_check_vqe(AoDevId, AoChn, pstVqeConfig);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:AO chn %d check vqe parameter failed!\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "AO chn %d check vqe parameter failed!\n", AoChn);
         return result;
     }
 
@@ -1771,9 +1542,8 @@ hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *p
     {
         result = mpi_ao_get_vqe_attr(AoDevId, AoChn, &stLastVqeAttr);
         if ( result != HI_SUCCESS ) {
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:ao_dev: %d get vqe attr failed!\n",
-                __FUNCTION__, __LINE__, AoDevId);
+            HI_TRACE_AO(RE_DBG_LVL,
+                "ao_dev: %d get vqe attr failed!\n", AoDevId);
             return HI_ERR_AO_NOT_CONFIG;
         }
 
@@ -1813,18 +1583,15 @@ hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *p
             ioctl(g_ao_fd[3 * AoDevId], AO_GET_PUB_ATTR, stAttr))
         {
             pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:ai_dev: %d haven't set attr!\n",
-                __FUNCTION__, __LINE__, AoDevId);
+            HI_TRACE_AO(RE_DBG_LVL, "ai_dev: %d haven't set attr!\n", AoDevId);
             return HI_ERR_AO_NOT_CONFIG;
         }
 
         if (stAttr.enSamplerate == AUDIO_SAMPLE_RATE_96000 ||
             stAttr.enSamplerate == AUDIO_SAMPLE_RATE_64000) {
             pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:vqe is not permit when ao samplerate is %d!\n",
-                __FUNCTION__, __LINE__, stAttr.enSamplerate);
+            HI_TRACE_AO(RE_DBG_LVL,
+                "vqe is not permit when ao samplerate is %d!\n", stAttr.enSamplerate);
             return HI_ERR_AO_NOT_PERM;
         }
 
@@ -1840,9 +1607,8 @@ hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *p
         result = ao_check_agc(AoDevId, AoChn, &pstVqeConfig->stAgcCfg);
         if ( result != HI_SUCCESS ) {
             pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:AO chn %d check vqe agc parameter failed!\n",
-                __FUNCTION__, __LINE__, AoChn);
+            HI_TRACE_AO(RE_DBG_LVL,
+                "AO chn %d check vqe agc parameter failed!\n", AoChn);
             return result;
         }
     }
@@ -1851,9 +1617,8 @@ hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *p
         result = ao_check_hpf(AoDevId, AoChn, &pstVqeConfig->stHpfCfg);
         if ( result != HI_SUCCESS ) {
             pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:AO chn %d check vqe hpf parameter failed!\n",
-                __FUNCTION__, __LINE__, AoChn);
+            HI_TRACE_AO(RE_DBG_LVL,
+                "AO chn %d check vqe hpf parameter failed!\n", AoChn);
             return result;
         }
     }
@@ -1862,9 +1627,8 @@ hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *p
         result = ao_check_anr(AoDevId, AoChn, &pstVqeConfig->stAnrCfg);
         if ( result != HI_SUCCESS ) {
             pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:AO chn %d check vqe anr parameter failed!\n",
-                __FUNCTION__, __LINE__, AoChn);
+            HI_TRACE_AO(RE_DBG_LVL,
+                "AO chn %d check vqe anr parameter failed!\n", AoChn);
             return result;
         }
     }
@@ -1873,9 +1637,7 @@ hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *p
         result = ao_check_eq(AoDevId, AoChn, &pstVqeConfig->stEqCfg);
         if ( result != HI_SUCCESS ) {
             pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:AO chn %d check vqe eq parameter failed!\n",
-                __FUNCTION__, __LINE__, AoChn);
+            HI_TRACE_AO(RE_DBG_LVL, "AO chn %d check vqe eq parameter failed!\n", AoChn);
             return result;
         }
     }
@@ -1908,9 +1670,8 @@ hi_mpi_ao_set_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, const AO_VQE_CONFIG_S *p
     result = HI_DNVQE_Create(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].pDnvqeHandle, &stNextVqeAttr);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev: %d, ao chn:%d, create vqe fail.\n",
-            __FUNCTION__, __LINE__, AoDevId, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "ao dev: %d, ao chn:%d, create vqe fail.\n", AoDevId, AoChn);
         return HI_ERR_AO_VQE_ERR;
     }
 
@@ -1932,16 +1693,12 @@ hi_mpi_ao_get_vqe_attr(AUDIO_DEV AoDevId, AO_CHN AoChn, AO_VQE_CONFIG_S *pstVqeC
     VQE_ATTR_S stVqeAttr;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-        __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
     
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-        __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
     
@@ -1996,16 +1753,12 @@ hi_mpi_ao_enable_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn)
     memset(&stAttr, 0, sizeof(AIO_ATTR_S));
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -2016,9 +1769,7 @@ hi_mpi_ao_enable_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn)
 
     if ( !g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].bEnabled ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:AO chn %d is not enable\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "AO chn %d is not enable\n", AoChn);
         return HI_ERR_AO_NOT_ENABLED;
     }
 
@@ -2029,9 +1780,7 @@ hi_mpi_ao_enable_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn)
 
     if ( !g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].bVqeConfigured ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:AO chn %d is not config vqe attr!\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "AO chn %d is not config vqe attr!\n", AoChn);
         return HI_ERR_AO_NOT_CONFIG;
     }
 
@@ -2039,34 +1788,27 @@ hi_mpi_ao_enable_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn)
         ioctl(g_ao_fd[3 * AoDevId], AO_GET_PUB_ATTR, &stAttr) != HI_SUCCESS)
     {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao_dev: %d haven't set attr!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao_dev: %d haven't set attr!\n", AoDevId);
         return HI_ERR_AO_NOT_CONFIG;
     }
 
     if ( stAttr.enSoundmode == AUDIO_SOUND_MODE_STEREO ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:vqe don't support stereo!\n",
-            __FUNCTION__, __LINE__);
+        HI_TRACE_AO(RE_DBG_LVL, "vqe don't support stereo!\n");
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
     if ( AoChn >= stAttr.u32ChnCnt ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:enable vqe fail, aodev%d don't have chn%d\n",
-            __FUNCTION__, __LINE__, AoDevId, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "enable vqe fail, aodev%d don't have chn%d\n", AoDevId, AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
     pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
 
     if ( mpi_ao_get_vqe_attr(AoDevId, AoChn, &stLastVqeAttr) != HI_SUCCESS ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao_dev: %d get vqe attr failed!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao_dev: %d get vqe attr failed!\n", AoDevId);
         return HI_ERR_AO_NOT_CONFIG;
     }
 
@@ -2074,9 +1816,9 @@ hi_mpi_ao_enable_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn)
 
     if ( stLastVqeAttr.enOutSampleRate != stAttr.enSamplerate ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:vqe's sample rate out:%d and device's sample rate:%d must be same!\n",
-            __FUNCTION__, __LINE__, stLastVqeAttr.enOutSampleRate, stAttr.enSamplerate);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "vqe's sample rate out:%d and device's sample rate:%d must be same!\n",
+            stLastVqeAttr.enOutSampleRate, stAttr.enSamplerate);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
@@ -2095,9 +1837,8 @@ hi_mpi_ao_enable_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn)
     result = HI_DNVQE_Create(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].pDnvqeHandle, &stNextVqeAttr);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev: %d, ao chn:%d, create vqe fail.\n",
-            __FUNCTION__, __LINE__, AoDevId, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "ao dev: %d, ao chn:%d, create vqe fail.\n", AoDevId, AoChn);
         return HI_ERR_AO_VQE_ERR;
     }
 
@@ -2140,16 +1881,12 @@ hi_mpi_ao_disable_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn)
     VQE_ATTR_DBG_S stVqeAttrDbg;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -2166,9 +1903,7 @@ hi_mpi_ao_disable_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn)
     pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
 
     if ( mpi_ao_get_vqe_attr(AoDevId, AoChn, &stLastVqeAttr) != HI_SUCCESS ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao_dev: %d get vqe attr failed!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao_dev: %d get vqe attr failed!\n", AoDevId);
         return HI_ERR_AO_NOT_CONFIG;
     }
 
@@ -2189,9 +1924,8 @@ hi_mpi_ao_disable_vqe(AUDIO_DEV AoDevId, AO_CHN AoChn)
     result = HI_DNVQE_Create(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].pDnvqeHandle, &stNextVqeAttr);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev: %d, ao chn:%d, create vqe fail.\n",
-            __FUNCTION__, __LINE__, AoDevId, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "ao dev: %d, ao chn:%d, create vqe fail.\n", AoDevId, AoChn);
         return HI_ERR_AO_VQE_ERR;
     }
 
@@ -2214,16 +1948,12 @@ hi_mpi_ao_query_file_status(AUDIO_DEV AoDevId, AO_CHN AoChn, AUDIO_FILE_STATUS_S
     AUDIO_SAVE_FILE_INFO_S stFileInfo;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -2250,16 +1980,13 @@ HI_MPI_AO_SetPubAttr(AUDIO_DEV AoDevId, const AIO_ATTR_S *pstAttr)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( pstAttr == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:the aio_attr pointer for ao_dev%d is NULL!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "the aio_attr pointer for ao_dev%d is NULL!\n", AoDevId);
         return HI_ERR_AO_NULL_PTR;
     }
 
@@ -2275,16 +2002,13 @@ HI_MPI_AO_GetPubAttr(AUDIO_DEV AoDevId, AIO_ATTR_S *pstAttr)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( pstAttr == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:the aio_attr pointer for ao_dev%d is NULL!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "the aio_attr pointer for ao_dev%d is NULL!\n", AoDevId);
         return HI_ERR_AO_NULL_PTR;
     }
 
@@ -2300,9 +2024,7 @@ HI_MPI_AO_Enable(AUDIO_DEV AoDevId)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
@@ -2318,9 +2040,7 @@ HI_MPI_AO_Disable(AUDIO_DEV AoDevId)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
@@ -2342,16 +2062,12 @@ HI_MPI_AO_EnableChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
     HI_CHAR* u32VirAddr = HI_NULL;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -2386,9 +2102,7 @@ HI_MPI_AO_EnableChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
         u32RawBufSize);
     if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:alloc mmb fail, len:%d\n",
-            __FUNCTION__, __LINE__, u32RawBufSize);
+        HI_TRACE_AO(RE_DBG_LVL, "alloc mmb fail, len:%d\n", u32RawBufSize);
         return HI_ERR_AO_NOMEM;
     }
 
@@ -2447,9 +2161,7 @@ HI_MPI_AO_EnableChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
     }
 
     pthread_mutex_unlock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
-    fprintf(stderr,
-        "[Func]:%s [Line]:%d [Info]:malloc err when enable ao chn!\n",
-        __FUNCTION__, __LINE__);
+    HI_TRACE_AO(RE_DBG_LVL, "malloc err when enable ao chn!\n");
     return HI_ERR_AO_NOMEM;
 }
 
@@ -2472,16 +2184,12 @@ HI_MPI_AO_EnableReSmp(AUDIO_DEV AoDevId, AO_CHN chnid, AUDIO_SAMPLE_RATE_E enInS
     memset(&stAttr, 0, sizeof(AIO_ATTR_S));
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( chnid > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, chnid);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", chnid);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -2492,18 +2200,16 @@ HI_MPI_AO_EnableReSmp(AUDIO_DEV AoDevId, AO_CHN chnid, AUDIO_SAMPLE_RATE_E enInS
 
     if ( g_mpi_ao_chn_ctx[chnid + 3 * AoDevId].bEnabled != HI_TRUE ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[chnid + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:AO chn %d is not enable\n",
-            __FUNCTION__, __LINE__, chnid);
+        HI_TRACE_AO(RE_DBG_LVL, "AO chn %d is not enable\n", chnid);
         return HI_ERR_AO_NOT_ENABLED;
     }
 
     if ( g_mpi_ao_chn_ctx[chnid + 3 * AoDevId].bResmpEnabled == HI_TRUE ) {
         if ( enInSampleRate != g_mpi_ao_chn_ctx[chnid + 3 * AoDevId].stAoResmp.enInSampleRate ) {
             pthread_mutex_unlock(&g_mpi_ao_chn_ctx[chnid + 3 * AoDevId].mutex);
-            fprintf(stderr,
-                "[Func]:%s [Line]:%d [Info]:resmp has been enable but the resamplerate:%d not the same as before:%d.\n",
-                __FUNCTION__, __LINE__, enInSampleRate,
+            HI_TRACE_AO(RE_DBG_LVL,
+                "resmp has been enable but the resamplerate:%d "
+                "not the same as before:%d.\n", enInSampleRate,
                 g_mpi_ao_chn_ctx[chnid + 3 * AoDevId].stAoResmp.enInSampleRate);
             return HI_ERR_AO_NOT_PERM;
         }
@@ -2512,7 +2218,7 @@ HI_MPI_AO_EnableReSmp(AUDIO_DEV AoDevId, AO_CHN chnid, AUDIO_SAMPLE_RATE_E enInS
     }
 
     result = mpi_ao_check_resmp(AoDevId, chnid, enInSampleRate);
-    if ( result ) {
+    if ( result != HI_SUCCESS ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[chnid + 3 * AoDevId].mutex);
         return result;
     }
@@ -2521,18 +2227,16 @@ HI_MPI_AO_EnableReSmp(AUDIO_DEV AoDevId, AO_CHN chnid, AUDIO_SAMPLE_RATE_E enInS
         ioctl(g_ao_fd[3 * AoDevId], AO_GET_PUB_ATTR, &stAttr) != HI_SUCCESS)
     {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[chnid + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:can't get aodev%d's attribute!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "can't get aodev%d's attribute!\n", AoDevId);
         return HI_ERR_AO_NOT_CONFIG;
     }
 
     if ( stAttr.enSamplerate == AUDIO_SAMPLE_RATE_96000 ||
          stAttr.enSamplerate == AUDIO_SAMPLE_RATE_64000 ) {
         pthread_mutex_unlock(&g_mpi_ao_chn_ctx[chnid + 3 * AoDevId].mutex);
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:resmp is not permit when ao samplerate is %d!\n",
-            __FUNCTION__, __LINE__, stAttr.enSamplerate);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "resmp is not permit when ao samplerate is %d!\n",
+            stAttr.enSamplerate);
         return HI_ERR_AO_NOT_PERM;
     }
 
@@ -2561,24 +2265,20 @@ HI_MPI_AO_DisableReSmp(AUDIO_DEV AoDevId, AO_CHN AoChn)
     AO_RESMP_DBG_S stResmpDbg;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
     result = ao_check_open(AoChn + 3 * AoDevId);
-    if ( result ) return result;
+    if ( result != HI_SUCCESS ) return result;
 
     result = mpi_ao_disable_resmp(AoChn + 3 * AoDevId);
-    if ( result ) return result;
+    if ( result != HI_SUCCESS ) return result;
 
     pthread_mutex_lock(&g_mpi_ao_chn_ctx[AoChn + 3 * AoDevId].mutex);
     memset_s(&stResmpDbg, sizeof(AO_RESMP_DBG_S), 0, sizeof(AO_RESMP_DBG_S));
@@ -2598,23 +2298,18 @@ HI_MPI_AO_QueryChnStat(AUDIO_DEV AoDevId, AO_CHN AoChn, AO_CHN_STATE_S *pstStatu
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
     
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
     if ( pstStatus == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:the ao_chn_state pointer for ao_dev%d is NULL!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "the ao_chn_state pointer for ao_dev%d is NULL!\n", AoDevId);
         return HI_ERR_AO_NULL_PTR;
     }
 
@@ -2630,16 +2325,12 @@ HI_MPI_AO_PauseChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -2659,16 +2350,12 @@ HI_MPI_AO_ResumeChn(AUDIO_DEV AoDevId, AO_CHN AoChn)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
     
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -2684,9 +2371,7 @@ HI_MPI_AO_SetVolume(AUDIO_DEV AoDevId, HI_S32 s32VolumeDb)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
@@ -2702,16 +2387,13 @@ HI_MPI_AO_GetVolume(AUDIO_DEV AoDevId, HI_S32 *ps32VolumeDb)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( ps32VolumeDb == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:the volume_db pointer for ao%d is NULL!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "the volume_db pointer for ao%d is NULL!\n", AoDevId);
         return HI_ERR_AO_NULL_PTR;
     }
 
@@ -2728,7 +2410,7 @@ HI_MPI_AO_SetMute(AUDIO_DEV AoDevId, HI_BOOL bEnable, const AUDIO_FADE_S *pstFad
     AO_MUTE_S stMute;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n", "hi_mpi_ao_set_mute", 1989, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
@@ -2738,8 +2420,7 @@ HI_MPI_AO_SetMute(AUDIO_DEV AoDevId, HI_BOOL bEnable, const AUDIO_FADE_S *pstFad
     stMute.bEnable = bEnable;
     if ( pstFade != HI_NULL )
         memcpy_s(&stMute.stFade, sizeof(AUDIO_FADE_S), pstFade, sizeof(AUDIO_FADE_S));
-    else
-        memset_s(&stMute.stFade, sizeof(AUDIO_FADE_S), 0, sizeof(AUDIO_FADE_S));
+    else memset_s(&stMute.stFade, sizeof(AUDIO_FADE_S), 0, sizeof(AUDIO_FADE_S));
 
     return ioctl(g_ao_fd[3 * AoDevId], AO_SET_MUTE, &stMute);
 }
@@ -2751,9 +2432,7 @@ HI_MPI_AO_GetMute(AUDIO_DEV AoDevId, HI_BOOL *pbEnable, AUDIO_FADE_S *pstFade)
     AO_MUTE_S stMute;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
@@ -2761,17 +2440,14 @@ HI_MPI_AO_GetMute(AUDIO_DEV AoDevId, HI_BOOL *pbEnable, AUDIO_FADE_S *pstFade)
     if ( result != HI_SUCCESS ) return result;
 
     if ( pbEnable == HI_NULL || pstFade == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:both enable and fade pointer for  ao_dev%d are NULL!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "both enable and fade pointer for  ao_dev%d are NULL!\n", AoDevId);
         return HI_ERR_AO_NULL_PTR;
     }
 
     result = ioctl(g_ao_fd[3 * AoDevId], AO_GET_MUTE, &stMute);
     if ( result != HI_SUCCESS ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao%d get mute error\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao%d get mute error\n", AoDevId);
         return result;
     }
 
@@ -2793,9 +2469,7 @@ HI_MPI_AO_SetTrackMode(AUDIO_DEV AoDevId, AUDIO_TRACK_MODE_E enTrackMode)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
@@ -2810,17 +2484,15 @@ HI_MPI_AO_GetTrackMode(AUDIO_DEV AoDevId, AUDIO_TRACK_MODE_E *penTrackMode)
 {
     HI_S32 result;
 
-    if ( (unsigned int)AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+    if ( AoDevId > 1 ) {
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( penTrackMode == HI_NULL ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:the track_mode pointer for ao_dev%d is NULL!\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL,
+            "the track_mode pointer for ao_dev%d is NULL!\n",
+            AoDevId);
         return HI_ERR_AO_NULL_PTR;
     }
 
@@ -2836,16 +2508,12 @@ HI_MPI_AO_GetFd(AUDIO_DEV AoDevId, AO_CHN AoChn)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
     
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 
@@ -2861,9 +2529,7 @@ HI_MPI_AO_ClrPubAttr(AUDIO_DEV AoDevId)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
@@ -2895,9 +2561,7 @@ HI_MPI_AO_SetClkDir(AUDIO_DEV AoDevId, AUDIO_CLKSEL_E enClksel)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
@@ -2905,9 +2569,7 @@ HI_MPI_AO_SetClkDir(AUDIO_DEV AoDevId, AUDIO_CLKSEL_E enClksel)
     if ( result != HI_SUCCESS ) return result;
 
     if ( enClksel > AUDIO_CLKSEL_SPARE ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:illegal param: clk_dir(%d)!\n",
-            __FUNCTION__, __LINE__, enClksel);
+        HI_TRACE_AO(RE_DBG_LVL, "illegal param: clk_dir(%d)!\n", enClksel);
         return HI_ERR_AO_ILLEGAL_PARAM;
     }
 
@@ -2920,7 +2582,7 @@ HI_MPI_AO_GetClkDir(AUDIO_DEV AoDevId, AUDIO_CLKSEL_E *penClksel)
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n", "hi_mpi_ao_get_clk_dir", 2107, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
@@ -2939,16 +2601,12 @@ HI_MPI_AO_SaveFile(AUDIO_DEV AoDevId, AO_CHN AoChn, AUDIO_SAVE_FILE_INFO_S *pstS
     HI_S32 result;
 
     if ( AoDevId > 1 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao dev %d is invalid\n",
-            __FUNCTION__, __LINE__, AoDevId);
+        HI_TRACE_AO(RE_DBG_LVL, "ao dev %d is invalid\n", AoDevId);
         return HI_ERR_AO_INVALID_DEVID;
     }
 
     if ( AoChn > 2 ) {
-        fprintf(stderr,
-            "[Func]:%s [Line]:%d [Info]:ao chnid %d is invalid\n",
-            __FUNCTION__, __LINE__, AoChn);
+        HI_TRACE_AO(RE_DBG_LVL, "ao chnid %d is invalid\n", AoChn);
         return HI_ERR_AO_INVALID_CHNID;
     }
 

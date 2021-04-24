@@ -8,8 +8,8 @@
 #include "mpi_audio.h"
 #include "mpi_errno.h"
 #include "hi_types.h"
-#include "hi_comm_sys.h"
 #include "hi_common.h"
+#include "hi_comm_sys.h"
 #include "list.h"
 
 #include <pthread.h>
