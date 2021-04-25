@@ -13,6 +13,8 @@
 
 #include "hi_common.h"
 #include "hi_errno.h"
+#include "hi_type.h"
+#include "hi_debug.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -20,6 +22,10 @@ extern "C" {
 #endif
 #endif /* End of #ifdef __cplusplus */
 
+#define HI_TRACE_AIO(level, fmt, ...)                                                                         \
+    do {                                                                                                      \
+        HI_TRACE(level, HI_ID_AIO, "[Func]:%s [Line]:%d [Info]:" fmt, __FUNCTION__, __LINE__, ##__VA_ARGS__); \
+    } while (0)
 
 #define MAX_AUDIO_FRAME_NUM    300       /* max count of audio frame in Buffer */
 #define MAX_AUDIO_POINT_BYTES  4        /* max bytes of one sample point(now 32bit max) */

@@ -218,7 +218,7 @@ HI_MPI_LOG_SetLevelConf(LOG_LEVEL_CONF_S *pstConf)
     result = log_check_open();
     if ( result != HI_SUCCESS ) return result;
 
-    return ioctl(g_log_fd, LOG_GET_LEVEL_CONF, pstConf);
+    return ioctl(g_log_fd, IOC_LOG_SET_LEVEL_CONF, pstConf);
 }
 
 HI_S32
@@ -234,7 +234,7 @@ HI_MPI_LOG_GetLevelConf(LOG_LEVEL_CONF_S *pstConf)
     result = log_check_open();
     if ( result != HI_SUCCESS ) return result;
 
-    return ioctl(g_log_fd, LOG_GET_LEVEL_CONF, pstConf);
+    return ioctl(g_log_fd, IOC_LOG_GET_LEVEL_CONF, pstConf);
 }
 
 HI_S32
@@ -242,7 +242,7 @@ HI_MPI_LOG_SetWaitFlag(HI_BOOL bWait)
 {
     HI_S32 result = log_check_open();
     if ( result != HI_SUCCESS ) return result;
-    return ioctl(g_log_fd, LOG_SET_WAIT_FLAG, &bWait);
+    return ioctl(g_log_fd, IOC_LOG_SET_WAIT_FLAG, &bWait);
 }
 
 HI_S32
@@ -826,7 +826,7 @@ HI_MPI_SYS_MmzFree(HI_U64 u64PhyAddr, HI_VOID *pVirAddr)
 }
 
 HI_S32
-HI_MPI_SYS_MmzFlushCache(HI_U64 u64PhyAddr, void *pVirAddr, HI_U32 u32Size)
+HI_MPI_SYS_MmzFlushCache(HI_U64 u64PhyAddr, HI_VOID *pVirAddr, HI_U32 u32Size)
 {
     HI_S32 result;
     MMZ_MEM_S stMem;
@@ -842,12 +842,12 @@ HI_MPI_SYS_MmzFlushCache(HI_U64 u64PhyAddr, void *pVirAddr, HI_U32 u32Size)
     pthread_mutex_lock(&g_sys_mem_mutex);
 
     if ( u64PhyAddr == HI_NULL )
-        result = ioctl(g_mmz_fd, MMZ_C_MMZ_FLUSH_CACHE, HI_NULL);
+        result = ioctl(g_mmz_fd, IOC_MMB_FLUSH_DCACHE, HI_NULL);
     else {
         stMem.u32PhyAddr = u64PhyAddr;
         stMem.u32VirAddr = (HI_U32)pVirAddr;
         stMem.u32Size    = u32Size;
-        result = ioctl(g_mmz_fd, MMZ_D_MMZ_FLUSH_CACHE, &stMem);
+        result = ioctl(g_mmz_fd, IOC_MMB_FLUSH_DCACHE_DIRTY, &stMem);
     }
 
     pthread_mutex_unlock(&g_sys_mem_mutex);

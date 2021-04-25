@@ -19,7 +19,7 @@ SET(MPI_FILES
     # mpi/mpi_aenc.c
     # mpi/mpi_ai.c
     "mpi/mpi_ao.c"
-    # mpi/mpi_audio.c
+    "mpi/mpi_audio.c"
     "mpi/mpi_bind.c"
     # mpi/mpi_gdc.c
     # mpi/mpi_region.c

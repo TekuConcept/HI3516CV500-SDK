@@ -8,10 +8,10 @@
 #include "mpi_audio.h"
 #include "hi_comm_aio.h"
 
-// #define AUDIO_CTL_SETMODPARAM           _IOR( 'S', 0x00, sizeof(AUDIO_MOD_PARAM_S))      /* 0x40045300 */
-// #define AUDIO_CTL_GETMODPARAM           _IOW( 'S', 0x01, sizeof(AUDIO_MOD_PARAM_S))      /* 0x80045301 */
+#include <sys/ioctl.h>
 
-// HI_S32 mpi_aio_init(HI_VOID);
-// HI_S32 mpi_aio_exit(HI_VOID);
+#define IOC_TYPE_AUDIO 'S' // 0x53
+#define IOC_AUDIO_SET_MOD_PARAM _IOR('S', 0, AUDIO_MOD_PARAM_S) /* 0x40045300u */
+#define IOC_AUDIO_GET_MOD_PARAM _IOW('S', 1, AUDIO_MOD_PARAM_S) /* 0x80045301u */
 
 #endif

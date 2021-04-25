@@ -79,42 +79,14 @@ typedef struct hiSYS_MEM_CONFIG_S { // (sizeof=0x1C)
     HI_CHAR acMmzName[MAX_MMZ_NAME_LEN]; // 0x0C
 } SYS_MEM_CONFIG_S;
 
+// #define IOC_TYPE_LOG 'L' // 0x4C
+#define IOC_LOG_SET_LEVEL_CONF    _IOWR('L', 0, LOG_LEVEL_CONF_S) /* 0x40184C00u */
+#define IOC_LOG_GET_LEVEL_CONF    _IOR( 'L', 1, LOG_LEVEL_CONF_S) /* 0xC0184C01u */
+#define IOC_LOG_SET_WAIT_FLAG     _IOW( 'L', 3, HI_BOOL         ) /* 0x40044C03u */
 
-
-#define IOC_TYPE_LOG 'L' // 0x4C
-typedef enum hiLOG_IOCTL_E {
-    IOC_NR_SET_LEVEL_CONF = 0x00, // 0x00
-    IOC_NR_GET_LEVEL_CONF,        // 0x01
-    // 0x02
-    IOC_NR_SET_WAIT_FLAG  = 0x03, // 0x03
-} LOG_IOCTL_E;
-
-#define LOG_SET_LEVEL_CONF _IOR( IOC_TYPE_LOG, IOC_NR_SET_LEVEL_CONF, LOG_LEVEL_CONF_S) /* 0x40184C00u */
-#define LOG_GET_LEVEL_CONF _IOWR(IOC_TYPE_LOG, IOC_NR_GET_LEVEL_CONF, LOG_LEVEL_CONF_S) /* 0xC0184C01u */
-// 0x02
-#define LOG_SET_WAIT_FLAG  _IOR( IOC_TYPE_LOG, IOC_NR_SET_WAIT_FLAG,  HI_BOOL         ) /* 0x40044C03u */
-
-
-
-#define IOC_TYPE_MMZ_C 'c' // 0x63 (create?)
-typedef enum hiMMZ_C_IOCTL_E {
-    IOC_NR_C_MMZ_FLUSH_CACHE = 0x28, // 0x28
-} MMZ_C_IOCTL_E;
-
-#define MMZ_C_MMZ_FLUSH_CACHE _IO(IOC_TYPE_MMZ_C, IOC_NR_C_MMZ_FLUSH_CACHE) /* 0x00006328u */
-
-
-
-#define IOC_TYPE_MMZ_D 'd' // 0x64 (delete?)
-typedef enum hiMMZ_D_IOCTL_E {
-    IOC_NR_D_MMZ_FLUSH_CACHE = 0x32, // 0x32
-} MMZ_D_IOCTL_E;
-
-#define MMZ_D_MMZ_FLUSH_CACHE _IOR(IOC_TYPE_MMZ_D, IOC_NR_D_MMZ_FLUSH_CACHE, MMZ_MEM_S) /* 0x400C6432u */
-
-
-
-// #define IOC_TYPE_MMZ 'm' // 0x6D (memory)
+// #define IOC_TYPE_DCACHE 'c' // 0x63
+// #define IOC_TYPE_DCACHE_DIRTY 'd' // 0x64
+// #define IOC_TYPE_MMZ 'm' // 0x6D
 // #define MMZ_ALLOC_MEMORY       /* 0xC0506D0Au (10) */
 // #define MMZ_FREE_MEMORY        /* 0x40506D0Cu (12) */
 // #define MMZ_REMAP_MEMORY       /* 0xC0506D14u (20) */
