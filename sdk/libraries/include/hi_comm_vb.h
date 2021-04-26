@@ -72,15 +72,16 @@ typedef enum hiVB_REMAP_MODE_E {
     VB_REMAP_MODE_BUTT
 } VB_REMAP_MODE_E;
 
-typedef struct hiVB_POOL_CONFIG_S { // s:0x20
+typedef struct hiVB_POOL_CONFIG_S { // (sizeof=0x20)
     HI_U64 u64BlkSize;
     HI_U32 u32BlkCnt;
     VB_REMAP_MODE_E enRemapMode;
     HI_CHAR acMmzName[MAX_MMZ_NAME_LEN];
 } VB_POOL_CONFIG_S;
 
-typedef struct hiVB_CONFIG_S { // s:0x204
+typedef struct hiVB_CONFIG_S { // (sizeof=0x208)
     HI_U32 u32MaxPoolCnt;
+    // HI_U32 reserved;
     VB_POOL_CONFIG_S astCommPool[VB_MAX_COMM_POOLS];
 } VB_CONFIG_S;
 
