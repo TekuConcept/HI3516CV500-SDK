@@ -3,228 +3,237 @@
  */
 
 #include <pthread.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #include "re_mpi_comm.h"
 #include "re_mpi_region.h"
 
-#define REGION_INFO_SIZE 128
+#define RE_DBG_LVL HI_DBG_ERR
+#define MAX_REGION_HANDLE 128
+#define RGN_DEV_NAME "/dev/rgn"
 
-REGION_INFO_S   g_mpi_rgn[REGION_INFO_SIZE];
+RGN_INFO_S      g_mpi_rgn[MAX_REGION_HANDLE];
 pthread_mutex_t g_region_lock;
 HI_S32          g_rgn_fd = -1;
+
+// ============================================================================
+
+// -- file: mpi_sys.c --
+extern HI_VOID* HI_MPI_SYS_Mmap(HI_U64 u64PhyAddr, HI_U32 u32Size);
+extern HI_S32 HI_MPI_SYS_Munmap(HI_VOID *pVirAddr, HI_U32 u32Size);
+
+// ============================================================================
 
 HI_S32
 mpi_rgn_check_handle(RGN_HANDLE Handle)
 {
-    fprintf(
-        (FILE*)stderr,
-        "[Func]:%s [Line]:%d [Info]:handle:%d is error!\n",
-        __FUNCTION__,
-        __LINE__,
-        Handle);
-    return ERR_RGN_ILLEGAL_PARAM;
+    HI_TRACE_RGN(RE_DBG_LVL, "handle:%d is error!\n", Handle);
+    return HI_ERR_RGN_ILLEGAL_PARAM;
 }
 
 HI_S32
 mpi_rgn_check_null()
 {
-    fprintf(
-        (FILE*)stderr,
-        "[Func]:%s [Line]:%d [Info]:NULL pointer detected\n",
-        __FUNCTION__,
-        __LINE__);
-    return ERR_RGN_NULL_PTR;
+    HI_TRACE_RGN(RE_DBG_LVL, "NULL pointer detected\n");
+    return HI_ERR_RGN_NULL_PTR;
 }
 
 HI_S32
 mpi_rgn_open()
 {
-    HI_S32 result;
-
     pthread_mutex_lock(&g_region_lock);
 
-    if (g_rgn_fd >= 0 || (g_rgn_fd = open("/dev/rgn", 0), g_rgn_fd >= 0)) {
-        pthread_mutex_unlock(&g_region_lock);
-        result = 0;
-    }
-    else {
-        pthread_mutex_unlock(&g_region_lock);
-        puts("open /dev/rgn err");
-        result = ERR_RGN_NOTREADY;
+    if ( g_rgn_fd < 0 ) {
+        g_rgn_fd = open(RGN_DEV_NAME, O_RDONLY);
+        if ( g_rgn_fd < 0 ) {
+            pthread_mutex_unlock(&g_region_lock);
+            puts("open /dev/rgn err");
+            return HI_ERR_RGN_NOTREADY;
+        }
     }
 
-    return result;
+    pthread_mutex_unlock(&g_region_lock);
+    return HI_SUCCESS;
 }
 
 HI_S32
-HI_MPI_RGN_Create(RGN_HANDLE Handle, const RGN_ATTR_S* pstRegion)
+HI_MPI_RGN_Create(RGN_HANDLE Handle, const RGN_ATTR_S *pstAttr)
 {
-    REGION_DATA_S data;
+    RGN_ATTR_INFO_S stAttrInfo;
 
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
 
-    if (!pstRegion && mpi_rgn_check_null()) return ERR_RGN_NULL_PTR;
+    if ( pstAttr == HI_NULL && mpi_rgn_check_null() )
+        return HI_ERR_RGN_NULL_PTR;
 
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
 
-    data.Handle = Handle;
-    memcpy_s(&data.stRegion, sizeof(RGN_ATTR_S), pstRegion, sizeof(RGN_ATTR_S));
-    return ioctl(g_rgn_fd, 0x40205200u, &data);
+    stAttrInfo.Handle = Handle;
+    memcpy_s(&stAttrInfo.stAttr, sizeof(RGN_ATTR_S), pstAttr, sizeof(RGN_ATTR_S));
+    return ioctl(g_rgn_fd, IOC_RGN_CREATE, &stAttrInfo);
 }
 
 HI_S32
 HI_MPI_RGN_Destroy(RGN_HANDLE Handle)
 {
-    HI_S32         result, i;
-    HI_U64         pVirAddr;
+    HI_S32 i;
 
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
 
-    result = mpi_rgn_open();
-    if (result) return ERR_RGN_NOTREADY;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
 
     pthread_mutex_lock(&g_region_lock);
 
-    for (i = 0; i < 6; i++) {
-        pVirAddr = g_mpi_rgn[Handle].pVirAddr[i];
-        if (!pVirAddr) continue;
-        HI_MPI_SYS_Munmap((void*)pVirAddr, g_mpi_rgn[Handle].u32Size);
-        g_mpi_rgn[Handle].pVirAddr[i] = 0LL;
+    for (i = 0; i < MAX_RGN_VIR_ADDR; i++) {
+        if ( g_mpi_rgn[Handle].pVirAddr[i] == HI_NULL ) continue;
+        HI_MPI_SYS_Munmap((HI_VOID *)(HI_U32)g_mpi_rgn[Handle].pVirAddr[i],
+            g_mpi_rgn[Handle].u32Size);
+        g_mpi_rgn[Handle].pVirAddr[i] = HI_NULL;
     }
 
     g_mpi_rgn[Handle].u32Size    = 0;
-    g_mpi_rgn[Handle].u64PhyAddr = 0LL;
+    g_mpi_rgn[Handle].u64PhyAddr = HI_NULL;
+
     pthread_mutex_unlock(&g_region_lock);
-    return ioctl(g_rgn_fd, 0x40045201u, &Handle);
+    return ioctl(g_rgn_fd, IOC_RGN_DESTROY, &Handle);
 }
 
 HI_S32
-HI_MPI_RGN_GetAttr(RGN_HANDLE Handle, RGN_ATTR_S* pstRegion)
+HI_MPI_RGN_GetAttr(RGN_HANDLE Handle, RGN_ATTR_S *pstAttr)
 {
-    HI_S32        result;
-    REGION_DATA_S data;
+    HI_S32 result;
+    RGN_ATTR_INFO_S stAttrInfo;
 
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
 
-    if (!pstRegion && mpi_rgn_check_null()) return ERR_RGN_NULL_PTR;
+    if ( pstAttr == HI_NULL && mpi_rgn_check_null() )
+        return HI_ERR_RGN_NULL_PTR;
 
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
 
-    data.Handle = Handle;
-    memset_s(&data.stRegion, sizeof(RGN_ATTR_S), 0, sizeof(RGN_ATTR_S));
-    result = ioctl(g_rgn_fd, 0xC0205203, &data);
+    stAttrInfo.Handle = Handle;
+    memset_s(&stAttrInfo.stAttr, sizeof(RGN_ATTR_S), 0, sizeof(RGN_ATTR_S));
 
-    if (!result)
-        memcpy_s(
-            pstRegion,
-            sizeof(RGN_ATTR_S),
-            &data.stRegion,
-            sizeof(RGN_ATTR_S));
+    result = ioctl(g_rgn_fd, IOC_RGN_GET_ATTR, &stAttrInfo);
+    if ( result != HI_SUCCESS ) return result;
 
-    return result;
+    memcpy_s(pstAttr, sizeof(RGN_ATTR_S), &stAttrInfo.stAttr, sizeof(RGN_ATTR_S));
+    return HI_SUCCESS;
 }
 
 HI_S32
-HI_MPI_RGN_SetAttr(RGN_HANDLE Handle, const RGN_ATTR_S* pstRegion)
+HI_MPI_RGN_SetAttr(RGN_HANDLE Handle, const RGN_ATTR_S *pstAttr)
 {
-    HI_S32         result, i;
-    HI_U64         u64VirAddr;
-    REGION_DATA_S  data;
+    HI_S32 result, i;
+    RGN_ATTR_INFO_S stAttrInfo;
 
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
 
-    if (!pstRegion && mpi_rgn_check_null()) return ERR_RGN_NULL_PTR;
+    if ( !pstAttr && mpi_rgn_check_null() )
+        return HI_ERR_RGN_NULL_PTR;
 
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
 
-    data.Handle  = Handle;
-    data.field_0 = -1;
-    memcpy_s(&data.stRegion, sizeof(RGN_ATTR_S), pstRegion, sizeof(RGN_ATTR_S));
-    result = ioctl(g_rgn_fd, 0x40205202u, &data);
-    if (result != 0xA0034000) return result;
+    stAttrInfo.field_0 = -1;
+    stAttrInfo.Handle  = Handle;
+    memcpy_s(&stAttrInfo.stAttr, sizeof(RGN_ATTR_S), pstAttr, sizeof(RGN_ATTR_S));
+
+    result = ioctl(g_rgn_fd, IOC_RGN_SET_ATTR, &stAttrInfo);
+    if ( result != HI_NOTICE_RGN_BUFFER_CHANGE ) return result;
 
     pthread_mutex_lock(&g_region_lock);
-
-    for (i = 0; i < 6; i++) {
-        u64VirAddr = g_mpi_rgn[Handle].pVirAddr[i];
-        if (!u64VirAddr) continue;
-        HI_MPI_SYS_Munmap((void*)u64VirAddr, g_mpi_rgn[Handle].u32Size);
-        g_mpi_rgn[Handle].pVirAddr[i] = 0LL;
+    for (i = 0; i < MAX_RGN_VIR_ADDR; i++) {
+        if ( g_mpi_rgn[Handle].pVirAddr[i] == HI_NULL ) continue;
+        HI_MPI_SYS_Munmap((HI_VOID*)(HI_U32)g_mpi_rgn[Handle].pVirAddr[i],
+            g_mpi_rgn[Handle].u32Size);
+        g_mpi_rgn[Handle].pVirAddr[i] = HI_NULL;
     }
 
-    g_mpi_rgn[Handle].u64PhyAddr = 0LL;
     g_mpi_rgn[Handle].u32Size    = 0;
+    g_mpi_rgn[Handle].u64PhyAddr = HI_NULL;
+
     pthread_mutex_unlock(&g_region_lock);
-    return 0;
+    return HI_SUCCESS;
 }
 
 HI_S32
-HI_MPI_RGN_SetBitMap(RGN_HANDLE Handle, const BITMAP_S* pstBitmap)
+HI_MPI_RGN_SetBitMap(RGN_HANDLE Handle, const BITMAP_S *pstBitmap)
 {
-    REGION_BITMAP_S data;
+    RGN_BITMAP_S stBitmap;
 
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
 
-    if (!pstBitmap && mpi_rgn_check_null()) return ERR_RGN_NULL_PTR;
+    if ( pstBitmap == HI_NULL && mpi_rgn_check_null() )
+        return HI_ERR_RGN_NULL_PTR;
 
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
 
-    data.Handle  = Handle;
-    data.field_0 = -1;
-    memcpy_s(&data.stBitmap, sizeof(BITMAP_S), pstBitmap, sizeof(BITMAP_S));
-    return ioctl(g_rgn_fd, 0x40185204u, &data);
+    stBitmap.field_0 = -1;
+    stBitmap.Handle  = Handle;
+    memcpy_s(&stBitmap.stBitmap, sizeof(BITMAP_S), pstBitmap, sizeof(BITMAP_S));
+    return ioctl(g_rgn_fd, IOC_RGN_SET_BITMAP, &stBitmap);
 }
 
 HI_S32
-HI_MPI_RGN_GetCanvasInfo(RGN_HANDLE Handle, RGN_CANVAS_INFO_S* pstCanvasInfo)
+HI_MPI_RGN_GetCanvasInfo(RGN_HANDLE Handle, RGN_CANVAS_INFO_S *pstCanvasInfo)
 {
-    HI_S32               result;
-    REGION_CANVAS_INFO_S data;
-    HI_VOID*             pMem;
+    HI_S32 result;
+    RGN_CANVAS_S stCanvas;
 
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
 
-    if (!pstCanvasInfo && mpi_rgn_check_null()) return ERR_RGN_NULL_PTR;
+    if ( pstCanvasInfo == HI_NULL && mpi_rgn_check_null() )
+        return HI_ERR_RGN_NULL_PTR;
 
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
 
-    data.field_0 = -1;
-    data.Handle  = Handle;
-    result       = ioctl(g_rgn_fd, 0xC030520A, &data);
+    stCanvas.field_0 = -1;
+    stCanvas.Handle = Handle;
 
-    if (result) return result;
+    result = ioctl(g_rgn_fd, IOC_RGN_GET_CANVAS_INFO, &stCanvas);
+    if ( result != HI_SUCCESS ) {
+        ioctl(g_rgn_fd, IOC_RGN_RST_CANVAS_INFO, &Handle);
+        return result;
+    }
 
     pthread_mutex_lock(&g_region_lock);
 
-    g_mpi_rgn[Handle].u32Size    = data.u32Size;
-    g_mpi_rgn[Handle].u64PhyAddr = data.u64PhyAddr;
+    g_mpi_rgn[Handle].u32Size    = stCanvas.u32Size;
+    g_mpi_rgn[Handle].u64PhyAddr = stCanvas.stInfo.u64PhyAddr;
 
-    if (!g_mpi_rgn[Handle].pVirAddr[data.u32VirAddrIdx]) {
-        pMem = HI_MPI_SYS_Mmap(data.u64PhyAddr, data.u32Size);
+    if ( g_mpi_rgn[Handle].pVirAddr[stCanvas.u32AddrIdx] == HI_NULL ) {
+        g_mpi_rgn[Handle].pVirAddr[stCanvas.u32AddrIdx] =
+            (HI_U32)HI_MPI_SYS_Mmap(stCanvas.stInfo.u64PhyAddr, stCanvas.u32Size);
 
-        if (!pMem) {
+        if ( g_mpi_rgn[Handle].pVirAddr[stCanvas.u32AddrIdx] == HI_NULL ) {
             g_mpi_rgn[Handle].u32Size    = 0;
-            g_mpi_rgn[Handle].u64PhyAddr = 0LL;
+            g_mpi_rgn[Handle].u64PhyAddr = HI_NULL;
             pthread_mutex_unlock(&g_region_lock);
-            ioctl(g_rgn_fd, 0x4004520Bu, &Handle);
-            return ERR_RGN_NOMEM;
+            ioctl(g_rgn_fd, IOC_RGN_RST_CANVAS_INFO, &Handle);
+            return HI_ERR_RGN_NOMEM;
         }
-
-        g_mpi_rgn[Handle].pVirAddr[data.u32VirAddrIdx] = (HI_U32)pMem;
     }
 
     memcpy_s(
-        pstCanvasInfo,
-        sizeof(RGN_CANVAS_INFO_S),
-        &data.u64PhyAddr,
-        sizeof(RGN_CANVAS_INFO_S));
-    pstCanvasInfo->u64VirtAddr = g_mpi_rgn[Handle].pVirAddr[data.u32VirAddrIdx];
+        pstCanvasInfo, sizeof(RGN_CANVAS_INFO_S),
+        &stCanvas.stInfo.u64PhyAddr, sizeof(RGN_CANVAS_INFO_S));
+    pstCanvasInfo->u64VirtAddr =
+        g_mpi_rgn[Handle].pVirAddr[stCanvas.u32AddrIdx];
+
     pthread_mutex_unlock(&g_region_lock);
     return result;
 }
@@ -232,160 +241,158 @@ HI_MPI_RGN_GetCanvasInfo(RGN_HANDLE Handle, RGN_CANVAS_INFO_S* pstCanvasInfo)
 HI_S32
 HI_MPI_RGN_UpdateCanvas(RGN_HANDLE Handle)
 {
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
 
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
 
-    return ioctl(g_rgn_fd, 0x4004520Cu, &Handle);
+    return ioctl(g_rgn_fd, IOC_RGN_UPDATE_CANVAS, &Handle);
 }
 
 HI_S32
-HI_MPI_RGN_AttachToChn(
-    RGN_HANDLE            Handle,
-    const MPP_CHN_S*      pstChn,
-    const RGN_CHN_ATTR_S* pstChnAttr)
+HI_MPI_RGN_AttachToChn(RGN_HANDLE Handle, const MPP_CHN_S *pstMppChn, const RGN_CHN_ATTR_S *pstAttr)
 {
-    REGION_CHN_INFO_EX_S data;
+    RGN_CHN_ATTR_INFO_S stAttrInfo;
 
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
 
-    if (!pstChnAttr && mpi_rgn_check_null() || !pstChn && mpi_rgn_check_null())
-        return ERR_RGN_NULL_PTR;
+    if ((pstAttr == HI_NULL || pstMppChn == HI_NULL) &&
+        mpi_rgn_check_null())
+        return HI_ERR_RGN_NULL_PTR;
 
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
 
-    data.Handle = Handle;
-    memcpy_s(&data.stChn, sizeof(MPP_CHN_S), pstChn, sizeof(MPP_CHN_S));
+    stAttrInfo.Handle = Handle;
     memcpy_s(
-        &data.stChnAttr,
-        sizeof(RGN_CHN_ATTR_S),
-        pstChnAttr,
-        sizeof(RGN_CHN_ATTR_S));
-    return ioctl(g_rgn_fd, 0x40545208u, &data);
-}
-
-HI_S32
-HI_MPI_RGN_DetachFromChn(RGN_HANDLE Handle, const MPP_CHN_S* pstChn)
-{
-    REGION_CHN_INFO_S data;
-
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
-
-    if (!pstChn && mpi_rgn_check_null()) return ERR_RGN_NULL_PTR;
-
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
-
-    data.Handle = Handle;
-    memcpy_s(&data.stChn, sizeof(MPP_CHN_S), pstChn, sizeof(MPP_CHN_S));
-    return ioctl(g_rgn_fd, 0x40105209u, &data);
-}
-
-HI_S32
-HI_MPI_RGN_SetDisplayAttr(
-    RGN_HANDLE            Handle,
-    const MPP_CHN_S*      pstChn,
-    const RGN_CHN_ATTR_S* pstChnAttr)
-{
-    REGION_CHN_INFO_EX_S data;
-
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
-
-    if (!pstChnAttr && mpi_rgn_check_null() || !pstChn && mpi_rgn_check_null())
-        return ERR_RGN_NULL_PTR;
-
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
-
-    data.Handle = Handle;
-    memcpy_s(&data.stChn, sizeof(MPP_CHN_S), pstChn, sizeof(MPP_CHN_S));
+        &stAttrInfo.stMppChn, sizeof(MPP_CHN_S),
+        pstMppChn, sizeof(MPP_CHN_S));
     memcpy_s(
-        &data.stChnAttr,
-        sizeof(RGN_CHN_ATTR_S),
-        pstChnAttr,
-        sizeof(RGN_CHN_ATTR_S));
-    return ioctl(g_rgn_fd, 0x40545206u, &data);
+        &stAttrInfo.stAttr, sizeof(RGN_CHN_ATTR_S),
+        pstAttr, sizeof(RGN_CHN_ATTR_S));
+    return ioctl(g_rgn_fd, IOC_RGN_ATTACH_TO_CHN, &stAttrInfo);
 }
 
 HI_S32
-HI_MPI_RGN_GetDisplayAttr(
-    RGN_HANDLE       Handle,
-    const MPP_CHN_S* pstChn,
-    RGN_CHN_ATTR_S*  pstChnAttr)
+HI_MPI_RGN_DetachFromChn(RGN_HANDLE Handle, const MPP_CHN_S *pstMppChn)
 {
-    HI_S32               result;
-    REGION_CHN_INFO_EX_S data;
+    RGN_CHN_INFO_S stChnInfo;
 
-    if (Handle >= REGION_INFO_SIZE && mpi_rgn_check_handle(Handle))
-        return ERR_RGN_ILLEGAL_PARAM;
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
 
-    if (!pstChnAttr && mpi_rgn_check_null() || !pstChn && mpi_rgn_check_null())
-        return ERR_RGN_NULL_PTR;
+    if ( pstMppChn == HI_NULL && mpi_rgn_check_null() )
+        return HI_ERR_RGN_NULL_PTR;
 
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
 
-    data.Handle = Handle;
-    memcpy_s(&data.stChn, sizeof(MPP_CHN_S), pstChn, sizeof(MPP_CHN_S));
-    result = ioctl(g_rgn_fd, 0xC0545207, &data);
-
-    if (!result)
-        memcpy_s(
-            pstChnAttr,
-            sizeof(RGN_CHN_ATTR_S),
-            &data.stChnAttr,
-            sizeof(RGN_CHN_ATTR_S));
-
-    return result;
+    stChnInfo.Handle = Handle;
+    memcpy_s(
+        &stChnInfo.stChn, sizeof(MPP_CHN_S),
+        pstMppChn, sizeof(MPP_CHN_S));
+    return ioctl(g_rgn_fd, IOC_RGN_DETACH_FROM_CHN, &stChnInfo);
 }
 
 HI_S32
-HI_MPI_RGN_BatchBegin(
-    RGN_HANDLEGROUP* pu32Group,
-    HI_U32           u32Num,
-    const RGN_HANDLE handle[])
+HI_MPI_RGN_SetDisplayAttr(RGN_HANDLE Handle, const MPP_CHN_S *pstMppChn, const RGN_CHN_ATTR_S *pstAttr)
 {
-    HI_S32              result;
-    REGION_BATCH_INFO_S data;
+    RGN_CHN_ATTR_INFO_S stAttrInfo;
 
-    if (!pu32Group && mpi_rgn_check_null()) return ERR_RGN_NULL_PTR;
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
 
-    if (u32Num > 23) {
-        fprintf(
-            (FILE*)stderr,
-            "[Func]:%s [Line]:%d [Info]:handlenum:%d is error!\n",
-            __FUNCTION__,
-            __LINE__,
-            u32Num);
-        return ERR_RGN_ILLEGAL_PARAM;
+    if ((pstAttr == HI_NULL || pstMppChn == HI_NULL) &&
+        mpi_rgn_check_null())
+        return HI_ERR_RGN_NULL_PTR;
+
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
+
+    stAttrInfo.Handle = Handle;
+    memcpy_s(
+        &stAttrInfo.stMppChn, sizeof(MPP_CHN_S),
+        pstMppChn, sizeof(MPP_CHN_S));
+    memcpy_s(
+        &stAttrInfo.stAttr, sizeof(RGN_CHN_ATTR_S),
+        pstAttr, sizeof(RGN_CHN_ATTR_S));
+    return ioctl(g_rgn_fd, IOC_RGN_SET_DISPLAY_ATTR, &stAttrInfo);
+}
+
+HI_S32
+HI_MPI_RGN_GetDisplayAttr(RGN_HANDLE Handle, const MPP_CHN_S *pstMppChn, RGN_CHN_ATTR_S *pstAttr)
+{
+    HI_S32 result;
+    RGN_CHN_ATTR_INFO_S stAttrInfo;
+
+    if ( Handle >= MAX_REGION_HANDLE && mpi_rgn_check_handle(Handle) )
+        return HI_ERR_RGN_ILLEGAL_PARAM;
+
+    if ((pstAttr == HI_NULL || pstMppChn == HI_NULL) &&
+        mpi_rgn_check_null())
+        return HI_ERR_RGN_NULL_PTR;
+
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
+
+    stAttrInfo.Handle = Handle;
+    memcpy_s(
+        &stAttrInfo.stMppChn, sizeof(MPP_CHN_S),
+        pstMppChn, sizeof(MPP_CHN_S));
+
+    result = ioctl(g_rgn_fd, IOC_RGN_GET_DISPLAY_ATTR, &stAttrInfo);
+    if ( result != HI_SUCCESS ) return result;
+
+    memcpy_s(
+        pstAttr, sizeof(RGN_CHN_ATTR_S),
+        &stAttrInfo.stAttr, sizeof(RGN_CHN_ATTR_S));
+    return HI_SUCCESS;
+}
+
+HI_S32
+HI_MPI_RGN_BatchBegin(RGN_HANDLEGROUP *pu32Group, HI_U32 u32Num, const RGN_HANDLE *aHandle)
+{
+    HI_S32 result;
+    RGN_BATCH_INFO_S stBatchInfo;
+
+    if ( pu32Group == HI_NULL && mpi_rgn_check_null() )
+        return HI_ERR_RGN_NULL_PTR;
+
+    if ( u32Num >= RGN_BATCHHANDLE_MAX ) {
+        HI_TRACE_RGN(RE_DBG_LVL, "handlenum:%d is error!\n", u32Num);
+        return HI_ERR_RGN_ILLEGAL_PARAM;
     }
 
-    if (!handle && mpi_rgn_check_null()) return ERR_RGN_NULL_PTR;
+    if ( aHandle == HI_NULL && mpi_rgn_check_null() )
+        return HI_ERR_RGN_NULL_PTR;
 
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
 
-    data.u32Num  = u32Num;
-    data.aHandle = (RGN_HANDLE*)handle;
-    result       = ioctl(g_rgn_fd, 0xC00C520D, &data);
+    stBatchInfo.u32Num  = u32Num;
+    stBatchInfo.aHandle = (RGN_HANDLE*)aHandle;
 
-    if (!result) *pu32Group = data.u32Group;
+    result = ioctl(g_rgn_fd, IOC_RGN_BATCH_BEGIN, &stBatchInfo);
+    if ( result != HI_SUCCESS ) return result;
 
-    return result;
+    *pu32Group = stBatchInfo.u32Group;
+    return HI_SUCCESS;
 }
 
 HI_S32
 HI_MPI_RGN_BatchEnd(RGN_HANDLEGROUP u32Group)
 {
-    if (mpi_rgn_open()) return ERR_RGN_NOTREADY;
-    return ioctl(g_rgn_fd, 0x4004520Eu, &u32Group);
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
+    return ioctl(g_rgn_fd, IOC_RGN_BATCH_END, &u32Group);
 }
 
 HI_S32
-HI_MPI_RGN_GetFd(void)
+HI_MPI_RGN_GetFd()
 {
-    if (mpi_rgn_open())
-        return ERR_RGN_NOTREADY;
-    else
-        return g_rgn_fd;
+    if ( mpi_rgn_open() != HI_SUCCESS )
+        return HI_ERR_RGN_NOTREADY;
+    else return g_rgn_fd;
 }

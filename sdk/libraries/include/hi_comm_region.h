@@ -41,13 +41,13 @@ typedef enum hiINVERT_COLOR_MODE_E {
     INVERT_COLOR_BUTT
 } INVERT_COLOR_MODE_E;
 
-typedef struct hiOVERLAY_QP_INFO_S {
+typedef struct hiOVERLAY_QP_INFO_S { // (sizeof=0x0C)
     HI_BOOL bAbsQp;
     HI_S32 s32Qp;
     HI_BOOL bQpDisable;
 } OVERLAY_QP_INFO_S;
 
-typedef struct hiOVERLAY_INVERT_COLOR_S {
+typedef struct hiOVERLAY_INVERT_COLOR_S { // (sizeof=0x14)
     SIZE_S stInvColArea;  // It must be multipe of 16 but not more than 64.
     HI_U32 u32LumThresh;  // The threshold to decide whether invert the OSD's color or not.
     INVERT_COLOR_MODE_E enChgMod;
@@ -61,7 +61,7 @@ typedef enum hiATTACH_DEST_E {
     ATTACH_JPEG_BUTT
 } ATTACH_DEST_E;
 
-typedef struct hiOVERLAY_ATTR_S {
+typedef struct hiOVERLAY_ATTR_S { // (sizeof=0x14)
     /* bitmap pixel format,now only support ARGB1555 or ARGB4444 */
     PIXEL_FORMAT_E enPixelFmt;
 
@@ -73,7 +73,7 @@ typedef struct hiOVERLAY_ATTR_S {
     HI_U32 u32CanvasNum;
 } OVERLAY_ATTR_S;
 
-typedef struct hiOVERLAY_CHN_ATTR_S {
+typedef struct hiOVERLAY_CHN_ATTR_S { // (sizeof=0x3C)
     /* X:[0,OVERLAY_MAX_X_VENC],align:2,Y:[0,OVERLAY_MAX_Y_VENC],align:2 */
     POINT_S stPoint;
 
@@ -117,7 +117,7 @@ typedef struct hiRGN_QUADRANGLE_S {
     POINT_S stPoint[4]; /* points of quadrilateral */
 } RGN_QUADRANGLE_S;
 
-typedef struct hiCOVER_CHN_ATTR_S {
+typedef struct hiCOVER_CHN_ATTR_S { // (sizeof=0x38)
     RGN_AREA_TYPE_E enCoverType; /* rect or arbitary quadrilateral COVER */
     union {
         RECT_S stRect;                 /* config of rect */
@@ -128,7 +128,7 @@ typedef struct hiCOVER_CHN_ATTR_S {
     RGN_COORDINATE_E enCoordinate; /* ratio coordiante or abs coordinate */
 } COVER_CHN_ATTR_S;
 
-typedef struct hiCOVEREX_CHN_ATTR_S {
+typedef struct hiCOVEREX_CHN_ATTR_S { // (sizeof=0x34)
     RGN_AREA_TYPE_E enCoverType; /* rect or arbitary quadrilateral COVER */
     union {
         RECT_S stRect;                 /* config of rect */
@@ -146,13 +146,13 @@ typedef enum hiMOSAIC_BLK_SIZE_E {
     MOSAIC_BLK_SIZE_BUTT
 } MOSAIC_BLK_SIZE_E;
 
-typedef struct hiMOSAIC_CHN_ATTR_S {
+typedef struct hiMOSAIC_CHN_ATTR_S { // (sizeof=0x18)
     RECT_S stRect;               /* location of MOSAIC */
     MOSAIC_BLK_SIZE_E enBlkSize; /* block size of MOSAIC */
     HI_U32 u32Layer;             /* MOSAIC region layer range:[0,3] */
 } MOSAIC_CHN_ATTR_S;
 
-typedef struct hiOVERLAYEX_COMM_ATTR_S {
+typedef struct hiOVERLAYEX_COMM_ATTR_S { // (sizeof=0x14)
     PIXEL_FORMAT_E enPixelFmt;
 
     /* background color, pixel format depends on "enPixelFmt" */
@@ -163,7 +163,7 @@ typedef struct hiOVERLAYEX_COMM_ATTR_S {
     HI_U32 u32CanvasNum;
 } OVERLAYEX_ATTR_S;
 
-typedef struct hiOVERLAYEX_CHN_ATTR_S {
+typedef struct hiOVERLAYEX_CHN_ATTR_S { // (sizeof=0x18)
     /* X:[0,RGN_OVERLAY_MAX_X],align:2,Y:[0,RGN_OVERLAY_MAX_Y],align:2 */
     POINT_S stPoint;
 
@@ -204,24 +204,24 @@ typedef struct hiRGN_ATTR_S {
 } RGN_ATTR_S;
 
 /* attribute of a region */
-typedef struct hiRGN_CHN_ATTR_S {
+typedef struct hiRGN_CHN_ATTR_S { // (sizeof=0x44)
     HI_BOOL bShow;
     RGN_TYPE_E enType;        /* region type */
     RGN_CHN_ATTR_U unChnAttr; /* region attribute */
 } RGN_CHN_ATTR_S;
 
-typedef struct hiRGN_BMP_UPDATE_S {
+typedef struct hiRGN_BMP_UPDATE_S { // (sizeof=0x14)
     POINT_S stPoint;
     BITMAP_S stBmp;
     HI_U32 u32Stride;
 } RGN_BMP_UPDATE_S;
 
-typedef struct hiRGN_BMP_UPDATE_CFG_S {
+typedef struct hiRGN_BMP_UPDATE_CFG_S { // (sizeof=0x1C0)
     HI_U32 u32BmpCnt;
     RGN_BMP_UPDATE_S astBmpUpdate[RGN_MAX_BMP_UPDATE_NUM];
 } RGN_BMP_UPDATE_CFG_S;
 
-typedef struct hiRGN_CANVAS_INFO_S {
+typedef struct hiRGN_CANVAS_INFO_S { // (sizeof=0x20)
     HI_U64 u64PhyAddr;
     HI_U64 u64VirtAddr;
     SIZE_S stSize;
