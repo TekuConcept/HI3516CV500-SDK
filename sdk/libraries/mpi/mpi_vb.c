@@ -455,7 +455,7 @@ HI_MPI_VB_MunmapPool(VB_POOL Pool)
 }
 
 HI_S32
-HI_MPI_VB_GetBlockVirAddr(VB_POOL Pool, HI_U64 u64PhyAddr, void **ppVirAddr)
+HI_MPI_VB_GetBlockVirAddr(VB_POOL Pool, HI_U64 u64PhyAddr, HI_VOID **ppVirAddr)
 {
     VB_POOL_INFO_S* pool_info;
 

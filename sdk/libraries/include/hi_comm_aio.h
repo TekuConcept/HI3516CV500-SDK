@@ -155,7 +155,7 @@ typedef enum hiADPCM_TYPE_E {
 #define AI_EXPAND  0x01
 #define AI_CUT     0x02
 
-typedef struct hiAIO_ATTR_S { // sizeof=0x28
+typedef struct hiAIO_ATTR_S { // (sizeof=0x28)
     AUDIO_SAMPLE_RATE_E enSamplerate;   /* sample rate */
     AUDIO_BIT_WIDTH_E   enBitwidth;     /* bitwidth */
     AIO_MODE_E          enWorkmode;     /* master or slave mode */
@@ -170,11 +170,11 @@ typedef struct hiAIO_ATTR_S { // sizeof=0x28
     AIO_I2STYPE_E       enI2sType;      /* i2s type */
 } AIO_ATTR_S;
 
-typedef struct hiAI_CHN_PARAM_S { // sizeof=0x4
+typedef struct hiAI_CHN_PARAM_S { // (sizeof=0x4)
     HI_U32 u32UsrFrmDepth;
 } AI_CHN_PARAM_S;
 
-typedef struct hiAUDIO_FRAME_S { // sizeof=0x38
+typedef struct hiAUDIO_FRAME_S { // (sizeof=0x38)
     AUDIO_BIT_WIDTH_E   enBitwidth;     /* audio frame bitwidth */
     AUDIO_SOUND_MODE_E  enSoundmode;    /* audio frame momo or stereo mode */
     HI_U8*  u64VirAddr[2];
@@ -185,19 +185,19 @@ typedef struct hiAUDIO_FRAME_S { // sizeof=0x38
     HI_U32  u32PoolId[2];
 } AUDIO_FRAME_S;
 
-typedef struct hiAEC_FRAME_S { // sizeof=0x40
+typedef struct hiAEC_FRAME_S { // (sizeof=0x40)
     AUDIO_FRAME_S   stRefFrame;    /* AEC reference audio frame */
     HI_BOOL         bValid;        /* whether frame is valid */
     HI_BOOL         bSysBind;      /* whether is sysbind */
 } AEC_FRAME_S;
 
 
-typedef struct hiAUDIO_FRAME_INFO_S { // sizeof=0x8
+typedef struct hiAUDIO_FRAME_INFO_S { // (sizeof=0x8)
     AUDIO_FRAME_S *pstFrame; /* frame ptr */
     HI_U32         u32Id;   /* frame id */
 } AUDIO_FRAME_INFO_S;
 
-typedef struct hiAUDIO_STREAM_S { // sizeof=0x28
+typedef struct hiAUDIO_STREAM_S { // (sizeof=0x28)
     HI_U8 ATTRIBUTE *pStream;         /* the virtual address of stream */
     HI_U64 ATTRIBUTE u64PhyAddr;      /* the physics address of stream */
     HI_U32 u32Len;          /* stream lenth, by bytes */
@@ -205,8 +205,7 @@ typedef struct hiAUDIO_STREAM_S { // sizeof=0x28
     HI_U32 u32Seq;          /* frame seq, if stream is not a valid frame,u32Seq is 0 */
 } AUDIO_STREAM_S;
 
-
-typedef struct hiAO_CHN_STATE_S { // sizeof=0xC
+typedef struct hiAO_CHN_STATE_S { // (sizeof=0xC)
     HI_U32                  u32ChnTotalNum;    /* total number of channel buffer */
     HI_U32                  u32ChnFreeNum;     /* free number of channel buffer */
     HI_U32                  u32ChnBusyNum;     /* busy number of channel buffer */
@@ -225,7 +224,6 @@ typedef enum hiAUDIO_TRACK_MODE_E {
     AUDIO_TRACK_BUTT
 } AUDIO_TRACK_MODE_E;
 
-
 typedef enum hiAUDIO_FADE_RATE_E {
     AUDIO_FADE_RATE_1   = 0,
     AUDIO_FADE_RATE_2   = 1,
@@ -239,14 +237,14 @@ typedef enum hiAUDIO_FADE_RATE_E {
     AUDIO_FADE_RATE_BUTT
 } AUDIO_FADE_RATE_E;
 
-typedef struct hiAUDIO_FADE_S { // sizof=0xC
+typedef struct hiAUDIO_FADE_S { // (sizof=0xC)
     HI_BOOL         bFade;
     AUDIO_FADE_RATE_E enFadeInRate;
     AUDIO_FADE_RATE_E enFadeOutRate;
 } AUDIO_FADE_S;
 
 /* Defines the configure parameters of AEC. */
-typedef struct hiAI_AEC_CONFIG_S { // sizeof=0x34 AI_AEC_CONFIG_S
+typedef struct hiAI_AEC_CONFIG_S { // (sizeof=0x34)
     HI_BOOL bUsrMode;                            /* mode 0: auto mode 1: mannual. */
     HI_S8 s8CngMode;                             /* cozy noisy mode: 0 close, 1 open, recommend 1 */
     HI_S8 s8NearAllPassEnergy;                   /* the far-end energy threshold for judging whether unvarnished transmission: 0 -59dBm0,
@@ -280,7 +278,7 @@ typedef struct hiAI_AEC_CONFIG_S { // sizeof=0x34 AI_AEC_CONFIG_S
 } AI_AEC_CONFIG_S;
 
 /* Defines the configure parameters of ANR. */
-typedef struct hiAUDIO_ANR_CONFIG_S { // sizeof=0x10
+typedef struct hiAUDIO_ANR_CONFIG_S { // (sizeof=0x10)
     HI_BOOL bUsrMode;   /* mode 0: auto, mode 1: manual. */
 
     HI_S16 s16NrIntensity;       /* noise reduce intensity, range: [0, 25] */
@@ -291,7 +289,7 @@ typedef struct hiAUDIO_ANR_CONFIG_S { // sizeof=0x10
 } AUDIO_ANR_CONFIG_S;
 
 /* Defines the configure parameters of AGC. */
-typedef struct hiAUDIO_AGC_CONFIG_S { // sizeof=0x14
+typedef struct hiAUDIO_AGC_CONFIG_S { // (sizeof=0x14)
     HI_BOOL bUsrMode;          /* mode 0: auto, mode 1: manual. */
 
     HI_S8 s8TargetLevel;       /* target voltage level, range: [-40, -1]dB */
@@ -317,12 +315,12 @@ typedef enum hiAUDIO_HPF_FREQ_E {
     AUDIO_HPF_FREQ_BUTT,
 } AUDIO_HPF_FREQ_E;
 
-typedef struct hiAUDIO_HPF_CONFIG_S { // sizeof=0x8
+typedef struct hiAUDIO_HPF_CONFIG_S { // (sizeof=0x8)
     HI_BOOL bUsrMode;   /* mode 0: auto mode 1: mannual. */
     AUDIO_HPF_FREQ_E enHpfFreq; /* freq to be processed, value:HiFiVqe/TalkVqe/AoVqe(80Hz,120Hz,150Hz), RecordVqe(80Hz) */
 } AUDIO_HPF_CONFIG_S;
 
-typedef struct hiAI_RNR_CONFIG_S { // sizeof=0x10
+typedef struct hiAI_RNR_CONFIG_S { // (sizeof=0x10)
     HI_BOOL bUsrMode;                /* mode 0: auto, mode 1: mannual. */
 
     HI_S32  s32NrMode;               /* mode 0: floor noise; 1:ambient noise */
@@ -332,7 +330,7 @@ typedef struct hiAI_RNR_CONFIG_S { // sizeof=0x10
     HI_S32  s32NoiseThresh;          /* noise threshold, range:[-80, -20] */
 } AI_RNR_CONFIG_S;
 
-typedef struct hiAUDIO_EQ_CONFIG_S { // sizeof=0x10
+typedef struct hiAUDIO_EQ_CONFIG_S { // (sizeof=0x10)
     HI_S8  s8GaindB[VQE_EQ_BAND_NUM];   /* EQ band, include 100, 200, 250, 350, 500, 800, 1.2k, 2.5k, 4k, 8k in turn,
                                         range:TalkVqe/AoVqe[-100, 20], RecordVqe[-50, 20] */
     HI_S32 s32Reserved;
@@ -356,7 +354,7 @@ typedef enum hiVQE_RECORD_TYPE {
 /* HDR Set CODEC GAIN Function Handle type */
 typedef HI_S32 (*pFuncGainCallBack)(HI_S32 s32SetGain);
 
-typedef struct hiAI_HDR_CONFIG_S { // sizeof=0x18
+typedef struct hiAI_HDR_CONFIG_S { // (sizeof=0x18)
     HI_BOOL bUsrMode;               /* mode 0: auto mode 1: mannual. */
 
     HI_S32 s32MinGaindB;            /* the minimum of MIC(AI) CODEC gain, [0, 120] */
@@ -367,7 +365,7 @@ typedef struct hiAI_HDR_CONFIG_S { // sizeof=0x18
     pFuncGainCallBack pcallback;    /* the callback function pointer of CODEC gain adjustment */
 } AI_HDR_CONFIG_S;
 
-typedef struct hiAI_DRC_CONFIG_S { // sizeof=0x1C
+typedef struct hiAI_DRC_CONFIG_S { // (sizeof=0x1C)
     HI_BOOL bUsrMode;   /* enable user mode or not,default 0: disable user mode,1: user mode. */
 
     HI_S16  s16AttackTime;   /* time of signal change from large to small (ms), range:HiFiVqe[10, 250]ms, RecordVqe[10, 126]ms */
