@@ -28,12 +28,12 @@ HI_BOOL s_ai_init = HI_FALSE;
 
 // ============================================================================
 
+extern HI_S32 HI_UPVQE_GetVolume(HI_VOID* pHandle, HI_S32 *ps32VolumeDb);
+
 // -- file: mpi_vb.c --
 extern HI_S32 HI_MPI_VB_MmapPool(VB_POOL Pool);
 extern HI_S32 HI_MPI_VB_MunmapPool(VB_POOL Pool);
 extern HI_S32 HI_MPI_VB_GetBlockVirAddr(VB_POOL Pool, HI_U64 u64PhyAddr, HI_VOID **ppVirAddr);
-
-extern HI_S32 HI_UPVQE_GetVolume(HI_VOID* pHandle, HI_S32 *ps32VolumeDb);
 
 // ============================================================================
 

@@ -28,7 +28,7 @@ typedef struct hiAI_DEV_INFO_S { // (sizeof=0x1C)
     pthread_mutex_t mutex; // 0x04
 } AI_DEV_INFO_S;
 
-typedef struct hiAI_CHN_CTX_S { // (sizeof=0x108)
+typedef struct hiAI_CHN_CTX_S { // (sizeof=0x84)
     pthread_mutex_t mutex;            // 0x00
     AI_CHN AiChn;                     // 0x18
     HI_U32 field_1C;                  // 0x1C
@@ -40,7 +40,7 @@ typedef struct hiAI_CHN_CTX_S { // (sizeof=0x108)
     HI_U32 field_34;                  // 0x34
     HI_U32 field_38;                  // 0x38
     HI_U32 field_3C;                  // 0x3C
-    HI_U32 field_40;                  // 0x40
+    HI_U32 field_40;                  // 0x40 (assigned 0)
     HI_BOOL bVqeEnabled;              // 0x44
     HI_VOID* pUpvqeHandle;            // 0x48
     HI_BOOL bResmpEnabled;            // 0x4C
@@ -55,7 +55,7 @@ typedef struct hiAI_CHN_CTX_S { // (sizeof=0x108)
     HI_U32 field_70;                  // 0x70
     HI_U8 *pu8CachBuff;               // 0x74 (pointer to memory of size 0x1000)
     HI_BOOL bAecRefFrameEnabled;      // 0x78
-    HI_U32 field_7C;                  // 0x7C
+    HI_U32 field_7C;                  // 0x7C (assigned 0)
     HI_U32 u32FrameCount;             // 0x80
 } AI_CHN_CTX_S;
 
@@ -83,7 +83,7 @@ typedef struct hiAI_RESMP_DBG_INFO_S { // (sizeof=0x10)
 } AI_RESMP_DBG_INFO_S;
 
 typedef struct hiAST_VQE_STATE_S { // (sizeof=0x28)
-    HI_U32 field_0;        // 0x00
+    HI_U32 field_0;        // 0x00 (assigned 0)
     HI_U32 field_4;        // 0x04
     HI_U32 field_8;        // 0x08
     HI_U32 field_C;        // 0x0C

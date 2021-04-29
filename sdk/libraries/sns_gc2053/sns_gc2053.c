@@ -6,16 +6,57 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 
 #include "mpi_ae.h"
 #include "mpi_awb.h"
 #include "mpi_isp.h"
-#include "mpi_errno.h"
 #include "hi_sns_ctrl.h"
+#include "hi_debug.h"
+
+
+HI_VOID cmos_get_inttime_max(VI_PIPE ViPipe, HI_U16 u16ManRatioEnable, HI_U32 *au32Ratio, HI_U32 *au32IntTimeMax, HI_U32 *au32IntTimeMin, HI_U32 *pu32LFMaxIntTime);
+HI_S32 gc2053_set_bus_info(VI_PIPE ViPipe, ISP_SNS_COMMBUS_U unSNSBusInfo);
+HI_S32 cmos_set_image_mode(VI_PIPE ViPipe, ISP_CMOS_SENSOR_IMAGE_MODE_S *pstSensorImageMode);
+HI_VOID cmos_fps_set(VI_PIPE ViPipe, HI_FLOAT f32Fps, AE_SENSOR_DEFAULT_S *pstAeSnsDft);
+inline HI_S32 sensor_ctx_init(VI_PIPE ViPipe);
+HI_S32 sensor_register_callback(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ALG_LIB_S *pstAwbLib);
+HI_S32 cmos_get_sns_regs_info(VI_PIPE ViPipe, ISP_SNS_REGS_INFO_S *pstSnsRegsInfo);
+HI_S32 cmos_get_isp_default(VI_PIPE ViPipe, ISP_CMOS_DEFAULT_S *pstDef);
+HI_S32 cmos_get_awb_default(VI_PIPE ViPipe, AWB_SENSOR_DEFAULT_S *pstAwbSnsDft);
+HI_S32 cmos_get_ae_default(VI_PIPE ViPipe, AE_SENSOR_DEFAULT_S *pstAeSnsDft);
+HI_S32 sensor_set_init(VI_PIPE ViPipe, ISP_INIT_ATTR_S *pstInitAttr);
+HI_VOID cmos_set_pixel_detect(HI_S32 ViPipe, HI_BOOL bEnable);
+HI_S32 cmos_get_isp_black_level(VI_PIPE ViPipe, ISP_CMOS_BLACK_LEVEL_S *pstBlackLevel);
+HI_VOID cmos_ae_fswdr_attr_set(VI_PIPE ViPipe, AE_FSWDR_ATTR_S *pstAeFSWDRAttr);
+HI_VOID cmos_again_calc_table(VI_PIPE ViPipe, HI_U32 *pu32AgainLin, HI_U32 *pu32AgainDb);
+HI_VOID cmos_gains_update(VI_PIPE ViPipe, HI_U32 u32Again, HI_U32 u32Dgain);
+HI_VOID cmos_inttime_update(VI_PIPE ViPipe, HI_U32 u32IntTime);
+HI_VOID cmos_slow_framerate_set(VI_PIPE ViPipe, HI_U32 u32FullLines, AE_SENSOR_DEFAULT_S *pstAeSnsDft);
+HI_S32 sensor_unregister_callback(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ALG_LIB_S *pstAwbLib);
+HI_VOID sensor_global_init(VI_PIPE ViPipe);
+HI_S32 cmos_set_wdr_mode(VI_PIPE ViPipe, HI_U8 u8Mode);
+HI_S32 gc2053_i2c_init(VI_PIPE ViPipe);
+HI_S32 gc2053_i2c_exit(VI_PIPE ViPipe);
+HI_S32 gc2053_read_register(VI_PIPE ViPipe, HI_S32 s32Addr);
+HI_S32 gc2053_write_register(VI_PIPE ViPipe, HI_S32 s32Addr, HI_S32 s32Data);
+HI_VOID gc2053_standby(VI_PIPE ViPipe);
+HI_VOID gc2053_restart(VI_PIPE ViPipe);
+HI_VOID gc2053_mirror_flip(VI_PIPE ViPipe, ISP_SNS_MIRRORFLIP_TYPE_E enFlipType);
+HI_VOID gc2053_exit(VI_PIPE ViPipe);
+HI_S32 gc2053_linear_1080p30_init(VI_PIPE ViPipe);
+HI_VOID gc2053_init(VI_PIPE ViPipe);
+
+
+#define VI_PIPE_SIZE 4
+#define HI_TRACE_SNS(fmt, ...)                                                                                     \
+    do {                                                                                                           \
+        HI_TRACE(HI_DBG_ERR, HI_ID_ISP, "[Func]:%s [Line]:%d [Info]:" fmt, __FUNCTION__, __LINE__, ##__VA_ARGS__); \
+    } while (0)
 
 typedef struct HiGC2053_S {
     HI_U32 field_0;                      // likely bEnabled
-    HI_U32 field_4;                      //
+    HI_BOOL field_4;                     //
     HI_U8 u8SensorMode;                  // [field_8]
     HI_U8 field_9;                       //
     HI_U8 field_A;                       //
@@ -34,8 +75,9 @@ typedef struct HiGC2053_S {
     HI_U32 field_878;                    //
 } GC2053_S;
 
-HI_U8 g_aunGc2053BusInfo[4];
-GC2053_S* g_pastGc2053[4];
+ISP_SNS_COMMBUS_U g_aunGc2053BusInfo[VI_PIPE_SIZE];
+GC2053_S* g_pastGc2053[VI_PIPE_SIZE];
+
 AWB_AGC_TABLE_S g_stAwbAgcTable = {
     .bValid = HI_TRUE,
     .au8Saturation = {
@@ -157,12 +199,12 @@ HI_U16 g_stDngColorParam[] = {
     0x1B7, 0x100, 0x1B7
 };
 
-HI_U16 g_au16InitCCM[36];
-HI_U16 g_au16InitWBGain[12];
-HI_U16 g_au16SampleRgain[4];
-HI_U16 g_au16SampleBgain[4];
-HI_U32 g_au32LinesPer500ms[4];
-HI_U32 g_au32InitExposure[4];
+HI_U16 g_au16InitCCM[9 * VI_PIPE_SIZE]; // 36
+HI_U16 g_au16InitWBGain[3 * VI_PIPE_SIZE]; // 12
+HI_U16 g_au16SampleRgain[VI_PIPE_SIZE];
+HI_U16 g_au16SampleBgain[VI_PIPE_SIZE];
+HI_U32 g_au32LinesPer500ms[VI_PIPE_SIZE];
+HI_U32 g_au32InitExposure[VI_PIPE_SIZE];
 
 HI_U32 analog_gain_table[29] = {
     0x00400, 0x004CE, 0x05A0, 0x006C2, 0x007F0, 0x0094C, 0x00B40,
@@ -211,35 +253,45 @@ ISP_CMOS_PREGAMMA_S g_stPreGamma;                // 0xd93c
 
 HI_U32 g_fd[4];
 
+ISP_SNS_OBJ_S stSnsGc2053Obj = {
+    .pfnRegisterCallback    = sensor_register_callback,
+    .pfnUnRegisterCallback  = sensor_unregister_callback,
+    .pfnSetBusInfo          = gc2053_set_bus_info,
+    .pfnSetBusExInfo        = HI_NULL,
+    .pfnStandby             = gc2053_standby,
+    .pfnRestart             = gc2053_restart,
+    .pfnMirrorFlip          = gc2053_mirror_flip,
+    .pfnWriteReg            = gc2053_write_register,
+    .pfnReadReg             = gc2053_read_register,
+    .pfnSetInit             = sensor_set_init
+};
+
 extern HI_U8  gc2053_i2c_addr;
 extern HI_U32 gc2053_addr_byte;
 extern HI_U32 gc2053_data_byte;
+
 
 HI_VOID
 cmos_get_inttime_max(VI_PIPE ViPipe, HI_U16 u16ManRatioEnable, HI_U32 *au32Ratio, HI_U32 *au32IntTimeMax, HI_U32 *au32IntTimeMin, HI_U32 *pu32LFMaxIntTime)
 {}
 
 HI_S32
-gc2053_set_bus_info(VI_PIPE ViPipe, HI_U8 info)
+gc2053_set_bus_info(VI_PIPE ViPipe, ISP_SNS_COMMBUS_U unSNSBusInfo)
 {
-    g_aunGc2053BusInfo[ViPipe] = info;
-    return 0;
+    g_aunGc2053BusInfo[ViPipe] = unSNSBusInfo;
+    return HI_SUCCESS;
 }
 
 HI_S32
 cmos_set_image_mode(VI_PIPE ViPipe, ISP_CMOS_SENSOR_IMAGE_MODE_S *pstSensorImageMode)
 {
     if ( pstSensorImageMode == HI_NULL || g_pastGc2053[ViPipe] == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
-        return ERR_ISP_NULL_PTR;
+        HI_TRACE_SNS("Null Pointer!\n");
+        return HI_ERR_ISP_NULL_PTR;
     }
 
     if ( pstSensorImageMode->u16Width > 1920 || pstSensorImageMode->u16Height > 1080 ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:Not support! Width:%d, Height:%d, Fps:%f\n",
-            __FUNCTION__,
-            __LINE__,
+        HI_TRACE_SNS("Not support! Width:%d, Height:%d, Fps:%f\n",
             pstSensorImageMode->u16Width,
             pstSensorImageMode->u16Height,
             pstSensorImageMode->f32Fps);
@@ -247,29 +299,24 @@ cmos_set_image_mode(VI_PIPE ViPipe, ISP_CMOS_SENSOR_IMAGE_MODE_S *pstSensorImage
     }
 
     if ( pstSensorImageMode->f32Fps > 30.0 ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:Not support! Width:%d, Height:%d, Fps:%f\n",
-            __FUNCTION__,
-            __LINE__,
+        HI_TRACE_SNS("Not support! Width:%d, Height:%d, Fps:%f\n",
             pstSensorImageMode->u16Width,
             pstSensorImageMode->u16Height,
             pstSensorImageMode->f32Fps);
         return HI_FAILURE;
     }
 
-    g_pastGc2053[ViPipe]->field_4         = 0;
+    g_pastGc2053[ViPipe]->field_4         = HI_FALSE;
     g_pastGc2053[ViPipe]->u32FullLinesStd = 1125;
 
     if ((g_pastGc2053[ViPipe]->field_0 == 1) &&
         (g_pastGc2053[ViPipe]->u8SensorMode == 0))
         return -2;
-    else {
-        g_pastGc2053[ViPipe]->u8SensorMode = 0;
-        g_pastGc2053[ViPipe]->u32FullLines = 1125;
-        g_pastGc2053[ViPipe]->field_854    = 1125;
-        return HI_SUCCESS;
-    }
+
+    g_pastGc2053[ViPipe]->u8SensorMode = 0;
+    g_pastGc2053[ViPipe]->u32FullLines = 1125;
+    g_pastGc2053[ViPipe]->field_854    = 1125;
+    return HI_SUCCESS;
 }
 
 HI_VOID
@@ -281,7 +328,7 @@ cmos_fps_set(VI_PIPE ViPipe, HI_FLOAT f32Fps, AE_SENSOR_DEFAULT_S *pstAeSnsDft)
     HI_U32 u32DataB;
 
     if ( pstAeSnsDft == HI_NULL || g_pastGc2053[ViPipe] == HI_NULL )
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
+        HI_TRACE_SNS("Null Pointer!\n");
 
     if ( g_pastGc2053[ViPipe]->u8SensorMode ) {
         u32MaxIntTime   = 1123;
@@ -291,7 +338,7 @@ cmos_fps_set(VI_PIPE ViPipe, HI_FLOAT f32Fps, AE_SENSOR_DEFAULT_S *pstAeSnsDft)
     }
     else {
         if ( f32Fps > 30.0 || f32Fps <= 2.06 ) {
-            fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Not support Fps: %f\n", __FUNCTION__, __LINE__, f32Fps);
+            HI_TRACE_SNS("Not support Fps: %f\n", f32Fps);
             return;
         }
 
@@ -329,16 +376,12 @@ cmos_fps_set(VI_PIPE ViPipe, HI_FLOAT f32Fps, AE_SENSOR_DEFAULT_S *pstAeSnsDft)
 inline HI_S32
 sensor_ctx_init(VI_PIPE ViPipe)
 {
-    if ( g_pastGc2053[ViPipe] )
+    if ( g_pastGc2053[ViPipe] != HI_NULL )
         return HI_SUCCESS;
 
-    if ( (g_pastGc2053[ViPipe] = (GC2053_S *)malloc(sizeof(GC2053_S))) == HI_NULL ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:Isp[%d] SnsCtx malloc memory failed!\n",
-            __FUNCTION__,
-            __LINE__,
-            ViPipe);
+    g_pastGc2053[ViPipe] = (GC2053_S *)malloc(sizeof(GC2053_S));
+    if ( g_pastGc2053[ViPipe] == HI_NULL ) {
+        HI_TRACE_SNS("Isp[%d] SnsCtx malloc memory failed!\n", ViPipe);
         return HI_FAILURE;
     }
 
@@ -355,8 +398,8 @@ sensor_register_callback(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ALG_LIB_S *pstAwbL
     ISP_SENSOR_REGISTER_S pstIspRegister;
 
     if ( pstAeLib == HI_NULL || pstAwbLib == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
-        return ERR_ISP_NULL_PTR;
+        HI_TRACE_SNS("Null Pointer!\n");
+        return HI_ERR_ISP_NULL_PTR;
     }
 
     result = sensor_ctx_init(ViPipe);
@@ -378,11 +421,7 @@ sensor_register_callback(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ALG_LIB_S *pstAwbL
 
     result = HI_MPI_ISP_SensorRegCallBack(ViPipe, &pstSnsAttrInfo, &pstIspRegister);
     if ( result != HI_SUCCESS ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:sensor register callback function failed!\n",
-            __FUNCTION__,
-            __LINE__);
+        HI_TRACE_SNS("sensor register callback function failed!\n");
         return result;
     }
 
@@ -397,12 +436,8 @@ sensor_register_callback(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ALG_LIB_S *pstAwbL
     pstAeRegister.stSnsExp.pfn_cmos_ae_fswdr_attr_set  = cmos_ae_fswdr_attr_set;
 
     result = HI_MPI_AE_SensorRegCallBack(ViPipe, pstAeLib, &pstSnsAttrInfo, &pstAeRegister);
-    if ( result ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:sensor register callback function to ae lib failed!\n",
-            __FUNCTION__,
-            __LINE__);
+    if ( result != HI_SUCCESS ) {
+        HI_TRACE_SNS("sensor register callback function to ae lib failed!\n");
         return result;
     }
 
@@ -410,13 +445,12 @@ sensor_register_callback(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ALG_LIB_S *pstAwbL
     pstAwbRegister.stSnsExp.pfn_cmos_get_awb_default      = cmos_get_awb_default;
 
     result = HI_MPI_AWB_SensorRegCallBack(ViPipe, pstAwbLib, &pstSnsAttrInfo, &pstAwbRegister);
-    if ( result )
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:sensor register callback function to awb lib failed!\n",
-            __FUNCTION__,
-            __LINE__);
-    return result;
+    if ( result != HI_SUCCESS ) {
+        HI_TRACE_SNS("sensor register callback function to awb lib failed!\n");
+        return result;
+    }
+
+    return HI_SUCCESS;
 }
 
 HI_S32
@@ -425,8 +459,8 @@ cmos_get_sns_regs_info(VI_PIPE ViPipe, ISP_SNS_REGS_INFO_S *pstSnsRegsInfo)
     HI_S32 result, i;
 
     if ( pstSnsRegsInfo == HI_NULL || g_pastGc2053[ViPipe] == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
-        return ERR_ISP_NULL_PTR;
+        HI_TRACE_SNS("Null Pointer!\n");
+        return HI_ERR_ISP_NULL_PTR;
     }
 
     if ( g_pastGc2053[ViPipe]->field_4 && pstSnsRegsInfo->bConfig ) {
@@ -449,7 +483,7 @@ cmos_get_sns_regs_info(VI_PIPE ViPipe, ISP_SNS_REGS_INFO_S *pstSnsRegsInfo)
     }
     else {
         g_pastGc2053[ViPipe]->stIspRegsInfo_A.enSnsType           = ISP_SNS_I2C_TYPE;
-        g_pastGc2053[ViPipe]->stIspRegsInfo_A.unComBus.s8I2cDev   = g_aunGc2053BusInfo[ViPipe];
+        g_pastGc2053[ViPipe]->stIspRegsInfo_A.unComBus.s8I2cDev   = g_aunGc2053BusInfo[ViPipe].s8I2cDev;
         g_pastGc2053[ViPipe]->stIspRegsInfo_A.u8Cfg2ValidDelayMax = 3;
         g_pastGc2053[ViPipe]->stIspRegsInfo_A.u32RegNum           = 11;
 
@@ -460,7 +494,7 @@ cmos_get_sns_regs_info(VI_PIPE ViPipe, ISP_SNS_REGS_INFO_S *pstSnsRegsInfo)
             g_pastGc2053[ViPipe]->stIspRegsInfo_A.astI2cData[i].u32DataByteNum = gc2053_data_byte;
         }
 
-        g_pastGc2053[ViPipe]->field_4 = 1;
+        g_pastGc2053[ViPipe]->field_4 = HI_TRUE;
 
         g_pastGc2053[ViPipe]->stIspRegsInfo_A.astI2cData[0].u8DelayFrmNum  = 1;
         g_pastGc2053[ViPipe]->stIspRegsInfo_A.astI2cData[1].u8DelayFrmNum  = 1;
@@ -499,8 +533,8 @@ HI_S32
 cmos_get_isp_default(VI_PIPE ViPipe, ISP_CMOS_DEFAULT_S *pstDef)
 {
     if ( pstDef == HI_NULL || g_pastGc2053[ViPipe] == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
-        return ERR_ISP_NULL_PTR;
+        HI_TRACE_SNS("Null Pointer!\n");
+        return HI_ERR_ISP_NULL_PTR;
     }
 
     memset(pstDef, 0, sizeof(ISP_CMOS_DEFAULT_S));
@@ -564,8 +598,8 @@ cmos_get_awb_default(VI_PIPE ViPipe, AWB_SENSOR_DEFAULT_S *pstAwbSnsDft)
     HI_S32 i;
 
     if ( pstAwbSnsDft == HI_NULL || g_pastGc2053[ViPipe] == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
-        return ERR_ISP_NULL_PTR;
+        HI_TRACE_SNS("Null Pointer!\n");
+        return HI_ERR_ISP_NULL_PTR;
     }
 
     memset(pstAwbSnsDft, 0, sizeof(AWB_SENSOR_DEFAULT_S));
@@ -607,8 +641,8 @@ cmos_get_ae_default(VI_PIPE ViPipe, AE_SENSOR_DEFAULT_S *pstAeSnsDft)
     HI_U32 u32InitExposure;
 
     if ( pstAeSnsDft == HI_NULL || g_pastGc2053[ViPipe] == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
-        return ERR_ISP_NULL_PTR;
+        HI_TRACE_SNS("Null Pointer!\n");
+        return HI_ERR_ISP_NULL_PTR;
     }
 
     memset(&pstAeSnsDft->stAERouteAttr, 0, sizeof(pstAeSnsDft->stAERouteAttr));
@@ -672,26 +706,26 @@ cmos_get_ae_default(VI_PIPE ViPipe, AE_SENSOR_DEFAULT_S *pstAeSnsDft)
     return HI_SUCCESS;
 }
 
-HI_S32 // TODO: au16Param is actually a struct
-sensor_set_init(VI_PIPE ViPipe, HI_U16 *au16Param)
+HI_S32
+sensor_set_init(VI_PIPE ViPipe, ISP_INIT_ATTR_S *pstInitAttr)
 {
     HI_S32 i;
 
-    if ( au16Param == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
-        return ERR_ISP_NULL_PTR;
+    if ( pstInitAttr == HI_NULL ) {
+        HI_TRACE_SNS("Null Pointer!\n");
+        return HI_ERR_ISP_NULL_PTR;
     }
 
-    g_au16InitWBGain[3 * ViPipe + 0] = au16Param[14];
-    g_au16InitWBGain[3 * ViPipe + 1] = au16Param[15];
-    g_au16InitWBGain[3 * ViPipe + 2] = au16Param[16];
-    g_au16SampleRgain[ViPipe]        = au16Param[17];
-    g_au16SampleBgain[ViPipe]        = au16Param[18];
-    g_au32InitExposure[ViPipe]       = *((HI_U32 *)au16Param + 4);
-    g_au32LinesPer500ms[ViPipe]      = *((HI_U32 *)au16Param + 5);
+    g_au16InitWBGain[3 * ViPipe + 0] = pstInitAttr->u16WBRgain;
+    g_au16InitWBGain[3 * ViPipe + 1] = pstInitAttr->u16WBGgain;
+    g_au16InitWBGain[3 * ViPipe + 2] = pstInitAttr->u16WBBgain;
+    g_au16SampleRgain[ViPipe]        = pstInitAttr->u16SampleRgain;
+    g_au16SampleBgain[ViPipe]        = pstInitAttr->u16SampleBgain;
+    g_au32InitExposure[ViPipe]       = pstInitAttr->u32Exposure;
+    g_au32LinesPer500ms[ViPipe]      = pstInitAttr->u32LinesPer500ms;
 
-    for (i = 0; i < 9; i++)
-        g_au16InitCCM[9 * ViPipe + i] = au16Param[19 + i];
+    for (i = 0; i < CCM_MATRIX_SIZE; i++)
+        g_au16InitCCM[9 * ViPipe + i] = pstInitAttr->au16CCM[i];
 
     return HI_SUCCESS;
 }
@@ -700,15 +734,15 @@ HI_VOID
 cmos_set_pixel_detect(HI_S32 ViPipe, HI_BOOL bEnable)
 {
     if ( g_pastGc2053[ViPipe] == HI_NULL )
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
+        HI_TRACE_SNS("Null Pointer!\n");
 }
 
 HI_S32
 cmos_get_isp_black_level(VI_PIPE ViPipe, ISP_CMOS_BLACK_LEVEL_S *pstBlackLevel)
 {
     if ( pstBlackLevel == HI_NULL || g_pastGc2053[ViPipe] ) {
-        fprintf((FILE *)stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", "cmos_get_isp_black_level", 555);
-        return ERR_ISP_NULL_PTR;
+        HI_TRACE_SNS("Null Pointer!\n");
+        return HI_ERR_ISP_NULL_PTR;
     }
 
     pstBlackLevel->bUpdate           = HI_FALSE;
@@ -724,7 +758,7 @@ HI_VOID
 cmos_ae_fswdr_attr_set(VI_PIPE ViPipe, AE_FSWDR_ATTR_S *pstAeFSWDRAttr)
 {
     if ( pstAeFSWDRAttr == HI_NULL )
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
+        HI_TRACE_SNS("Null Pointer!\n");
 }
 
 HI_VOID
@@ -733,7 +767,7 @@ cmos_again_calc_table(VI_PIPE ViPipe, HI_U32 *pu32AgainLin, HI_U32 *pu32AgainDb)
     HI_U32 i, j;
 
     if ( pu32AgainLin == HI_NULL || pu32AgainDb == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
+        HI_TRACE_SNS("Null Pointer!\n");
         return;
     }
 
@@ -758,7 +792,7 @@ HI_VOID
 cmos_gains_update(VI_PIPE ViPipe, HI_U32 u32Again, HI_U32 u32Dgain)
 {
     if ( g_pastGc2053[ViPipe] == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
+        HI_TRACE_SNS("Null Pointer!\n");
         return;
     }
 
@@ -774,7 +808,7 @@ HI_VOID
 cmos_inttime_update(VI_PIPE ViPipe, HI_U32 u32IntTime)
 {
     if ( g_pastGc2053[ViPipe] == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
+        HI_TRACE_SNS("Null Pointer!\n");
         return;
     }
 
@@ -789,7 +823,7 @@ HI_VOID
 cmos_slow_framerate_set(VI_PIPE ViPipe, HI_U32 u32FullLines, AE_SENSOR_DEFAULT_S *pstAeSnsDft)
 {
     if ( pstAeSnsDft == HI_NULL || g_pastGc2053[ViPipe] == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
+        HI_TRACE_SNS("Null Pointer!\n");
         return;
     }
 
@@ -811,37 +845,25 @@ sensor_unregister_callback(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ALG_LIB_S *pstAw
     HI_S32 result;
 
     if ( pstAeLib == HI_NULL || pstAwbLib == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
-        return ERR_ISP_NULL_PTR;
+        HI_TRACE_SNS("Null Pointer!\n");
+        return HI_ERR_ISP_NULL_PTR;
     }
 
     result = HI_MPI_ISP_SensorUnRegCallBack(ViPipe, 2053);
-    if ( result ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:sensor unregister callback function failed!\n",
-            __FUNCTION__,
-            __LINE__);
+    if ( result != HI_SUCCESS ) {
+        HI_TRACE_SNS("sensor unregister callback function failed!\n");
         return result;
     }
 
     result = HI_MPI_AE_SensorUnRegCallBack(ViPipe, pstAeLib, 2053);
-    if ( result ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:sensor unregister callback function to ae lib failed!\n",
-            __FUNCTION__,
-            __LINE__);
+    if ( result != HI_SUCCESS ) {
+        HI_TRACE_SNS("sensor unregister callback function to ae lib failed!\n");
         return result;
     }
 
     result = HI_MPI_AWB_SensorUnRegCallBack(ViPipe, pstAwbLib, 2053);
-    if ( result ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:sensor unregister callback function to awb lib failed!\n",
-            __FUNCTION__,
-            __LINE__);
+    if ( result != HI_SUCCESS ) {
+        HI_TRACE_SNS("sensor unregister callback function to awb lib failed!\n");
         return result;
     }
 
@@ -856,12 +878,12 @@ HI_VOID
 sensor_global_init(VI_PIPE ViPipe)
 {
     if ( g_pastGc2053[ViPipe] == HI_NULL ) {
-        fprintf((FILE *)stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
+        HI_TRACE_SNS("Null Pointer!\n");
         return;
     }
 
     g_pastGc2053[ViPipe]->field_0         = 0;
-    g_pastGc2053[ViPipe]->field_4         = 0;
+    g_pastGc2053[ViPipe]->field_4         = HI_FALSE;
     g_pastGc2053[ViPipe]->field_C         = 0;
     g_pastGc2053[ViPipe]->u8SensorMode    = 0;
     g_pastGc2053[ViPipe]->u32FullLinesStd = 0x465;
@@ -876,22 +898,18 @@ HI_S32
 cmos_set_wdr_mode(VI_PIPE ViPipe, HI_U8 u8Mode)
 {
     if ( g_pastGc2053[ViPipe] == HI_NULL ) {
-        fprintf(stderr, "[Func]:%s [Line]:%d [Info]:Null Pointer!\n", __FUNCTION__, __LINE__);
-        return ERR_ISP_NULL_PTR;
+        HI_TRACE_SNS("Null Pointer!\n");
+        return HI_ERR_ISP_NULL_PTR;
     }
 
-    g_pastGc2053[ViPipe]->field_4 = 0;
+    g_pastGc2053[ViPipe]->field_4 = HI_FALSE;
     if ( u8Mode ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:cmos_set_wdr_mode_NOT support this mode!\n",
-            __FUNCTION__,
-            __LINE__);
+        HI_TRACE_SNS("cmos_set_wdr_mode_NOT support this mode!\n");
         return HI_FAILURE;
     }
 
     g_pastGc2053[ViPipe]->stIspRegsInfo_B.astI2cData[16];
-    g_pastGc2053[ViPipe]->field_C = 0;
+    g_pastGc2053[ViPipe]->field_C   = 0;
     g_pastGc2053[ViPipe]->field_85C = 0;
     g_pastGc2053[ViPipe]->field_864 = 0;
 
@@ -909,26 +927,19 @@ gc2053_i2c_init(VI_PIPE ViPipe)
     if ( g_fd[ViPipe] >= 0 )
         return HI_SUCCESS;
 
-    snprintf(filename, 16, "/dev/i2c-%u", g_aunGc2053BusInfo[ViPipe]);
+    snprintf(filename, 16, "/dev/i2c-%u",
+        g_aunGc2053BusInfo[ViPipe].s8I2cDev);
     g_fd[ViPipe] = open(filename, O_RDWR, S_IXUSR | S_IRGRP);
 
     if ( g_fd[ViPipe] < 0 ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:Open /dev/hi_i2c_drv-%u error!\n",
-            __FUNCTION__,
-            __LINE__,
-            g_aunGc2053BusInfo[ViPipe]);
+        HI_TRACE_SNS("Open /dev/hi_i2c_drv-%u error!\n",
+            g_aunGc2053BusInfo[ViPipe].s8I2cDev);
         return HI_FAILURE;
     }
 
     result = ioctl(g_fd[ViPipe], 0x706u, 55);
-    if (result < 0) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:I2C_SLAVE_FORCE error!\n",
-            __FUNCTION__,
-            __LINE__);
+    if ( result < HI_SUCCESS ) {
+        HI_TRACE_SNS("I2C_SLAVE_FORCE error!\n");
         close(g_fd[ViPipe]);
         g_fd[ViPipe] = -1;
         return result;
@@ -940,55 +951,50 @@ gc2053_i2c_init(VI_PIPE ViPipe)
 HI_S32
 gc2053_i2c_exit(VI_PIPE ViPipe)
 {
-    if ( g_fd[ViPipe] < 0 )
-        return HI_FAILURE;
+    if ( g_fd[ViPipe] < 0 ) return HI_FAILURE;
     close(g_fd[ViPipe]);
     g_fd[ViPipe] = -1;
     return HI_SUCCESS;
 }
 
 HI_S32
-gc2053_read_register(VI_PIPE ViPipe, HI_U8 u8Addr)
+gc2053_read_register(VI_PIPE ViPipe, HI_S32 s32Addr)
 { return HI_SUCCESS; }
 
 HI_S32
-gc2053_write_register(VI_PIPE ViPipe, HI_U8 u8Addr, HI_U8 u8Data)
+gc2053_write_register(VI_PIPE ViPipe, HI_S32 s32Addr, HI_S32 s32Data)
 {
     HI_CHAR buf[2];
 
     if ( g_fd[ViPipe] < 0 )
         return HI_SUCCESS;
 
-    buf[0] = u8Addr;
-    buf[1] = u8Data;
+    buf[0] = (HI_CHAR)s32Addr;
+    buf[1] = (HI_CHAR)s32Data;
 
     if ( write(g_fd[ViPipe], buf, 2u) < 0 ) {
-        fprintf(
-            stderr,
-            "[Func]:%s [Line]:%d [Info]:I2C_WRITE error!\n",
-            __FUNCTION__,
-            __LINE__);
+        HI_TRACE_SNS("I2C_WRITE error!\n");
         return HI_FAILURE;
     }
 
     return HI_SUCCESS;
 }
 
-HI_S32
+HI_VOID
 gc2053_standby(VI_PIPE ViPipe)
 {
     gc2053_write_register(ViPipe, 0xF2u, 0x01u);
-    return gc2053_write_register(ViPipe, 0xFCu, 0x8Fu);
+    gc2053_write_register(ViPipe, 0xFCu, 0x8Fu);
 }
 
-HI_S32
+HI_VOID
 gc2053_restart(VI_PIPE ViPipe)
 {
     gc2053_write_register(ViPipe, 0xF2u, 0);
-    return gc2053_write_register(ViPipe, 0xFCu, 0x8Eu);
+    gc2053_write_register(ViPipe, 0xFCu, 0x8Eu);
 }
 
-HI_S32
+HI_VOID
 gc2053_mirror_flip(VI_PIPE ViPipe, ISP_SNS_MIRRORFLIP_TYPE_E enFlipType)
 {
     HI_U8 u8Data;
@@ -1000,12 +1006,12 @@ gc2053_mirror_flip(VI_PIPE ViPipe, ISP_SNS_MIRRORFLIP_TYPE_E enFlipType)
     default:                  u8Data = 0x80; break;
     }
 
-    return gc2053_write_register(ViPipe, 0x17u, u8Data);
+    gc2053_write_register(ViPipe, 0x17u, u8Data);
 }
 
-HI_S32
+HI_VOID
 gc2053_exit(VI_PIPE ViPipe)
-{ return gc2053_i2c_exit(ViPipe); }
+{ gc2053_i2c_exit(ViPipe); }
 
 HI_S32
 gc2053_linear_1080p30_init(VI_PIPE ViPipe)
@@ -1093,7 +1099,7 @@ gc2053_linear_1080p30_init(VI_PIPE ViPipe)
     return puts("=== Galaxycore GC2053_1080P_30FPS_10BIT_LINE_Init_OK!===");
 }
 
-HI_S32
+HI_VOID
 gc2053_init(VI_PIPE ViPipe)
 {
     HI_S32 i;
@@ -1117,5 +1123,5 @@ gc2053_init(VI_PIPE ViPipe)
     }
 
     g_pastGc2053[ViPipe]->field_0 = 1;
-    return puts("GC2053 init succuss!");
+    puts("GC2053 init succuss!");
 }
