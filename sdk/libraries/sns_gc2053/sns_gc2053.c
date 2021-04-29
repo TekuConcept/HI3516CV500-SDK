@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 
@@ -166,7 +167,7 @@ HI_U32 regValTable[116] = {
     0x00, 0xCE, 0x3F, 0x3F
 };
 
-HI_U32 g_fd[4] = { -1, -1, -1, -1 };
+HI_S32 g_fd[4] = { -1, -1, -1, -1 };
 
 ISP_SNS_OBJ_S stSnsGc2053Obj = {
     .pfnRegisterCallback    = sensor_register_callback,
@@ -181,18 +182,20 @@ ISP_SNS_OBJ_S stSnsGc2053Obj = {
     .pfnSetInit             = sensor_set_init
 };
 
-HI_CHAR gc2053_i2c_addr = 0x6E;
+HI_CHAR gc2053_i2c_addr = 0x6E; // 'n'
 HI_S32 gc2053_addr_byte = 1;
 HI_S32 gc2053_data_byte = 1;
 
-HI_U16 g_au16InitCCM[9 * VI_PIPE_SIZE]; // 36
-HI_U16 g_au16InitWBGain[3 * VI_PIPE_SIZE]; // 12
-HI_U16 g_au16SampleRgain[VI_PIPE_SIZE];
-HI_U16 g_au16SampleBgain[VI_PIPE_SIZE];
-HI_U32 g_au32LinesPer500ms[VI_PIPE_SIZE];
-HI_U32 g_au32InitExposure[VI_PIPE_SIZE];
+HI_U16 g_au16InitCCM[9 * VI_PIPE_SIZE] = {0}; // 36
+HI_U16 g_au16InitWBGain[3 * VI_PIPE_SIZE] = {0}; // 12
+HI_U16 g_au16SampleRgain[VI_PIPE_SIZE] = {0};
+HI_U16 g_au16SampleBgain[VI_PIPE_SIZE] = {0};
+HI_U32 g_au32LinesPer500ms[VI_PIPE_SIZE] = {0};
+HI_U32 g_au32InitExposure[VI_PIPE_SIZE] = {0};
 
-GC2053_S* g_pastGc2053[VI_PIPE_SIZE];
+GC2053_S* g_pastGc2053[VI_PIPE_SIZE] = {
+    HI_NULL, HI_NULL, HI_NULL, HI_NULL
+};
 
 
 HI_VOID
@@ -233,7 +236,7 @@ cmos_set_image_mode(VI_PIPE ViPipe, ISP_CMOS_SENSOR_IMAGE_MODE_S *pstSensorImage
     g_pastGc2053[ViPipe]->field_4         = HI_FALSE;
     g_pastGc2053[ViPipe]->u32FullLinesStd = 0x465;
 
-    if ((g_pastGc2053[ViPipe]->bEnabled == HI_TRUE) &&
+    if ((g_pastGc2053[ViPipe]->bEnabled) &&
         (g_pastGc2053[ViPipe]->u8SensorMode == 0))
         return -2;
 
@@ -309,6 +312,7 @@ sensor_ctx_init(VI_PIPE ViPipe)
         return HI_FAILURE;
     }
 
+    memset(g_pastGc2053[ViPipe], 0, sizeof(GC2053_S));
     return HI_SUCCESS;
 }
 
@@ -328,8 +332,6 @@ sensor_register_callback(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ALG_LIB_S *pstAwbL
 
     result = sensor_ctx_init(ViPipe);
     if (result != HI_SUCCESS) return result;
-
-    memset(g_pastGc2053[ViPipe], 0, sizeof(GC2053_S));
 
     pstSnsAttrInfo.eSensorId                             = 2053;
     pstIspRegister.stSnsExp.pfn_cmos_get_awb_gains       = HI_NULL;
@@ -670,7 +672,7 @@ cmos_set_pixel_detect(HI_S32 ViPipe, HI_BOOL bEnable)
 HI_S32
 cmos_get_isp_black_level(VI_PIPE ViPipe, ISP_CMOS_BLACK_LEVEL_S *pstBlackLevel)
 {
-    if ( pstBlackLevel == HI_NULL || g_pastGc2053[ViPipe] ) {
+    if ( pstBlackLevel == HI_NULL || g_pastGc2053[ViPipe] == HI_NULL ) {
         HI_TRACE_SNS("Null Pointer!\n");
         return HI_ERR_ISP_NULL_PTR;
     }
@@ -851,7 +853,7 @@ cmos_set_wdr_mode(VI_PIPE ViPipe, HI_U8 u8Mode)
 HI_S32
 gc2053_i2c_init(VI_PIPE ViPipe)
 {
-    HI_S32 result;
+    HI_S32 result, i;
     HI_CHAR filename[16] = { 0 };
 
     if ( g_fd[ViPipe] >= 0 )
@@ -867,7 +869,7 @@ gc2053_i2c_init(VI_PIPE ViPipe)
         return HI_FAILURE;
     }
 
-    result = ioctl(g_fd[ViPipe], 0x706u, 55);
+    result = ioctl(g_fd[ViPipe], 0x706u, 0x37);
     if ( result < HI_SUCCESS ) {
         HI_TRACE_SNS("I2C_SLAVE_FORCE error!\n");
         close(g_fd[ViPipe]);
@@ -894,6 +896,7 @@ gc2053_read_register(VI_PIPE ViPipe, HI_S32 s32Addr)
 HI_S32
 gc2053_write_register(VI_PIPE ViPipe, HI_S32 s32Addr, HI_S32 s32Data)
 {
+    HI_S32 result;
     HI_CHAR buf[2];
 
     if ( g_fd[ViPipe] < 0 )
@@ -902,8 +905,10 @@ gc2053_write_register(VI_PIPE ViPipe, HI_S32 s32Addr, HI_S32 s32Data)
     buf[0] = (HI_CHAR)s32Addr;
     buf[1] = (HI_CHAR)s32Data;
 
-    if ( write(g_fd[ViPipe], buf, 2u) < 0 ) {
-        HI_TRACE_SNS("I2C_WRITE error!\n");
+    result = write(g_fd[ViPipe], buf, 2u);
+    if ( result < 0 ) {
+        HI_TRACE_SNS("I2C_WRITE error! [%d, 0x%x, 0x%x](%d)\n",
+            g_fd[ViPipe], buf[0], buf[1], errno);
         return HI_FAILURE;
     }
 
@@ -946,85 +951,85 @@ gc2053_exit(VI_PIPE ViPipe)
 HI_VOID
 gc2053_linear_1080p30_init(VI_PIPE ViPipe)
 {
-    gc2053_write_register(ViPipe, 0xFEu, 0x80u);
-    gc2053_write_register(ViPipe, 0xFEu, 0x80u);
-    gc2053_write_register(ViPipe, 0xFEu, 0x80u);
-    gc2053_write_register(ViPipe, 0xFEu, 0x00u);
-    gc2053_write_register(ViPipe, 0xF2u, 0x00u);
-    gc2053_write_register(ViPipe, 0xF3u, 0x00u);
-    gc2053_write_register(ViPipe, 0xF4u, 0x36u);
-    gc2053_write_register(ViPipe, 0xF5u, 0xC0u);
-    gc2053_write_register(ViPipe, 0xF6u, 0x44u);
-    gc2053_write_register(ViPipe, 0xF7u, 0x01u);
-    gc2053_write_register(ViPipe, 0xF8u, 0x2Cu);
-    gc2053_write_register(ViPipe, 0xF9u, 0x42u);
-    gc2053_write_register(ViPipe, 0xFCu, 0x8Eu);
-    gc2053_write_register(ViPipe, 0xFEu, 0x00u);
-    gc2053_write_register(ViPipe, 0x87u, 0x18u);
-    gc2053_write_register(ViPipe, 0xEEu, 0x30u);
-    gc2053_write_register(ViPipe, 0xD0u, 0xB7u);
-    gc2053_write_register(ViPipe, 0x03u, 0x04u);
-    gc2053_write_register(ViPipe, 0x04u, 0x60u);
-    gc2053_write_register(ViPipe, 0x05u, 0x04u);
-    gc2053_write_register(ViPipe, 0x06u, 0x4Cu);
-    gc2053_write_register(ViPipe, 0x07u, 0x00u);
-    gc2053_write_register(ViPipe, 0x08u, 0x11u);
-    gc2053_write_register(ViPipe, 0x0Au, 0x02u);
-    gc2053_write_register(ViPipe, 0x0Cu, 0x02u);
-    gc2053_write_register(ViPipe, 0x0Du, 0x04u);
-    gc2053_write_register(ViPipe, 0x0Eu, 0x40u);
-    gc2053_write_register(ViPipe, 0x12u, 0xE2u);
-    gc2053_write_register(ViPipe, 0x13u, 0x16u);
-    gc2053_write_register(ViPipe, 0x19u, 0xAu);
-    gc2053_write_register(ViPipe, 0x28u, 0xAu);
-    gc2053_write_register(ViPipe, 0x2Bu, 0x04u);
-    gc2053_write_register(ViPipe, 0x37u, 0x03u);
-    gc2053_write_register(ViPipe, 0x43u, 0x07u);
-    gc2053_write_register(ViPipe, 0x44u, 0x40u);
-    gc2053_write_register(ViPipe, 0x46u, 0xBu);
-    gc2053_write_register(ViPipe, 0x4Bu, 0x20u);
-    gc2053_write_register(ViPipe, 0x4Eu, 0x08u);
-    gc2053_write_register(ViPipe, 0x55u, 0x20u);
-    gc2053_write_register(ViPipe, 0x77u, 0x01u);
-    gc2053_write_register(ViPipe, 0x78u, 0x00u);
-    gc2053_write_register(ViPipe, 0x7Cu, 0x93u);
-    gc2053_write_register(ViPipe, 0x8Du, 0x92u);
-    gc2053_write_register(ViPipe, 0x90u, 0x00u);
-    gc2053_write_register(ViPipe, 0x41u, 0x04u);
-    gc2053_write_register(ViPipe, 0x42u, 0x65u);
-    gc2053_write_register(ViPipe, 0xCEu, 0x7Cu);
-    gc2053_write_register(ViPipe, 0xD2u, 0x41u);
-    gc2053_write_register(ViPipe, 0xD3u, 0xDCu);
-    gc2053_write_register(ViPipe, 0xE6u, 0x50u);
-    gc2053_write_register(ViPipe, 0xB6u, 0xC0u);
-    gc2053_write_register(ViPipe, 0xB0u, 0x70u);
-    gc2053_write_register(ViPipe, 0x26u, 0x30u);
-    gc2053_write_register(ViPipe, 0xFEu, 0x01u);
-    gc2053_write_register(ViPipe, 0x55u, 0x07u);
-    gc2053_write_register(ViPipe, 0x58u, 0x00u);
-    gc2053_write_register(ViPipe, 0xFEu, 0x04u);
-    gc2053_write_register(ViPipe, 0x14u, 0x78u);
-    gc2053_write_register(ViPipe, 0x15u, 0x78u);
-    gc2053_write_register(ViPipe, 0x16u, 0x78u);
-    gc2053_write_register(ViPipe, 0x17u, 0x78u);
-    gc2053_write_register(ViPipe, 0xFEu, 0x01u);
-    gc2053_write_register(ViPipe, 0x04u, 0x00u);
-    gc2053_write_register(ViPipe, 0x94u, 0x03u);
-    gc2053_write_register(ViPipe, 0x97u, 0x07u);
-    gc2053_write_register(ViPipe, 0x98u, 0x80u);
-    gc2053_write_register(ViPipe, 0x9Au, 0x06u);
-    gc2053_write_register(ViPipe, 0xFEu, 0x00u);
-    gc2053_write_register(ViPipe, 0x7Bu, 0x2Au);
-    gc2053_write_register(ViPipe, 0x23u, 0x2Du);
-    gc2053_write_register(ViPipe, 0xFEu, 0x03u);
-    gc2053_write_register(ViPipe, 0x01u, 0x27u);
-    gc2053_write_register(ViPipe, 0x02u, 0x56u);
-    gc2053_write_register(ViPipe, 0x03u, 0xB6u);
-    gc2053_write_register(ViPipe, 0x12u, 0x80u);
-    gc2053_write_register(ViPipe, 0x13u, 0x07u);
-    gc2053_write_register(ViPipe, 0x15u, 0x12u);
-    gc2053_write_register(ViPipe, 0xFEu, 0x00u);
-    gc2053_write_register(ViPipe, 0x3Eu, 0x91u);
+    gc2053_write_register(ViPipe, 0xFE, 0x80);
+    gc2053_write_register(ViPipe, 0xFE, 0x80);
+    gc2053_write_register(ViPipe, 0xFE, 0x80);
+    gc2053_write_register(ViPipe, 0xFE, 0x00);
+    gc2053_write_register(ViPipe, 0xF2, 0x00);
+    gc2053_write_register(ViPipe, 0xF3, 0x00);
+    gc2053_write_register(ViPipe, 0xF4, 0x36);
+    gc2053_write_register(ViPipe, 0xF5, 0xC0);
+    gc2053_write_register(ViPipe, 0xF6, 0x44);
+    gc2053_write_register(ViPipe, 0xF7, 0x01);
+    gc2053_write_register(ViPipe, 0xF8, 0x2C);
+    gc2053_write_register(ViPipe, 0xF9, 0x42);
+    gc2053_write_register(ViPipe, 0xFC, 0x8E);
+    gc2053_write_register(ViPipe, 0xFE, 0x00);
+    gc2053_write_register(ViPipe, 0x87, 0x18);
+    gc2053_write_register(ViPipe, 0xEE, 0x30);
+    gc2053_write_register(ViPipe, 0xD0, 0xB7);
+    gc2053_write_register(ViPipe, 0x03, 0x04);
+    gc2053_write_register(ViPipe, 0x04, 0x60);
+    gc2053_write_register(ViPipe, 0x05, 0x04);
+    gc2053_write_register(ViPipe, 0x06, 0x4C);
+    gc2053_write_register(ViPipe, 0x07, 0x00);
+    gc2053_write_register(ViPipe, 0x08, 0x11);
+    gc2053_write_register(ViPipe, 0x0A, 0x02);
+    gc2053_write_register(ViPipe, 0x0C, 0x02);
+    gc2053_write_register(ViPipe, 0x0D, 0x04);
+    gc2053_write_register(ViPipe, 0x0E, 0x40);
+    gc2053_write_register(ViPipe, 0x12, 0xE2);
+    gc2053_write_register(ViPipe, 0x13, 0x16);
+    gc2053_write_register(ViPipe, 0x19, 0x0A);
+    gc2053_write_register(ViPipe, 0x28, 0x0A);
+    gc2053_write_register(ViPipe, 0x2B, 0x04);
+    gc2053_write_register(ViPipe, 0x37, 0x03);
+    gc2053_write_register(ViPipe, 0x43, 0x07);
+    gc2053_write_register(ViPipe, 0x44, 0x40);
+    gc2053_write_register(ViPipe, 0x46, 0x0B);
+    gc2053_write_register(ViPipe, 0x4B, 0x20);
+    gc2053_write_register(ViPipe, 0x4E, 0x08);
+    gc2053_write_register(ViPipe, 0x55, 0x20);
+    gc2053_write_register(ViPipe, 0x77, 0x01);
+    gc2053_write_register(ViPipe, 0x78, 0x00);
+    gc2053_write_register(ViPipe, 0x7C, 0x93);
+    gc2053_write_register(ViPipe, 0x8D, 0x92);
+    gc2053_write_register(ViPipe, 0x90, 0x00);
+    gc2053_write_register(ViPipe, 0x41, 0x04);
+    gc2053_write_register(ViPipe, 0x42, 0x65);
+    gc2053_write_register(ViPipe, 0xCE, 0x7C);
+    gc2053_write_register(ViPipe, 0xD2, 0x41);
+    gc2053_write_register(ViPipe, 0xD3, 0xDC);
+    gc2053_write_register(ViPipe, 0xE6, 0x50);
+    gc2053_write_register(ViPipe, 0xB6, 0xC0);
+    gc2053_write_register(ViPipe, 0xB0, 0x70);
+    gc2053_write_register(ViPipe, 0x26, 0x30);
+    gc2053_write_register(ViPipe, 0xFE, 0x01);
+    gc2053_write_register(ViPipe, 0x55, 0x07);
+    gc2053_write_register(ViPipe, 0x58, 0x00);
+    gc2053_write_register(ViPipe, 0xFE, 0x04);
+    gc2053_write_register(ViPipe, 0x14, 0x78);
+    gc2053_write_register(ViPipe, 0x15, 0x78);
+    gc2053_write_register(ViPipe, 0x16, 0x78);
+    gc2053_write_register(ViPipe, 0x17, 0x78);
+    gc2053_write_register(ViPipe, 0xFE, 0x01);
+    gc2053_write_register(ViPipe, 0x04, 0x00);
+    gc2053_write_register(ViPipe, 0x94, 0x03);
+    gc2053_write_register(ViPipe, 0x97, 0x07);
+    gc2053_write_register(ViPipe, 0x98, 0x80);
+    gc2053_write_register(ViPipe, 0x9A, 0x06);
+    gc2053_write_register(ViPipe, 0xFE, 0x00);
+    gc2053_write_register(ViPipe, 0x7B, 0x2A);
+    gc2053_write_register(ViPipe, 0x23, 0x2D);
+    gc2053_write_register(ViPipe, 0xFE, 0x03);
+    gc2053_write_register(ViPipe, 0x01, 0x27);
+    gc2053_write_register(ViPipe, 0x02, 0x56);
+    gc2053_write_register(ViPipe, 0x03, 0xB6);
+    gc2053_write_register(ViPipe, 0x12, 0x80);
+    gc2053_write_register(ViPipe, 0x13, 0x07);
+    gc2053_write_register(ViPipe, 0x15, 0x12);
+    gc2053_write_register(ViPipe, 0xFE, 0x00);
+    gc2053_write_register(ViPipe, 0x3E, 0x91);
 
     // puts("=== Galaxycore GC2053_1080P_30FPS_10BIT_LINE_Init_OK!===");
 }
@@ -1034,7 +1039,7 @@ gc2053_init(VI_PIPE ViPipe)
 {
     HI_S32 i;
 
-    if ( g_pastGc2053[ViPipe]->bEnabled == HI_FALSE )
+    if ( !g_pastGc2053[ViPipe]->bEnabled )
         gc2053_i2c_init(ViPipe);
 
     if ( g_pastGc2053[ViPipe]->u8SensorMode != 0 ) {
@@ -1043,13 +1048,11 @@ gc2053_init(VI_PIPE ViPipe)
     }
     else gc2053_linear_1080p30_init(ViPipe);
 
-    if ( g_pastGc2053[ViPipe]->stIspRegsInfo_A.u32RegNum ) {
-        for (i = 0; i < g_pastGc2053[ViPipe]->stIspRegsInfo_A.u32RegNum; i++) {
-            gc2053_write_register(
-                ViPipe,
-                g_pastGc2053[ViPipe]->stIspRegsInfo_A.astI2cData[i].u32RegAddr,
-                g_pastGc2053[ViPipe]->stIspRegsInfo_A.astI2cData[i].u32Data);
-        }
+    for (i = 0; i < g_pastGc2053[ViPipe]->stIspRegsInfo_A.u32RegNum; i++) {
+        gc2053_write_register(
+            ViPipe,
+            g_pastGc2053[ViPipe]->stIspRegsInfo_A.astI2cData[i].u32RegAddr,
+            g_pastGc2053[ViPipe]->stIspRegsInfo_A.astI2cData[i].u32Data);
     }
 
     g_pastGc2053[ViPipe]->bEnabled = HI_TRUE;
