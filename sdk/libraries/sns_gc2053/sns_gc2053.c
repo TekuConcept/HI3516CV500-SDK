@@ -14,12 +14,13 @@
 #include "hi_sns_ctrl.h"
 #include "hi_debug.h"
 
+#include "isp_calibration.c"
 
 HI_VOID cmos_get_inttime_max(VI_PIPE ViPipe, HI_U16 u16ManRatioEnable, HI_U32 *au32Ratio, HI_U32 *au32IntTimeMax, HI_U32 *au32IntTimeMin, HI_U32 *pu32LFMaxIntTime);
 HI_S32 gc2053_set_bus_info(VI_PIPE ViPipe, ISP_SNS_COMMBUS_U unSNSBusInfo);
 HI_S32 cmos_set_image_mode(VI_PIPE ViPipe, ISP_CMOS_SENSOR_IMAGE_MODE_S *pstSensorImageMode);
 HI_VOID cmos_fps_set(VI_PIPE ViPipe, HI_FLOAT f32Fps, AE_SENSOR_DEFAULT_S *pstAeSnsDft);
-inline HI_S32 sensor_ctx_init(VI_PIPE ViPipe);
+HI_S32 sensor_ctx_init(VI_PIPE ViPipe);
 HI_S32 sensor_register_callback(VI_PIPE ViPipe, ALG_LIB_S *pstAeLib, ALG_LIB_S *pstAwbLib);
 HI_S32 cmos_get_sns_regs_info(VI_PIPE ViPipe, ISP_SNS_REGS_INFO_S *pstSnsRegsInfo);
 HI_S32 cmos_get_isp_default(VI_PIPE ViPipe, ISP_CMOS_DEFAULT_S *pstDef);
@@ -44,7 +45,7 @@ HI_VOID gc2053_standby(VI_PIPE ViPipe);
 HI_VOID gc2053_restart(VI_PIPE ViPipe);
 HI_VOID gc2053_mirror_flip(VI_PIPE ViPipe, ISP_SNS_MIRRORFLIP_TYPE_E enFlipType);
 HI_VOID gc2053_exit(VI_PIPE ViPipe);
-HI_S32 gc2053_linear_1080p30_init(VI_PIPE ViPipe);
+HI_VOID gc2053_linear_1080p30_init(VI_PIPE ViPipe);
 HI_VOID gc2053_init(VI_PIPE ViPipe);
 
 
@@ -54,29 +55,30 @@ HI_VOID gc2053_init(VI_PIPE ViPipe);
         HI_TRACE(HI_DBG_ERR, HI_ID_ISP, "[Func]:%s [Line]:%d [Info]:" fmt, __FUNCTION__, __LINE__, ##__VA_ARGS__); \
     } while (0)
 
-typedef struct HiGC2053_S {
-    HI_U32 field_0;                      // likely bEnabled
-    HI_BOOL field_4;                     //
-    HI_U8 u8SensorMode;                  // [field_8]
+typedef struct HiGC2053_S { // (sizeof=0x87C)
+    HI_BOOL bEnabled;                    // 0x000
+    HI_BOOL field_4;                     // 0x004
+    HI_U8 u8SensorMode;                  // 0x008
     HI_U8 field_9;                       //
     HI_U8 field_A;                       //
     HI_U8 field_B;                       //
-    HI_U32 field_C;                      //
-    ISP_SNS_REGS_INFO_S stIspRegsInfo_A; // [field_10]
-    ISP_SNS_REGS_INFO_S stIspRegsInfo_B; // [field_430]
-    HI_U32 u32FullLines;                 // [field_850]
-    HI_U32 field_854;                    // likely u32FullLinesMax
-    HI_U32 u32FullLinesStd;              // [field_858]
-    HI_U64 field_85C;                    //
-    HI_U64 field_864;                    //
-    HI_U32 field_86C;                    //
-    HI_U32 field_870;                    //
-    HI_U32 field_874;                    //
-    HI_U32 field_878;                    //
+    HI_BOOL field_C;                     // 0x00C
+    ISP_SNS_REGS_INFO_S stIspRegsInfo_A; // 0x010
+    ISP_SNS_REGS_INFO_S stIspRegsInfo_B; // 0x430
+    HI_U32 u32FullLines;                 // 0x850
+    HI_U32 u32FullLinesMax;              // 0x854
+    HI_U32 u32FullLinesStd;              // 0x858
+    HI_U64 field_85C;                    // 0x85C
+    HI_U64 field_864;                    // 0x864
+    HI_U32 field_86C;                    // 0x86C
+    HI_U32 field_870;                    // 0x870
+    HI_U32 field_874;                    // 0x874
+    HI_U32 field_878;                    // 0x878
 } GC2053_S;
 
-ISP_SNS_COMMBUS_U g_aunGc2053BusInfo[VI_PIPE_SIZE];
-GC2053_S* g_pastGc2053[VI_PIPE_SIZE];
+ISP_SNS_COMMBUS_U g_aunGc2053BusInfo[VI_PIPE_SIZE] = {
+    0x00, 0xFF, 0xFF, 0xFF
+};
 
 AWB_AGC_TABLE_S g_stAwbAgcTable = {
     .bValid = HI_TRUE,
@@ -85,62 +87,6 @@ AWB_AGC_TABLE_S g_stAwbAgcTable = {
         0x69, 0x5F, 0x58, 0x50,
         0x48, 0x40, 0x38, 0x38,
         0x38, 0x38, 0x38, 0x38
-    }
-};
-
-ISP_CMOS_NOISE_CALIBRATION_S g_stIspNoiseCalibratio = {
-    .u16CalibrationLutNum = 9,
-    .afCalibrationCoef = {
-        {   100.000000,     0.055957,     0.015088 },
-        {   200.000000,     0.110440,     0.000000 },
-        {   400.000000,     0.208750,     0.000000 },
-        {   800.000000,     0.430600,     0.000000 },
-        {  1600.000000,     0.868610,     0.000000 },
-        {  3200.000000,     1.698800,     0.742000 },
-        {  6400.000000,     3.371000,     4.415500 },
-        { 12800.000000,     6.607100,    15.182000 },
-        { 25600.000000,    12.531000,    58.288000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 },
-        {     0.000000,     0.000000,     0.000000 }
     }
 };
 
@@ -194,18 +140,6 @@ AWB_CCM_S g_stAwbCcm = {
     }
 };
 
-HI_U16 g_stDngColorParam[] = {
-    0x17A, 0x100, 0x1AE,
-    0x1B7, 0x100, 0x1B7
-};
-
-HI_U16 g_au16InitCCM[9 * VI_PIPE_SIZE]; // 36
-HI_U16 g_au16InitWBGain[3 * VI_PIPE_SIZE]; // 12
-HI_U16 g_au16SampleRgain[VI_PIPE_SIZE];
-HI_U16 g_au16SampleBgain[VI_PIPE_SIZE];
-HI_U32 g_au32LinesPer500ms[VI_PIPE_SIZE];
-HI_U32 g_au32InitExposure[VI_PIPE_SIZE];
-
 HI_U32 analog_gain_table[29] = {
     0x00400, 0x004CE, 0x05A0, 0x006C2, 0x007F0, 0x0094C, 0x00B40,
     0x00D84, 0x00FF0, 0x12C0, 0x01690, 0x01A68, 0x01F80, 0x0251C,
@@ -232,26 +166,7 @@ HI_U32 regValTable[116] = {
     0x00, 0xCE, 0x3F, 0x3F
 };
 
-ISP_CMOS_DPC_S g_stCmosDpc;                      // 0x2000
-ISP_CMOS_LSC_S g_stCmosLsc;                      // 0x2040
-ISP_CMOS_ANTIFALSECOLOR_S g_stIspAntiFalseColor; // 0x685c
-ISP_CMOS_BAYERNR_S g_stIspBayerNr;               // 0x6880
-ISP_CMOS_CA_S g_stIspCA;                         // 0x69cc
-ISP_CMOS_CLUT_S g_stIspCLUT;                     // 0x6af0
-ISP_CMOS_DRC_S g_stIspDRC;                       // 0xc110
-ISP_CMOS_DEHAZE_S g_stIspDehaze;                 // 0xc328
-ISP_CMOS_DEMOSAIC_S g_stIspDemosaic;             // 0xc338
-ISP_CMOS_DETAIL_S g_stIspDetail;                 // 0xc37c
-ISP_CMOS_EDGEMARK_S g_stIspEdgeMark;             // 0xc410
-ISP_CMOS_GAMMA_S g_stIspGamma;                   // 0xc41c
-ISP_CMOS_GE_S g_stIspGe;                         // 0xcc20
-ISP_CMOS_HLC_S g_stIspHlc;                       // 0xcc88
-ISP_CMOS_LDCI_S g_stIspLdci;                     // 0xcc90
-ISP_CMOS_WDR_S g_stIspWDR;                       // 0xcd18
-ISP_CMOS_SHARPEN_S g_stIspYuvSharpen;            // 0xcd64
-ISP_CMOS_PREGAMMA_S g_stPreGamma;                // 0xd93c
-
-HI_U32 g_fd[4];
+HI_U32 g_fd[4] = { -1, -1, -1, -1 };
 
 ISP_SNS_OBJ_S stSnsGc2053Obj = {
     .pfnRegisterCallback    = sensor_register_callback,
@@ -266,9 +181,18 @@ ISP_SNS_OBJ_S stSnsGc2053Obj = {
     .pfnSetInit             = sensor_set_init
 };
 
-extern HI_U8  gc2053_i2c_addr;
-extern HI_U32 gc2053_addr_byte;
-extern HI_U32 gc2053_data_byte;
+HI_CHAR gc2053_i2c_addr = 0x6E;
+HI_S32 gc2053_addr_byte = 1;
+HI_S32 gc2053_data_byte = 1;
+
+HI_U16 g_au16InitCCM[9 * VI_PIPE_SIZE]; // 36
+HI_U16 g_au16InitWBGain[3 * VI_PIPE_SIZE]; // 12
+HI_U16 g_au16SampleRgain[VI_PIPE_SIZE];
+HI_U16 g_au16SampleBgain[VI_PIPE_SIZE];
+HI_U32 g_au32LinesPer500ms[VI_PIPE_SIZE];
+HI_U32 g_au32InitExposure[VI_PIPE_SIZE];
+
+GC2053_S* g_pastGc2053[VI_PIPE_SIZE];
 
 
 HI_VOID
@@ -307,15 +231,15 @@ cmos_set_image_mode(VI_PIPE ViPipe, ISP_CMOS_SENSOR_IMAGE_MODE_S *pstSensorImage
     }
 
     g_pastGc2053[ViPipe]->field_4         = HI_FALSE;
-    g_pastGc2053[ViPipe]->u32FullLinesStd = 1125;
+    g_pastGc2053[ViPipe]->u32FullLinesStd = 0x465;
 
-    if ((g_pastGc2053[ViPipe]->field_0 == 1) &&
+    if ((g_pastGc2053[ViPipe]->bEnabled == HI_TRUE) &&
         (g_pastGc2053[ViPipe]->u8SensorMode == 0))
         return -2;
 
-    g_pastGc2053[ViPipe]->u8SensorMode = 0;
-    g_pastGc2053[ViPipe]->u32FullLines = 1125;
-    g_pastGc2053[ViPipe]->field_854    = 1125;
+    g_pastGc2053[ViPipe]->u8SensorMode    = 0;
+    g_pastGc2053[ViPipe]->u32FullLines    = 0x465;
+    g_pastGc2053[ViPipe]->u32FullLinesMax = 0x465;
     return HI_SUCCESS;
 }
 
@@ -373,7 +297,7 @@ cmos_fps_set(VI_PIPE ViPipe, HI_FLOAT f32Fps, AE_SENSOR_DEFAULT_S *pstAeSnsDft)
     pstAeSnsDft->u32FullLines    = u32FullLinesStd;
 }
 
-inline HI_S32
+HI_S32
 sensor_ctx_init(VI_PIPE ViPipe)
 {
     if ( g_pastGc2053[ViPipe] != HI_NULL )
@@ -522,9 +446,15 @@ cmos_get_sns_regs_info(VI_PIPE ViPipe, ISP_SNS_REGS_INFO_S *pstSnsRegsInfo)
     }
 
     pstSnsRegsInfo->bConfig = HI_FALSE;
-    memcpy(pstSnsRegsInfo, &g_pastGc2053[ViPipe]->stIspRegsInfo_A, sizeof(ISP_SNS_REGS_INFO_S));
-    memcpy(&g_pastGc2053[ViPipe]->stIspRegsInfo_B, &g_pastGc2053[ViPipe]->stIspRegsInfo_A, sizeof(g_pastGc2053[ViPipe]->stIspRegsInfo_B));
-    g_pastGc2053[ViPipe]->field_854 = g_pastGc2053[ViPipe]->u32FullLines;
+    memcpy(
+        pstSnsRegsInfo,
+        &g_pastGc2053[ViPipe]->stIspRegsInfo_A,
+        sizeof(ISP_SNS_REGS_INFO_S));
+    memcpy(
+        &g_pastGc2053[ViPipe]->stIspRegsInfo_B,
+        &g_pastGc2053[ViPipe]->stIspRegsInfo_A,
+        sizeof(g_pastGc2053[ViPipe]->stIspRegsInfo_B));
+    g_pastGc2053[ViPipe]->u32FullLinesMax = g_pastGc2053[ViPipe]->u32FullLines;
 
     return HI_SUCCESS;
 }
@@ -563,12 +493,12 @@ cmos_get_isp_default(VI_PIPE ViPipe, ISP_CMOS_DEFAULT_S *pstDef)
 
     pstDef->stSensorMode.u32SensorID                                                  = 2053;
     pstDef->stSensorMode.u8SensorMode                                                 = g_pastGc2053[ViPipe]->u8SensorMode;
-    pstDef->stDngColorParam.stWbGain1.u16Rgain                                        = g_stDngColorParam[0];
-    pstDef->stDngColorParam.stWbGain1.u16Ggain                                        = g_stDngColorParam[1];
-    pstDef->stDngColorParam.stWbGain1.u16Bgain                                        = g_stDngColorParam[2];
-    pstDef->stDngColorParam.stWbGain2.u16Rgain                                        = g_stDngColorParam[3];
-    pstDef->stDngColorParam.stWbGain2.u16Ggain                                        = g_stDngColorParam[4];
-    pstDef->stDngColorParam.stWbGain2.u16Bgain                                        = g_stDngColorParam[5];
+    pstDef->stDngColorParam.stWbGain1.u16Rgain                                        = g_stDngColorParam.stWbGain1.u16Rgain;
+    pstDef->stDngColorParam.stWbGain1.u16Ggain                                        = g_stDngColorParam.stWbGain1.u16Ggain;
+    pstDef->stDngColorParam.stWbGain1.u16Bgain                                        = g_stDngColorParam.stWbGain1.u16Bgain;
+    pstDef->stDngColorParam.stWbGain2.u16Rgain                                        = g_stDngColorParam.stWbGain2.u16Rgain;
+    pstDef->stDngColorParam.stWbGain2.u16Ggain                                        = g_stDngColorParam.stWbGain2.u16Ggain;
+    pstDef->stDngColorParam.stWbGain2.u16Bgain                                        = g_stDngColorParam.stWbGain2.u16Bgain;
     pstDef->stSensorMode.stDngRawFormat.u8BitsPerSample                               = 10;
     pstDef->stSensorMode.stDngRawFormat.u32WhiteLevel                                 = 1023;
     pstDef->stSensorMode.stDngRawFormat.stDefaultScale.stDefaultScaleH.u32Denominator = 1;
@@ -675,7 +605,7 @@ cmos_get_ae_default(VI_PIPE ViPipe, AE_SENSOR_DEFAULT_S *pstAeSnsDft)
     pstAeSnsDft->stAgainAccu.enAccuType  = AE_ACCURACY_TABLE;
 
     if ( g_pastGc2053[ViPipe]->field_C ) {
-        puts("cmos_get_ae_default_Sensor Mode is error!");
+        // puts("cmos_get_ae_default_Sensor Mode is error!");
         return HI_SUCCESS;
     }
 
@@ -882,13 +812,13 @@ sensor_global_init(VI_PIPE ViPipe)
         return;
     }
 
-    g_pastGc2053[ViPipe]->field_0         = 0;
+    g_pastGc2053[ViPipe]->bEnabled        = HI_FALSE;
     g_pastGc2053[ViPipe]->field_4         = HI_FALSE;
-    g_pastGc2053[ViPipe]->field_C         = 0;
+    g_pastGc2053[ViPipe]->field_C         = HI_FALSE;
     g_pastGc2053[ViPipe]->u8SensorMode    = 0;
     g_pastGc2053[ViPipe]->u32FullLinesStd = 0x465;
     g_pastGc2053[ViPipe]->u32FullLines    = 0x465;
-    g_pastGc2053[ViPipe]->field_854       = 0x465;
+    g_pastGc2053[ViPipe]->u32FullLinesMax = 0x465;
 
     memset(&g_pastGc2053[ViPipe]->stIspRegsInfo_A, 0, sizeof(g_pastGc2053[ViPipe]->stIspRegsInfo_A));
     memset(&g_pastGc2053[ViPipe]->stIspRegsInfo_B, 0, sizeof(g_pastGc2053[ViPipe]->stIspRegsInfo_B));
@@ -909,11 +839,11 @@ cmos_set_wdr_mode(VI_PIPE ViPipe, HI_U8 u8Mode)
     }
 
     g_pastGc2053[ViPipe]->stIspRegsInfo_B.astI2cData[16];
-    g_pastGc2053[ViPipe]->field_C   = 0;
+    g_pastGc2053[ViPipe]->field_C   = HI_FALSE;
     g_pastGc2053[ViPipe]->field_85C = 0;
     g_pastGc2053[ViPipe]->field_864 = 0;
 
-    puts("GC2053_SENSOR_1080P_30FPS_LINEAR_MODE");
+    // puts("GC2053_SENSOR_1080P_30FPS_LINEAR_MODE");
 
     return HI_SUCCESS;
 }
@@ -1013,7 +943,7 @@ HI_VOID
 gc2053_exit(VI_PIPE ViPipe)
 { gc2053_i2c_exit(ViPipe); }
 
-HI_S32
+HI_VOID
 gc2053_linear_1080p30_init(VI_PIPE ViPipe)
 {
     gc2053_write_register(ViPipe, 0xFEu, 0x80u);
@@ -1096,7 +1026,7 @@ gc2053_linear_1080p30_init(VI_PIPE ViPipe)
     gc2053_write_register(ViPipe, 0xFEu, 0x00u);
     gc2053_write_register(ViPipe, 0x3Eu, 0x91u);
 
-    return puts("=== Galaxycore GC2053_1080P_30FPS_10BIT_LINE_Init_OK!===");
+    // puts("=== Galaxycore GC2053_1080P_30FPS_10BIT_LINE_Init_OK!===");
 }
 
 HI_VOID
@@ -1104,12 +1034,12 @@ gc2053_init(VI_PIPE ViPipe)
 {
     HI_S32 i;
 
-    if ( g_pastGc2053[ViPipe]->field_0 == 0 )
+    if ( g_pastGc2053[ViPipe]->bEnabled == HI_FALSE )
         gc2053_i2c_init(ViPipe);
 
     if ( g_pastGc2053[ViPipe]->u8SensorMode != 0 ) {
         puts("GC2053_SENSOR_CTL_Not support this mode");
-        g_pastGc2053[ViPipe]->field_0 = 0;
+        g_pastGc2053[ViPipe]->bEnabled = HI_FALSE;
     }
     else gc2053_linear_1080p30_init(ViPipe);
 
@@ -1122,6 +1052,6 @@ gc2053_init(VI_PIPE ViPipe)
         }
     }
 
-    g_pastGc2053[ViPipe]->field_0 = 1;
-    puts("GC2053 init succuss!");
+    g_pastGc2053[ViPipe]->bEnabled = HI_TRUE;
+    // puts("GC2053 init succuss!");
 }
