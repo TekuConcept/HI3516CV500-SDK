@@ -14,8 +14,12 @@ SDK
 [Bb]uild/
 [Ii]nstall/
 
+[Bb]uildEl/
+
 .DS_Store/**/*
 .DS_Store
 
 *.ko
 *.orig
+*.o
+

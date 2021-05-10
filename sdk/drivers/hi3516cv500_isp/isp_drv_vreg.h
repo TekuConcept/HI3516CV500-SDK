@@ -17,14 +17,14 @@ extern "C" {
 #endif
 #endif /* End of #ifdef __cplusplus */
 
-#define IOC_TYPE_ISP         'I'
+#define IOC_TYPE_ISP         'I' // 0x49
 
 typedef enum hiIOC_NR_VREG_E {
-    IOC_NR_VREG_FD = 200,
-    IOC_NR_VREG_INIT,
-    IOC_NR_VREG_EXIT,
-    IOC_NR_VREG_RELEASE_ALL,
-    IOC_NR_VREG_GETADDR,
+    IOC_NR_VREG_FD = 200,    // 0xC8
+    IOC_NR_VREG_INIT,        // 0xC9
+    IOC_NR_VREG_EXIT,        // 0xCA
+    IOC_NR_VREG_RELEASE_ALL, // 0xCB
+    IOC_NR_VREG_GETADDR,     // 0xCC
 
     IOC_NR_VREG_BUTT,
 } IOC_NR_VREG_E;

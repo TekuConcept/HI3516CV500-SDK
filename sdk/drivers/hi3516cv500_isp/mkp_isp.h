@@ -238,7 +238,7 @@ typedef union {
     };
 } isp_stat_key;
 
-typedef struct {
+typedef struct { // (sizeof=0x18)
     isp_stat_key  stat_key;
     hi_u64   phy_addr;
     hi_void *virt_addr;                 /* (isp_stat *) */
@@ -2661,105 +2661,97 @@ typedef struct {
 #define ISP_UNDEF_INT                   0xF4
 #define ISP_BE_FSTART                   (1<<16)
 
-#define ISP_DEV_SET_FD                  _IOW(IOC_TYPE_ISP, IOC_NR_ISP_SET_FD, hi_s32)
-#define ISP_GET_FRAME_EDGE              _IOR(IOC_TYPE_ISP, IOC_NR_ISP_GET_FRAME_EDGE, hi_u32)
-#define ISP_GET_VD_TIMEOUT              _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_VD_TIMEOUT, isp_vd_timeout)
-#define ISP_GET_VD_END_TIMEOUT          _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_VD_END_TIMEOUT, isp_vd_timeout)
-#define ISP_GET_VD_BEEND_TIMEOUT        _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_VD_BEEND_TIMEOUT, isp_vd_timeout)
-#define ISP_SET_INT_ENABLE              _IOW(IOC_TYPE_ISP, IOC_NR_ISP_SET_INT_ENABLE, hi_bool)
-#define ISP_GET_VERSION                 _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_VERSION, ISP_VERSION_S)
-#define ISP_STAT_BUF_INIT               _IOR(IOC_TYPE_ISP, IOC_NR_ISP_STAT_BUF_INIT, hi_u64)
-#define ISP_STAT_BUF_EXIT               _IO(IOC_TYPE_ISP, IOC_NR_ISP_STAT_BUF_EXIT)
-#define ISP_STAT_BUF_GET                _IOR(IOC_TYPE_ISP, IOC_NR_ISP_STAT_BUF_GET, isp_stat_info)
-#define ISP_STAT_BUF_PUT                _IOW(IOC_TYPE_ISP, IOC_NR_ISP_STAT_BUF_PUT, isp_stat_info)
-#define ISP_STAT_ACT_GET                _IOR(IOC_TYPE_ISP, IOC_NR_ISP_STAT_ACT_GET, isp_stat_info)
-#define ISP_REG_CFG_INIT                _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_REG_CFG_INIT, isp_reg_cfg)
-#define ISP_REG_CFG_SET                 _IOW(IOC_TYPE_ISP, IOC_NR_ISP_REG_CFG_SET, isp_kernel_reg_cfg)
-
-#define ISP_BE_CFG_BUF_INIT             _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_BE_CFG_BUF_INIT, hi_u64)
-#define ISP_GET_BE_BUF_FIRST            _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_BE_BUF_FIRST, hi_u64)
-#define ISP_BE_FREE_BUF_GET             _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_BE_FREE_BUF_GET, isp_be_wo_cfg_buf)
-#define ISP_BE_LAST_BUF_GET             _IOR(IOC_TYPE_ISP, IOC_NR_ISP_BE_LAST_BUF_GET, hi_u64)
-#define ISP_BE_CFG_BUF_EXIT             _IO(IOC_TYPE_ISP, IOC_NR_ISP_BE_CFG_BUF_EXIT)
-#define ISP_BE_CFG_BUF_CTL              _IOW(IOC_TYPE_ISP, IOC_NR_ISP_BE_CFG_BUF_CTL, isp_be_wo_cfg_buf)
-#define ISP_BE_CFG_BUF_RUNNING          _IO(IOC_TYPE_ISP, IOC_NR_ISP_BE_CFG_BUF_RUNNING)
-#define ISP_BE_All_BUF_INIT             _IO(IOC_TYPE_ISP, IOC_NR_ISP_BE_All_BUF_INIT)
-#define ISP_BE_SWITCH_FINISH_STATE_SET  _IO(IOC_TYPE_ISP, IOC_NR_ISP_BE_SWITCH_FINISH_STATE_SET)
-#define ISP_MODE_SWITCH_SET         _IO(IOC_TYPE_ISP, IOC_NR_ISP_MODE_SWITCH_SET)
-
-#define ISP_MEM_INFO_SET                _IOW(IOC_TYPE_ISP, IOC_NR_ISP_MEM_INFO_SET, hi_bool)
-#define ISP_MEM_INFO_GET                _IOR(IOC_TYPE_ISP, IOC_NR_ISP_MEM_INFO_GET, hi_bool)
-#define ISP_P2EN_INFO_GET               _IOR(IOC_TYPE_ISP, IOC_NR_ISP_P2EN_INFO_GET, hi_bool)
-#define ISP_INIT_INFO_SET               _IOW(IOC_TYPE_ISP, IOC_NR_ISP_INIT_INFO_SET, hi_bool)
-#define ISP_SYNC_INIT_SET               _IOW(IOC_TYPE_ISP, IOC_NR_ISP_SYNC_INIT_SET, hi_bool)
-#define ISP_RUN_STATE_SET               _IOW(IOC_TYPE_ISP, IOC_NR_ISP_RUN_STATE_SET, hi_u64)
-#define ISP_RESET_CTX                   _IO(IOC_TYPE_ISP, IOC_NR_ISP_RESET_CTX)
-#define ISP_CONFIG_INFO_SET             _IOW(IOC_TYPE_ISP, IOC_NR_ISP_CONFIG_INFO_SET, hi_isp_config_info)
-#define ISP_SNAP_INFO_GET               _IOR(IOC_TYPE_ISP, IOC_NR_ISP_SNAP_INFO_GET, isp_snap_info)
-#define ISP_PRO_TRIGGER_GET             _IOR(IOC_TYPE_ISP, IOC_NR_ISP_PRO_EN_GET, hi_bool)
-#define ISP_UPDATE_POS_GET              _IOR(IOC_TYPE_ISP, IOC_NR_ISP_UPDATE_POS_GET, hi_u32)
-#define ISP_FRAME_CNT_GET               _IOR(IOC_TYPE_ISP, IOC_NR_ISP_FRAME_CNT_GET, hi_u32)
-#define ISP_SNAP_ATTR_GET               _IOR(IOC_TYPE_ISP, IOC_NR_ISP_SNAP_ATTR_GET, isp_snap_attr)
-
-#define ISP_PROC_INIT                   _IOR(IOC_TYPE_ISP, IOC_NR_ISP_PROC_INIT, isp_proc_mem)
-#define ISP_PROC_WRITE_ING              _IO(IOC_TYPE_ISP, IOC_NR_ISP_PROC_WRITE_ING)
-#define ISP_PROC_WRITE_OK               _IO(IOC_TYPE_ISP, IOC_NR_ISP_PROC_WRITE_OK)
-#define ISP_PROC_EXIT                   _IO(IOC_TYPE_ISP, IOC_NR_ISP_PROC_EXIT)
-#define ISP_PROC_PARAM_GET              _IOR(IOC_TYPE_ISP, IOC_NR_ISP_PROC_PARAM_GET, hi_u32)
-#define ISP_TRANS_BUF_INIT              _IOR(IOC_TYPE_ISP, IOC_NR_ISP_TRANS_BUF_INIT, isp_trans_info_buf)
-#define ISP_TRANS_BUF_EXIT              _IO(IOC_TYPE_ISP, IOC_NR_ISP_TRANS_BUF_EXIT)
-#define ISP_PRO_BUF_INIT                _IOR(IOC_TYPE_ISP, IOC_NR_ISP_PRO_BUF_INIT, isp_pro_info_buf)
-#define ISP_PRO_BUF_EXIT                _IO(IOC_TYPE_ISP,  IOC_NR_ISP_PRO_BUF_EXIT)
-
-#define ISP_UPDATE_INFO_SET             _IOW(IOC_TYPE_ISP, IOC_NR_ISP_UPDATE_INFO_SET, hi_isp_dcf_update_info)
-#define ISP_FRAME_INFO_SET              _IOW(IOC_TYPE_ISP, IOC_NR_ISP_FRAME_INFO_SET, hi_isp_frame_info)
-#define ISP_FRAME_INFO_GET              _IOR(IOC_TYPE_ISP, IOC_NR_ISP_FRAME_INFO_GET, hi_isp_frame_info)
-#define ISP_DNG_INFO_SET                _IOW(IOC_TYPE_ISP, IOC_NR_ISP_DNG_INFO_SET, hi_dng_image_dynamic_info)
-#define ISP_DNG_INFO_GET                _IOR(IOC_TYPE_ISP, IOC_NR_ISP_DNG_INFO_GET, hi_isp_dng_image_static_info)
-#define ISP_SYNC_CFG_SET                _IOW(IOC_TYPE_ISP, IOC_NR_ISP_SYNC_CFG_SET, isp_sync_cfg_buf_node)
-#define ISP_WDR_CFG_SET                 _IOW(IOC_TYPE_ISP, IOC_NR_WDR_SYNC_CFG_SET, isp_wdr_cfg)
-#define ISP_BE_SYNC_PARAM_INIT          _IOW(IOC_TYPE_ISP, IOC_NR_ISP_BE_SYNC_PARAM_INIT, isp_be_sync_para)
-#define ISP_RES_SWITCH_SET              _IO(IOC_TYPE_ISP, IOC_NR_ISP_RES_SWITCH_SET)
-#define ISP_CHN_SELECT_CFG              _IOW(IOC_TYPE_ISP, IOC_NR_ISP_CHN_SELECT_CFG, hi_u32)
-#define ISP_AWB_EN_SET                  _IOW(IOC_TYPE_ISP, IOC_NR_ISP_AWB_EN_SET, hi_bool)
-
-#define ISP_PWM_NUM_GET                 _IOR(IOC_TYPE_ISP, IOC_NR_ISP_PWM_NUM_GET, hi_u32)
-#define ISP_WORK_MODE_INIT              _IOR(IOC_TYPE_ISP, IOC_NR_ISP_WORK_MODE_INIT, isp_block_attr)
-#define ISP_WORK_MODE_GET               _IOR(IOC_TYPE_ISP, IOC_NR_ISP_WORK_MODE_GET, isp_working_mode)
-#define ISP_WORK_MODE_EXIT              _IO(IOC_TYPE_ISP, IOC_NR_ISP_WORK_MODE_EXIT)
-#define ISP_SET_MOD_PARAM               _IOW(IOC_TYPE_ISP, IOC_NR_ISP_SET_MOD_PARAM, hi_isp_mod_param)
-#define ISP_GET_MOD_PARAM               _IOR(IOC_TYPE_ISP, IOC_NR_ISP_GET_MOD_PARAM, hi_isp_mod_param)
-#define ISP_SET_CTRL_PARAM              _IOW(IOC_TYPE_ISP, IOC_NR_ISP_SET_CTRL_PARAM, hi_isp_ctrl_param)
-#define ISP_GET_CTRL_PARAM              _IOR(IOC_TYPE_ISP, IOC_NR_ISP_GET_CTRL_PARAM, hi_isp_ctrl_param)
-#define ISP_PRE_BLK_NUM_UPDATE          _IOW(IOC_TYPE_ISP, IOC_NR_ISP_PRE_BLK_NUM_UPDATE, hi_u8)
-
-#define ISP_GET_HDR_ATTR                _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_HDR_ATTR, vi_pipe_hdr_attr)
-#define ISP_GET_WDR_ATTR                _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_WDR_ATTR, vi_pipe_wdr_attr)
-#define ISP_GET_STITCH_ATTR             _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_STITCH_ATTR, vi_stitch_attr)
-#define ISP_GET_PIPE_SIZE               _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_PIPE_SIZE, hi_size)
-#define ISP_PUB_ATTR_INFO               _IOW(IOC_TYPE_ISP, IOC_NR_ISP_PUB_ATTR_INFO, hi_isp_pub_attr)
-#define ISP_KERNEL_RUNONCE              _IO(IOC_TYPE_ISP, IOC_NR_ISP_KERNEL_RUNONCE)
-#define ISP_OPT_RUNONCE_INFO            _IOW(IOC_TYPE_ISP, IOC_NR_ISP_OPT_RUNONCE_INFO, hi_bool)
-#define ISP_SET_PROCALCDONE             _IO(IOC_TYPE_ISP, IOC_NR_ISP_SET_PROCALCDONE)
-#define ISP_YUV_RUNONCE_INFO            _IOW(IOC_TYPE_ISP, IOC_NR_ISP_YUV_RUNONCE_INFO, hi_bool)
-#define ISP_KERNEL_YUV_RUNONCE          _IO(IOC_TYPE_ISP,  IOC_NR_ISP_KERNEL_YUV_RUNONCE)
-#define ISP_SYNC_STITCH_PARAM_INIT      _IO(IOC_TYPE_ISP, IOC_NR_ISP_SYNC_STITCH_PARAM_INIT)
-#define ISP_CLUT_BUF_INIT               _IO(IOC_TYPE_ISP, IOC_NR_ISP_CLUT_BUF_INIT)
-#define ISP_CLUT_BUF_EXIT               _IO(IOC_TYPE_ISP, IOC_NR_ISP_CLUT_BUF_EXIT)
-#define ISP_CLUT_BUF_GET                _IOR(IOC_TYPE_ISP,IOC_NR_ISP_CLUT_BUF_GET, hi_u64)
-#define ISP_LDCI_BUF_INIT               _IO(IOC_TYPE_ISP, IOC_NR_ISP_LDCI_BUF_INIT)
-#define ISP_LDCI_BUF_EXIT               _IO(IOC_TYPE_ISP, IOC_NR_ISP_LDCI_BUF_EXIT)
-#define ISP_LDCI_READ_STT_BUF_GET       _IOR(IOC_TYPE_ISP, IOC_NR_ISP_LDCI_READ_STT_BUF_GET, isp_ldci_read_stt_buf)
-
-#define ISP_STT_BUF_INIT                _IO(IOC_TYPE_ISP, IOC_NR_ISP_STT_BUF_INIT)
-#define ISP_STT_BUF_EXIT                _IO(IOC_TYPE_ISP, IOC_NR_ISP_STT_BUF_EXIT)
-#define ISP_STT_ADDR_INIT               _IO(IOC_TYPE_ISP, IOC_NR_ISP_STT_ADDR_INIT)
-#define ISP_BE_LUT_STT_BUF_GET          _IOR(IOC_TYPE_ISP,IOC_NR_ISP_BE_LUT_STT_BUF_GET, hi_u64)
-
-#define ISP_SPECAWB_BUF_INIT            _IO(IOC_TYPE_ISP, IOC_NR_ISP_SPECAWB_BUF_INIT)
-#define ISP_SPECAWB_BUF_EXIT            _IO(IOC_TYPE_ISP, IOC_NR_ISP_SPECAWB_BUF_EXIT)
-#define ISP_SPECAWB_BUF_GET             _IOR(IOC_TYPE_ISP,IOC_NR_ISP_SPECAWB_BUF_GET, hi_u64)
-#define ISP_SET_RGBIR_FORMAT            _IOW(IOC_TYPE_ISP,IOC_NR_ISP_SET_RGBIR_FORMAT, hi_isp_ir_bayer_format)
+#define ISP_DEV_SET_FD                  _IOW( IOC_TYPE_ISP, IOC_NR_ISP_SET_FD,                    hi_s32                      ) /* 0x40044900u */
+#define ISP_GET_FRAME_EDGE              _IOR( IOC_TYPE_ISP, IOC_NR_ISP_GET_FRAME_EDGE,            hi_u32                      ) /* 0x    4901u */
+#define ISP_GET_VD_TIMEOUT              _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_VD_TIMEOUT,            isp_vd_timeout              ) /* 0x    4902u */
+#define ISP_GET_VD_END_TIMEOUT          _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_VD_END_TIMEOUT,        isp_vd_timeout              ) /* 0x    4903u */
+#define ISP_GET_VD_BEEND_TIMEOUT        _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_VD_BEEND_TIMEOUT,      isp_vd_timeout              ) /* 0x    4904u */
+#define ISP_SET_INT_ENABLE              _IOW( IOC_TYPE_ISP, IOC_NR_ISP_SET_INT_ENABLE,            hi_bool                     ) /* 0x    4905u */
+#define ISP_GET_VERSION                 _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_VERSION,               ISP_VERSION_S               ) /* 0x    4906u */
+#define ISP_STAT_BUF_INIT               _IOR( IOC_TYPE_ISP, IOC_NR_ISP_STAT_BUF_INIT,             hi_u64                      ) /* 0x    4907u */
+#define ISP_STAT_BUF_EXIT               _IO(  IOC_TYPE_ISP, IOC_NR_ISP_STAT_BUF_EXIT                                          ) /* 0x    4908u */
+#define ISP_STAT_BUF_GET                _IOR( IOC_TYPE_ISP, IOC_NR_ISP_STAT_BUF_GET,              isp_stat_info               ) /* 0x    4909u */
+#define ISP_STAT_BUF_PUT                _IOW( IOC_TYPE_ISP, IOC_NR_ISP_STAT_BUF_PUT,              isp_stat_info               ) /* 0x    490Au */
+#define ISP_STAT_ACT_GET                _IOR( IOC_TYPE_ISP, IOC_NR_ISP_STAT_ACT_GET,              isp_stat_info               ) /* 0x    490Bu */
+#define ISP_REG_CFG_INIT                _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_REG_CFG_INIT,              isp_reg_cfg                 ) /* 0x    490Cu */
+#define ISP_REG_CFG_SET                 _IOW( IOC_TYPE_ISP, IOC_NR_ISP_REG_CFG_SET,               isp_kernel_reg_cfg          ) /* 0x    490Du */
+#define ISP_BE_CFG_BUF_INIT             _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_BE_CFG_BUF_INIT,           hi_u64                      ) /* 0x    490Eu */
+#define ISP_GET_BE_BUF_FIRST            _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_BE_BUF_FIRST,          hi_u64                      ) /* 0x    490Fu */
+#define ISP_BE_FREE_BUF_GET             _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_BE_FREE_BUF_GET,           isp_be_wo_cfg_buf           ) /* 0x    4910u */
+#define ISP_BE_LAST_BUF_GET             _IOR( IOC_TYPE_ISP, IOC_NR_ISP_BE_LAST_BUF_GET,           hi_u64                      ) /* 0x    4911u */
+#define ISP_BE_CFG_BUF_EXIT             _IO(  IOC_TYPE_ISP, IOC_NR_ISP_BE_CFG_BUF_EXIT                                        ) /* 0x    4912u */
+#define ISP_BE_CFG_BUF_CTL              _IOW( IOC_TYPE_ISP, IOC_NR_ISP_BE_CFG_BUF_CTL,            isp_be_wo_cfg_buf           ) /* 0x    4913u */
+#define ISP_BE_CFG_BUF_RUNNING          _IO(  IOC_TYPE_ISP, IOC_NR_ISP_BE_CFG_BUF_RUNNING                                     ) /* 0x    4914u */
+#define ISP_BE_All_BUF_INIT             _IO(  IOC_TYPE_ISP, IOC_NR_ISP_BE_All_BUF_INIT                                        ) /* 0x    4915u */
+#define ISP_BE_SWITCH_FINISH_STATE_SET  _IO(  IOC_TYPE_ISP, IOC_NR_ISP_BE_SWITCH_FINISH_STATE_SET                             ) /* 0x    4932u */
+#define ISP_MODE_SWITCH_SET         _IO(      IOC_TYPE_ISP, IOC_NR_ISP_MODE_SWITCH_SET                                        ) /* 0x    4933u */
+#define ISP_MEM_INFO_SET                _IOW( IOC_TYPE_ISP, IOC_NR_ISP_MEM_INFO_SET,              hi_bool                     ) /* 0x    4922u */
+#define ISP_MEM_INFO_GET                _IOR( IOC_TYPE_ISP, IOC_NR_ISP_MEM_INFO_GET,              hi_bool                     ) /* 0x80044923u */
+#define ISP_P2EN_INFO_GET               _IOR( IOC_TYPE_ISP, IOC_NR_ISP_P2EN_INFO_GET,             hi_bool                     ) /* 0x    4924u */
+#define ISP_INIT_INFO_SET               _IOW( IOC_TYPE_ISP, IOC_NR_ISP_INIT_INFO_SET,             hi_bool                     ) /* 0x    4925u */
+#define ISP_SYNC_INIT_SET               _IOW( IOC_TYPE_ISP, IOC_NR_ISP_SYNC_INIT_SET,             hi_bool                     ) /* 0x    4926u */
+#define ISP_RUN_STATE_SET               _IOW( IOC_TYPE_ISP, IOC_NR_ISP_RUN_STATE_SET,             hi_u64                      ) /* 0x    4927u */
+#define ISP_RESET_CTX                   _IO(  IOC_TYPE_ISP, IOC_NR_ISP_RESET_CTX                                              ) /* 0x    4928u */
+#define ISP_CONFIG_INFO_SET             _IOW( IOC_TYPE_ISP, IOC_NR_ISP_CONFIG_INFO_SET,           hi_isp_config_info          ) /* 0x    4929u */
+#define ISP_SNAP_INFO_GET               _IOR( IOC_TYPE_ISP, IOC_NR_ISP_SNAP_INFO_GET,             isp_snap_info               ) /* 0x    492Au */
+#define ISP_PRO_TRIGGER_GET             _IOR( IOC_TYPE_ISP, IOC_NR_ISP_PRO_EN_GET,                hi_bool                     ) /* 0x    492Bu */
+#define ISP_UPDATE_POS_GET              _IOR( IOC_TYPE_ISP, IOC_NR_ISP_UPDATE_POS_GET,            hi_u32                      ) /* 0x    492Cu */
+#define ISP_FRAME_CNT_GET               _IOR( IOC_TYPE_ISP, IOC_NR_ISP_FRAME_CNT_GET,             hi_u32                      ) /* 0x    492Du */
+#define ISP_SNAP_ATTR_GET               _IOR( IOC_TYPE_ISP, IOC_NR_ISP_SNAP_ATTR_GET,             isp_snap_attr               ) /* 0x    492Eu */
+#define ISP_PROC_INIT                   _IOR( IOC_TYPE_ISP, IOC_NR_ISP_PROC_INIT,                 isp_proc_mem                ) /* 0x    4916u */
+#define ISP_PROC_WRITE_ING              _IO(  IOC_TYPE_ISP, IOC_NR_ISP_PROC_WRITE_ING                                         ) /* 0x    4917u */
+#define ISP_PROC_WRITE_OK               _IO(  IOC_TYPE_ISP, IOC_NR_ISP_PROC_WRITE_OK                                          ) /* 0x    4918u */
+#define ISP_PROC_EXIT                   _IO(  IOC_TYPE_ISP, IOC_NR_ISP_PROC_EXIT                                              ) /* 0x    4919u */
+#define ISP_PROC_PARAM_GET              _IOR( IOC_TYPE_ISP, IOC_NR_ISP_PROC_PARAM_GET,            hi_u32                      ) /* 0x    491Au */
+#define ISP_TRANS_BUF_INIT              _IOR( IOC_TYPE_ISP, IOC_NR_ISP_TRANS_BUF_INIT,            isp_trans_info_buf          ) /* 0x    491Bu */
+#define ISP_TRANS_BUF_EXIT              _IO(  IOC_TYPE_ISP, IOC_NR_ISP_TRANS_BUF_EXIT                                         ) /* 0x    491Cu */
+#define ISP_PRO_BUF_INIT                _IOR( IOC_TYPE_ISP, IOC_NR_ISP_PRO_BUF_INIT,              isp_pro_info_buf            ) /* 0x    491Du */
+#define ISP_PRO_BUF_EXIT                _IO(  IOC_TYPE_ISP, IOC_NR_ISP_PRO_BUF_EXIT                                           ) /* 0x    491Eu */
+#define ISP_UPDATE_INFO_SET             _IOW( IOC_TYPE_ISP, IOC_NR_ISP_UPDATE_INFO_SET,           hi_isp_dcf_update_info      ) /* 0x    4957u */
+#define ISP_FRAME_INFO_SET              _IOW( IOC_TYPE_ISP, IOC_NR_ISP_FRAME_INFO_SET,            hi_isp_frame_info           ) /* 0x    4934u */
+#define ISP_FRAME_INFO_GET              _IOR( IOC_TYPE_ISP, IOC_NR_ISP_FRAME_INFO_GET,            hi_isp_frame_info           ) /* 0x    4935u */
+#define ISP_DNG_INFO_SET                _IOW( IOC_TYPE_ISP, IOC_NR_ISP_DNG_INFO_SET,              hi_dng_image_dynamic_info   ) /* 0x    4936u */
+#define ISP_DNG_INFO_GET                _IOR( IOC_TYPE_ISP, IOC_NR_ISP_DNG_INFO_GET,              hi_isp_dng_image_static_info) /* 0x    4937u */
+#define ISP_SYNC_CFG_SET                _IOW( IOC_TYPE_ISP, IOC_NR_ISP_SYNC_CFG_SET,              isp_sync_cfg_buf_node       ) /* 0x    491Fu */
+#define ISP_WDR_CFG_SET                 _IOW( IOC_TYPE_ISP, IOC_NR_WDR_SYNC_CFG_SET,              isp_wdr_cfg                 ) /* 0x    4921u */
+#define ISP_BE_SYNC_PARAM_INIT          _IOW( IOC_TYPE_ISP, IOC_NR_ISP_BE_SYNC_PARAM_INIT,        isp_be_sync_para            ) /* 0x    4958u */
+#define ISP_RES_SWITCH_SET              _IO(  IOC_TYPE_ISP, IOC_NR_ISP_RES_SWITCH_SET                                         ) /* 0x    4930u */
+#define ISP_CHN_SELECT_CFG              _IOW( IOC_TYPE_ISP, IOC_NR_ISP_CHN_SELECT_CFG,            hi_u32                      ) /* 0x    4931u */
+#define ISP_AWB_EN_SET                  _IOW( IOC_TYPE_ISP, IOC_NR_ISP_AWB_EN_SET,                hi_bool                     ) /* 0x    495Cu */
+#define ISP_PWM_NUM_GET                 _IOR( IOC_TYPE_ISP, IOC_NR_ISP_PWM_NUM_GET,               hi_u32                      ) /* 0x    492Fu */
+#define ISP_WORK_MODE_INIT              _IOR( IOC_TYPE_ISP, IOC_NR_ISP_WORK_MODE_INIT,            isp_block_attr              ) /* 0x    493Du */
+#define ISP_WORK_MODE_GET               _IOR( IOC_TYPE_ISP, IOC_NR_ISP_WORK_MODE_GET,             isp_working_mode            ) /* 0x    493Eu */
+#define ISP_WORK_MODE_EXIT              _IO(  IOC_TYPE_ISP, IOC_NR_ISP_WORK_MODE_EXIT                                         ) /* 0x    493Fu */
+#define ISP_SET_MOD_PARAM               _IOW( IOC_TYPE_ISP, IOC_NR_ISP_SET_MOD_PARAM,             hi_isp_mod_param            ) /* 0x    4938u */
+#define ISP_GET_MOD_PARAM               _IOR( IOC_TYPE_ISP, IOC_NR_ISP_GET_MOD_PARAM,             hi_isp_mod_param            ) /* 0x    4939u */
+#define ISP_SET_CTRL_PARAM              _IOW( IOC_TYPE_ISP, IOC_NR_ISP_SET_CTRL_PARAM,            hi_isp_ctrl_param           ) /* 0x    493Au */
+#define ISP_GET_CTRL_PARAM              _IOR( IOC_TYPE_ISP, IOC_NR_ISP_GET_CTRL_PARAM,            hi_isp_ctrl_param           ) /* 0x    493Bu */
+#define ISP_PRE_BLK_NUM_UPDATE          _IOW( IOC_TYPE_ISP, IOC_NR_ISP_PRE_BLK_NUM_UPDATE,        hi_u8                       ) /* 0x    4940u */
+#define ISP_GET_HDR_ATTR                _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_HDR_ATTR,              vi_pipe_hdr_attr            ) /* 0x    4941u */
+#define ISP_GET_WDR_ATTR                _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_WDR_ATTR,              vi_pipe_wdr_attr            ) /* 0x    4942u */
+#define ISP_GET_STITCH_ATTR             _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_STITCH_ATTR,           vi_stitch_attr              ) /* 0x    4943u */
+#define ISP_GET_PIPE_SIZE               _IOWR(IOC_TYPE_ISP, IOC_NR_ISP_GET_PIPE_SIZE,             hi_size                     ) /* 0x    4945u */
+#define ISP_PUB_ATTR_INFO               _IOW( IOC_TYPE_ISP, IOC_NR_ISP_PUB_ATTR_INFO,             hi_isp_pub_attr             ) /* 0x    4946u */
+#define ISP_KERNEL_RUNONCE              _IO(  IOC_TYPE_ISP, IOC_NR_ISP_KERNEL_RUNONCE                                         ) /* 0x    494Eu */
+#define ISP_OPT_RUNONCE_INFO            _IOW( IOC_TYPE_ISP, IOC_NR_ISP_OPT_RUNONCE_INFO,          hi_bool                     ) /* 0x    4951u */
+#define ISP_SET_PROCALCDONE             _IO(  IOC_TYPE_ISP, IOC_NR_ISP_SET_PROCALCDONE                                        ) /* 0x    4952u */
+#define ISP_YUV_RUNONCE_INFO            _IOW( IOC_TYPE_ISP, IOC_NR_ISP_YUV_RUNONCE_INFO,          hi_bool                     ) /* 0x    494Fu */
+#define ISP_KERNEL_YUV_RUNONCE          _IO(  IOC_TYPE_ISP, IOC_NR_ISP_KERNEL_YUV_RUNONCE                                     ) /* 0x    4950u */
+#define ISP_SYNC_STITCH_PARAM_INIT      _IO(  IOC_TYPE_ISP, IOC_NR_ISP_SYNC_STITCH_PARAM_INIT                                 ) /* 0x    4920u */
+#define ISP_CLUT_BUF_INIT               _IO(  IOC_TYPE_ISP, IOC_NR_ISP_CLUT_BUF_INIT                                          ) /* 0x    4947u */
+#define ISP_CLUT_BUF_EXIT               _IO(  IOC_TYPE_ISP, IOC_NR_ISP_CLUT_BUF_EXIT                                          ) /* 0x    4948u */
+#define ISP_CLUT_BUF_GET                _IOR( IOC_TYPE_ISP, IOC_NR_ISP_CLUT_BUF_GET,              hi_u64                      ) /* 0x    4949u */
+#define ISP_LDCI_BUF_INIT               _IO(  IOC_TYPE_ISP, IOC_NR_ISP_LDCI_BUF_INIT                                          ) /* 0x    4959u */
+#define ISP_LDCI_BUF_EXIT               _IO(  IOC_TYPE_ISP, IOC_NR_ISP_LDCI_BUF_EXIT                                          ) /* 0x    495Au */
+#define ISP_LDCI_READ_STT_BUF_GET       _IOR( IOC_TYPE_ISP, IOC_NR_ISP_LDCI_READ_STT_BUF_GET,     isp_ldci_read_stt_buf       ) /* 0x    495Bu */
+#define ISP_STT_BUF_INIT                _IO(  IOC_TYPE_ISP, IOC_NR_ISP_STT_BUF_INIT                                           ) /* 0x    494Au */
+#define ISP_STT_BUF_EXIT                _IO(  IOC_TYPE_ISP, IOC_NR_ISP_STT_BUF_EXIT                                           ) /* 0x    494Bu */
+#define ISP_STT_ADDR_INIT               _IO(  IOC_TYPE_ISP, IOC_NR_ISP_STT_ADDR_INIT                                          ) /* 0x    494Cu */
+#define ISP_BE_LUT_STT_BUF_GET          _IOR( IOC_TYPE_ISP, IOC_NR_ISP_BE_LUT_STT_BUF_GET,        hi_u64                      ) /* 0x    494Du */
+#define ISP_SPECAWB_BUF_INIT            _IO(  IOC_TYPE_ISP, IOC_NR_ISP_SPECAWB_BUF_INIT                                       ) /* 0x    4953u */
+#define ISP_SPECAWB_BUF_EXIT            _IO(  IOC_TYPE_ISP, IOC_NR_ISP_SPECAWB_BUF_EXIT                                       ) /* 0x    4954u */
+#define ISP_SPECAWB_BUF_GET             _IOR( IOC_TYPE_ISP, IOC_NR_ISP_SPECAWB_BUF_GET,           hi_u64                      ) /* 0x    4955u */
+#define ISP_SET_RGBIR_FORMAT            _IOW( IOC_TYPE_ISP, IOC_NR_ISP_SET_RGBIR_FORMAT,          hi_isp_ir_bayer_format      ) /* 0x    4956u */
 
 #define ISP_GET_DEV(f)             (*((hi_u32*)(f)))
 

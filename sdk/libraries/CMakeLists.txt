@@ -1,8 +1,10 @@
-# CMAKE_MINIMUM_REQUIRED(VERSION 3.8.2)
-# PROJECT(libraries C ASM)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.8.2)
+PROJECT(libraries C ASM)
 
 OPTION(BUILD_SHARED_LIBS "Build shared user-space libraries" ON)
 OPTION(BUILD_STATIC_LIBS "Build static user-space libraries" ON)
+
+set(CMAKE_ASM_CREATE_SHARED_LIBRARY ${CMAKE_C_CREATE_SHARED_LIBRARY})
 
 #
 # mpi
@@ -52,7 +54,18 @@ TARGET_INCLUDE_DIRECTORIES(mpi_obj PUBLIC
 # sns_gc2053
 #
 
-SET(SNS_GC2053_FILES "sns_gc2053/sns_gc2053.c")
+SET(SNS_GC2053_FILES
+    # "sns_gc2053/sns_gc2053.c"
+    "sns_gc2053/gc2053_cmos.S"
+    # "sns_gc2053/gc2053_sensor.S"
+    # "sns_gc2053/gc2053_cmos.c"
+    # "sns_gc2053/gc2053_sensor.c"
+)
+SET_SOURCE_FILES_PROPERTIES(
+    "sns_gc2053/gc2053_cmos.S"
+    PROPERTIES COMPILE_FLAGS
+    "-x assembler-with-cpp"
+)
 ADD_LIBRARY(sns_gc2053_obj OBJECT ${SNS_GC2053_FILES})
 IF (${BUILD_SHARED_LIBS})
     ADD_LIBRARY(sns_gc2053_shared SHARED $<TARGET_OBJECTS:sns_gc2053_obj>)
