@@ -5,6 +5,27 @@
 #ifndef REGMAP_USB_H
 #define REGMAP_USB_H
 
+#define USB2_PHY_CLK_OUTPUT_REG   0x0018
+#define USB2_PHY_CLK_OUTPUT_VAL   0x000C
+#define USB2_INNO_TRIM_OFFSET     0x000C
+#define USB2_VBUS_IO_OFFSET       0x0040
+#define USB2_VBUS_IO_VAL          0x0431
+#define USB_TRIM_OFFSET           0x0038
+#define USB_INNO_TRIM_MASK        0x007C
+#define USB_INNO_TRIM_VAL(a)      (((a) << 2) & USB_INNO_TRIM_MASK)
+#define USB_TRIM_VAL_MASK         0x001F
+#define USB_TRIM_VAL_MIN          0x000F
+#define USB_TRIM_VAL_MAX          0x001C
+
+#define PRE_EMPHASIS_TUNING_OFFSET   0x00 /* usb-inno */
+#define HS_HIGH_HEIGHT_TUNING_OFFSET 0x08 /* usb-inno */
+#define DISCONNECT_TRIGGER_OFFSET    0x10 /* usb-inno */
+#define PRE_EMPHASIS_STRENGTH_OFFSET 0x14 /* usb-inno */
+#define HS_SLEW_RATE_TUNING_OFFSET   0x74 /* usb-inno */
+
+#define PCS_SSP_SOFT_RESET        (0x1 << 31)
+#define PORT_DISABLE_SUSPEND      (0x1 << 17)
+
 #define PERI_USB2_GSBUSCFG0       0xC100 /* Global SoC bus configuration register 0 */
 #define PERI_USB2_GSBUSCFG1       0xC104 /* Global SoC bus configuration register 1 */
 #define PERI_USB2_GTXTHRCFG       0xC108 /* Global TX threshold control register */
@@ -24,6 +45,7 @@
 #define PERI_USB2_GPRTBIMAP_FS_HI 0xC188 /* FS port-bus mapping upper-32-bit register */
 #define PERI_USB2_GPRTBIMAP_FS    0xC18C /* FS port-bus mapping lower-32-bit register */
 #define PERI_USB2_GUSB2PHYCFGN    0xC200 /* Global USB 2.0 PHY configuration register */
+#define PERI_USB2_GUSB3PIPECTL0   0xC2C0
 #define PERI_USB2_GTXFIFOSIZN     0xC304 /* Global TX FIFO size register */
 #define PERI_USB2_GRXFIFOSIZN     0xC384 /* Global RX FIFO size register */
 #define PERI_USB2_GEVNTADRN_HI    0xC410 /* Global event buffer address upper-32-bit register */

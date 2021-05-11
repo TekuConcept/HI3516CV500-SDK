@@ -6,11 +6,15 @@
 
 #define REGU32(addr) *((unsigned int*)(addr))
 
-#define EXE_SIZE 0x6000
+#define PROGRAM_SIZE 0x6000
+
+#define ACK         '\xAA'
+#define NACK        '\x55'
 
 #define FRAME_ENTER '\xFE'
 #define FRAME_DATA  '\xDA'
 #define FRAME_END   '\xED'
+#define FRAME_ENTER_SIZE 14
 
 #define DOWN_MAGIC  0x444F574E /* "DOWN" */
 #define ZIJU_MAGIC  0x7A696A75 /* "ziju" */
@@ -74,22 +78,49 @@ typedef struct struc_4 {
     unsigned int field_18; // 0x18
 } struc_4;
 
+typedef struct struc_7 { // (sizeof=0x40)
+    unsigned int field_0;              // 0x00
+    unsigned int field_4;              // 0x04
+    unsigned int field_8[4];           // 0x08
+    unsigned int field_18;             // 0x18 (assigned 0x10)
+    unsigned int field_1C;             // 0x1C
+    unsigned int field_20;             // 0x20
+    unsigned int in_addr;              // 0x24
+    unsigned int out_addr;             // 0x28
+    unsigned int field_2C;             // 0x2C
+    unsigned int field_30;             // 0x30 (assigned 0; in; likely count)
+    unsigned int field_34;             // 0x34 (assigned 0; out; likely count)
+    unsigned int cipher_in_node_wptr;  // 0x38
+    unsigned int cipher_out_node_wptr; // 0x3C
+} struc_7; // (relating to SPAcc Cipher)
+
+typedef struct struc_8 { // (sizeof=0x10)
+    unsigned int field_0;           // 0x00
+    unsigned int in_addr;           // 0x04
+    unsigned int field_8;           // 0x08 (assigned 0; in; likely count)
+    unsigned int hash_in_node_wptr; // 0x0C
+} struc_8; // (relating to SPAcc Hash)
+
 typedef struct context_t { // (sizeof=0x268)
-    unsigned int field_0;         // 0x000
+    int (*callback)();            // 0x000
     char field_4[12];             // 0x004 (relating to memory mapping)
-
     phy_mem_t memory_map[16];     // 0x010 (sizeof=0x100)
-
-    unsigned int field_110;       // 0x110
+    struc_7 field_110;            // 0x110 (relating to SPAcc Cipher)
+    struc_8 field_150;            // 0x150 (relating to SPAcc Hash)
     unsigned int field_160;       // 0x160 (relating to SDIO)
     void *mmc_phy_addr;           // 0x164
-
+    unsigned int field_168;       // 0x168
+    unsigned int field_16C;       // 0x16C
+    unsigned int field_170;       // 0x170
+    unsigned int field_174;       // 0x174
+    unsigned int field_178;       // 0x178
     unsigned int uart_base;       // 0x17C
-
     unsigned int time_value;      // 0x180
     unsigned int residual_time;   // 0x184
     unsigned int field_188;       // 0x188
-
+    // 0x18C - 0x25C
+    unsigned int field_260;       // 0x260 (values include 0x20000, 0x40000, 0x60000)
+    unsigned int field_264;       // 0x264
 } context_t;
 
 context_t* g_context = (context_t*)SDRAM_START;
@@ -99,143 +130,6 @@ extern void enable_instruction_cache();       // offset=0x2858
 extern void disable_instruction_cache();      // offset=0x2880
 extern int invalidate_instruction_pipeline(); // offset=0x28E0
 
-
-int // offset=0x3410
-sub_3410()
-{
-    int v0; // r6
-    int v1; // r0
-    int v2; // r0
-    unsigned int v3; // r4
-    int v4; // r5
-    int v5; // r0
-
-    // UART0_RXD: slow level conversion, IO2_level3, pullup (0x531)
-    REGU32(IO_CTRL1_START + 0x10) = 0x531;
-    // UART0_TXD: slow level conversion, IO2_level3 (0x431)
-    REGU32(IO_CTRL1_START + 0x14) = 0x431;
-
-    v0 = 5;
-    v1 = enable_uart();
-    v2 = sub_3338(v1);
-    v3 = 10 * sub_5244(v2);
-
-    while ( 2 ) {
-        v4 = 5;
-        do {
-            uart_send(32);
-            --v4;
-        } while ( v4 );
-
-        timer_reset_counter();
-
-        while ( v3 > timer_time_passed() ) {
-            if ( uart_has_data() && (unsigned char)uart_recv() == 170 )
-                return 1;
-        }
-
-        if ( --v0 ) continue;
-        break;
-    }
-
-    uart_send(10);
-    disable_uart();
-    return 0;
-}
-
-int // offset=0x1470
-sub_1470()
-{
-    int result;
-    unsigned int value;
-    int is_emmc_boot;
-    int magic;
-
-    int v4; // r7
-    void *v5; // r0
-    int n6; // r7
-
-    if ( sub_3410() == 0 )
-        return -1;
-
-    value = REGU32(SYSCTRL_START + SYSSTAT);
-    is_emmc_boot = (value & 0x10) >> 4;
-
-    sub_3580();
-
-    if ( sub_34E0(&dword_4010500, EXE_SIZE) ) {
-        REGU32(SYSCTRL_START + 0x140) = 0xFFFFFFFF;
-        REGU32(SYSCTRL_START + 0x13C) = DOWN;
-
-        if ( is_emmc_boot ) {
-            sub_3DE0();
-            emmc_load(PHY_MEM_START, EXE_SIZE);
-        }
-        else memcpy(PHY_MEM_START, (const void *)FLASH_MEM_START, EXE_SIZE);
-
-        magic = 0x73616666; // "saff";
-    }
-    else magic = 0x73616665; // "safe";
-
-    result = sub_2B78(48);
-    if ( result == 0 ) {
-        sub_320(49);
-        return -1;
-    }
-
-    if ( sub_1DC() != 0 )
-        sub_320(48);
-    else if ( sub_1150(result) != 0 )
-        sub_320(50);
-    else {
-        v4 = *(_DWORD *)(result + 16);
-
-        if ( sub_868(result, *(_DWORD *)(result + 28), *(_DWORD *)(result + 24), *(_DWORD *)(result + 32), v4) ) {
-            sub_320(51);
-            sub_10AC(magic, is_emmc_boot);
-        }
-        else {
-            sub_5348(*(_DWORD *)(result + 28));
-            v5 = memset(*(void **)(result + 28), 0, *(_DWORD *)(result + 24));
-
-            if ( (REGU32(SYSCTRL_START + PERISTAT) & 2) == 0 || sub_358(v5) == 0 ) {
-                sub_568(
-                    magic,
-                    is_emmc_boot,
-                    *(_DWORD *)(result + 4));
-
-                *(_DWORD *)(result + 44) =
-                    *(_DWORD *)(result + 4) -
-                    *(_DWORD *)(result + 8) -
-                    *(_DWORD *)(result + 40) -
-                    0x7F000000;
-
-                sub_136C(result);
-
-                n6 = sub_868(
-                    result,
-                    *(_DWORD *)(result + 44),
-                    *(_DWORD *)(result + 40),
-                    *(_DWORD *)(result + 40) + *(_DWORD *)(result + 44),
-                    v4);
-
-                sub_10AC(magic, is_emmc_boot);
-
-                if ( n6 == 0 ) {
-                    g_context.callback = *(int (**)(void))(result + 44);
-                    free(result);
-                    return 0;
-                }
-
-                sub_320(52);
-            }
-            else sub_10AC(magic, is_emmc_boot);
-        }
-    }
-
-    free(result);
-    return -1;
-}
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -279,7 +173,46 @@ reset_soc_clocks()
     for (i = 10; i > 0; i--);
 }
 
-// sub_1DC
+int // offset=0x1DC
+sub_1DC(unsigned int *a1)
+{
+    a1[0] = REGU32(PHY_MEM_START + 0x00);
+    a1[1] = REGU32(PHY_MEM_START + 0x04);
+
+    if ( REGU32(PHY_MEM_START + 0x04) > 0x100000 )
+        return -1;
+
+    a1[2] = REGU32(PHY_MEM_START + 0x08);
+
+    if ( a1[2] != 0x200 && ((a1[2] - 0x80) & 0xFFFFFF7F) != 0 )
+        return -1;
+
+    a1[3] = REGU32(PHY_MEM_START + 0x0C);
+
+    if ( a1[2] != a1[3] )
+        return -1;
+
+    a1[4] = PHY_MEM_START + 0x10;
+    a1[5] = a1[4] + 2 * a1[2];
+    a1[6] = *(int *)(PHY_MEM_START + 0x20 + 2 * a1[2]);
+
+    if ( a1[6] & 3 != 0 )
+        return -1;
+
+    a1[7] = PHY_MEM_START + 0x24 + 2 * a1[2];
+    a1[8] = a1[7] + a1[6];
+
+    if ( ((unsigned int)(a1[8] + 0xFBFEFB00) > 0x6000) )
+        return -1;
+
+    a1[9] = a1[2];
+    a1[10] = *(_DWORD *)&(a1[8])[a1[2]];
+
+    if ( a1[1] < a1[10] )
+        return -1;
+
+    return -((a1[10] & 3) != 0);
+}
 
 int // offset=0x2CC
 rand()
@@ -333,7 +266,7 @@ ddr_scramble()
             }
 
             value = REGU32(DDRC_DMC_START + DDRC_UNK_294) & 1;
-        } while ( value == 0 )
+        } while ( value == 0 );
     }
     else {
         timer_reset_counter();
@@ -417,21 +350,21 @@ register_uboot_callback(int is_emmc_boot)
     unsigned int uboot_magic[4];
 
     if ( is_emmc_boot ) {
-        emmc_boot();
+        emmc_init();
         emmc_load(PHY_MEM_START, 0x6000u);
 
-        uboot_magic[0] = REGU32(PHY_MEM_START + 0x0); // v4
-        uboot_magic[1] = REGU32(PHY_MEM_START + 0x4); // v3
-        uboot_magic[2] = REGU32(PHY_MEM_START + 0x8); // v2
-        uboot_magic[3] = REGU32(PHY_MEM_START + 0xC); // v1
-        g_context.callback = (int (*)(void))(PHY_MEM_START);
+        uboot_magic[0] = REGU32(PHY_MEM_START + 0x0);
+        uboot_magic[1] = REGU32(PHY_MEM_START + 0x4);
+        uboot_magic[2] = REGU32(PHY_MEM_START + 0x8);
+        uboot_magic[3] = REGU32(PHY_MEM_START + 0xC);
+        g_context->callback = (int (*)(void))(PHY_MEM_START);
     }
     else {
         uboot_magic[0] = REGU32(FLASH_MEM_START + 0x0);
         uboot_magic[1] = REGU32(FLASH_MEM_START + 0x4);
         uboot_magic[2] = REGU32(FLASH_MEM_START + 0x8);
         uboot_magic[3] = REGU32(FLASH_MEM_START + 0xC);
-        g_context.callback = (int (*)(void))(FLASH_MEM_START);
+        g_context->callback = (int (*)(void))(FLASH_MEM_START);
     }
 
     /**
@@ -448,7 +381,24 @@ register_uboot_callback(int is_emmc_boot)
     return 0;
 }
 
-// sub_568
+void // offset=0x568
+boot(boot_type_t boot_type, int is_emmc_boot, unsigned int size)
+{
+    switch ( boot_type ) {
+    case BOOT_TYPE_SDIO:   sdio_boot(UBOOT_START, size);   break;
+    case BOOT_TYPE_USB:    usb_boot(UBOOT_START, size);    break;
+    case BOOT_TYPE_SERIAL: serial_boot(UBOOT_START, size); break;
+    default:
+        memcpy((void *)(UBOOT_START), (void *)PHY_MEM_START, PROGRAM_SIZE);
+        if ( is_emmc_boot )
+            emmc_load(UBOOT_START + PROGRAM_SIZE, size - PROGRAM_SIZE);
+        else memcpy(
+            (void *)(UBOOT_START + PROGRAM_SIZE),
+            (const void *)(FLASH_MEM_START + PROGRAM_SIZE),
+            size - PROGRAM_SIZE);
+        break;
+    }
+}
 
 // sub_614
 
@@ -637,7 +587,7 @@ sub_2284()
      * SPAcc clock gating enabled
      */
     value = REGU32(CRG_START + SPA_CONFIG);
-    REGU32(CRG_START + SPA_CONFIG) = value & 0xFFFFFEFF | 0x200
+    REGU32(CRG_START + SPA_CONFIG) = value & 0xFFFFFEFF | 0x200;
 
     /**
      * KLAD soft reset request deassert
@@ -654,7 +604,7 @@ sub_2284()
      * DRBG post-processing enabled
      * Random number source 2 is used
      */
-    REGU32(TRNG_START + HISEC_COM_TRNG_CTRL) = 0xA
+    REGU32(TRNG_START + HISEC_COM_TRNG_CTRL) = 0xA;
 
     value = REGU32(SYSCTRL_START + SYSSTAT);
     is_emmc_boot = value & 0x10;
@@ -663,10 +613,10 @@ sub_2284()
     if ( is_fast_boot && sub_1470() == 0 )
         result = 0;
     else {
-        value = sub_3318();
-        value = sub_3338(value);
+        enable_serial();
+        serial_flush();
 
-        if ( sub_105C(value) != 0 && sub_1AF4() == 0)
+        if ( gpio_pin2_pressed() != 0 && sub_1AF4() == 0)
             result = 0;
         else {
             if ( is_emmc_boot )
@@ -679,7 +629,7 @@ sub_2284()
         }
     }
 
-    sub_3334();
+    disable_serial();
 
     /**
      * SPAcc clock gating disabled
@@ -696,7 +646,22 @@ sub_2284()
     return result;
 }
 
-// sub_2368
+int // offset=0x2368
+flash_firmware()
+{
+    int result;
+    int is_emmc_boot;
+
+    if ( serial_burn() != 0 )
+        return -1;
+
+    is_emmc_boot = (REGU32(SYSCTRL_START = SYSSTAT) >> 4) & 1;
+    result = register_uboot_callback(is_emmc_boot);
+
+    if ( result != 0 && is_emmc_boot )
+        emmc_reset();
+    return result;
+}
 
 // sub_23C4
 
@@ -737,12 +702,12 @@ main()
         REGU32(IO_CTRL0_START + 0x14) = 0x4F1;
     }
 
-    if ( ddr_scramble_enabled != 0 ) {
+    if ( ddr_scramble_enabled ) {
         if ( sub_2284() )
             goto error;
     }
-    else if ((is_fast_boot == 0 || sub_2368()) &&
-        (!sub_105C() || sub_23C4()) )
+    else if ((is_fast_boot == 0 || flash_firmware()) &&
+        (gpio_pin2_pressed() == 0 || sub_23C4()) )
     {
         if ( is_emmc_boot ) {
             if ( sub_25D4() && sub_23C4() )
@@ -1071,15 +1036,49 @@ sleep(unsigned int seconds)
         msleep(1000u);
 }
 
-// sub_2CD8
+int // offset=0x2CD8
+strlen(const char *str)
+{
+    const char *s = str;
+    if ( *str == '\0' )
+        return 0;
+    while ( *(unsigned char *)(++s) );
+    return s - str;
+}
 
-// sub_2D04 /**/
+int // offset=0x2D04
+strncmp(const char *str1, const char *str2, int size)
+{
+    int i, result;
+
+    for (i = 0; i < size; i++) {
+        result = str1[i] - str2[i];
+        if ( result != 0 )
+            return result;
+    }
+
+    return 0;
+}
 
 void // offset=0x2D74
 print(const char* str, int log_level)
 { }
 
-// sub_2E00
+int // offset=0x2E00
+strcmp(const char *str1, const char *str2)
+{
+    const unsigned char *s1 = (const unsigned char *)str1;
+    const unsigned char *s2 = (const unsigned char *)str2;
+    unsigned char c1, c2;
+
+    do {
+        c1 = (unsigned char)*s1++;
+        c2 = (unsigned char)*s2++;
+        if ( c1 == '\0' )
+            return 0; /* as opposed to c1 - c2 */
+    } while ( c1 == c2 );
+    return c1 - c2;
+}
 
 int // offset=0x2E30
 crc16_checksum(crc_context_t *crc, unsigned int count, unsigned int data)
@@ -1115,7 +1114,7 @@ crc16_checksum(crc_context_t *crc, unsigned int count, unsigned int data)
     }
 }
 
-int // offset=0x2EE4
+stream_state_t // offset=0x2EE4
 serial_recv_packet(program_stream_t *stream)
 {
     /**
@@ -1197,7 +1196,7 @@ serial_recv_packet(program_stream_t *stream)
             last_frame = byte;
 
             switch ( count ) {
-            case 0x0: crc.count = FRAME_SIZE - 1;                                 break;
+            case 0x0: crc.count = FRAME_ENTER_SIZE - 1;                                 break;
             case 0x1: crc.data = (unsigned char)byte;                             break;
             case 0x2:                                                             break;
             case 0x3: stream->data = byte;                                        break;
@@ -1216,7 +1215,7 @@ serial_recv_packet(program_stream_t *stream)
                 if ( count == 0 && stream->count != 0 ) {
                     memset(&crc, 0, sizeof(crc_context_t));
                     memset(stream, 0, sizeof(program_stream_t));
-                    crc.count = FRAME_SIZE - 1;
+                    crc.count = FRAME_ENTER_SIZE - 1;
                 }
 
                 if (
@@ -1334,41 +1333,162 @@ serial_flush()
 void // offset=0x3354
 serial_invoke()
 {
-    int result;
+    stream_state_t result;
     program_stream_t stream;
 
     memset(&stream, 0, sizeof(stream));
 
     do {
         result = serial_recv_packet(&stream);
-        if ( result == 2 )
-            uart_send('U');
-        else if ( result == 4 ) {
-            uart_send('\xAA');
+        if ( result == STREAM_STATE_ERROR )
+            uart_send(NACK);
+        else if ( result == STREAM_STATE_DONE ) {
+            uart_send(ACK);
             stream.callback();
             serial_flush();
             memset(&stream, 0, sizeof(stream));
         }
-        else if ( result == 1 )
-            uart_send('\xAA');
+        else if ( result == STREAM_STATE_ACK )
+            uart_send(ACK);
     } while (REGU32(SYSCTRL_START + UNK_150) != EMMC_MAGIC);
 
     REGU32(SYSCTRL_START + UNK_150) = 0;
 }
 
-// sub_3410
+int // offset=0x3410
+serial_wait_signal()
+{
+    unsigned int delay;
+    int i, j;
 
-// sub_34AC
+    // UART0_RXD IO2_level4, slow level conversion, pull-up
+    REGU32(IO_CTRL1_START + 0x10) = 0x531;
+    // UART0_TXD IO2_level4, slow level conversion
+    REGU32(IO_CTRL1_START + 0x14) = 0x431;
 
-// sub_34E0
+    enable_uart();
+    serial_flush();
+    delay = 10 * common_delay();
 
-// sub_3580
+    for (i = 5; i > 0; i--) {
+        for (j = 5; j > 0; j--)
+            uart_send(' ');
+
+        timer_reset_counter();
+
+        do {
+            if ( uart_has_data() && uart_recv() == ACK )
+                return 1;
+        } while ( delay > timer_time_passed() );
+    }
+
+    uart_send('\n');
+    disable_uart();
+    return 0;
+}
+
+int // offset=0x34AC
+serial_burn()
+{
+    if ( !serial_wait_signal() )
+        return -1;
+    REGU32(SYSCTRL_START + UNK_154) = 1;
+    serial_invoke();
+    return 0;
+}
+
+int // offset=0x34E0
+serial_boot(unsigned int addr, unsigned int size)
+{
+    stream_state_t status;
+    program_stream_t stream;
+    int retries = 0;
+    int result = 0;
+
+    memset(&stream, 0, sizeof(stream));
+
+    do {
+        status = serial_recv_packet(&stream);
+        if ( status == STREAM_STATE_ERROR )
+            uart_send(NACK);
+        else if ( status == STREAM_STATE_ACK ) {
+            uart_send(ACK);
+            if ( stream.size != size )
+                result = -1;
+            if ( stream.count == 1 )
+                stream.addr = addr;
+        }
+        else if ( status == STREAM_STATE_DONE )
+            break;
+    } while ( ++retries <= 0xFF );
+
+    if ( retries > 0xFF ) result = -1;
+
+    uart_send(ACK);
+    return result;
+}
+
+void // offset=0x3580
+serial_load()
+{
+    stream_state_t status;
+    program_stream_t stream;
+
+    memset(&stream, 0, sizeof(stream));
+
+    do {
+        status = serial_recv_packet(&stream);
+        if ( status == STREAM_STATE_ERROR )
+            uart_send(NACK);
+        else if ( status == STREAM_STATE_ACK )
+            uart_send(ACK);
+    } while ( status != STREAM_STATE_DONE );
+
+    uart_send(ACK);
+
+    REGU32(SYSCTRL_START + UNK_140) = ZIJU_MAGIC;
+    REGU32(SYSCTRL_START + UNK_13C) = DOWN_MAGIC;
+    REGU32(SYSCTRL_START + UNK_154) = 1;
+
+    serial_flush();
+    memset(&stream, 0, sizeof(stream));
+}
 
 // sub_3628
 
-// sub_36C0
+void // offset=0x36C0
+deadlock()
+{ while (1); }
 
-// sub_36C4
+int // offset=0x36C4
+sub_36C4(unsigned int in_addr, unsigned int out_addr)
+{
+    unsigned int cipher_in_node_total_num;
+    unsigned int cipher_out_node_total_num;
+    memset(&g_context.field_110, 0, sizeof(g_context.field_110));
+
+    cipher_in_node_total_num = REGU32(SPACC_START + CHANN_CIPHER_IN_NODE_CFG(1));
+    cipher_in_node_total_num &= ~(0x7F << 24);
+    cipher_in_node_total_num |= 0x02 << 24;
+
+    REGU32(SPACC_START + CHANN_CIPHER_IN_NODE_CFG(1)) = cipher_in_node_total_num;
+    REGU32(SPACC_START + CHANN_CIPHER_IN_NODE_START_ADDR(1)) = in_addr;
+
+    g_context.field_110.in_addr = in_addr;
+    g_context.field_110.field_30 = 0;
+    g_context.field_110.cipher_in_node_wptr = (cipher_in_node_total_num >> 16) & 0x7F;
+
+    cipher_out_node_total_num = REGU32(SPACC_START + CHANN_CIPHER_OUT_NODE_CFG(1));
+    cipher_out_node_total_num &= ~(7F << 24);
+    cipher_out_node_total_num |= (0x02 << 24);
+
+    REGU32(SPACC_START + CHANN_CIPHER_OUT_NODE_CFG(1)) = cipher_out_node_total_num;
+    REGU32(SPACC_START + CHANN_CIPHER_OUT_NODE_START_ADDR(1)) = out_addr;
+
+    g_context.field_110.out_addr = out_addr;
+    g_context.field_110.field_34 = 0;
+    g_context.field_110.cipher_out_node_wptr = (cipher_out_node_total_num >> 16) & 0x7F;
+}
 
 // sub_373C
 
@@ -1525,17 +1645,17 @@ emmc_hardware_init()
     sdio_pad_pu_disable = REGU32(SYSCTRL_START + PERISTAT) & 0x2000;
 
     for (i = 4; i != 0x18; i += 4) {
-        value = pin_mode[v1 + emmc_start_freq];
+        value = pin_mode[i + emmc_start_freq];
         if ( sdio_pad_pu_disable )
             value &= 0xFFFFFEFF;
-        REGU32(IO_CTRL0_START + v1) = value;
+        REGU32(IO_CTRL0_START + i) = value;
     }
 
     REGU32(IO_CTRL0_START + 0x18) = pin_mode[0x18 + emmc_start_freq];
 }
 
 int // offset=0x3DE0
-emmc_boot()
+emmc_init()
 {
     unsigned int value;
     unsigned int interrupt_status;
@@ -1908,7 +2028,7 @@ check_sd_card()
 }
 
 int // offset=0x422C
-sdio_boot()
+sdio_init()
 {
     unsigned int value;
     unsigned int cmdarg;
@@ -1972,7 +2092,7 @@ sdio_boot()
      * rx_wmark FIFO depth = 7
      * tx_wmark FIFO depth = 8
      */
-    REGU32(SDIO_START + MMC_FIFOTH) = 0x20070008;
+    REGU32(SDIO0_START + MMC_FIFOTH) = 0x20070008;
 
     /**
      * read threshold = 512 bytes
@@ -2109,9 +2229,9 @@ sdio_boot()
 void // offset=0x445C
 sdio_shutdown()
 {
-    if ( g_context.mmc_phy_addr != 0 ) {
-        free(g_context.mmc_phy_addr);
-        g_context.mmc_phy_addr = 0;
+    if ( g_context->mmc_phy_addr != 0 ) {
+        free(g_context->mmc_phy_addr);
+        g_context->mmc_phy_addr = 0;
     }
 
     /**
@@ -2181,7 +2301,7 @@ disable_uart()
     /**
      * UART disabled
      */
-    REGU32(g_context.uart_base = UART_CR) &= 0xFFFFFFFE;
+    REGU32(g_context->uart_base = UART_CR) &= 0xFFFFFFFE;
     return 0;
 }
 
@@ -2191,8 +2311,8 @@ uart_send(int data)
     /**
      * UART TX FIFO full - wait
      */
-    while ( (REGU32(g_context.uart_base + UART_FR) & 0x20) != 0 );
-    REGU32(g_context.uart_base + UART_DR) = data;
+    while ( (REGU32(g_context->uart_base + UART_FR) & 0x20) != 0 );
+    REGU32(g_context->uart_base + UART_DR) = data;
 }
 
 int // offset=0x5170
@@ -2203,14 +2323,14 @@ uart_recv()
     /**
      * UART RX FIFO empty - wait
      */
-    while ( (REGU32(g_context.uart_base + UART_FR) & 0x10) != 0 );
+    while ( (REGU32(g_context->uart_base + UART_FR) & 0x10) != 0 );
 
-    result = REGU32(g_context.uart_base + UART_DR);
+    result = REGU32(g_context->uart_base + UART_DR);
     if ( (result & 0xFFFFFF00) != 0 ) {
         /**
          * reset UART
          */
-        REGU32(g_context.uart_base + UART_RSR) = -1;
+        REGU32(g_context->uart_base + UART_RSR) = -1;
         return -1;
     }
 
@@ -2219,7 +2339,7 @@ uart_recv()
 
 int // offset=0x51A0
 uart_has_data()
-{ return ((REGU32(g_context.uart_base + UART_FR) ^ 0x10) >> 4) & 1; }
+{ return ((REGU32(g_context->uart_base + UART_FR) ^ 0x10) >> 4) & 1; }
 
 // ============================================================================
 
@@ -2274,7 +2394,7 @@ timer_update_value()
     g_context->time_value = REGU32(TIMER01_START + TIMER_VALUE);
 
     ticks = time_value + g_context->residual_time;
-    if ( REGU32(TIMER01_START + TIMER_VALUE) > last_time_value )
+    if ( REGU32(TIMER01_START + TIMER_VALUE) > time_value )
         ticks--;
 
     g_context->residual_time = ticks - REGU32(TIMER01_START + TIMER_VALUE);
@@ -2410,7 +2530,15 @@ sub_5468(int a1, unsigned int a2)
 
 // sub_6B00
 
-// sub_6C08
+void // offset=0x6C08
+sub_6C08()
+{
+    switch ( g_context.field_260 ) {
+    case 0x40000: long_sleep(300); break;
+    case 0x60000: long_sleep( 50); break;
+    case 0x20000: long_sleep(200); break;
+    }
+}
 
 // sub_6C60
 
@@ -2473,9 +2601,149 @@ is_emmc_power_on_delayed()
     return (REGU32(SYSCTRL_START + PERISTAT) >> 15) & 1;
 }
 
-// sub_75A0
+void // offset=0x75A0
+usb_eye_on()
+{
+    unsigned int usb_phy_para_sel;
+    unsigned int usb_phy_trim;
+    unsigned int usb_inno_trim;
 
-// sub_7688
+    REGU32(USB_PHY_START + USB2_PHY_CLK_OUTPUT_REG) =
+        USB2_PHY_CLK_OUTPUT_VAL;
+    long_sleep(1); // wait 1 millisecond
+
+    usb_phy_trim = REGU32(USB_TRIM_START + USB_TRIM_OFFSET) & USB_TRIM_VAL_MASK;
+    if ( usb_phy_trim <= USB_TRIM_VAL_MAX ) {
+        usb_inno_trim = REGU32(USB_PHY_START + USB2_INNO_TRIM_OFFSET);
+        usb_inno_trim &= 0xFFFFFF83;
+        usb_inno_trim |= (4 * usb_phy_trim);
+
+        long_sleep(1); // wait 1 millisecond
+        REGU32(USB_PHY_START + USB2_INNO_TRIM_OFFSET) = usb_inno_trim;
+        long_sleep(1); // wait 1 millisecond
+    }
+
+    usb_phy_para_sel = REGU32(SYSCTRL_START + PERISTAT) & 0xC0;
+    if ( usb_phy_para_sel == 0x80 )
+        /* pre-emphasis tuning only */
+        REGU32(USB_PHY_START + PRE_EMPHASIS_TUNING_OFFSET) = 0x1C;
+    else if ( usb_phy_para_sel == 0xC0 )
+        /* hs eye high-height tunning only */
+        REGU32(USB_PHY_START + HS_HIGH_HEIGHT_TUNING_OFFSET) = 0x02;
+    else if ( usb_phy_para_sel != 0x40 ) {
+        /* both pre-emphasis and hs eye high-height tuning */
+        REGU32(USB_PHY_START + HS_HIGH_HEIGHT_TUNING_OFFSET) = 0x02;
+        long_sleep(1); // wait 1 millisecond
+        REGU32(USB_PHY_START + PRE_EMPHASIS_TUNING_OFFSET) = 0x1C;
+    }
+
+    long_sleep(20); // wait 20 milliseconds
+}
+
+void // offset=0x7688
+usb_init()
+{
+    unsigned int value;
+
+    /**
+     * USB 2.0 PHY test soft reset asserted
+     */
+    REGU32(CRG_START + USB_CONFIG) |= 0x4000u;
+
+    long_sleep(100); // wait 100 milliseconds
+
+    /**
+     * USB 2.0 PHY test soft reset deasserted
+     */
+    REGU32(CRG_START + USB_CONFIG) &= 0xFFFFBFFF;
+
+    long_sleep(20); // wait 20 milliseconds
+
+    usb_eye_on();
+
+    /**
+     * USB 2.0 PHY REF clock gating enabled
+     */
+    REGU32(CRG_START + USB_CONFIG) |= 0x00000004;
+
+    /**
+     * USB 2.0 UTMI clock source: USB 2.0 PHY clock
+     */
+    REGU32(CRG_START + USB_CONFIG) &= 0xFFFFDFFF;
+
+    /**
+     * USB 2.0 controller UTMI clock gating enabled
+     */
+    REGU32(CRG_START + USB_CONFIG) |= 0x00001000;
+
+    /**
+     * USB 2.0 controller REF clock gating enabled
+     */
+    REGU32(CRG_START + USB_CONFIG) |= 0x00000200;
+
+    /**
+     * USB 2.0 controller bus clock gating enabled
+     */
+    REGU32(CRG_START + USB_CONFIG) |= 0x00000100;
+
+    long_sleep(200); // wait 200 milliseconds
+
+    /**
+     * USB 2.0 PHY POR soft reset deasserted
+     */
+    REGU32(CRG_START + USB_CONFIG) &= 0xFFFFFFFE;
+
+    long_sleep(2000); // wait 2 seconds
+
+    /**
+     * USB 2.0 PHY TPOR soft reset deasserted
+     */
+    REGU32(CRG_START + USB_CONFIG) &= 0xFFFFFFFD;
+
+    long_sleep(200); // wait 200 milliseconds
+
+    /**
+     * USB 2.0 controller VCC soft reset deasserted
+     */
+    REGU32(CRG_START + USB_CONFIG) &= 0xFFFFFFF7;
+
+    long_sleep(200); // wait 200 milliseconds
+
+    REGU32(USB_CTL_START + PERI_USB2_GUSB3PIPECTL0) |= PCS_SSP_SOFT_RESET;
+
+    long_sleep(200); // wait 200 milliseconds
+
+    /**
+     * Port configuration type: host configuration
+     */
+    value = REGU32(USB_CTL_START + PERI_USB2_GCTL);
+    value &= 0xFFFFCFFF;
+    value |= 0x1000
+    REGU32(USB_CTL_START + PERI_USB2_GCTL) = value;
+
+    long_sleep(20); // wait 20 milliseconds
+
+    REGU32(USB_CTL_START + PERI_USB2_GUSB3PIPECTL0) &=
+        ~(PCS_SSP_SOFT_RESET | PORT_DISABLE_SUSPEND);
+
+    long_sleep(20); // wait 20 milliseconds
+
+    /**
+     * usbmaxtxburstsize = 16
+     * usbtxpktcnt = 3
+     * The USB module starts transfer only after specified packets are read to the specified TX FIFO.
+     */
+    REGU32(USB_CTL_START + PERI_USB2_GTXTHRCFG) = 0x23100000;
+
+    /**
+     * usbmaxtxburstsize = 2
+     * usbtxpktcnt = 3
+     * The USB module starts transfer only after specified packets are read to the specified RX FIFO.
+     */
+    REGU32(USB_CTL_START + PERI_USB2_GRXTHRCFG) = 0x23100000;
+
+    long_sleep(20); // wait 20 milliseconds
+}
 
 // sub_77A8
 

@@ -21,7 +21,6 @@
 #define CHAN0_CIPHER_CTRL                        0x0400                           /* Encryption/decryption control register for channel 0 of the symmetric algorithm */
 #define CIPHER_INT_STATUS                        0x0404                           /* Interrupt status register for the symmetric algorithm */
 #define CIPHER_INT_EN                            0x0408                           /* Interrupt enable register for the symmetric algorithm */
-
 #define CIPHER_INT_RAW                           0x040C                           /* Raw interrupt status register for the symmetric algorithm */
 #define CIPHER_IN_SMMU_EN                        0x0410                           /* Input data read address bypass register for the symmetric algorithm of channel 1–7 */
 #define OUT_SMMU_EN                              0x0414                           /* Output data read address bypass register for the symmetric algorithm of channel 1–7 */
@@ -41,7 +40,6 @@
 #define CHANN_CIPHER_IN_BUF_REST_LEN(n)          0x0420 + ((n) << 7)              /* Remaining length register for the input buffer of channel n (1–7) */
 #define CHANN_CIPHER_OUT_NODE_CFG(n)             0x0430 + ((n) << 7)              /* Output node configuration register for channel n (1–7) */
 #define CHANN_CIPHER_OUT_NODE_START_ADDR(n)      0x0434 + ((n) << 7)              /* Output node start address register for channel n (1–7) */
-
 #define CHANN_CIPHER_OUT_BUF_RPTR(n)             0x0438 + ((n) << 7)              /* Output buffer read address register for channel n (1–7) */
 #define CHANN_CIPHER_OUT_LEFT_BYTE(n)            0x0440 + ((n) << 7)              /* Left-byte register for the current output data of channel n (1–7) */
 #define CHANN_CIPHER_OUT_LEFT_WORD0(n)           0x0444 + ((n) << 7)              /* Left-word register for the current output data of channel n (1–7) */
@@ -60,7 +58,6 @@
 #define CHAN0_HASH_DAT_IN                        0x0818                           /* CPU input data register */
 #define CHAN0_HASH_TOTAL_DAT_LEN                 0x081C                           /* CPU input data length register */
 #define CHAN0_HASH_IN_DAT_LEN                    0x0820                           /* Input data length register for channel 0 */
-
 #define CHANN_HASH_CTRL(n)                       0x0800 + ((n) << 7)              /* Hash control register for channel n (1–7) */
 #define CHANN_HASH_IN_NODE_CFG(n)                0x0804 + ((n) << 7)              /* Input node configuration register for channel n (1–7) */
 #define CHANN_HASH_IN_NODE_START_ADDR(n)         0x0808 + ((n) << 7)              /* Input node start address register for channel n (1–7) */

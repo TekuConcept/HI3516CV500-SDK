@@ -20,10 +20,13 @@
 
 #define UNK_130      0x0130
 
+#define UNK_13C      0x013C /*  */
+#define UNK_140      0x0140 /* (relating to ZIJU) */
 #define UNK_144      0x0144
 #define UNK_148      0x0148
 #define UNK_14C      0x014C
 #define UNK_150      0x0150 /* (relating to serial stream loading) */
+#define UNK_154      0x0154 /* (relating to serial stream loading) */
 
 #define DIE_ID0      0x0400
 #define DIE_ID1      0x0404

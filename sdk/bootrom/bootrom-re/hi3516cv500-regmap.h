@@ -19,6 +19,7 @@
 #include "regmap-usb.h"
 #include "regmap-uart.h"
 #include "regmap-mmc.h"
+#include "regmap-gpio.h"
 #include "regmap-otp.h"
 
 #define ENTRY_START     0x00000000
@@ -31,6 +32,7 @@
 #define KLAD_START      0x10070000
 #define RSA0_START      0x10080000
 #define TRNG_START      0x10090000
+#define USB_TRIM_START  0x100A0000
 #define OTPUSER_START   0x100B0000
 #define SPACC_START     0x100C0000
 #define RSA1_START      0x100D0000
@@ -38,7 +40,6 @@
 #define SDIO0_START     0x100F0000
 #define EMMC_START      0x10100000
 #define USB_PHY_START   0x10110000
-#define SPACC_START     0x10200000
 #define IO_CTRL0_START  0x10FF0000
 #define VIPROC_START    0x11000000
 #define VPSS_START      0x11040000
