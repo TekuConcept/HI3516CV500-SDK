@@ -7,6 +7,12 @@
 #define REGU32(addr) *((unsigned int*)(addr))
 
 #define PROGRAM_SIZE 0x6000
+#define UBOOT_SIZE   0x80000
+
+#define NULL 0
+
+#define SUCCESS      0
+#define FAILURE      -1
 
 #define ACK         '\xAA'
 #define NACK        '\x55'
@@ -19,6 +25,11 @@
 #define DOWN_MAGIC  0x444F574E /* "DOWN" */
 #define ZIJU_MAGIC  0x7A696A75 /* "ziju" */
 #define EMMC_MAGIC  0x454D4D43 /* "EMMC" */
+
+typedef enum bool_t {
+    FALSE = 0,
+    TRUE  = 1
+} bool_t;
 
 typedef enum boot_type_t {
     BOOT_TYPE_SERIAL = 0x73616665, /* safe */
@@ -33,6 +44,25 @@ typedef enum stream_state_t {
     STREAM_STATE_IGNORE = 3,
     STREAM_STATE_DONE   = 4,
 } stream_state_t;
+
+typedef enum cipher_algorithm_t {
+    CIPHER_ALG_DES      = 0,
+    CIPHER_ALG_TDES     = 1,
+    CIPHER_ALG_AES      = 2,
+    CIPHER_ALG_SM4      = 3,
+    CIPHER_ALG_SM1      = 4,
+    CIPHER_ALG_DMA_COPY = 5,
+} cipher_algorithm_t;
+
+typedef enum cipher_mode_t {
+    CIPHER_MODE_ECB = 0,
+    CIPHER_MODE_CBC = 1,
+    CIPHER_MODE_CFB = 2,
+    CIPHER_MODE_OFB = 3,
+    CIPHER_MODE_CTR = 4,
+    CIPHER_MODE_CCM = 5,
+    CIPHER_MODE_GCM = 6,
+} cipher_mode_t;
 
 typedef struct mem_block_t {
     unsigned short size;
@@ -65,7 +95,7 @@ typedef struct program_stream_t { // (sizeof=0x1C)
     void (*callback)();        // 0x18
 } program_stream_t;
 
-typedef struct struc_4 {
+typedef struct struc_4 { // (sizeof=0x1C)
     unsigned int field_0;  // 0x00 (assigned 0)
     char field_4;          // 0x04 (assigned -1)
     char field_5;          // 0x05 (assigned 0)
@@ -78,49 +108,92 @@ typedef struct struc_4 {
     unsigned int field_18; // 0x18
 } struc_4;
 
-typedef struct struc_7 { // (sizeof=0x40)
-    unsigned int field_0;              // 0x00
-    unsigned int field_4;              // 0x04
-    unsigned int field_8[4];           // 0x08
-    unsigned int field_18;             // 0x18 (assigned 0x10)
+typedef struct spacc_cipher_t { // (sizeof=0x40)
+    cipher_algorithm_t algorithm;      // 0x00
+    cipher_mode_t mode;                // 0x04
+    unsigned int data_8[4];            // 0x08 (128-bits, linked with struc_9.field_14)
+    unsigned int size_18;              // 0x18 (assigned 0x10)
     unsigned int field_1C;             // 0x1C
     unsigned int field_20;             // 0x20
     unsigned int in_addr;              // 0x24
     unsigned int out_addr;             // 0x28
     unsigned int field_2C;             // 0x2C
-    unsigned int field_30;             // 0x30 (assigned 0; in; likely count)
-    unsigned int field_34;             // 0x34 (assigned 0; out; likely count)
+    unsigned int in_count;             // 0x30 (assigned 0; in; likely count)
+    unsigned int out_count;            // 0x34 (assigned 0; out; likely count)
     unsigned int cipher_in_node_wptr;  // 0x38
     unsigned int cipher_out_node_wptr; // 0x3C
-} struc_7; // (relating to SPAcc Cipher)
+} spacc_cipher_t; // (relating to SPAcc Cipher)
 
-typedef struct struc_8 { // (sizeof=0x10)
-    unsigned int field_0;           // 0x00
+typedef struct spacc_hash_t { // (sizeof=0x10)
+    unsigned int size;              // 0x00
     unsigned int in_addr;           // 0x04
-    unsigned int field_8;           // 0x08 (assigned 0; in; likely count)
+    unsigned int count;             // 0x08 (assigned 0; in; likely count)
     unsigned int hash_in_node_wptr; // 0x0C
-} struc_8; // (relating to SPAcc Hash)
+} spacc_hash_t; // (relating to SPAcc Hash)
+
+typedef struct cipher_node_t { // (sizeof=0x20)
+    unsigned char field_0;  // 0x00
+    unsigned char field_1;  // 0x01
+    unsigned char field_2;  // 0x02
+    unsigned char field_3;  // 0x03
+    unsigned int address;   // 0x04
+    unsigned int field_8;   // 0x08 (likely size)
+    unsigned int field_C;   // 0x0C
+    unsigned int field_10;  // 0x10 (cipher data[0])
+    unsigned int field_14;  // 0x14 (cipher data[1])
+    unsigned int field_18;  // 0x18 (cipher data[2])
+    unsigned int field_1C;  // 0x1C (cipher data[3])
+} cipher_node_t;
+
+typedef struct hash_node_t { // (sizeof=0x10)
+    unsigned char field_0;  // 0x00
+    unsigned char field_1;  // 0x01
+    unsigned char field_2;  // 0x02
+    unsigned char field_3;  // 0x03
+    unsigned int field_4;   // 0x04 (likely address)
+    unsigned int field_8;   // 0x08 (likely size)
+    unsigned int field_C;   // 0x0C
+} hash_node_t;
+
+typedef struct sha256_hash_magic_t { // (sizeof=0x20)
+    unsigned int data[8];
+} sha256_hash_magic_t;
+
+typedef struct struc_9 { // (sizeof=0x30)
+    unsigned int field_0;     // 0x00
+    unsigned int size_4;      // 0x04
+    unsigned int field_8;     // 0x08
+    unsigned int field_C;     // 0x0C
+    unsigned int field_10;    // 0x10
+    void* field_14;           // 0x14 (linked with spacc_cipher_t.field_8)
+    unsigned int size_18;     // 0x18
+    int (*ddr_init_cb)();     // 0x1C
+    unsigned int field_20;    // 0x20 (address relative to PHY_MEM_START)
+    unsigned int field_24;    // 0x24
+    unsigned int field_28;    // 0x28
+    int (*callback_2C)();     // 0x2C
+} struc_9;
 
 typedef struct context_t { // (sizeof=0x268)
-    int (*callback)();            // 0x000
-    char field_4[12];             // 0x004 (relating to memory mapping)
-    phy_mem_t memory_map[16];     // 0x010 (sizeof=0x100)
-    struc_7 field_110;            // 0x110 (relating to SPAcc Cipher)
-    struc_8 field_150;            // 0x150 (relating to SPAcc Hash)
-    unsigned int field_160;       // 0x160 (relating to SDIO)
-    void *mmc_phy_addr;           // 0x164
-    unsigned int field_168;       // 0x168
-    unsigned int field_16C;       // 0x16C
-    unsigned int field_170;       // 0x170
-    unsigned int field_174;       // 0x174
-    unsigned int field_178;       // 0x178
-    unsigned int uart_base;       // 0x17C
-    unsigned int time_value;      // 0x180
-    unsigned int residual_time;   // 0x184
-    unsigned int field_188;       // 0x188
+    int (*callback)();               // 0x000
+    char field_4[12];                // 0x004 (relating to memory mapping)
+    phy_mem_t memory_map[16];        // 0x010 (sizeof=0x100)
+    spacc_cipher_t spacc_cipher_ctx; // 0x110
+    spacc_hash_t spacc_hash_ctx;     // 0x150
+    unsigned int field_160;          // 0x160 (relating to SDIO)
+    void *mmc_phy_addr;              // 0x164
+    unsigned int field_168;          // 0x168
+    unsigned int field_16C;          // 0x16C
+    unsigned int field_170;          // 0x170
+    unsigned int field_174;          // 0x174
+    unsigned int field_178;          // 0x178
+    unsigned int uart_base;          // 0x17C
+    unsigned int time_value;         // 0x180
+    unsigned int residual_time;      // 0x184
+    unsigned int ddr_initialized;    // 0x188
     // 0x18C - 0x25C
-    unsigned int field_260;       // 0x260 (values include 0x20000, 0x40000, 0x60000)
-    unsigned int field_264;       // 0x264
+    unsigned int field_260;          // 0x260 (values include 0x20000, 0x40000, 0x60000)
+    unsigned int field_264;          // 0x264
 } context_t;
 
 context_t* g_context = (context_t*)SDRAM_START;
@@ -173,45 +246,48 @@ reset_soc_clocks()
     for (i = 10; i > 0; i--);
 }
 
-int // offset=0x1DC
-sub_1DC(unsigned int *a1)
+int // offset=0x1DC (TODO)
+sub_1DC(struc_9 *pst9)
 {
-    a1[0] = REGU32(PHY_MEM_START + 0x00);
-    a1[1] = REGU32(PHY_MEM_START + 0x04);
+    // (PHY_MEM_START is where the uboot bootloader starts)
+
+    pst9->field_0 = REGU32(PHY_MEM_START + 0x00);
+    pst9->size_4  = REGU32(PHY_MEM_START + 0x04);
 
     if ( REGU32(PHY_MEM_START + 0x04) > 0x100000 )
-        return -1;
+        return FAILURE;
 
-    a1[2] = REGU32(PHY_MEM_START + 0x08);
+    pst9->field_8 = REGU32(PHY_MEM_START + 0x08);
 
-    if ( a1[2] != 0x200 && ((a1[2] - 0x80) & 0xFFFFFF7F) != 0 )
-        return -1;
+    if ((pst9->field_8 != 0x200) &&
+        ((pst9->field_8 - 0x80) & 0xFFFFFF7F) != 0)
+        return FAILURE;
 
-    a1[3] = REGU32(PHY_MEM_START + 0x0C);
+    pst9->field_C = REGU32(PHY_MEM_START + 0x0C);
 
-    if ( a1[2] != a1[3] )
-        return -1;
+    if ( pst9->field_8 != pst9->field_C )
+        return FAILURE;
 
-    a1[4] = PHY_MEM_START + 0x10;
-    a1[5] = a1[4] + 2 * a1[2];
-    a1[6] = *(int *)(PHY_MEM_START + 0x20 + 2 * a1[2]);
+    pst9->field_10 = PHY_MEM_START + 0x10;
+    pst9->field_14 = pst9->field_10 + pst9->field_8 << 1;
+    pst9->size_18 = *(int *)(PHY_MEM_START + 0x20 + pst9->field_8 << 1);
 
-    if ( a1[6] & 3 != 0 )
-        return -1;
+    if ( pst9->size_18 & 3 != 0 )
+        return FAILURE;
 
-    a1[7] = PHY_MEM_START + 0x24 + 2 * a1[2];
-    a1[8] = a1[7] + a1[6];
+    pst9->ddr_init_cb = PHY_MEM_START + 0x24 + pst9->field_8 << 1;
+    pst9->field_20 = pst9->ddr_init_cb + pst9->size_18;
 
-    if ( ((unsigned int)(a1[8] + 0xFBFEFB00) > 0x6000) )
-        return -1;
+    if ( ((unsigned int)(pst9->field_20 - (PHY_MEM_START)) > PROGRAM_SIZE) )
+        return FAILURE;
 
-    a1[9] = a1[2];
-    a1[10] = *(_DWORD *)&(a1[8])[a1[2]];
+    pst9->field_24 = pst9->field_8;
+    pst9->field_28 = *(unsigned int *)((char*)pst9->field_20 + pst9->field_8);
 
-    if ( a1[1] < a1[10] )
-        return -1;
+    if ( pst9->size_4 < pst9->field_28 )
+        return FAILURE;
 
-    return -((a1[10] & 3) != 0);
+    return -((pst9->field_28 & 3) != 0);
 }
 
 int // offset=0x2CC
@@ -484,7 +560,33 @@ init_memory()
     map_phy_memory();
 }
 
-// sub_1150
+int // offset=0x1150 (TODO)
+sub_1150(struc_9 *pst9)
+{
+    int result, i;
+    char usb_hash[32] = { 0 };
+    char hash[40]     = { 0 };
+
+    for (i = 0; i < sizeof(usb_hash); i += 4)
+        *(unsigned int *)&usb_hash[i] = REGU32(USB_TRIM_START + 0x50 + i);
+
+    result = sub_72C(
+        pst9->field_10,
+        pst9->field_C + pst9->field_8,
+        hash);
+    if ( result ) {
+        serial_send_status('5', '1');
+        return FAILURE;
+    }
+
+    result = strncmp(usb_hash, (const char *)hash, sizeof(usb_hash));
+    if ( result ) {
+        serial_send_status('5', '2');
+        return FAILURE;
+    }
+
+    return SUCCESS;
+}
 
 void // offset=0x122C
 decrypt()
@@ -537,15 +639,110 @@ decrypt()
 
 // sub_1314
 
-// sub_136C
+// sub_136C /**/
 
-// sub_1470
+int // offset=0x1470 (TODO)
+secure_fast_boot()
+{
+    int result;
+    int is_emmc_boot;
+    int ddr_scrambling_enabled;
+    enum boot_type_t boot_type;
+    struc_9 *pst9;
+
+    if ( !serial_packet_is_ready() )
+        return FAILURE;
+
+    is_emmc_boot = (REGU32(SYSCTRL_START + SYSSTAT) >> 4) & 1;
+
+    serial_load();
+
+    if ( serial_boot(PHY_MEM_START, PROGRAM_SIZE) == SUCCESS )
+        boot_type = BOOT_TYPE_SERIAL;
+    else {
+        REGU32(SYSCTRL_START + UNK_140) = 0xFFFFFFFF;
+        REGU32(SYSCTRL_START + UNK_13C) = DOWN_MAGIC;
+
+        if ( is_emmc_boot ) {
+            emmc_init();
+            emmc_load(PHY_MEM_START, PROGRAM_SIZE);
+        }
+        else memcpy((void *)PHY_MEM_START, (const void *)FLASH_MEM_START, PROGRAM_SIZE);
+        
+        boot_type = BOOT_TYPE_EMMC;
+    }
+
+    pst9 = (struc_9 *)alloc(sizeof(struc_9));
+    if ( pst9 == NULL ) {
+        serial_send_status('1', '1');
+        return FAILURE;
+    }
+
+    if ( sub_1DC(pst9) ) {
+        serial_send_status('0', '1');
+        free(pst9);
+        return FAILURE;
+    }
+
+    if ( sub_1150(pst9) ) {
+        serial_send_status('2', '1');
+        free(pst9);
+        return FAILURE;
+    }
+
+    result = sub_868(
+        pst9->field_0,
+        pst9->ddr_init_cb,
+        pst9->size_18,
+        pst9->field_20,
+        pst9->field_10);
+    if ( result ) {
+        serial_send_status('3', '1');
+        cancel_boot(boot_type, is_emmc_boot);
+        free(pst9);
+        return FAILURE;
+    }
+
+    invoke_ddr_init((int (*)(void))pst9->ddr_init_cb);
+    memset((void *)pst9->ddr_init_cb, 0, pst9->size_18);
+
+    ddr_scrambling_enabled = REGU32(SYSCTRL_START + PERISTAT) & 2;
+    if ( ddr_scrambling_enabled && ddr_scramble() != SUCCESS ) {
+        cancel_boot(boot_type, is_emmc_boot);
+        free(pst9);
+        return FAILURE;
+    }
+
+    boot(boot_type, is_emmc_boot, pst9->size_4);
+
+    pst9->callback_2C = pst9->size_4 - pst9->field_8 - pst9->field_28 - 0x7F000000;
+
+    sub_136C(pst9);
+    result = sub_868(
+        pst9->field_0,
+        pst9->callback_2C,
+        pst9->field_28,
+        pst9->field_28 + pst9->callback_2C,
+        pst9->field_10);
+
+    cancel_boot(boot_type, is_emmc_boot);
+
+    if ( result ) {
+        serial_send_status('4', '1');
+        free(pst9);
+        return FAILURE;
+    }
+
+    g_context->callback = (int (*)())pst9->callback_2C;
+    free(pst9);
+    return SUCCESS;
+}
 
 // sub_16AC
 
 // sub_18B8
 
-// sub_1AF4
+// sub_1AF4 /**/
 
 void // offset=0x1B40
 sub_1B40(unsigned int result)
@@ -610,14 +807,15 @@ sub_2284()
     is_emmc_boot = value & 0x10;
     is_fast_boot = value & 0x20;
 
-    if ( is_fast_boot && sub_1470() == 0 )
+    if ( is_fast_boot && secure_fast_boot() == SUCCESS )
         result = 0;
     else {
         enable_serial();
         serial_flush();
 
-        if ( gpio_pin2_pressed() != 0 && sub_1AF4() == 0)
-            result = 0;
+        if (gpio_pin2_pressed() != SUCCESS &&
+            sub_1AF4() == SUCCESS)
+            result = SUCCESS;
         else {
             if ( is_emmc_boot )
                 result = sub_1F0C();
@@ -625,7 +823,7 @@ sub_2284()
 
             if ( result == -2 )
                 result = sub_1AF4();
-            else result = 0;
+            else result = SUCCESS;
         }
     }
 
@@ -653,12 +851,12 @@ flash_firmware()
     int is_emmc_boot;
 
     if ( serial_burn() != 0 )
-        return -1;
+        return FAILURE;
 
-    is_emmc_boot = (REGU32(SYSCTRL_START = SYSSTAT) >> 4) & 1;
+    is_emmc_boot = (REGU32(SYSCTRL_START + SYSSTAT) >> 4) & 1;
     result = register_uboot_callback(is_emmc_boot);
 
-    if ( result != 0 && is_emmc_boot )
+    if ( result != SUCCESS && is_emmc_boot )
         emmc_reset();
     return result;
 }
@@ -667,7 +865,7 @@ flash_firmware()
 
 // sub_249C
 
-// sub_25D4
+// sub_25D4 /**/
 
 // ============================================================================
 
@@ -706,19 +904,23 @@ main()
         if ( sub_2284() )
             goto error;
     }
-    else if ((is_fast_boot == 0 || flash_firmware()) &&
-        (gpio_pin2_pressed() == 0 || sub_23C4()) )
-    {
-        if ( is_emmc_boot ) {
-            if ( sub_25D4() && sub_23C4() )
+    else {
+        result =
+            (is_fast_boot && flash_firmware() == SUCCESS) ||
+            (gpio_pin2_pressed() && sub_23C4() == SUCCESS);
+
+        if ( result == SUCCESS ) {
+            if ( is_emmc_boot ) {
+                if ( sub_25D4() && sub_23C4() )
+                    goto error;
+            }
+            else if ( sub_249C() && sub_23C4() )
                 goto error;
         }
-        else if ( sub_249C() && sub_23C4() )
-            goto error;
     }
 
     disable_instruction_cache();
-    if ( g_context->field_188 == 0 )
+    if ( !g_context->ddr_initialized )
         reset_soc_clocks();
 
     timer_stop();
@@ -781,7 +983,7 @@ memset(void *ptr, unsigned char value, unsigned int num)
     // -- assign remaining bytes --
     while ((int)num > 0) {
         *(unsigned char*)ptr32 = (unsigned char*)val32;
-        ((unsigned char*)ptr32)++;
+        ptr32 = (unsigned int *)((unsigned char)ptr32 + 1);
         num--;
     }
 
@@ -823,8 +1025,8 @@ memcpy(void *dst, const void *src, unsigned int num)
             *((int *)dstp + 5) = *((int *)srcp + 5);
             *((int *)dstp + 6) = *((int *)srcp + 6);
             *((int *)dstp + 7) = *((int *)srcp + 7);
-            ((int *)srcp) += 8;
-            ((int *)dtsp) += 8;
+            srcp = (void *)((int *)srcp + 8);
+            dstp = (void *)((int *)dstp + 8);
         }
 
         // -- 4-dword copy --
@@ -833,8 +1035,8 @@ memcpy(void *dst, const void *src, unsigned int num)
             *((int *)dstp + 1) = *((int *)srcp + 1);
             *((int *)dstp + 2) = *((int *)srcp + 2);
             *((int *)dstp + 3) = *((int *)srcp + 3);
-            ((int *)srcp) += 4;
-            ((int *)dstp) += 4;
+            srcp = (void *)((int *)srcp + 4);
+            dstp = (void *)((int *)dstp + 4);
         }
 
         // -- 3-dword copy --
@@ -842,31 +1044,31 @@ memcpy(void *dst, const void *src, unsigned int num)
             *((int *)dstp + 0) = *((int *)srcp + 0);
             *((int *)dstp + 1) = *((int *)srcp + 1);
             *((int *)dstp + 2) = *((int *)srcp + 2);
-            ((int *)srcp) += 3;
-            ((int *)dstp) += 3;
+            srcp = (void *)((int *)srcp + 3);
+            dstp = (void *)((int *)dstp + 3);
         }
 
         // -- 2-dword copy --
         for (; num >= 8; num -= 8) {
             *((int *)dstp + 0) = *((int *)srcp + 0);
             *((int *)dstp + 1) = *((int *)srcp + 1);
-            ((int *)srcp) += 2;
-            ((int *)dstp) += 2;
+            srcp = (void *)((int *)srcp + 2);
+            dstp = (void *)((int *)dstp + 2);
         }
 
         // -- 1-dword copy --
         for (; num >= 4; num -= 4) {
             *((int *)dst + 0) = *((int *)src + 0);
-            ((int *)srcp) += 1;
-            ((int *)dstp) += 1;
+            srcp = (void *)((int *)srcp + 1);
+            dstp = (void *)((int *)dstp + 1);
         }
     }
 
     // -- 1-byte copy --
     if (; num > 0; num--) {
         *(char *)dstp = *(char *)srcp;
-        ((char *)srcp)++;
-        ((char *)dstp)++;
+        srcp = (void *)((char *)srcp + 1);
+        dstp = (void *)((char *)dstp + 1);
     }
 
     return dst;
@@ -882,7 +1084,7 @@ map_phy_memory()
     mem_block_t blocks[16] = {
         { .size = 0x6000, .count = 1 }, /*  24 KBs   x 1 */
         { .size = 0x0200, .count = 6 }, /* 512 bytes x 6 */
-        ( .size = 0x0800, .count = 1 ), /*   2 KBs   x 1 */
+        { .size = 0x0800, .count = 1 }, /*   2 KBs   x 1 */
         { .size = 0x0070, .count = 1 }, /* 112 bytes x 1 */
 
         { .size = 0x0020, .count = 3 }, /*  32 bytes x 3 */
@@ -899,7 +1101,7 @@ map_phy_memory()
         { .size = 0x0050, .count = 2 }, /*  80 bytes x 2 */
         { .size = 0x0B00, .count = 1 }, /*  +2 KBs   x 1 */
         { .size = 0x0000, .count = 0 }, /*   0 bytes x 0 */
-    }
+    };
 
     memset(&g_context->phy_mem_t, 0, sizeof(g_context->phy_mem_t));
 
@@ -994,7 +1196,7 @@ free(void *phy_addr)
         value =
             g_context->memory_map[i].blk_count *
             g_context->memory_map[i].blk_size;
-        if ( offset <  max_size)
+        if ( offset < value)
             break;
     }
 
@@ -1355,8 +1557,8 @@ serial_invoke()
     REGU32(SYSCTRL_START + UNK_150) = 0;
 }
 
-int // offset=0x3410
-serial_wait_signal()
+bool_t // offset=0x3410
+serial_packet_is_ready()
 {
     unsigned int delay;
     int i, j;
@@ -1378,23 +1580,23 @@ serial_wait_signal()
 
         do {
             if ( uart_has_data() && uart_recv() == ACK )
-                return 1;
+                return TRUE;
         } while ( delay > timer_time_passed() );
     }
 
     uart_send('\n');
     disable_uart();
-    return 0;
+    return FALSE;
 }
 
 int // offset=0x34AC
 serial_burn()
 {
-    if ( !serial_wait_signal() )
-        return -1;
+    if ( !serial_packet_is_ready() )
+        return FAILURE;
     REGU32(SYSCTRL_START + UNK_154) = 1;
     serial_invoke();
-    return 0;
+    return SUCCESS;
 }
 
 int // offset=0x34E0
@@ -1403,7 +1605,7 @@ serial_boot(unsigned int addr, unsigned int size)
     stream_state_t status;
     program_stream_t stream;
     int retries = 0;
-    int result = 0;
+    int result = SUCCESS;
 
     memset(&stream, 0, sizeof(stream));
 
@@ -1414,7 +1616,7 @@ serial_boot(unsigned int addr, unsigned int size)
         else if ( status == STREAM_STATE_ACK ) {
             uart_send(ACK);
             if ( stream.size != size )
-                result = -1;
+                result = FAILURE;
             if ( stream.count == 1 )
                 stream.addr = addr;
         }
@@ -1422,7 +1624,8 @@ serial_boot(unsigned int addr, unsigned int size)
             break;
     } while ( ++retries <= 0xFF );
 
-    if ( retries > 0xFF ) result = -1;
+    if ( retries > 0xFF )
+        result = FAILURE;
 
     uart_send(ACK);
     return result;
@@ -1446,26 +1649,75 @@ serial_load()
 
     uart_send(ACK);
 
-    REGU32(SYSCTRL_START + UNK_140) = ZIJU_MAGIC;
     REGU32(SYSCTRL_START + UNK_13C) = DOWN_MAGIC;
+    REGU32(SYSCTRL_START + UNK_140) = ZIJU_MAGIC;
     REGU32(SYSCTRL_START + UNK_154) = 1;
 
     serial_flush();
     memset(&stream, 0, sizeof(stream));
 }
 
-// sub_3628
+int // offset=0x3628
+divide(int num, unsigned int den)
+{
+    int result = 0;
+    unsigned int quo = 1;
+
+    if ( den == 0 ) deadlock();
+    if ( num < den ) return 0;
+
+    while ( den < 0x10000000 && num > den ) {
+        den <<= 4;
+        quo <<= 4;
+    }
+
+    while ( den < 0x80000000 && num > den ) {
+        den <<= 1;
+        quo <<= 1;
+    }
+
+    do {
+        if ( num >= (den >> 0) ) {
+            num -= den >> 0;
+            result |= quo >> 0;
+        }
+
+        if ( num >= (den >> 1) ) {
+            num -= den >> 1;
+            result |= quo >> 1;
+        }
+
+        if ( num >= (den >> 2) ) {
+            num -= den >> 2;
+            result |= quo >> 2;
+        }
+
+        if ( num >= (den >> 3) ) {
+            num -= den >> 3;
+            result |= quo >> 3;
+        }
+
+        if ( num ) {
+            den >>= 4;
+            quo >>= 4;
+        }
+    } while ( num != 0 && quo != 0 );
+
+    return result;
+}
 
 void // offset=0x36C0
 deadlock()
-{ while (1); }
+{ while (TRUE); }
+
+// ============================================================================
 
 int // offset=0x36C4
-sub_36C4(unsigned int in_addr, unsigned int out_addr)
+cipher_sub_36C4(unsigned int in_addr, unsigned int out_addr)
 {
     unsigned int cipher_in_node_total_num;
     unsigned int cipher_out_node_total_num;
-    memset(&g_context.field_110, 0, sizeof(g_context.field_110));
+    memset(&g_context->spacc_cipher_ctx, 0, sizeof(g_context->spacc_cipher_ctx));
 
     cipher_in_node_total_num = REGU32(SPACC_START + CHANN_CIPHER_IN_NODE_CFG(1));
     cipher_in_node_total_num &= ~(0x7F << 24);
@@ -1474,43 +1726,278 @@ sub_36C4(unsigned int in_addr, unsigned int out_addr)
     REGU32(SPACC_START + CHANN_CIPHER_IN_NODE_CFG(1)) = cipher_in_node_total_num;
     REGU32(SPACC_START + CHANN_CIPHER_IN_NODE_START_ADDR(1)) = in_addr;
 
-    g_context.field_110.in_addr = in_addr;
-    g_context.field_110.field_30 = 0;
-    g_context.field_110.cipher_in_node_wptr = (cipher_in_node_total_num >> 16) & 0x7F;
+    g_context->spacc_cipher_ctx.in_addr             = in_addr;
+    g_context->spacc_cipher_ctx.in_count            = 0;
+    g_context->spacc_cipher_ctx.cipher_in_node_wptr = (cipher_in_node_total_num >> 16) & 0x7F;
 
     cipher_out_node_total_num = REGU32(SPACC_START + CHANN_CIPHER_OUT_NODE_CFG(1));
-    cipher_out_node_total_num &= ~(7F << 24);
+    cipher_out_node_total_num &= ~(0x7F << 24);
     cipher_out_node_total_num |= (0x02 << 24);
 
     REGU32(SPACC_START + CHANN_CIPHER_OUT_NODE_CFG(1)) = cipher_out_node_total_num;
     REGU32(SPACC_START + CHANN_CIPHER_OUT_NODE_START_ADDR(1)) = out_addr;
 
-    g_context.field_110.out_addr = out_addr;
-    g_context.field_110.field_34 = 0;
-    g_context.field_110.cipher_out_node_wptr = (cipher_out_node_total_num >> 16) & 0x7F;
+    g_context->spacc_cipher_ctx.out_addr             = out_addr;
+    g_context->spacc_cipher_ctx.out_count            = 0;
+    g_context->spacc_cipher_ctx.cipher_out_node_wptr = (cipher_out_node_total_num >> 16) & 0x7F;
 }
 
-// sub_373C
+void // offset=0x373C
+cipher_sub_373C(int a1, int a2)
+{
+    cipher_node_t *node = (cipher_node_t *)(
+        g_context.spacc_cipher_ctx.in_addr +
+        g_context.spacc_cipher_ctx.cipher_in_node_wptr * sizeof(cipher_node_t));
 
-// sub_37E4
+    memset(node, 0, sizeof(cipher_node_t));
 
-// sub_3858
+    node->field_0 &= 0xFC;
+    node->field_1 = node->field_1 & 0x80 | 3;
+    node->field_8 = a1;
+    node->field_C = a2;
 
-// sub_38DC
+    g_context.spacc_cipher_ctx.in_count++;
+    g_context.spacc_cipher_ctx.cipher_in_node_wptr++;
+    g_context.spacc_cipher_ctx.cipher_in_node_wptr &= 1;
 
-// sub_390C
+    if ( g_context.spacc_cipher_ctx.size_18 != 0 ) {
+        node->field_10 = g_context.spacc_cipher_ctx.data_8[0];
+        node->field_14 = g_context.spacc_cipher_ctx.data_8[1];
+        node->field_18 = g_context.spacc_cipher_ctx.data_8[2];
+        node->field_1C = g_context.spacc_cipher_ctx.data_8[3];
+    }
+}
 
-// sub_39A8
+void // offset=0x37E4
+cipher_sub_37E4(unsigned int address, int a2)
+{
+    cipher_node_t *node;
 
-// sub_39FC
+    node = (cipher_node_t *)(
+        g_context->spacc_cipher_ctx.out_addr +
+        g_context->spacc_cipher_ctx.cipher_out_node_wptr * sizeof(cipher_node_t));
 
-// sub_3A74
+    memset(node, 0, sizeof(cipher_node_t));
 
-// sub_3AE8
+    node->field_1 = node->field_1 & 0xF0 | 0x03;
+    node->address = address;
+    node->field_8 = a2;
 
-// sub_3B68
+    g_context->spacc_cipher_ctx.out_count++;
+    g_context->spacc_cipher_ctx.cipher_out_node_wptr++;
+    g_context->spacc_cipher_ctx.cipher_out_node_wptr &= 1;
+}
 
-// sub_3BCC /**/
+void // offset=0x3858
+aes256_cipher_init()
+{
+    unsigned int value = REGU32(SPACC_START + CHANN_CIPHER_CTRL(1));
+
+    /**
+     * Keys configured by hardware
+     */
+    value = value & 0xFFF3BFFF | 0x4000;
+
+    /**
+     * AES 128-bit data
+     * AES 256-bit key
+     * Decryption
+     */
+    value = value & 0xFFFFF3FF | 0x0B80;
+
+    /**
+     * Algorithm: AES
+     */
+    value = value & 0xFFFFFF8F | 0x0020;
+
+    /**
+     * AES operating mode: CBC
+     */
+    value = value & 0xFFFFFFF1 | 0x0002;
+
+    REGU32(SPACC_START + CHANN_CIPHER_CTRL(1)) = value;
+
+    g_context->spacc_cipher_ctx.algorithm = CIPHER_ALG_AES;
+    g_context->spacc_cipher_ctx.mode      = CIPHER_MODE_CBC;
+    g_context->spacc_cipher_ctx.in_count  = 0;
+    g_context->spacc_cipher_ctx.out_count = 0;
+}
+
+void // offset=0x38DC
+cipher_sub_38DC(void *source)
+{
+    if ( source == NULL ) return;
+
+    g_context->spacc_cipher_ctx.size_18 =
+        sizeof(g_context->spacc_cipher_ctx.data_8);
+    memcpy(
+        g_context->spacc_cipher_ctx.data_8,
+        source,
+        g_context->spacc_cipher_ctx.size_18);
+}
+
+int // offset=0x390C
+cipher_io_init()
+{
+    unsigned int cipher_in_cfg;
+    unsigned int cipher_out_cfg;
+    unsigned char cipher_in_node_wptr;
+    unsigned char cipher_out_node_wptr;
+    unsigned char cipher_out_node_rptr;
+
+    cipher_out_cfg = REGU32(SPACC_START + CHANN_CIPHER_OUT_NODE_CFG(1));
+    cipher_out_node_rptr = (cipher_out_cfg >>  8) & 0x7F;
+    cipher_out_node_wptr = (cipher_out_cfg >> 16) & 0x7F;
+
+    if ( cipher_out_node_rptr != cipher_out_node_wptr )
+        return FAILURE;
+
+    cipher_out_node_rptr += g_context->spacc_cipher_ctx.out_count;
+    cipher_out_node_rptr &= 1;
+
+    cipher_out_cfg = (cipher_out_cfg & 0xFF80FFFF) | (cipher_out_node_rptr << 16);
+    cipher_out_cfg = (cipher_out_cfg & 0xFFFFFF80) | (g_context->spacc_cipher_ctx.out_count & 0x7F);
+
+    REGU32(SPACC_START + CHANN_CIPHER_OUT_NODE_CFG(1)) = cipher_out_cfg;
+
+    cipher_in_cfg = REGU32(SPACC_START + CHANN_CIPHER_IN_NODE_CFG(1));
+    cipher_in_node_wptr  = (cipher_in_cfg >> 16) & 0x7F;
+
+    cipher_in_node_wptr += g_context->spacc_cipher_ctx.in_count;
+    cipher_in_node_wptr &= 1;
+
+    cipher_in_cfg = (cipher_in_cfg & 0xFF80FFFF) | (cipher_in_node_wptr << 16);
+    cipher_in_cfg = (cipher_in_cfg & 0xFFFFFF80) | (g_context->spacc_cipher_ctx.in_count & 0x7F);
+
+    REGU32(SPACC_START + CHANN_CIPHER_IN_NODE_CFG(1)) = cipher_in_cfg;
+
+    g_context->spacc_cipher_ctx.in_count  = 0;
+    g_context->spacc_cipher_ctx.out_count = 0;
+
+    return SUCCESS;
+}
+
+void // offset=0x39A8
+hash_context_init(unsigned int hash_in_node_start_addr)
+{
+    unsigned int hash_in_node_total_num;
+    unsigned int hash_in_node_wptr;
+
+    memset(&g_context->spacc_hash_ctx, 0, sizeof(g_context->spacc_hash_ctx));
+
+    hash_in_node_total_num = REGU32(SPACC_START + CHANN_HASH_IN_NODE_CFG(1));
+    hash_in_node_total_num &= 0x00FFFFFF;
+    hash_in_node_total_num |= 0x02000000;
+
+    REGU32(SPACC_START + CHANN_HASH_IN_NODE_CFG(1)) = hash_in_node_total_num;
+    REGU32(SPACC_START + CHANN_HASH_IN_NODE_START_ADDR(1)) = hash_in_node_start_addr;
+
+    hash_in_node_wptr = REGU32(SPACC_START + CHANN_HASH_IN_NODE_CFG(1)) >> 16;
+    g_context->spacc_hash_ctx.hash_in_node_wptr = hash_in_node_wptr;
+    g_context->spacc_hash_ctx.in_addr           = hash_in_node_start_addr;
+    g_context->spacc_hash_ctx.count             = 0;
+}
+
+void // offset=0x39FC
+sha256_hash_init(sha256_hash_magic_t *magic)
+{
+    memset(magic, 0, sizeof(sha256_hash_magic_t));
+
+    magic->data[0] = 0x67E6096A;
+    magic->data[1] = 0x85AE67BB;
+    magic->data[2] = 0x72F36E3C;
+    magic->data[3] = 0x3AF54FA5;
+    magic->data[4] = 0x7F520E51;
+    magic->data[5] = 0x8C68059B;
+    magic->data[6] = 0xABD9831F;
+    magic->data[7] = 0x19CDE05B;
+}
+
+int // offset=0x3A74
+sha256_hash_begin()
+{
+    int i;
+    unsigned int value;
+    sha256_hash_magic_t magic;
+
+    /**
+     * Raw hash calculation
+     * Algorithm: SHA256
+     */
+    value = REGU32(SPACC_START + CHANN_HASH_CTRL(1));
+    REGU32(SPACC_START + CHANN_HASH_CTRL(1)) = value & 0xFFFFFFD1 | 0x4;
+
+    sha256_hash_init(&magic);
+
+    g_context->spacc_hash_ctx.count = 0;
+    g_context->spacc_hash_ctx.size  = 32;
+
+    for (i = 0; i != 8; i++) {
+        REGU32(SPACC_START + CHANN_HASH_STATE_VAL(1))      = magic.data[i];
+        REGU32(SPACC_START + CHANN_HASH_STATE_VAL_ADDR(1)) = i;
+    }
+
+    return SUCCESS;
+}
+
+void // offset=0x3AE8
+hash_sub_3AE8(int a1, int a2)
+{
+    hash_node_t *node = (hash_node_t *)(
+        g_context->spacc_hash_ctx.in_addr +
+        g_context->spacc_hash_ctx.hash_in_node_wptr * sizeof(hash_node_t));
+
+    memset(node, 0, sizeof(hash_node_t));
+
+    node->field_0 &= 0xFC;
+    node->field_1 = node->field_1 & 0xC0 | 0x02;
+    node->field_4 = a1;
+    node->field_8 = a2;
+
+    g_context->spacc_hash_ctx.count++;
+    g_context->spacc_hash_ctx.hash_in_node_wptr++;
+    g_context->spacc_hash_ctx.hash_in_node_wptr &= 1;
+}
+
+void // offset=0x3B68
+flush_hash_in_node()
+{
+    unsigned int hash_in_node_cfg;
+    unsigned int hash_in_node_wptr;
+
+    hash_in_node_cfg = REGU32(SPACC_START + CHANN_HASH_IN_NODE_CFG(1)) & 0xFF00FFFF;
+
+    /**
+     * update wptr
+     */
+    hash_in_node_wptr  = (REGU32(SPACC_START + CHANN_HASH_IN_NODE_CFG(1)) >> 16);
+    hash_in_node_wptr += g_context->spacc_hash_ctx.count;
+    hash_in_node_wptr &= 1;
+    hash_in_node_cfg |= (hash_in_node_wptr << 16);
+
+    /**
+     * set level 1 interrupt
+     */
+    hash_in_node_cfg  = hash_in_node_cfg & 0xFFFFFF00 | 1;
+
+    REGU32(SPACC_START + CHANN_HASH_IN_NODE_CFG(1)) = hash_in_node_cfg;
+    g_context->spacc_hash_ctx.count = 0;
+}
+
+char * // offset=0x3BCC
+get_chip_hash(char *hash)
+{
+    int i;
+    unsigned int size = (unsigned int)g_context->spacc_hash_ctx.size >> 2;
+    unsigned int *ptr = (unsigned int *)hash;
+
+    for (i = 0; i < size; i++, ptr++) {
+        REGU32(SPACC_START + CHANN_HASH_STATE_VAL_ADDR(1)) = i;
+        *ptr = REGU32(SPACC_START + CHANN_HASH_STATE_VAL(1));
+    }
+
+    return hash;
+}
 
 // ============================================================================
 
@@ -2173,7 +2660,7 @@ sdio_init()
         long_sleep(1000u);
     } while ( result >= 0 );
 
-    g_context.field_160 = ((unsigned int)result >> 30) & 1;
+    g_context->field_160 = ((unsigned int)result >> 30) & 1;
 
     /**
      * The CMD and DATA signals transmitted to the MMC pass through the hold register.
@@ -2222,8 +2709,8 @@ sdio_init()
      */
     REGU32(SDIO0_START + MMC_CTYPE) = 1;
 
-    g_context.mmc_phy_addr = alloc(/*blk_size=*/512u);
-    return -(g_context.mmc_phy_addr == 0);
+    g_context->mmc_phy_addr = alloc(/*blk_size=*/512u);
+    return -(g_context->mmc_phy_addr == NULL);
 }
 
 void // offset=0x445C
@@ -2261,7 +2748,7 @@ sdio_shutdown()
 
 // sub_4828
 
-// sub_4900
+// sub_4900 (run_program)
 
 // sub_4D8C /**/
 
@@ -2433,41 +2920,38 @@ msleep(unsigned int milliseconds)
 // ============================================================================
 
 int // offset=0x5348
-sub_5348(int (*callback)(void))
+invoke_ddr_init(int (*callback)(void))
 {
     int result;
-
     REGU32(SYSCTRL_START + UNK_144) = &end;
     result = callback();
 
     end:
-    g_context.field_188 = 1;
+    g_context->ddr_initialized = 1;
     return result;
 }
 
 int // offset=0x5384
-sub_5384()
+start_uboot()
 {
-    int v0;
-
-    if ( sub_4900("u-boot.bin", PHY_MEM_START, 0x6000) <= 0 )
+    if ( run_program("u-boot.bin", PHY_MEM_START, PROGRAM_SIZE) <= 0 )
         return -1;
 
     print("Initializing DDR... \n", 0);
     REGU32(SYSCTRL_START + UNK_144) = &end;
 
-    ((void (*)(void))PHY_MEM_START)();
+    ((void (*)())PHY_MEM_START)();
 
     end:
-    g_context.field_188 = 1;
-    if ( sub_4900("u-boot.bin", UBOOT_START, 0x80000) <= 0 )
+    g_context->ddr_initialized = 1;
+    if ( run_program("u-boot.bin", UBOOT_START, UBOOT_SIZE) <= 0 )
         return -1;
 
     REGU32(SYSCTRL_START + UNK_130) = UBOOT_START;
-    REGU32(SYSCTRL_START + UNK_148) = DOWN;
+    REGU32(SYSCTRL_START + UNK_148) = DOWN_MAGIC;
 
     print("Start u-boot.bin\n", 0);
-    sdio_shutdown(v0);
+    sdio_shutdown();
 
     ((void (*)(void))UBOOT_START)();
 
@@ -2475,9 +2959,9 @@ sub_5384()
 }
 
 int // offset=0x5468
-sub_5468(int a1, unsigned int a2)
+sdio_boot(unsigned int address, unsigned int size)
 {
-    if ( sub_4900("u-boot.bin", a1, a2) <= 0 )
+    if ( run_program("u-boot.bin", address, size) <= 0 )
         return -1;
 
     REGU32(SYSCTRL_START + UNK_130) = UBOOT_START;
@@ -2496,7 +2980,7 @@ sub_5468(int a1, unsigned int a2)
 
 // sub_56C0
 
-// sub_5740
+// sub_5740 (usb_boot)
 
 // sub_57DC
 
@@ -2533,7 +3017,7 @@ sub_5468(int a1, unsigned int a2)
 void // offset=0x6C08
 sub_6C08()
 {
-    switch ( g_context.field_260 ) {
+    switch ( g_context->field_260 ) {
     case 0x40000: long_sleep(300); break;
     case 0x60000: long_sleep( 50); break;
     case 0x20000: long_sleep(200); break;
@@ -2718,7 +3202,7 @@ usb_init()
      */
     value = REGU32(USB_CTL_START + PERI_USB2_GCTL);
     value &= 0xFFFFCFFF;
-    value |= 0x1000
+    value |= 0x1000;
     REGU32(USB_CTL_START + PERI_USB2_GCTL) = value;
 
     long_sleep(20); // wait 20 milliseconds
